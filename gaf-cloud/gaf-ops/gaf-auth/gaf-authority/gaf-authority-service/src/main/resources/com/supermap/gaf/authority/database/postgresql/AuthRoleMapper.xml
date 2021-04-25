@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthRoleMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthRole">
+        <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="role_catalog_id" jdbcType="VARCHAR" property="roleCatalogId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id,
+        tenant_id,
+        role_catalog_id,
+        sort_sn,
+        role_name,
+        name_en,
+        code,
+        status,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        type    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role"
+        WHERE role_id = #{roleId}
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthRoleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+    <select id="listRoles" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role"
+        where status = true and (tenant_id = #{tenantId} or tenant_id = '000000')
+    </select>
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthRoleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role"
+        where tenant_id = #{tenantId} and status = true
+		<if test ='null != selectVo.searchFieldName and null != selectVo.searchFieldValue'>and ${selectVo.searchFieldName} LIKE CONCAT('%', #{selectVo.searchFieldValue}, '%')</if>
+		<if test ='null != selectVo.orderFieldName'>order by ${selectVo.orderFieldName} ${selectVo.orderMethod}</if>
+        LIMIT #{selectVo.pageSize}
+        <if test ='null != selectVo.offset'>OFFSET #{selectVo.offset}</if>
+    </select>
+    <select id="searchWholeMatchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthRoleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role"
+        where status = true and ${selectVo.searchFieldName} = #{selectVo.searchFieldValue}
+        <if test ='null != selectVo.orderFieldName'>order by ${selectVo.orderFieldName} ${selectVo.orderMethod}</if>
+        LIMIT #{selectVo.pageSize}
+        <if test ='null != selectVo.offset'>OFFSET #{selectVo.offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_role"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.role_id, a.tenant_id, a.role_catalog_id, a.sort_sn, a.role_name, a.name_en, a.code, a.status, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_role" a,(
+            select role_id 
+            From "auth_role" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.role_id = b.role_id 
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_role"
+    </select>
+    <select id="countByCombination" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_role"
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != roleId'>role_id = #{roleId} AND </if>
+            <if test ='null != tenantId'>tenant_id = #{tenantId} AND </if>
+            <if test ='null != roleCatalogId'>role_catalog_id = #{roleCatalogId} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != roleName'>role_name = #{roleName} AND </if>
+            <if test ='null != nameEn'>name_en = #{nameEn} AND </if>
+            <if test ='null != code'>code = #{code} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != description'>description = #{description} AND </if>
+            <if test ='null != type'>type = #{type} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+
+        </trim>
+    </select>
+    <select id="selectByIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role"
+        where status = true and role_id IN
+        <foreach collection="roleIds" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectByNameEns" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role"
+        where status = true and name_en IN
+        <foreach collection="nameEns" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="role_id" keyProperty="roleId" parameterType="com.supermap.gaf.authority.commontype.AuthRole">
+        INSERT INTO "auth_role"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != roleId'>role_id,</if>
+				<if test ='null != tenantId'>tenant_id,</if>
+				<if test ='null != roleCatalogId'>role_catalog_id,</if>
+				<if test ='null != sortSn'>sort_sn,</if>
+				<if test ='null != roleName'>role_name,</if>
+				<if test ='null != nameEn'>name_en,</if>
+				<if test ='null != code'>code,</if>
+				<if test ='null != status'>status,</if>
+				<if test ='null != description'>description,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+                <if test ='null != type'>type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != roleId'>#{roleId},</if>
+				<if test ='null != tenantId'>#{tenantId},</if>
+				<if test ='null != roleCatalogId'>#{roleCatalogId},</if>
+				<if test ='null != sortSn'>#{sortSn},</if>
+				<if test ='null != roleName'>#{roleName},</if>
+				<if test ='null != nameEn'>#{nameEn},</if>
+				<if test ='null != code'>#{code},</if>
+				<if test ='null != status'>#{status},</if>
+				<if test ='null != description'>#{description},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+                <if test ='null != type'>#{type},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_role"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.roleId}  ,  #{item.tenantId}  ,  #{item.roleCatalogId}  ,  #{item.sortSn}  ,  #{item.roleName}  ,  #{item.nameEn}  ,  #{item.code}  ,  #{item.status}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE "auth_role"
+        SET status = false
+        WHERE status = true and role_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE "auth_role"
+        SET status = false
+        WHERE status = true and role_id = #{roleId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthRole">
+        UPDATE "auth_role"
+        <set>
+				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>
+				<if test ='null != roleName'>role_name = #{roleName},</if>				
+				<if test ='null != nameEn'>name_en = #{nameEn},</if>				
+				<if test ='null != code'>code = #{code},</if>				
+				<if test ='null != status'>status = #{status},</if>				
+				<if test ='null != description'>description = #{description},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>
+                <if test ='null != type'>type = #{type},</if>
+        </set>
+        WHERE role_id = #{roleId}
+    </update>
+
+</mapper>

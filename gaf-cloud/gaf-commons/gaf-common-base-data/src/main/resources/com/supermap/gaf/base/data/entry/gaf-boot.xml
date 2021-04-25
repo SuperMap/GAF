@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog logicalFilePath="no-matter-file-name.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <include  file="./gaf-authority.xml" relativeToChangelogFile="true"/>
+    <include  file="./gaf-authentication.xml" relativeToChangelogFile="true"/>
+    <include  file="./gaf-data-mgt.xml" relativeToChangelogFile="true"/>
+    <include  file="./gaf-sys-mgt.xml" relativeToChangelogFile="true"/>
+    <include  file="./gaf-portal.xml" relativeToChangelogFile="true"/>
+    <include  file="./gaf-map.xml" relativeToChangelogFile="true"/>
+    <include file="../changelog/gaf-boot/delete_overage.sql" relativeToChangelogFile="true"/>
+</databaseChangeLog>

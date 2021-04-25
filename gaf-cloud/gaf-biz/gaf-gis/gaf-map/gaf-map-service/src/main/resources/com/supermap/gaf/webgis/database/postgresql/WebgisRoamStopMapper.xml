@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.webgis.dao.WebgisRoamStopMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.webgis.entity.WebgisRoamStop">
+        <result column="gis_roam_stop_id" jdbcType="VARCHAR" property="gisRoamStopId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="gis_roam_route_id" jdbcType="VARCHAR" property="gisRoamRouteId" />
+        <result column="speed" jdbcType="NUMERIC" property="speed" />
+        <result column="usemyspeed" jdbcType="BIT" property="usemyspeed" />
+        <result column="longitude" jdbcType="NUMERIC" property="longitude" />
+        <result column="latitude" jdbcType="NUMERIC" property="latitude" />
+        <result column="altitude" jdbcType="NUMERIC" property="altitude" />
+        <result column="altitudemode" jdbcType="NUMERIC" property="altitudemode" />
+        <result column="heading" jdbcType="NUMERIC" property="heading" />
+        <result column="tilt" jdbcType="NUMERIC" property="tilt" />
+        <result column="sight_center_x" jdbcType="NUMERIC" property="sightCenterX" />
+        <result column="sight_center_y" jdbcType="NUMERIC" property="sightCenterY" />
+        <result column="sight_center_z" jdbcType="NUMERIC" property="sightCenterZ" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        gis_roam_stop_id,
+        name,
+        gis_roam_route_id,
+        speed,
+        usemyspeed,
+        longitude,
+        latitude,
+        altitude,
+        altitudemode,
+        heading,
+        tilt,
+        sight_center_x,
+        sight_center_y,
+        sight_center_z,
+        sort_sn,
+        description,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_roam_stop"
+        WHERE gis_roam_stop_id = #{gisRoamStopId}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_roam_stop"
+        WHERE status = true
+        <trim>
+            <if test='gisRoamStopId != null'> AND   gis_roam_stop_id = #{gisRoamStopId}</if>
+            <if test='name != null'> AND   name = #{name}</if>
+            <if test='gisRoamRouteId != null'> AND   gis_roam_route_id = #{gisRoamRouteId}</if>
+            <if test='speed != null'> AND   speed = #{speed}</if>
+            <if test='usemyspeed != null'> AND   usemyspeed = #{usemyspeed}</if>
+            <if test='longitude != null'> AND   longitude = #{longitude}</if>
+            <if test='latitude != null'> AND   latitude = #{latitude}</if>
+            <if test='altitude != null'> AND   altitude = #{altitude}</if>
+            <if test='altitudemode != null'> AND   altitudemode = #{altitudemode}</if>
+            <if test='heading != null'> AND   heading = #{heading}</if>
+            <if test='tilt != null'> AND   tilt = #{tilt}</if>
+            <if test='sightCenterX != null'> AND   sight_center_x = #{sightCenterX}</if>
+            <if test='sightCenterY != null'> AND   sight_center_y = #{sightCenterY}</if>
+            <if test='sightCenterZ != null'> AND   sight_center_z = #{sightCenterZ}</if>
+            <if test='sortSn != null'> AND   sort_sn = #{sortSn}</if>
+            <if test='description != null'> AND   description = #{description}</if>
+            <if test='status != null'> AND   status = #{status}</if>
+            <if test='createdTime != null'> AND   created_time = #{createdTime}</if>
+            <if test='createdBy != null'> AND   created_by = #{createdBy}</if>
+            <if test='updatedTime != null'> AND   updated_time = #{updatedTime}</if>
+            <if test='updatedBy != null'> AND   updated_by = #{updatedBy}</if>
+            <if test ='null != equalFieldName'> AND ${equalFieldName}
+                <choose>
+                    <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                    <otherwise>  is null </otherwise>
+                </choose>
+            </if>
+            <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%') </if>
+        </trim>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="gis_roam_stop_id" keyProperty="gisRoamStopId" parameterType="com.supermap.gaf.webgis.entity.WebgisRoamStop">
+        INSERT INTO "webgis_roam_stop"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != gisRoamStopId'>gis_roam_stop_id,</if>
+			<if test ='null != name'>name,</if>
+			<if test ='null != gisRoamRouteId'>gis_roam_route_id,</if>
+			<if test ='null != speed'>speed,</if>
+			<if test ='null != usemyspeed'>usemyspeed,</if>
+			<if test ='null != longitude'>longitude,</if>
+			<if test ='null != latitude'>latitude,</if>
+			<if test ='null != altitude'>altitude,</if>
+			<if test ='null != altitudemode'>altitudemode,</if>
+			<if test ='null != heading'>heading,</if>
+			<if test ='null != tilt'>tilt,</if>
+			<if test ='null != sightCenterX'>sight_center_x,</if>
+			<if test ='null != sightCenterY'>sight_center_y,</if>
+			<if test ='null != sightCenterZ'>sight_center_z,</if>
+			<if test ='null != sortSn'>sort_sn,</if>
+			<if test ='null != description'>description,</if>
+			status,
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != gisRoamStopId'>#{gisRoamStopId},</if>
+			<if test ='null != name'>#{name},</if>
+			<if test ='null != gisRoamRouteId'>#{gisRoamRouteId},</if>
+			<if test ='null != speed'>#{speed},</if>
+			<if test ='null != usemyspeed'>#{usemyspeed},</if>
+			<if test ='null != longitude'>#{longitude},</if>
+			<if test ='null != latitude'>#{latitude},</if>
+			<if test ='null != altitude'>#{altitude},</if>
+			<if test ='null != altitudemode'>#{altitudemode},</if>
+			<if test ='null != heading'>#{heading},</if>
+			<if test ='null != tilt'>#{tilt},</if>
+			<if test ='null != sightCenterX'>#{sightCenterX},</if>
+			<if test ='null != sightCenterY'>#{sightCenterY},</if>
+			<if test ='null != sightCenterZ'>#{sightCenterZ},</if>
+			<if test ='null != sortSn'>#{sortSn},</if>
+			<if test ='null != description'>#{description},</if>
+			true,
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "webgis_roam_stop"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.gisRoamStopId}  ,  #{item.name}  ,  #{item.gisRoamRouteId}  ,  #{item.speed}  ,  #{item.usemyspeed}  ,  #{item.longitude}  ,  #{item.latitude}  ,  #{item.altitude}  ,  #{item.altitudemode}  ,  #{item.heading}  ,  #{item.tilt}  ,  #{item.sightCenterX}  ,  #{item.sightCenterY}  ,  #{item.sightCenterZ}  ,  #{item.sortSn}  ,  #{item.description}  ,  true  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE webgis_roam_stop SET status = false
+        WHERE gis_roam_stop_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="deleteById" >
+        UPDATE webgis_roam_stop SET status = false
+        WHERE gis_roam_stop_id = #{gisRoamStopId}
+    </update>
+    <update id="delete">
+        UPDATE webgis_roam_stop SET status = false
+        WHERE status = true
+        <trim>
+            <if test='gisRoamStopId != null'> AND   gis_roam_stop_id = #{gisRoamStopId}</if>
+            <if test='name != null'> AND   name = #{name}</if>
+            <if test='gisRoamRouteId != null'> AND   gis_roam_route_id = #{gisRoamRouteId}</if>
+            <if test='speed != null'> AND   speed = #{speed}</if>
+            <if test='usemyspeed != null'> AND   usemyspeed = #{usemyspeed}</if>
+            <if test='longitude != null'> AND   longitude = #{longitude}</if>
+            <if test='latitude != null'> AND   latitude = #{latitude}</if>
+            <if test='altitude != null'> AND   altitude = #{altitude}</if>
+            <if test='altitudemode != null'> AND   altitudemode = #{altitudemode}</if>
+            <if test='heading != null'> AND   heading = #{heading}</if>
+            <if test='tilt != null'> AND   tilt = #{tilt}</if>
+            <if test='sightCenterX != null'> AND   sight_center_x = #{sightCenterX}</if>
+            <if test='sightCenterY != null'> AND   sight_center_y = #{sightCenterY}</if>
+            <if test='sightCenterZ != null'> AND   sight_center_z = #{sightCenterZ}</if>
+            <if test='sortSn != null'> AND   sort_sn = #{sortSn}</if>
+            <if test='description != null'> AND   description = #{description}</if>
+            <if test='createdTime != null'> AND   created_time = #{createdTime}</if>
+            <if test='createdBy != null'> AND   created_by = #{createdBy}</if>
+            <if test='updatedTime != null'> AND   updated_time = #{updatedTime}</if>
+            <if test='updatedBy != null'> AND   updated_by = #{updatedBy}</if>
+        </trim>
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.webgis.entity.WebgisRoamStop">
+        UPDATE "webgis_roam_stop"
+        <set>
+			<if test ="null != name and '' != name">name = #{name},</if>				
+			<if test ="null != gisRoamRouteId and '' != gisRoamRouteId">gis_roam_route_id = #{gisRoamRouteId},</if>				
+			speed = #{speed},
+			usemyspeed = #{usemyspeed},
+			longitude = #{longitude},
+			latitude = #{latitude},
+			altitude = #{altitude},
+			altitudemode = #{altitudemode},
+			heading = #{heading},
+			tilt = #{tilt},
+			sight_center_x = #{sightCenterX},
+			sight_center_y = #{sightCenterY},
+			sight_center_z = #{sightCenterZ},
+			sort_sn = #{sortSn},
+			description = #{description},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+        </set>
+        WHERE gis_roam_stop_id = #{gisRoamStopId}  AND status = true
+    </update>
+
+</mapper>

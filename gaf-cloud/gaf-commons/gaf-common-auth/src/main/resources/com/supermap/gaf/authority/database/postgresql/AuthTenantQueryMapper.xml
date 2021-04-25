@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthTenantQueryMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthTenant">
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="tenant_name" jdbcType="VARCHAR" property="tenantName" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+        <result column="brief_name_en" jdbcType="VARCHAR" property="briefNameEn" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="status" jdbcType="SMALLINT" property="status" />
+        <result column="admin_id" jdbcType="VARCHAR" property="adminId" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        tenant_id,
+        tenant_name,
+        description,
+        type,
+        name_en,
+        brief_name_en,
+        code,
+        status,
+        admin_id,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_tenant"
+        WHERE tenant_id = #{tenantId} and "status" = true
+    </select>
+
+
+</mapper>

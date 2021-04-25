@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthUserQueryMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthUser">
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="real_name" jdbcType="VARCHAR" property="realName" />
+        <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+        <result column="mobile_number" jdbcType="VARCHAR" property="mobileNumber" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="post_id" jdbcType="VARCHAR" property="postId" />
+        <result column="expiration_time" jdbcType="TIMESTAMP" property="expirationTime" />
+        <result column="is_third_party" jdbcType="BIT" property="isThirdParty" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,
+        tenant_id,
+        department_id,
+        sort_sn,
+        name,
+        password,
+        real_name,
+        id_number,
+        mobile_number,
+        email,
+        address,
+        post_id,
+        expiration_time,
+        is_third_party,
+        status,
+        description,
+        last_login_time,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user"
+        WHERE user_id = #{userId}
+    </select>
+    <select id="getByUserName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user"
+        WHERE "name" = #{username} and "status" = true
+    </select>
+
+</mapper>

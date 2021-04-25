@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGIS</title>
+    <link href="./iframe/antd.min.css" rel="stylesheet" />
+    <link href="./webGL/Cesium/Widgets/widgets.css" rel="stylesheet" />
+    <link href="./iframe/css/font_577982_beimm7aom3g.css" rel="stylesheet" />
+    <link href="./iframe/css/geoFont/iconfont.css" rel="stylesheet" />
+    <style>
+      .ant-input{
+    background: transparent;
+    border: 1px solid #545c64
+}
+#draggable {
+  background-color: rgba(25, 40, 58, 0.6);
+  border-width: 0;
+  color: #ffffff;
+  margin-left: 30px;
+  padding: 0 15px 0;
+}
+#draggable  .ant-slider-mark-text {
+    color: #ffffff;
+}
+#draggable .sm-profile3d-content {
+    background-color: transparent;
+  }
+#draggable .sm-content {
+    background-color: transparent;
+  }
+#draggable.GafMapProfile .draggable .header {
+    background: transparent;
+   }
+#treeComponent  .ant-tree li .ant-tree-node-content-wrapper:hover{
+    background-color: transparent;
+}
+#treeComponent   .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected{
+    background-color: transparent;
+}
+#treeComponent  .ant-input {
+    color: #ffffff;
+    background-color: transparent;
+  }
+#treeComponent   .ant-input-search-icon {
+    color:#ffffff;
+  }
+#treeComponent   .ant-tree-checkbox-inner {
+    background-color: transparent;
+}
+.bottom {
+  position: absolute;
+  right: -138px;
+  bottom: 20px;
+}
+.map-type p{
+  float: right !important;
+  background-size: cover !important;
+}
+.ant-tooltip-inner{
+  background-color: black;
+
+}
+.Treetooltip {
+  z-index: 10000;
+}
+    </style>
+    <link rel="stylesheet" href="./iframe/iview.css" />
+    <script src="./iframe/vue.min.js"></script>
+    <script src="./iframe/iview.js"></script>
+    <script src="./webGL/Cesium/Cesium.js"></script>
+    <script src="./iframe/antd.min.js"></script>
+    <script src="./iframe/gafmapui.umd.js"></script>
+    <script src="./iframe/vue-iclient3d-webgl.min.js"></script>
+    <script src="./iframe/echarts.min.js"></script>
+    <script src="./iframe/tooltip.js"></script>
+    <script src="./iframe/axios.min.js"></script>
+    <script src="./classic/SuperMap.Include.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+       new Vue({
+          el: '#app',
+          template: `<div>
+    <gaf-map-basic-element v-if="loaded"/>
+    <gaf-map-viewer
+      :mvtLayerList="mvtLayerList"
+      :smSceneList="smSceneList"
+      :smSceneDataList="smSceneDataList"
+      :smLayerList="smLayerList"
+      :tinDemLayerList="tinDemLayerList"
+      :gridDemLayerList="gridDemLayerList"
+      :tiandituLayerList="tiandituLayerList"
+        :token="token"
+        @initialize="onViewerLoaded"
+        ></gaf-map-viewer>
+    <div v-if="mapApp">
+        <gaf-map-tool-bar-horizontal v-for="horizontalToolbar in mapApp.horizontalToolbars" :content="horizontalToolbar.buttons" :position="horizontalToolbar.position"/>
+        <gaf-map-tool-bar-vertical v-for="verticalToolbar in mapApp.verticalToolbars" :content="verticalToolbar.buttons" :position="verticalToolbar.position"/>
+        <gaf-map-draggable
+        visible="true"
+        title="资源目录"
+        :width="280"
+        >
+        <gaf-map-tree
+        :replaceFields="mapApp.resourceTree.replaceFields"
+        :data-list="mapApp.resourceTree.allDataList"
+        :searchInputShow="true"
+        :check="onTreeNodeChecked"
+        :select="onSelect"
+        :allCheckable="false"
+        :leafnodeCheckable="true"
+        :someNodeCheckable="false"
+        />
+        </gaf-map-draggable>
+        <div class="bottom" v-if="mapApp.bottomLayers!==null && mapApp.bottomLayers.length>0">
+        <gaf-map-bottom
+        @mapBottomChange="handleMapBottomChange"
+        :bottomList="mapApp.bottomLayers"
+        />
+        </div>
+
+    </div>
+</div>`,
+          name: 'GafMapViewer',
+    data() {
+    return {
+        loaded: false,
+        mapApp: null,
+        location: null,
+        layerList: [],
+        token: null,
+        bottomLayer:null
+    }
+    },
+    beforeCreate() {
+        Vue.prototype.$bus = new Vue()
+        Vue.prototype.$mapActions = gafmapui.mapActions
+    },
+    computed: {
+       mvtLayerList() {
+         return this.layerList.filter(item => item && item.resourceTag === 'MVT')
+       },
+       smSceneList() {
+         return this.layerList.filter(
+           item => item && item.resourceTag === 'RESTREALSPACE'
+         )
+       },
+       smSceneDataList() {
+         const data =  this.layerList.filter(
+           item => item && item.resourceTag === 'RESTREALSPACE-DATA'
+         )
+         console.log(data)
+         return data;
+       },
+       tinDemLayerList() {
+         return this.layerList.filter(
+           item => item && item.resourceTag === 'TIN_DEM'
+         )
+       },
+       gridDemLayerList() {
+         return this.layerList.filter(
+           item => item && item.resourceTag === 'GRID_DEM'
+         )
+       },
+       smLayerList() {
+         return this.layerList.filter(
+           item => item && item.resourceTag === 'RESTMAP'
+         )
+       },
+       tiandituLayerList() {
+         return this.layerList.filter(
+           item =>
+             item && item.sourceType === 'MAPWORLD' && item.isBaseLayer === true
+         )
+       }
+    },
+    watch: {
+        location(val) {
+            this.$mapActions.flyTo(val)
+        }
+    },
+    methods: {
+    getQueryVariable(variable) {
+        let query = window.location.search.substring(1);
+        let vars = query.split("&");
+        for (let i = 0; i < vars.length; i++) {
+        let pair = vars[i].split("=");
+        if (pair[0] == variable) { return pair[1]; }
+        }
+    },
+    async loadAppConfig() {
+        const previewCode = this.getQueryVariable("previewCode")
+        let url = 'http://gaf.gaf-dev.chengdu/map/webgis-apps/test-1/config'
+        // if (previewCode != undefined) {
+        //     url += '?previewCode=' + previewCode
+        // }
+        // const response = await axios.get(url)
+        const response = JSON.parse("{\"message\":\"查询成功\",\"status\":200,\"data\":{\"horizontalToolbars\":[{\"buttons\":[{\"children\":[{\"children\":null,\"name\":\"GafMapSplitScreen\",\"icon\":null,\"toggle\":null,\"title\":\"水平分屏\",\"params\":\"splitScreenHorizontal\",\"selectedName\":\"GafMapSplitScreen\",\"actions\":null,\"closePanel\":null},{\"children\":null,\"name\":\"GafMapSplitScreen\",\"icon\":null,\"toggle\":null,\"title\":\"垂直分屏\",\"params\":\"splitScreenVertical\",\"selectedName\":\"GafMapSplitScreen\",\"actions\":null,\"closePanel\":null},{\"children\":null,\"name\":\"GafMapSplitScreen\",\"icon\":null,\"toggle\":null,\"title\":\"三屏\",\"params\":\"splitScreenTriple\",\"selectedName\":\"GafMapSplitScreen\",\"actions\":\"\",\"closePanel\":null},{\"children\":null,\"name\":\"GafMapSplitScreen\",\"icon\":null,\"toggle\":null,\"title\":\"四屏\",\"params\":\"splitScreenQuad\",\"selectedName\":\"GafMapSplitScreen\",\"actions\":null,\"closePanel\":null},{\"children\":null,\"name\":\"GafMapSplitScreen\",\"icon\":null,\"toggle\":null,\"title\":\"关闭\",\"params\":\"splitScreenNone\",\"selectedName\":\"GafMapSplitScreen\",\"actions\":null,\"closePanel\":null}],\"name\":\"GafMapSplitScreen\",\"icon\":\"icon-ditu\",\"toggle\":false,\"title\":\"GafMapSplitScreen\",\"params\":[],\"actions\":[],\"closePanel\":false},{\"children\":\"\",\"name\":\"gaf-map-profile\",\"icon\":\"icon-moxing\",\"toggle\":false,\"title\":\"剖切\",\"params\":[],\"actions\":[\"clear\"],\"closePanel\":false},{\"children\":\"\",\"name\":\"pointSelect\",\"icon\":\"icon-xuanze\",\"toggle\":true,\"title\":\"点选\",\"params\":[\"red\"],\"actions\":[\"releaseSelection\"],\"closePanel\":false},{\"children\":\"\",\"name\":\"GafMapRoaming\",\"icon\":\"icon-shidu\",\"toggle\":false,\"title\":\"Gaf三维漫游\",\"params\":{\"fpfUrl\":\"/fpf/sceneRoaming.fpf'\"},\"actions\":[],\"closePanel\":false},{\"children\":[{\"children\":null,\"name\":\"RollerShutter\",\"icon\":null,\"toggle\":null,\"title\":\"左右卷帘\",\"params\":{\"type\":\"vertical\"},\"selectedName\":\"RollerShutterType\",\"actions\":null,\"closePanel\":null},{\"children\":null,\"name\":\"RollerShutter\",\"icon\":\"icon-ditu\",\"toggle\":null,\"title\":\"上下卷帘\",\"params\":{\"type\":\"horizontal\"},\"selectedName\":\"RollerShutterType\",\"actions\":null,\"closePanel\":null},{\"children\":null,\"name\":\" RollerShutter\",\"icon\":\"icon-ditu\",\"toggle\":null,\"title\":\"关闭卷帘\",\"params\":{\"type\":\"close\"},\"selectedName\":\"RollerShutterType\",\"actions\":null,\"closePanel\":null}],\"name\":\"RollerShutterType\",\"icon\":\"icon-shidu\",\"toggle\":false,\"title\":\"卷帘\",\"params\":[],\"actions\":[],\"closePanel\":false},{\"children\":\"\",\"name\":\"flood-light\",\"icon\":\"icon-dingwei\",\"toggle\":false,\"title\":\"泛光扫描线\",\"params\":[],\"actions\":[],\"closePanel\":false},{\"children\":\"\",\"name\":\"attribute-select\",\"icon\":\"icon-xuanze2\",\"toggle\":false,\"title\":\"属性查询\",\"params\":\"red\",\"actions\":[],\"closePanel\":false},{\"children\":\"\",\"name\":\"gaf-map-locate\",\"icon\":\"icon-shidu\",\"toggle\":false,\"title\":\"区域查询定位\",\"params\":{\"districts\":[{\"code\":420102,\"name\":\"江岸区\"},{\"code\":420103,\"name\":\"江汉区\"},{\"code\":420104,\"name\":\"硚口区\"},{\"code\":420105,\"name\":\"汉阳区\"},{\"code\":420106,\"name\":\"武昌区\"},{\"code\":420107,\"name\":\"青山区\"},{\"code\":420111,\"name\":\"  洪山区\"},{\"code\":420112,\"name\":\"东西湖区\"},{\"code\":420113,\"name\":\"汉南区\"},{\"code\":420114,\"name\":\"蔡甸区\"},{\"code\":420115,\"name\":\"江夏区\"},{\"code\":420116,\"name\":\"黄陂区\"},{\"code\":420117,\"name\":\"新洲区\"}],\"info\":{\"dataUrl\":\"http://1.202.165.56:8090/iserver/services/data-cim_gis/rest\",\"fillColor\":\"blue\",\"borderColor\":\"red\",\"code\":420100,\"city\":\"武汉市\",\"dataSetName\":\"XZQH_ALL_L12\",\"filterField\":\"QHBM\",\"dataSourceName\":\"cim-base\"}},\"actions\":[\"clear\"],\"closePanel\":false},{\"children\":null,\"name\":\"viewpoint-manage\",\"icon\":\"icon-shidian\",\"toggle\":false,\"title\":\"视点管理\",\"params\":[],\"actions\":[\"clear\"],\"closePanel\":false},{\"children\":\"\",\"name\":\"GafMapWhiteModel\",\"icon\":\"icon-dingwei\",\"toggle\":false,\"title\":\"白模\",\"params\":[],\"actions\":[\"clear\"],\"closePanel\":false},{\"children\":[{\"children\":null,\"name\":\"light-shadow\",\"icon\":\"icon-tianqi1\",\"toggle\":null,\"title\":\"光影变化\",\"params\":null,\"selectedName\":\"GafMapWeather\",\"actions\":[\"clear\"],\"closePanel\":null},{\"children\":null,\"name\":\"GafMapWeather\",\"icon\":\"icon-tianqi1\",\"toggle\":null,\"title\":\"天气变化\",\"params\":null,\"selectedName\":\"GafMapWeather\",\"actions\":[\"clear\"],\"closePanel\":null}],\"name\":\"GafMapWeather\",\"icon\":\"icon-dingwei\",\"toggle\":false,\"title\":\"环境模拟\",\"params\":[],\"actions\":[\"clear\"],\"closePanel\":false},{\"children\":\"\",\"name\":\"GafMapFlatten\",\"icon\":\"icon-xuanze\",\"toggle\":false,\"title\":\"压平\",\"params\":[],\"actions\":[\"clear\"],\"closePanel\":false},{\"children\":\"\",\"name\":\"roaming\",\"icon\":\"icon-manyou1\",\"toggle\":false,\"title\":\"三维漫游\",\"params\":[],\"actions\":[],\"closePanel\":false},{\"children\":[{\"children\":null,\"name\":\"measureArea\",\"icon\":\"icon-xiankuang\",\"toggle\":true,\"title\":\"面积量算\",\"params\":[],\"selectedName\":\"measure\",\"actions\":[\"splitScreenNone\"],\"closePanel\":true},{\"children\":null,\"name\":\"measureHeight\",\"icon\":\"icon-clear\",\"toggle\":true,\"title\":\"清除量算\",\"params\":[],\"selectedName\":\"measure\",\"actions\":[\"splitScreenNone\",\"mapClear\"],\"closePanel\":true},{\"children\":null,\"name\":\"measureDistance\",\"icon\":\"icon-ceju\",\"toggle\":true,\"title\":\"距离量算\",\"params\":[],\"selectedName\":\"measure\",\"actions\":[\"splitScreenNon\"],\"closePanel\":true},{\"children\":null,\"name\":\"measureHeight\",\"icon\":\"icon-cegao\",\"toggle\":true,\"title\":\"高度量算\",\"params\":[],\"selectedName\":\"measure\",\"actions\":[\"splitScreenNone\"],\"closePanel\":true}],\"name\":\"measure\",\"icon\":\"icon-xiankuang\",\"toggle\":true,\"title\":\"量算\",\"params\":[1,2,3,4,5],\"actions\":[],\"closePanel\":true}],\"id\":\"555ad6b4-ed11-4842-8a88-7fb8926c288a\",\"position\":\"bottom\"}],\"verticalToolbars\":[{\"buttons\":[{\"children\":null,\"name\":\"zoomIn\",\"icon\":\"icon-jiahao\",\"toggle\":false,\"title\":\"放大\",\"params\":[],\"actions\":[],\"closePanel\":false},{\"children\":null,\"name\":\"zoomOut\",\"icon\":\"icon-jianhaocu\",\"toggle\":false,\"title\":\"缩小\",\"params\":[],\"actions\":[],\"closePanel\":false},{\"children\":null,\"name\":\"flyTo\",\"icon\":\"icon-chushihuashijiao\",\"toggle\":false,\"title\":\"初始化视角\",\"params\":[{\"altitude\":499.14128987677395,\"heading\":0,\"latitude\":39.50020733649198,\"tilt\":1.72818592948345E-12,\"longitude\":115.50061346140873}],\"actions\":[],\"closePanel\":false},{\"children\":null,\"name\":\"switchMode\",\"icon\":\"icon-diqiu\",\"toggle\":false,\"title\":\"二维视图|三维视图\",\"params\":[],\"actions\":[],\"closePanel\":false},{\"children\":null,\"name\":\"fullScreen\",\"icon\":\"icon-quanping1\",\"toggle\":false,\"title\":\"全屏|取消全屏\",\"params\":[],\"actions\":[],\"closePanel\":false},{\"children\":null,\"name\":\"mapClear\",\"icon\":\"icon-clear\",\"toggle\":false,\"title\":\"清除\",\"params\":[],\"actions\":[],\"closePanel\":false}],\"id\":\"815c6d97-0545-4bf6-9cf4-9410668fd311\",\"position\":\"topRight\"}],\"resourceTree\":{\"allDataList\":[{\"resourceId\":\"98d10e8a-f913-4505-a7f7-1bb24dbccd41\",\"pid\":\"\",\"resourceName\":\"CIM_test目录树\"},{\"resourceId\":\"e9f1bd74-91b5-4193-b916-00a56c5bc4e3\",\"pid\":\"98d10e8a-f913-4505-a7f7-1bb24dbccd41\",\"resourceName\":\"地图服务\"},{\"resourceId\":\"99d8b80e-8b7b-4b36-9190-cc2f6fc2aa0d\",\"pid\":\"98d10e8a-f913-4505-a7f7-1bb24dbccd41\",\"resourceName\":\"三维服务\"},{\"resourceId\":\"6904728d-e0d8-45d2-bc8b-fc399f31859a\",\"resourceTag\":\"RESTREALSPACE-DATA\",\"resourceName\":\"武汉行政区\",\"pid\":\"99d8b80e-8b7b-4b36-9190-cc2f6fc2aa0d\",\"resourceLocation\":\"http://1.202.165.56:8090/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_xzqh\",\"moreProperties\":null},{\"resourceId\":\"1e19b067-e49f-4f19-b1ca-faf1b2f10421\",\"resourceTag\":\"RESTREALSPACE-DATA\",\"resourceName\":\"地形2W\",\"pid\":\"e9f1bd74-91b5-4193-b916-00a56c5bc4e3\",\"resourceLocation\":\"http://1.202.165.56:8090/iserver/services/3D-cim_gis/rest/realspace/datas/Dem30\",\"moreProperties\":null},{\"resourceId\":\"b72eed34-1c9c-4b68-ae78-5a8e74495c53\",\"resourceTag\":\"RESTMAP\",\"resourceName\":\"China400\",\"pid\":\"e9f1bd74-91b5-4193-b916-00a56c5bc4e3\",\"resourceLocation\":\"http://www.supermapol.com/realspace/services/map-China400/rest/maps/China400\",\"moreProperties\":null},{\"resourceId\":\"3e4ba6ee-7699-40e2-84d3-01fe23ce9d26\",\"resourceTag\":\"RESTREALSPACE-DATA\",\"resourceName\":\"CBD\",\"pid\":\"99d8b80e-8b7b-4b36-9190-cc2f6fc2aa0d\",\"resourceLocation\":\"http://www.supermapol.com/realspace/services/3D-CBD/rest/realspace/scenes/CBD\",\"moreProperties\":null},{\"resourceId\":\"a01f7f09-6aa3-4835-b12a-9468c39c0114\",\"resourceTag\":\"RESTREALSPACE-DATA\",\"resourceName\":\"退界红线\",\"pid\":\"99d8b80e-8b7b-4b36-9190-cc2f6fc2aa0d\",\"resourceLocation\":\"http://1.202.165.56:8090/iserver/services/3D-cim_gis/rest/realspace/datas/dlhx\",\"moreProperties\":null},{\"resourceId\":\"54f724b1-1b5f-40ac-9e2f-dc2e2d179e89\",\"resourceTag\":\"RESTREALSPACE-DATA\",\"resourceName\":\"不动产档案馆（J_V01）\",\"pid\":\"99d8b80e-8b7b-4b36-9190-cc2f6fc2aa0d\",\"resourceLocation\":\"http://1.202.165.56:8090/iserver/services/3D-cim_gis/rest/realspace/datas/J_V01\",\"moreProperties\":null},{\"resourceId\":\"5ffd077f-f72d-46c6-8772-3ad09d715d4f\",\"resourceTag\":\"RESTREALSPACE-DATA\",\"resourceName\":\"武汉白模\",\"pid\":\"99d8b80e-8b7b-4b36-9190-cc2f6fc2aa0d\",\"resourceLocation\":\"http://1.202.165.56:8090/iserver/services/3D-cim_gis/rest/realspace/datas/WuHanBaiMo\",\"moreProperties\":null},{\"resourceId\":\"06e39d3b-8bb3-48de-ba26-ce57f27017de\",\"resourceTag\":\"RESTMAP\",\"resourceName\":\"路网\",\"pid\":\"e9f1bd74-91b5-4193-b916-00a56c5bc4e3\",\"resourceLocation\":\"http://1.202.165.56:8090/iserver/services/3D-wuh_bjdt1/rest/realspace\",\"moreProperties\":null}],\"replaceFields\":{\"title\":\"resourceName\",\"key\":\"resourceId\"}},\"bottomLayers\":[{\"serviceType\":\"VEC_C\",\"resourceId\":\"57ba645a-73d3-4a96-bf6a-a3ff4b845ea2\",\"isDefault\":false,\"isBaseLayer\":true,\"options\":{},\"resourceTag\":\"MAPWORLD\",\"resourceName\":\"地图\",\"resourceLocation\":\"1d11\",\"thumbnailAddr\":null},{\"serviceType\":\"VEC_C\",\"resourceId\":\"201e306a-55a4-417c-a855-2f17b77908c6\",\"isDefault\":false,\"isBaseLayer\":true,\"options\":{},\"resourceTag\":\"MAPWORLD\",\"resourceName\":\"地形\",\"resourceLocation\":\"http://test\",\"thumbnailAddr\":null},{\"serviceType\":null,\"resourceId\":\"2864fc6d-30fa-4d0b-86d8-d44f79875d40\",\"isDefault\":null,\"isBaseLayer\":true,\"options\":null,\"resourceTag\":\"RESTREALSPACE-DATA\",\"resourceName\":\"影像1-17\",\"resourceLocation\":\"http://1.202.165.56:8090/iserver/services/3D-cim_gis/rest/realspace/datas/wuh-img\",\"thumbnailAddr\":null}],\"location\":null,\"token\":null,\"timestamp\":0},\"resourceId\":null,\"successed\":true,\"isSuccessed\":true}")
+        const mapApp = response.data;
+        debugger
+        this.location = mapApp.location
+        if(mapApp.bottomLayers!==null && mapApp.bottomLayers.length>0){
+            const bottomLayer = mapApp.bottomLayers.filter(item => item.isDefault)
+            if(bottomLayer.length>0 ){
+                this.bottomLayer=bottomLayer[0]
+            }else{
+                this.bottomLayer = mapApp.bottomLayers[0]
+                mapApp.bottomLayers[0].isDefault = true
+            }
+            this.layerList = [this.bottomLayer]
+        }
+        this.token = mapApp.token
+        this.mapApp = mapApp
+    },
+    handleMapBottomChange(resourceId) {
+        this.layerList.splice(0, 1)
+        this.bottomLayer = this.mapApp.bottomLayers.filter(item => item.resourceId === resourceId)[0];
+        this.layerList.unshift(this.bottomLayer)
+    },
+    onTreeNodeChecked(checkedKeys, info) {
+        const self = this
+        const layerList = []
+        checkedKeys.forEach(key => {
+        const data = self.mapApp.resourceTree.allDataList.find(item => {
+            return item.resourceId.toString() === key.toString()
+        })
+        if (data) {
+            layerList.push(data)
+        }
+        })
+        if (self.bottomLayer!=null) {
+        layerList.unshift(self.bottomLayer)
+        }
+        self.layerList = layerList
+    },
+    onSelect(selectedKeys, info) {
+        const self = this
+        const selectedKey = selectedKeys[0]
+        const layerList = self.layerList.map(item => {
+        if (item.resourceId === selectedKey) {
+            const newLayer = { ...item, location: true }
+            return newLayer
+        }
+        return item
+        })
+        this.layerList = layerList
+    },
+    onViewerLoaded() {
+        this.loaded = true
+    }
+    },
+    beforeMount() {
+    this.loadAppConfig()
+    }
+        })
+    </script>
+  </body>
+</html>

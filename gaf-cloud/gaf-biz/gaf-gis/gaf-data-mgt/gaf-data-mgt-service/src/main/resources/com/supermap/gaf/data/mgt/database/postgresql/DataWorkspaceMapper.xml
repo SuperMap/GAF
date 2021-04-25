@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.mgt.mapper.DataWorkspaceMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.data.mgt.entity.DataWorkspace">
+        <result column="workspace_id" jdbcType="VARCHAR" property="workspaceId" />
+        <result column="ws_name" jdbcType="VARCHAR" property="wsName" />
+        <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
+        <result column="server" jdbcType="VARCHAR" property="server" />
+        <result column="database" jdbcType="VARCHAR" property="database" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="published" jdbcType="BIT" property="published" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        workspace_id,
+        ws_name,
+        type_code,
+        server,
+        database,
+        user_name,
+        password,
+        description,
+        status,
+        tenant_id,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        published    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "data_workspace"
+        WHERE workspace_id = #{workspaceId}
+    </select>
+    <select id="selectByIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "data_workspace"
+        WHERE workspace_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "data_workspace"
+        where status = true
+        <if test='workspaceId != null'>and workspace_id = #{workspaceId}</if>
+        <if test='wsName != null'>and ws_name = #{wsName}</if>
+        <if test='typeCode != null'>and type_code = #{typeCode}</if>
+        <if test='server != null'>and server = #{server}</if>
+        <if test='database != null'>and database = #{database}</if>
+        <if test='userName != null'>and user_name = #{userName}</if>
+        <if test='password != null'>and password = #{password}</if>
+        <if test='description != null'>and description = #{description}</if>
+        <if test='tenantId != null'>and tenant_id = #{tenantId}</if>
+        <if test='createdTime != null'>and created_time = #{createdTime}</if>
+        <if test='createdBy != null'>and created_by = #{createdBy}</if>
+        <if test='updatedTime != null'>and updated_time = #{updatedTime}</if>
+        <if test='updatedBy != null'>and updated_by = #{updatedBy}</if>
+        <if test='published != null'>and published = #{published}</if>
+        <if test ='null != equalFieldName'> AND ${equalFieldName}
+            <choose>
+                <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                <otherwise>  is null </otherwise>
+            </choose>
+        </if>
+        <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="workspace_id" keyProperty="workspaceId" parameterType="com.supermap.gaf.data.mgt.entity.DataWorkspace">
+        INSERT INTO "data_workspace"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != workspaceId'>workspace_id,</if>
+			<if test ='null != wsName'>ws_name,</if>
+			<if test ='null != typeCode'>type_code,</if>
+			<if test ='null != server'>server,</if>
+			<if test ='null != database'>database,</if>
+			<if test ='null != userName'>user_name,</if>
+			<if test ='null != password'>password,</if>
+			<if test ='null != description'>description,</if>
+			status,
+			<if test ='null != tenantId'>tenant_id,</if>
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+            <if test ='null != published'>published,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != workspaceId'>#{workspaceId},</if>
+			<if test ='null != wsName'>#{wsName},</if>
+			<if test ='null != typeCode'>#{typeCode},</if>
+			<if test ='null != server'>#{server},</if>
+			<if test ='null != database'>#{database},</if>
+			<if test ='null != userName'>#{userName},</if>
+			<if test ='null != password'>#{password},</if>
+			<if test ='null != description'>#{description},</if>
+			true,
+			<if test ='null != tenantId'>#{tenantId},</if>
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+            <if test ='null != published'>#{published},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "data_workspace"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.workspaceId}  ,  #{item.wsName}  ,  #{item.typeCode}  ,  #{item.server}  ,  #{item.database}  ,  #{item.userName}  ,  #{item.password}  ,  #{item.description}  ,  true  ,  #{item.tenantId}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}, #{item.published}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE data_workspace SET status = false
+        WHERE workspace_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE data_workspace SET status = false
+        WHERE workspace_id = #{workspaceId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.data.mgt.entity.DataWorkspace">
+        UPDATE "data_workspace"
+        <set>
+			<if test ="null != wsName and '' != wsName">ws_name = #{wsName},</if>				
+			<if test ="null != typeCode and '' != typeCode">type_code = #{typeCode},</if>				
+			<if test ="null != server and '' != server">server = #{server},</if>				
+			database = #{database},
+			user_name = #{userName},
+			password = #{password},
+			description = #{description},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+            <if test ='null != published'>published = #{published},</if>
+        </set>
+        WHERE workspace_id = #{workspaceId}  AND status = true
+    </update>
+
+</mapper>

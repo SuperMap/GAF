@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.webgis.dao.WebgisDataServiceFieldMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.webgis.entity.WebgisDataServiceField">
+        <result column="gis_service_field_id" jdbcType="VARCHAR" property="gisServiceFieldId" />
+        <result column="gis_data_service_id" jdbcType="VARCHAR" property="gisDataServiceId" />
+        <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+        <result column="field_alias" jdbcType="VARCHAR" property="fieldAlias" />
+        <result column="field_type_code" jdbcType="VARCHAR" property="fieldTypeCode" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        gis_service_field_id,
+        gis_data_service_id,
+        field_name,
+        field_alias,
+        field_type_code,
+        description,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by
+    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_data_service_field"
+        WHERE gis_service_field_id = #{gisServiceFieldId}
+    </select>
+    <select id="selectByCombination" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_data_service_field"
+        WHERE
+        <trim  suffixOverrides="AND">
+            <if test ='null != gisServiceFieldId'>gis_service_field_id = #{gisServiceFieldId} AND </if>
+            <if test ='null != gisDataServiceId'>gis_data_service_id = #{gisDataServiceId} AND </if>
+            <if test ='null != fieldName'>field_name = #{fieldName} AND </if>
+            <if test ='null != fieldAlias'>field_alias = #{fieldAlias} AND </if>
+            <if test ='null != fieldTypeCode'>field_type_code = #{fieldTypeCode} AND </if>
+            <if test ='null != description'>description = #{description} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != updatedTime'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+        </trim>
+    </select>
+	<select id="selectByOneField" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_data_service_field"
+		WHERE status = true
+        <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+        <if test ='null != orderFieldName and null != orderMethod'>order by ${orderFieldName} ${orderMethod}</if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="gis_service_field_id" keyProperty="gisServiceFieldId" parameterType="com.supermap.gaf.webgis.entity.WebgisDataServiceField">
+        INSERT INTO "webgis_data_service_field"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != gisServiceFieldId'>gis_service_field_id,</if>
+			<if test ='null != gisDataServiceId'>gis_data_service_id,</if>
+			<if test ='null != fieldName'>field_name,</if>
+			<if test ='null != fieldAlias'>field_alias,</if>
+			<if test ='null != fieldTypeCode'>field_type_code,</if>
+			<if test ='null != description'>description,</if>
+			status,
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != gisServiceFieldId'>#{gisServiceFieldId},</if>
+			<if test ='null != gisDataServiceId'>#{gisDataServiceId},</if>
+			<if test ='null != fieldName'>#{fieldName},</if>
+			<if test ='null != fieldAlias'>#{fieldAlias},</if>
+			<if test ='null != fieldTypeCode'>#{fieldTypeCode},</if>
+			<if test ='null != description'>#{description},</if>
+			true,
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "webgis_data_service_field"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.gisServiceFieldId}  ,  #{item.gisDataServiceId}  ,  #{item.fieldName}  ,  #{item.fieldAlias}  ,  #{item.fieldTypeCode}  ,  #{item.description}  ,  true  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE webgis_data_service_field SET status = false
+        WHERE gis_service_field_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE webgis_data_service_field SET status = false
+        WHERE gis_service_field_id = #{gisServiceFieldId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.webgis.entity.WebgisDataServiceField">
+        UPDATE "webgis_data_service_field"
+        <set>
+			<if test ="null != gisDataServiceId and '' != gisDataServiceId">gis_data_service_id = #{gisDataServiceId},</if>				
+			field_name = #{fieldName},
+			field_alias = #{fieldAlias},
+			field_type_code = #{fieldTypeCode},
+			description = #{description},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+        </set>
+        WHERE gis_service_field_id = #{gisServiceFieldId}  AND status = true
+    </update>
+
+</mapper>

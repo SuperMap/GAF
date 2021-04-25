@@ -1,0 +1,5 @@
+-- liquibase formatted sql logicalFilePath:dict/DataSourceClassification
+
+-- changeset SYS:20210406-0
+INSERT INTO "sys_dict"("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('6a95cd0b-0e5c-4259-98c7-6563af3b5f82', 'DataSourceClassification', '数据源分类', NULL, NULL, 3, '0', NULL, 't', '2021-02-05 06:16:17.427449', 'SYS', '2021-02-05 06:16:17.427449', 'SYS', 'tenant_000000', 't', '64b6f34d-7f8e-42d8-b50c-590b653b2107', NULL);
+INSERT INTO "sys_dict"("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('dfd7bd04-7947-4c30-b8fe-e896f49c93c8', 'DataSourceClassification', '示例', 'example', NULL, 1, '6a95cd0b-0e5c-4259-98c7-6563af3b5f82', NULL, 't', '2021-04-01 05:46:08.015413', 'SYS', '2021-04-01 05:47:19.713599', 'SYS', 'tenant_000000', 't', NULL, NULL);

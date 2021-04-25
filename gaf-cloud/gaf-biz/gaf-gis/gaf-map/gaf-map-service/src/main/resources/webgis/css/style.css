@@ -1,0 +1,63 @@
+.mapping-box {
+    width: 70%;
+    margin: 0 auto;
+    padding-top: 2%;
+  }
+  .mapping-btn {
+    width: 120px;
+    border: none;
+    background-color: rgba(204, 204, 204, 0.7);
+    color: white;
+    font-weight: bolder;
+  }
+  .mapping-btn:hover {
+    background-color: rgba(204, 204, 204, 0.3);
+    transform: scale(1.1);
+    color: #ff9b6a;
+  }
+  #mappingBox .ant-table-row-cell-break-word,
+  .ant-table-row-cell-ellipsis {
+    text-align: center;
+  }
+  #mappingBox .ant-table-thead tr th {
+    background-color: #fff;
+    border: none;
+    text-align: center;
+  }
+  #mappingBox .ant-table-thead tr th:nth-child(1) {
+    background-color: #fff;
+    border: none;
+    text-align: left;
+  }
+  #mappingBox .ant-table-wrapper tr td {
+    border: none;
+  }
+  .mapping-search {
+    width: 45%;
+    margin: 3% 0 0 47%;
+  }
+  .mapping-search input{
+    border-top: 2px solid rgb(168, 168, 168);
+    border-right:1px solid #ccc ;
+  }
+  .search-btn {
+    margin-left: 10px;
+    width: 120px;
+    background-color: rgba(204, 204, 204, 0.7);
+    color: white;
+    border: none;
+    font-weight: bolder;
+  }
+  .search-btn:hover {
+    transform: scale(1.1);
+    color: #ff9b6a;
+    border: none;
+    background-color: rgba(204, 204, 204, 0.3);
+  }
+  #searchBox {
+    margin-top:5%;
+  }
+  #searchBox .ant-table-thead tr th, #searchBox .ant-table-wrapper tr td{
+    border: 1px solid rgba(112, 112, 112, 0.5);
+    text-align: center;
+  }

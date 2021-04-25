@@ -1,0 +1,2 @@
+com.supermap.gaf.analysis.spi.overlay.SpatialOverlayIobjectProvider
+com.supermap.gaf.analysis.spi.overlay.SpatialOverlayIserverProvider

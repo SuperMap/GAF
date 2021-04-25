@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthP3MappingRuleMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthP3MappingRule">
+        <result column="mapping_rule_id" jdbcType="VARCHAR" property="mappingRuleId" />
+        <result column="p3_component_id" jdbcType="VARCHAR" property="p3ComponentId" />
+        <result column="mapping_type" jdbcType="VARCHAR" property="mappingType" />
+        <result column="mapping_method" jdbcType="VARCHAR" property="mappingMethod" />
+        <result column="mapping_impl" jdbcType="VARCHAR" property="mappingImpl" />
+        <result column="extra_param_json" jdbcType="VARCHAR" property="extraParamJson" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="mapping_rule_name" jdbcType="VARCHAR" property="mappingRuleName" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        mapping_rule_id,
+        p3_component_id,
+        mapping_type,
+        mapping_method,
+        mapping_impl,
+        status,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        extra_param_json,
+        mapping_rule_name    </sql>
+     <insert id="insert" useGeneratedKeys="true" keyColumn="mapping_rule_id" keyProperty="mappingRuleId" parameterType="com.supermap.gaf.authority.commontype.AuthP3MappingRule">
+        INSERT INTO "auth_p3_mapping_rule"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test ='null != mappingRuleId'>mapping_rule_id,</if>
+                <if test ='null != p3ComponentId'>p3_component_id,</if>
+                <if test ='null != mappingType'>mapping_type,</if>
+                <if test ='null != mappingMethod'>mapping_method,</if>
+                <if test ='null != mappingImpl'>mapping_impl,</if>
+                <if test ='null != status'>status,</if>
+                <if test ='null != description'>description,</if>
+                created_time,
+                <if test ='null != createdBy'>created_by,</if>
+                updated_time,
+                <if test ='null != updatedBy'>updated_by,</if>
+                <if test ='null != extraParamJson'>extra_param_json,</if>
+                <if test ='null != mappingRuleName'>mapping_rule_name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test ='null != mappingRuleId'>#{mappingRuleId},</if>
+                <if test ='null != p3ComponentId'>#{p3ComponentId},</if>
+                <if test ='null != mappingType'>#{mappingType},</if>
+                <if test ='null != mappingMethod'>#{mappingMethod},</if>
+                <if test ='null != mappingImpl'>#{mappingImpl},</if>
+                <if test ='null != status'>#{status},</if>
+                <if test ='null != description'>#{description},</if>
+                now(),
+                <if test ='null != createdBy'>#{createdBy},</if>
+                now(),
+                <if test ='null != updatedBy'>#{updatedBy},</if>
+                <if test ='null != extraParamJson'>#{extraParamJson},</if>
+                <if test ='null != mappingRuleName'>#{mappingRuleName},</if>
+        </trim>
+    </insert>
+    <delete id="delete" >
+        DELETE FROM "auth_p3_mapping_rule"
+        WHERE mapping_rule_id = #{mappingRuleId}
+    </delete>
+
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthP3MappingRule">
+        UPDATE "auth_p3_mapping_rule"
+        <set>
+                <if test ='null != p3ComponentId'>p3_component_id = #{p3ComponentId},</if>
+                <if test ='null != mappingType'>mapping_type = #{mappingType},</if>
+                <if test ='null != mappingMethod'>mapping_method = #{mappingMethod},</if>
+                <if test ='null != mappingImpl'>mapping_impl = #{mappingImpl},</if>
+                <if test ='null != status'>status = #{status},</if>
+                <if test ='null != description'>description = #{description},</if>
+                updated_time = now(),
+                <if test ='null != updatedBy'>updated_by = #{updatedBy},</if>
+                <if test ='null != extraParamJson'>extra_param_json = #{extraParamJson},</if>
+                <if test ='null != mappingRuleName'>mapping_rule_name = #{mappingRuleName},</if>
+        </set>
+        WHERE mapping_rule_id = #{mappingRuleId}
+    </update>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_p3_mapping_rule"
+        WHERE mapping_rule_id = #{mappingRuleId}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthP3MappingRuleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_p3_mapping_rule"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthP3MappingRuleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_p3_mapping_rule"
+		<if test ='null != searchFieldName'>where ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+
+    <select id="listByOneField" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthP3MappingRuleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_p3_mapping_rule"
+        WHERE ${fieldName} = #{fieldValue}
+    </select>
+
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.mapping_rule_id, a.p3_component_id, a.mapping_type, a.mapping_method, a.mapping_impl, a.status, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by, a.extra_param_json, a.mapping_rule_name        FROM "auth_p3_mapping_rule" a,(
+            select mapping_rule_id 
+            From "auth_p3_mapping_rule" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.mapping_rule_id = b.mapping_rule_id 
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM "auth_p3_mapping_rule"
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_p3_mapping_rule"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.mappingRuleId}, #{item.p3ComponentId}, #{item.mappingType}, #{item.mappingMethod}, #{item.mappingImpl}, #{item.status}, #{item.description}, #{item.createdTime}, #{item.createdBy}, #{item.updatedTime}, #{item.updatedBy}, #{item.extraParamJson}, #{item.mappingRuleName})
+        </foreach>
+    </insert>
+    <delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "auth_p3_mapping_rule" 
+        WHERE mapping_rule_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

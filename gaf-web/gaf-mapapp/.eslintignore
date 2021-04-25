@@ -1,0 +1,12 @@
+/.nuxt
+/dist
+/static
+/node_modules
+package-lock.json
+yarn.lock
+.editorconfig
+.eslintignore
+.eslintrc.js
+.gitignore
+.gitlab-ci.yml
+.prettierrc

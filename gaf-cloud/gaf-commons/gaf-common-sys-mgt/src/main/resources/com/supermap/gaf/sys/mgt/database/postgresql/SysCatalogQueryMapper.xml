@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.sys.mgt.dao.SysCatalogQueryMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.sys.mgt.commontype.SysCatalog">
+        <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
+        <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="biz_type_code" jdbcType="VARCHAR" property="bizTypeCode" />
+    </resultMap>
+
+    <resultMap id="TreeResultMap" type="com.supermap.gaf.sys.mgt.commontype.SysCatalog">
+        <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="biz_type_code" jdbcType="VARCHAR" property="bizTypeCode" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        catalog_id,
+        parent_id,
+        sort_sn,
+        name,
+        type,
+        code,
+        sys_component_id,
+        icon_url,
+        description,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        tenant_id,
+        biz_type_code
+    </sql>
+    <select id="selectByCombination" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != parentId'>parent_id = #{parentId} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != name'>name = #{name} AND </if>
+            <if test ='null != type'>type = #{type} AND </if>
+            <if test ='null != code'>code = #{code} AND </if>
+            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
+            <if test ='null != iconUrl'>icon_url = #{iconUrl} AND </if>
+            <if test ='null != description'>description = #{description} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+            <if test ='null != tenantId'>tenant_id = #{tenantId} AND </if>
+        </trim>
+    </select>
+
+    <select id="getCatalogTreeListByRootId" resultMap="TreeResultMap">
+      WITH RECURSIVE T AS (
+        SELECT catalog_id, name, parent_id,type,biz_type_code,sort_sn
+        FROM sys_catalog
+        WHERE catalog_id = #{rootId} AND status = true
+        UNION ALL
+        SELECT D.catalog_id, D.name, D.parent_id,D.type,D.biz_type_code,D.sort_sn
+        FROM sys_catalog D,T
+        where D.PARENT_ID = T.catalog_id AND status = true
+      )
+      SELECT catalog_id, name, parent_id,type,biz_type_code,sort_sn FROM T
+    </select>
+</mapper>

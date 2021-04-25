@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.supermap.gaf.portal.menu.dao.MenuDao">
+
+<!--     <update id=""> -->
+<!--         create table menus( -->
+<!--         `id` VARCHAR (255) PRIMARY KEY NOT NULL, -->
+<!--         `pid` VARCHAR (255) NOT NULL DEFAULT "", -->
+<!--         `path` VARCHAR (255) NOT NULL DEFAULT "", -->
+<!--         `name` VARCHAR (255) NOT NULL DEFAULT "", -->
+<!--         `target` VARCHAR (255) NOT NULL DEFAULT "", -->
+<!--         `icon` VARCHAR (255) NOT NULL DEFAULT "", -->
+<!--         `order` INT (4) NOT NULL DEFAULT "0", -->
+<!--         `visible` TINYINT (1) NOT NULL DEFAULT 1, -->
+<!--         `isEmbed` TINYINT (1) NOT NULL DEFAULT 0, -->
+<!--         `embedUrl` VARCHAR (255) NOT NULL DEFAULT "", -->
+<!--         `flag` VARCHAR (255) NOT NULL DEFAULT "" -->
+<!--         ) -->
+<!--         INSERT INTO `menus` VALUES ('04ec24b3-c899-11e9-8b31-223e840cdc84', '765c763e-c898-11e9-8b31-223e840cdc84', '', 'continuecompiledeploy', '1', 'icon-gateway', 4, 1, 1, 'http://gitlab.supermap.pub/', ''); -->
+<!--         INSERT INTO `menus` VALUES ('072a54f1-c896-11e9-8b31-223e840cdc84', '98c3751e-c893-11e9-8b31-223e840cdc84', '/gateway', 'gateway', '0', 'icon-share-alt', 4, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/gateway', '072a54f1-c896-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('09ac8e09-c894-11e9-8b31-223e840cdc84', '98c3751e-c893-11e9-8b31-223e840cdc84', '/servicelog', 'servicelog', '0', 'icon-eye', 3, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/servicelog', '09ac8e09-c894-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('0caed60d-c897-11e9-8b31-223e840cdc84', '480b8443-c896-11e9-8b31-223e840cdc84', '/authapproles', 'authapproles', '0', 'icon-gateway', 3, 1, 1, 'http://igaf.supermap.pub/security/view/index.html#/authapproles', '0caed60d-c897-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('137501c1-c89e-11e9-8b31-223e840cdc84', 'f66acb50-c89c-11e9-8b31-223e840cdc84', '/map3d', 'map3d', '0', 'icon-video-camera', 5, 1, 1, 'http://igaf.supermap.pub/map/view/index.html#/map3d', ''); -->
+<!--         INSERT INTO `menus` VALUES ('16c6ff89-c893-11e9-8b31-223e840cdc84', 'bc88ec4d-c892-11e9-8b31-223e840cdc84', '/resourcemonitor', 'resourcemonitor', '0', 'icon-cluster', 1, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/resourcemonitor', '16c6ff89-c893-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('326c6a1c-c897-11e9-8b31-223e840cdc84', '480b8443-c896-11e9-8b31-223e840cdc84', '/authapps', 'appManager', '0', 'icon-copyright', 4, 1, 1, 'http://igaf.supermap.pub/security/view/index.html#/authapps', '326c6a1c-c897-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('38eea305-c89e-11e9-8b31-223e840cdc84', 'f66acb50-c89c-11e9-8b31-223e840cdc84', '/map23d', 'map_index', '0', 'icon-eye', 6, 1, 1, 'http://igaf.supermap.pub/map/view/index.html#/', '38eea305-c89e-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('39691265-c893-11e9-8b31-223e840cdc84', 'bc88ec4d-c892-11e9-8b31-223e840cdc84', '/hostmonitor', 'hostmonitor', '0', 'icon-eye', 2, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/hostmonitor', '39691265-c893-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('3a232dd2-c899-11e9-8b31-223e840cdc84', '765c763e-c898-11e9-8b31-223e840cdc84', '', 'imagemanager', '1', 'icon-block', 5, 1, 1, 'http://harbor.supermap.pub', ''); -->
+<!--         INSERT INTO `menus` VALUES ('480b8443-c896-11e9-8b31-223e840cdc84', '', '', 'systemManager', '0', 'icon-setting', 4, 1, 0, '', '480b8443-c896-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('5bfd7c8c-c893-11e9-8b31-223e840cdc84', 'bc88ec4d-c892-11e9-8b31-223e840cdc84', '/storageinfo', 'storageinfo', '0', 'icon-book', 3, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/storageinfo', ''); -->
+<!--         INSERT INTO `menus` VALUES ('5cd6c73f-c89f-11e9-8b31-223e840cdc84', 'a0f63d1d-c89b-11e9-8b31-223e840cdc84', '', 'productAPI', '1', 'icon-tags', 3, 1, 1, ' http://gaf.supermap.pub/docs/api/index.html', '5cd6c73f-c89f-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('635a09a3-c897-11e9-8b31-223e840cdc84', '', '', 'personCenter', '0', 'icon-setting', 6, 0, 0, '', ''); -->
+<!--         INSERT INTO `menus` VALUES ('6633dfe7-c896-11e9-8b31-223e840cdc84', '480b8443-c896-11e9-8b31-223e840cdc84', '/tenants', 'tenants', '0', 'icon-copyright', 1, 1, 1, 'http://igaf.supermap.pub/security/view/index.html#/tenants', '6633dfe7-c896-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('724cda0b-c89e-11e9-8b31-223e840cdc84', '', '', 'configuration', '0', 'icon-logout', 11, 1, 0, '', '724cda0b-c89e-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('765c763e-c898-11e9-8b31-223e840cdc84', '', '', 'continueIntegration', '0', 'icon-shop', 7, 1, 0, '', ''); -->
+<!--         INSERT INTO `menus` VALUES ('787555a1-c896-11e9-8b31-223e840cdc84', '', '', 'organizationManager', '0', 'icon-cluster', 5, 1, 0, '', '787555a1-c896-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('7b87ac23-c894-11e9-8b31-223e840cdc84', '', '', 'serviceAppManager', '0', 'icon-highlight', 3, 1, 0, '', '7b87ac23-c894-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('7d42bbce-c89d-11e9-8b31-223e840cdc84', 'f66acb50-c89c-11e9-8b31-223e840cdc84', '', 'gisportal', '1', 'icon-vertical-right', 1, 1, 1, 'http://gaf.supermap.pub/iportal', '7d42bbce-c89d-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('815ca499-c893-11e9-8b31-223e840cdc84', 'bc88ec4d-c892-11e9-8b31-223e840cdc84', '/networkmonitor', 'networkmonitor', '0', 'icon-gateway', 4, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/networkmonitor', '815ca499-c893-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('8fe3043d-c896-11e9-8b31-223e840cdc84', '787555a1-c896-11e9-8b31-223e840cdc84', '/users', 'users', '0', 'icon-user', 1, 1, 1, 'http://igaf.supermap.pub/security/view/index.html#/users', '8fe3043d-c896-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('917a5178-c897-11e9-8b31-223e840cdc84', '635a09a3-c897-11e9-8b31-223e840cdc84', '/users/password', 'users_password', '0', 'icon-man', 1, 1, 1, 'http://igaf.supermap.pub/security/view/index.html#/users/password', '917a5178-c897-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('98c3751e-c893-11e9-8b31-223e840cdc84', '', '', 'serviceGovernance', '0', 'icon-cloud-server', 2, 1, 0, '', '98c3751e-c893-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('99722fe0-c89d-11e9-8b31-223e840cdc84', 'f66acb50-c89c-11e9-8b31-223e840cdc84', '', 'gisServer', '1', 'icon-notification', 2, 1, 1, 'http://iserver.supermap.pub/iserver', '99722fe0-c89d-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('a0f63d1d-c89b-11e9-8b31-223e840cdc84', '', '', 'productManual', '0', 'icon-question', 9, 1, 0, '', 'a0f63d1d-c89b-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('a627a2b4-c896-11e9-8b31-223e840cdc84', '787555a1-c896-11e9-8b31-223e840cdc84', '/roles', 'roles', '0', 'icon-team', 2, 1, 1, 'http://igaf.supermap.pub/security/view/index.html#/roles', 'a627a2b4-c896-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('ac4d9a9a-c899-11e9-8b31-223e840cdc84', '', '', 'database', '0', 'icon-appstore', 8, 1, 0, '', ''); -->
+<!--         INSERT INTO `menus` VALUES ('b14708df-c897-11e9-8b31-223e840cdc84', '635a09a3-c897-11e9-8b31-223e840cdc84', '/users/profile', 'users_profile', '0', 'icon-tags', 2, 1, 1, 'http://igaf.supermap.pub/security/view/index.html#/users/profile', 'b14708df-c897-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('b5a89f8e-c89e-11e9-8b31-223e840cdc84', '724cda0b-c89e-11e9-8b31-223e840cdc84', '/mapmanager', 'manager', '0', 'icon-cloud-server', 1, 1, 1, 'http://igaf.supermap.pub/map/view/index.html#/manager', 'b5a89f8e-c89e-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('b6e1e535-c893-11e9-8b31-223e840cdc84', '98c3751e-c893-11e9-8b31-223e840cdc84', '/servicelist', 'servicelist', '0', 'icon-woman', 1, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/servicelist', 'b6e1e535-c893-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('b7ed3374-c894-11e9-8b31-223e840cdc84', '7b87ac23-c894-11e9-8b31-223e840cdc84', '/tplmanager', 'tplmanager', '0', 'icon-copy', 1, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/tplmanager', 'b7ed3374-c894-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('bb4b8ec6-c896-11e9-8b31-223e840cdc84', '787555a1-c896-11e9-8b31-223e840cdc84', '/departments', 'departments', '0', 'icon-cluster', 3, 1, 1, 'http://igaf.supermap.pub/security/view/index.html#/departments', 'bb4b8ec6-c896-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('bc88ec4d-c892-11e9-8b31-223e840cdc84', '', '', 'resourceCenter', '0', 'icon-appstore', 1, 1, 0, '', 'bc88ec4d-c892-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('bd5391af-c898-11e9-8b31-223e840cdc84', '765c763e-c898-11e9-8b31-223e840cdc84', '', 'codemanager', '1', 'icon-copyright', 2, 1, 1, 'http://gitlab.supermap.pub/', ''); -->
+<!--         INSERT INTO `menus` VALUES ('be6925e6-c89d-11e9-8b31-223e840cdc84', 'f66acb50-c89c-11e9-8b31-223e840cdc84', '', 'report_designcenter', '1', 'icon-apartment', 3, 1, 1, 'http://gaf.supermap.pub/report/DesignCenter', 'be6925e6-c89d-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('ce596377-c899-11e9-8b31-223e840cdc84', 'ac4d9a9a-c899-11e9-8b31-223e840cdc84', '/dbmanager', 'dbmanager', '0', 'icon-woman', 1, 1, 1, 'http://igaf.supermap.pub/datacenter/view/index.html#/dbmanager', 'ce596377-c899-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('cfa3cf53-c89b-11e9-8b31-223e840cdc84', 'a0f63d1d-c89b-11e9-8b31-223e840cdc84', '', 'developermanual', '1', 'icon-check', 1, 1, 1, 'http://doc.supermap.pub/content/快速入门/DevOps.html', 'cfa3cf53-c89b-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('d61df27f-c894-11e9-8b31-223e840cdc84', '7b87ac23-c894-11e9-8b31-223e840cdc84', '/appmanage', 'appmanage', '0', 'icon-picture', 2, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/appmanage', 'd61df27f-c894-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('d77c4b8a-c893-11e9-8b31-223e840cdc84', '98c3751e-c893-11e9-8b31-223e840cdc84', '/servicemonitor', 'servicemonitor', '0', 'icon-cloud-download', 2, 1, 1, 'http://igaf.supermap.pub/manager/view/index.html#/servicemonitor', 'd77c4b8a-c893-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('e34b8491-c898-11e9-8b31-223e840cdc84', '765c763e-c898-11e9-8b31-223e840cdc84', '', 'codereview', '1', 'icon-crown', 3, 1, 1, 'http://sonar.supermap.pub', ''); -->
+<!--         INSERT INTO `menus` VALUES ('e453028d-c89e-11e9-8b31-223e840cdc84', '724cda0b-c89e-11e9-8b31-223e840cdc84', '/serviceconfig', 'configserverinfolist', '0', 'icon-appstore', 2, 1, 1, 'http://igaf.supermap.pub/configserver/view/index.html#/configserverinfolist', 'e453028d-c89e-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('ecf13111-c896-11e9-8b31-223e840cdc84', '765c763e-c898-11e9-8b31-223e840cdc84', '/projects', 'projects', '0', 'icon-apartment', 1, 1, 1, 'http://igaf.supermap.pub/security/view/index.html#/projects', ''); -->
+<!--         INSERT INTO `menus` VALUES ('f05a2b28-c89d-11e9-8b31-223e840cdc84', 'f66acb50-c89c-11e9-8b31-223e840cdc84', '/map', 'map', '0', 'icon-picture', 4, 1, 1, 'http://igaf.supermap.pub/map/view/index.html#/map', 'f05a2b28-c89d-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('f66acb50-c89c-11e9-8b31-223e840cdc84', '', '', 'portalApp', '0', 'icon-login', 10, 1, 0, '', 'f66acb50-c89c-11e9-8b31-223e840cdc84.'); -->
+<!--         INSERT INTO `menus` VALUES ('ff559766-c89b-11e9-8b31-223e840cdc84', 'a0f63d1d-c89b-11e9-8b31-223e840cdc84', '', 'quickstart', '1', 'icon-tags', 2, 1, 1, 'http://doc.supermap.pub/content/产品简介/', 'ff559766-c89b-11e9-8b31-223e840cdc84.'); -->
+<!--     </update> -->
+
+    <select id="queryMenus" resultType="com.supermap.gaf.portal.menu.commontypes.MenuInfo">
+		SELECT * FROM menus
+	</select>
+
+    <select id="queryMenuById" parameterType="java.lang.String" resultType="com.supermap.gaf.portal.menu.commontypes.MenuInfo">
+	    SELECT * FROM menus WHERE "id" = #{id}
+	</select>
+
+    <insert id="addMenu" parameterType="com.supermap.gaf.portal.menu.commontypes.MenuInfo">
+<!--         <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String"> -->
+<!--             SELECT UUID() -->
+<!--         </selectKey> -->
+        INSERT INTO menus("id","pid","path","name","target","icon","order","visible","isEmbed","embedUrl","flag")
+        VALUES(#{id},#{pid},#{path},#{name},#{target},#{icon},#{order},#{visible},#{isEmbed},#{embedUrl},#{flag})
+    </insert>
+
+    <delete id="deleteMenuById" parameterType="java.lang.String">
+	    DELETE FROM menus WHERE "id" = #{id}
+-- 	    DELETE menus WHERE "flag" like'${id}%'
+	</delete>
+    <delete id="deleteMenuByFlag" parameterType="java.lang.String">
+        DELETE FROM menus WHERE "flag" = #{flag}
+    </delete>
+    <delete id="deleteMenuByIds"  parameterType = "java.util.List">
+        DELETE FROM menus WHERE 1>2
+        or id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="updateMenu" parameterType="com.supermap.gaf.portal.menu.commontypes.MenuInfo">
+	    UPDATE menus SET "pid"=#{pid},"path"=#{path},"name"=#{name},"target"=#{target},"icon"=#{icon},"order"=#{order},"visible"=#{visible},"isEmbed"=#{isEmbed},"embedUrl"=#{embedUrl},"flag"=#{flag} WHERE id=#{id}
+	</update>
+
+</mapper>

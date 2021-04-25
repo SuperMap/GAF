@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.supermap.gaf.authentication.dao.ThirdPartyAssociationMapper">
+    <insert id="addThirdPartyAssociation" useGeneratedKeys="true" keyProperty="id">
+        insert into third_party_association
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="username != null">username,</if>
+                <if test="thirdPartyUsername != null">third_party_username,</if>
+                <if test="enabledThirdParty != null">enabled_third_party,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id},</if>
+                <if test="username != null">#{username},</if>
+                <if test="thirdPartyUsername != null">#{thirdPartyUsername},</if>
+                <if test="enabledThirdParty != null">#{enabledThirdParty},</if>
+        </trim>
+    </insert>
+    <delete id="deleteThirdPartyAssociation">
+        delete from third_party_association where id = #{id}
+    </delete>
+    <update id="updateThirdPartyAssociation" parameterType="com.supermap.gaf.authentication.entity.entity.po.ThirdPartyAssociation">
+        update third_party_association
+        <set>
+                <if test="id != null">id = #{id},</if>
+                <if test="username != null">username = #{username},</if>
+                <if test="thirdPartyUsername != null">third_party_username = #{thirdPartyUsername},</if>
+                <if test="enabledThirdParty != null">enabled_third_party = #{enabledThirdParty},</if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="listThirdPartyAssociation" resultType="com.supermap.gaf.authentication.entity.entity.po.ThirdPartyAssociation">
+        select * from third_party_association order by id desc
+    </select>
+    <select id="getThirdPartyAssociation" resultType="com.supermap.gaf.authentication.entity.entity.po.ThirdPartyAssociation">
+        select * from third_party_association where id = #{id}
+    </select>
+    <select id="getByEnabledThirdPartyAndThirdPartyUserName" resultType="com.supermap.gaf.authentication.entity.entity.po.ThirdPartyAssociation">
+        select * from third_party_association where enabled_third_party = #{enabledThirdParty} and third_party_username = #{thirdPartyUsername}
+    </select>
+</mapper>

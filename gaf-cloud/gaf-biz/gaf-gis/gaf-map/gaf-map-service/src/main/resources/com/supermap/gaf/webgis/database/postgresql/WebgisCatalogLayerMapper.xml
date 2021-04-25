@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.webgis.dao.WebgisCatalogLayerMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.webgis.entity.WebgisCatalogLayer">
+        <result column="catalog_layer_id" jdbcType="VARCHAR" property="catalogLayerId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="layer_catalog_id" jdbcType="VARCHAR" property="layerCatalogId" />
+        <result column="gis_service_id" jdbcType="VARCHAR" property="gisServiceId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="init_load" jdbcType="BIT" property="initLoad" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+
+        <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+        <result column="service_name_en" jdbcType="VARCHAR" property="serviceNameEn" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
+        <result column="more_properties" jdbcType="VARCHAR" property="moreProperties" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        catalog_layer_id,
+        name,
+        layer_catalog_id,
+        gis_service_id,
+        sort_sn,
+        init_load,
+        description,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <sql id="Do_Column_List">
+        cl.catalog_layer_id,
+        cl.name,
+        cl.layer_catalog_id,
+        cl.gis_service_id,
+        cl.sort_sn,
+        cl.init_load,
+        cl.description,
+        cl.status,
+        cl.created_time,
+        cl.created_by,
+        cl.updated_time,
+        cl.updated_by,
+
+
+        s.name service_name,
+        s.name_en service_name_en,
+        s.address,
+        s.type_code,
+        s.more_properties
+        </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_catalog_layer"
+        WHERE catalog_layer_id = #{catalogLayerId}
+    </select>
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_catalog_layer"
+		WHERE status = true
+        <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+        <if test ='null != layerCatalogId'> AND layer_catalog_id = #{layerCatalogId}</if>
+        <if test ='null != orderFieldName and null != orderMethod'>order by ${orderFieldName} ${orderMethod}</if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="catalog_layer_id" keyProperty="catalogLayerId" parameterType="com.supermap.gaf.webgis.entity.WebgisCatalogLayer">
+        INSERT INTO "webgis_catalog_layer"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != catalogLayerId'>catalog_layer_id,</if>
+			<if test ='null != name'>name,</if>
+			<if test ='null != layerCatalogId'>layer_catalog_id,</if>
+			<if test ='null != gisServiceId'>gis_service_id,</if>
+			<if test ='null != sortSn'>sort_sn,</if>
+			<if test ='null != initLoad'>init_load,</if>
+			<if test ='null != description'>description,</if>
+			status,
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != catalogLayerId'>#{catalogLayerId},</if>
+			<if test ='null != name'>#{name},</if>
+			<if test ='null != layerCatalogId'>#{layerCatalogId},</if>
+			<if test ='null != gisServiceId'>#{gisServiceId},</if>
+			<if test ='null != sortSn'>#{sortSn},</if>
+			<if test ='null != initLoad'>#{initLoad},</if>
+			<if test ='null != description'>#{description},</if>
+			true,
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "webgis_catalog_layer"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.catalogLayerId}  ,  #{item.name}  ,  #{item.layerCatalogId}  ,  #{item.gisServiceId}  ,  #{item.sortSn}  ,  #{item.initLoad}  ,  #{item.description}  ,  true  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE webgis_catalog_layer SET status = false
+        WHERE catalog_layer_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE webgis_catalog_layer SET status = false
+        WHERE catalog_layer_id = #{catalogLayerId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.webgis.entity.WebgisCatalogLayer">
+        UPDATE "webgis_catalog_layer"
+        <set>
+			<if test ="null != name and '' != name">name = #{name},</if>				
+			layer_catalog_id = #{layerCatalogId},
+			gis_service_id = #{gisServiceId},
+            <if test ="null != sortSn and '' != sortSn">sort_sn = #{sortSn},</if>
+			init_load = #{initLoad},
+			description = #{description},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+        </set>
+        WHERE catalog_layer_id = #{catalogLayerId}  AND status = true
+    </update>
+
+    <!--<select id="getWebgisCatalogLayerByCatalogIds0" resultMap="BaseResultMap">-->
+        <!--SELECT <include refid="Base_Column_List" />-->
+        <!--FROM "webgis_catalog_layer"-->
+        <!--WHERE layer_catalog_id in-->
+          <!--<foreach collection="catalogIds" index="index" item="item" open="(" separator="," close=")">-->
+            <!--#{item}-->
+          <!--</foreach>-->
+          <!--AND status = true-->
+    <!--</select>-->
+
+    <resultMap type="com.supermap.gaf.webgis.entity.WebgisCatalogLayer" id="detailResultMap" extends="BaseResultMap">
+        <association property="webgisService" column="gis_service_id" javaType="com.supermap.gaf.webgis.entity.WebgisService" select="selectLayerService"></association>
+    </resultMap>
+    <select id="selectLayerService" parameterType="String" resultType="com.supermap.gaf.webgis.entity.WebgisService">
+        select * from webgis_service where gis_service_id=#{gisServiceId}
+    </select>
+
+    <select id="getWebgisCatalogLayerByCatalogIds" resultMap="BaseResultMap">
+        SELECT <include refid="Do_Column_List" />
+        FROM "webgis_catalog_layer" cl
+        join "webgis_service" s on cl.gis_service_id = s.gis_service_id and s.status = true
+        WHERE cl.layer_catalog_id in
+          <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+          AND cl.status = true
+    </select>
+    <select id="selectServiceIdsByCatalogId" resultType="string" parameterType="string">
+        SELECT gis_service_id
+        FROM webgis_catalog_layer
+        WHERE status = true
+        <if test ="null != layerCatalogId and '' != layerCatalogId"> AND layer_catalog_id = #{layerCatalogId}</if>
+    </select>
+
+
+</mapper>

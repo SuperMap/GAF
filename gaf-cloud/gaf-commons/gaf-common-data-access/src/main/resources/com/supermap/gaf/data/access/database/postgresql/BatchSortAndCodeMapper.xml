@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.access.dao.BatchSortAndCodeMapper">
+
+
+    <update id="revisionSortSn" parameterType="com.supermap.gaf.data.access.commontypes.RevisionSortSnParam">
+        UPDATE "${tableName}" t
+        set ${sortSnFieldName}=m._seqnum
+        FROM(
+            select m.${idFieldName},row_number() over (order by m.${sortSnFieldName},m.${updatedTimeFieldName}
+            <if test="oldSortSn == null or curSortSn == null or curSortSn lte oldSortSn">
+                desc
+            </if>
+           ) as _seqnum
+            from "${tableName}" m
+            WHERE
+            <choose>
+                <when  test="parentId != null">
+                    m.${parentIdFieldName}=#{parentId}
+                </when>
+                <otherwise>
+                    m.${parentIdFieldName} is null
+                </otherwise>
+            </choose>
+            <if test="logicDeleteFieldName != null">
+                and m.${logicDeleteFieldName}=true
+            </if>
+        ) m
+        WHERE t.${idFieldName} = m.${idFieldName}
+    </update>
+    <update id="revisionSortSnMutiCondition">
+        UPDATE "${tableName}" t
+        set ${sortSnFieldName}=m._seqnum
+        FROM(
+        select m.${idFieldName},row_number() over (order by m.${sortSnFieldName},m.${updatedTimeFieldName}
+        <if test="oldSortSn == null or curSortSn == null or curSortSn lte oldSortSn">
+            desc
+        </if>
+        ) as _seqnum
+        from "${tableName}" m
+        WHERE
+        <choose>
+            <when  test="parentId != null">
+                m.${parentIdFieldName}=#{parentId}
+            </when>
+            <otherwise>
+                m.${parentIdFieldName} is null
+            </otherwise>
+        </choose>
+        <if test="conditions != null and conditions.size > 0">
+            and <foreach collection="conditions" item="condition" separator=" and ">
+            m.${condition}
+        </foreach>
+        </if>
+        <if test="logicDeleteFieldName != null">
+            and m.${logicDeleteFieldName}=true
+        </if>
+        ) m
+        WHERE t.${idFieldName} = m.${idFieldName}
+    </update>
+    <update id="batchModifySortSNWhenAdd">
+      update ${tableName}
+        set sort_sn = sort_sn + 1
+      where ${idFieldName} != #{curId}
+        and ${parentIdFieldName} = #{parentId}
+        and sort_sn >= #{curSN}
+        and status = true
+    </update>
+    
+    <update id="batchModifySortSNWhenDown">
+      update ${tableName}
+        set sort_sn = sort_sn + 1
+      where ${idFieldName} != #{curId}
+        and ${parentIdFieldName} = #{parentId}
+        and sort_sn >= #{curSN}
+        and sort_sn <![CDATA[<]]> #{oldSN}
+        and status = true
+    </update>
+
+    <update id="batchModifySortSNWhenUp">
+      update ${tableName}
+        set sort_sn = sort_sn - 1
+      where ${idFieldName} != #{curId}
+        and ${parentIdFieldName} = #{parentId}
+        and sort_sn <![CDATA[<=]]> #{curSN}
+        and sort_sn > #{oldSN}
+        and status = true
+    </update>
+
+    <update id="modifyCurSortSN">
+      update ${tableName}
+        set sort_sn = #{curSN}
+      where ${idFieldName} = #{curId}
+        and status = true
+    </update>
+
+    <update id="batchResetSortSN">
+      update ${tableName}
+        set sort_sn = #{curSN}
+      where ${idFieldName} = #{curId}
+        and status = true
+    </update>
+
+</mapper>

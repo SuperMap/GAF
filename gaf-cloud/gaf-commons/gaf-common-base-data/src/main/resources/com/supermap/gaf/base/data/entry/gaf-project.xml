@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog logicalFilePath="no-matter-file-name.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <include  file="./component/common-auth.xml" relativeToChangelogFile="true"/>
+    <include file="../ddl/config_properties.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/proj_code_base_user.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/proj_code_template.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/proj_code_template_param.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/proj_code_template_param_grp.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/proj_group.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/proj_group_member.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/proj_info.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/proj_code_table_field_info.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/proj_code_table_info.sql" relativeToChangelogFile="true"/>
+
+    <includeAll  path="../changelog/gaf-project/" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

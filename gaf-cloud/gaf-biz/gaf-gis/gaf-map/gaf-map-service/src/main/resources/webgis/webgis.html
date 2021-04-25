@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebGIS</title>
+  <link href="./iframe/antd.min.css" rel="stylesheet" />
+  <link href="./webGL/Cesium/Widgets/widgets.css" rel="stylesheet" />
+  <link href="./iframe/css/font_577982_beimm7aom3g.css" rel="stylesheet" />
+  <link href="./iframe/css/geoFont/iconfont.css" rel="stylesheet" />
+  <style>
+.ant-input{
+    background: transparent;
+    border: 1px solid #545c64
+}
+#draggable {
+  background-color: rgba(25, 40, 58, 0.6);
+  border-width: 0;
+  color: #ffffff;
+  margin-left: 30px;
+  padding: 0 15px 0;
+}
+#draggable  .ant-slider-mark-text {
+    color: #ffffff;
+}
+#draggable .sm-profile3d-content {
+    background-color: transparent;
+  }
+#draggable .sm-content {
+    background-color: transparent;
+  }
+#draggable.GafMapProfile .draggable .header {
+    background: transparent;
+   }
+#treeComponent  .ant-tree li .ant-tree-node-content-wrapper:hover{
+    background-color: transparent;
+}
+#treeComponent   .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected{
+    background-color: transparent;
+}
+#treeComponent  .ant-input {
+    color: #ffffff;
+    background-color: transparent;
+  }
+#treeComponent   .ant-input-search-icon {
+    color:#ffffff;
+  }
+#treeComponent   .ant-tree-checkbox-inner {
+    background-color: transparent;
+}
+.bottom {
+  position: absolute;
+  right: -138px;
+  bottom: 20px;
+}
+.map-type p{
+  float: right !important;
+  background-size: cover !important;
+}
+.ant-tooltip-inner{
+  background-color: black;
+  
+}
+.Treetooltip {
+  z-index: 10000;
+}
+  </style>
+  <link rel="stylesheet" href="./iframe/iview.css" />
+  <script src="./iframe/vue.min.js"></script>
+  <script src="./iframe/iview.js"></script>
+  <script src="./webGL/Cesium/Cesium.js"></script>
+  <script src="./iframe/antd.min.js"></script>
+  <script src="./iframe/gafmapui.umd.min.js"></script>
+  <script src="./iframe/vue-iclient3d-webgl.min.js"></script>
+  <script src="./iframe/echarts.min.js"></script>
+  <script src="./iframe/tooltip.js"></script>
+  <script src="./iframe/axios.min.js"></script>
+  <script src="./classic/SuperMap.Include.js"></script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    new Vue({
+      el: '#app',
+      template: ` 
+     <div>
+        <gaf-map-basic-element v-if="loaded"/>
+        <gaf-map-viewer
+            :smSceneList="smSceneList"
+            :smLayerList="smLayerList"
+            :tiandituLayerList="tiandituLayerList"
+            :token="token"
+            @initialize="onViewerLoaded"
+          ></gaf-map-viewer>
+        <div v-if="mapApp">
+          <gaf-map-tool-bar-horizontal v-for="horizontalToolbar in mapApp.horizontalToolbars" :content="horizontalToolbar.buttons" :position="horizontalToolbar.position"/>
+          <gaf-map-tool-bar-vertical v-for="verticalToolbar in mapApp.verticalToolbars" :content="verticalToolbar.buttons" :position="verticalToolbar.position"/>
+          <gaf-map-draggable
+            visible="true"
+            title="资源目录"
+            :width="280"
+          >
+          <gaf-map-tree
+            :replaceFields="mapApp.resourceTree.replaceFields"
+            :data-list="mapApp.resourceTree.allDataList"
+            :searchInputShow="true"
+            :check="onTreeNodeChecked"
+            :select="onSelect"
+            :allCheckable="false"
+            :leafnodeCheckable="true"
+            :someNodeCheckable="false"
+          />
+          </gaf-map-draggable>
+          <div class="bottom" v-if="mapApp.bottomLayers!==null && mapApp.bottomLayers.length>0">
+            <gaf-map-bottom
+            @mapBottomChange="handleMapBottomChange"
+            :bottomList="mapApp.bottomLayers"
+          />
+          </div>
+          
+        </div>
+     </div>
+    `,
+      name: 'GafMapViewer',
+      data() {
+        return {
+          loaded: false,
+          mapApp: null,
+          location: null,
+          layerList: [],
+          token: null,
+          bottomLayer:null
+        }
+      },
+      beforeCreate() {
+        Vue.prototype.$bus = new Vue()
+        Vue.prototype.$mapActions = gafmapui.mapActions
+      },
+      computed: {
+        smSceneList() {
+          return this.layerList.filter(item => item.resourceTag === 'RESTREALSPACE')
+        },
+        smLayerList() {
+          return this.layerList.filter(item => item.resourceTag === 'RESTMAP')
+        },
+        tiandituLayerList() {
+          return this.layerList.filter(item => item.resourceTag === 'MAPWORLD')
+        }
+      },
+      watch: {
+        location(val) {
+          this.$mapActions.flyTo(val)
+        }
+      },
+      methods: {
+        getQueryVariable(variable) {
+          let query = window.location.search.substring(1);
+          let vars = query.split("&");
+          for (let i = 0; i < vars.length; i++) {
+            let pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+          }
+        },
+        async loadAppConfig() {
+          const previewCode = this.getQueryVariable("previewCode")
+          let url = 'http://localhost:8763/map/webgis-apps/cim-test/config'
+          if (previewCode != undefined) {
+            url += '?previewCode=' + previewCode
+          }
+          const response = await axios.get(url)
+          const mapApp = response.data.data;
+          this.location = mapApp.location
+          if(mapApp.bottomLayers!==null && mapApp.bottomLayers.length>0){
+            this.bottomLayper = mapApp.bottomLayers.filter(item => item.isDefault) 
+            if(this.bottomLayer!==null){
+              this.bottomLayer=bottomLayer[0]
+            }else{
+              this.bottomLayer = mapApp.bottomLayers[0]
+              mapApp.bottomLayers[0].isDefault = true
+            }
+          }
+          this.token = mapApp.token
+          this.mapApp = mapApp
+        },
+        handleMapBottomChange(resourceId) {
+          this.layerList.splice(0, 1)
+          this.bottomLayer = this.mapApp.bottomLayers.filter(item => item.resourceId === resourceId)[0];
+          this.layerList.unshift(this.bottomLayer)
+        },
+        onTreeNodeChecked(checkedKeys, info) {
+          const self = this
+          const layerList = []
+          checkedKeys.forEach(key => {
+            const data = self.mapApp.resourceTree.allDataList.find(item => {
+              return item.resourceId.toString() === key.toString()
+            })
+            if (data) {
+              layerList.push(data)
+            }
+          })
+          if (self.bottomLayer!=null) {
+            layerList.unshift(self.bottomLayer)
+          }
+          self.layerList = layerList
+        },
+        onSelect(selectedKeys, info) {
+          const self = this
+          const selectedKey = selectedKeys[0]
+          const layerList = self.layerList.map(item => {
+            if (item.resourceId === selectedKey) {
+              const newLayer = { ...item, location: true }
+              return newLayer
+            }
+            return item
+          })
+          this.layerList = layerList
+        },
+        onViewerLoaded() {
+          this.loaded = true
+        }
+      },
+      beforeMount() {
+        this.loadAppConfig()
+      }
+    })
+  </script>
+</body>
+
+</html>

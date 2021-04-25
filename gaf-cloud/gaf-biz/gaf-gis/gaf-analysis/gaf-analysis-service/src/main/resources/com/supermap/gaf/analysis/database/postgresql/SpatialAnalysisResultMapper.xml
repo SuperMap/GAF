@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.analysis.dao.SpatialAnalysisResultDao">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.analysis.entity.SpatialAnalysisResult">
+        <result column="result_id" jdbcType="VARCHAR" property="resultId" />
+        <result column="analysis_name" jdbcType="VARCHAR" property="analysisName" />
+        <result column="analysis_type" jdbcType="VARCHAR" property="analysisType" />
+        <result column="result_conn_info" jdbcType="VARCHAR" property="resultConnInfo" />
+        <result column="result_data_set_name" jdbcType="VARCHAR" property="resultDataSetName" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        result_id,
+        analysis_name,
+        analysis_type,
+        result_conn_info,
+        result_data_set_name,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+	<select id="getById" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "spatial_analysis_result"
+        WHERE result_id = #{resultId}
+    </select>
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM "spatial_analysis_result"
+    </select>
+    <select id="querySpatialAnalysisResults" parameterType="com.supermap.gaf.analysis.entity.SpatialAnalysisResultSearchParameter" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from "spatial_analysis_result"
+        <if test ='null != keyword'>where analysis_name LIKE CONCAT('%', #{keyword}, '%')</if>
+        order by "created_time" desc
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+    <insert id="addSpatialAnalysisResult" useGeneratedKeys="false" keyColumn="$tableMetadataInfo.pkName" keyProperty="$tableMetadataInfo.pkLowCamelName" parameterType="com.supermap.gaf.analysis.entity.SpatialAnalysisResult">
+        INSERT INTO "spatial_analysis_result"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != resultId'>result_id,</if>
+            <if test ='null != analysisName'>analysis_name,</if>
+            <if test ='null != analysisType'>analysis_type,</if>
+			<if test ='null != resultConnInfo'>result_conn_info,</if>
+			<if test ='null != resultDataSetName'>result_data_set_name,</if>
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != resultId'>#{resultId},</if>
+            <if test ='null != analysisName'>#{analysisName},</if>
+            <if test ='null != analysisType'>#{analysisType},</if>
+			<if test ='null != resultConnInfo'>#{resultConnInfo},</if>
+			<if test ='null != resultDataSetName'>#{resultDataSetName},</if>
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthModuleApiQueryMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthModuleApi">
+        <result column="module_api_id" jdbcType="VARCHAR" property="moduleApiId" />
+        <result column="resource_module_id" jdbcType="VARCHAR" property="resourceModuleId" />
+        <result column="resource_api_id" jdbcType="VARCHAR" property="resourceApiId" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        module_api_id,
+        resource_module_id,
+        resource_api_id,
+        status,
+        sort_sn,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+
+    <select id="getByModuleId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_module_api"
+        where resource_module_id = #{moduleId} and status = #{status}
+    </select>
+
+</mapper>

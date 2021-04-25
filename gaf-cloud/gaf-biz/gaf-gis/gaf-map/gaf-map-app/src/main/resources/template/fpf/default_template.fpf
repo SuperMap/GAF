@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SceneRoute xmlns="http://www.supermap.com.cn/ugc60">
+<route name="飞行路线_1" speed="2.010321" lineType="0" showroutestop="false" showrouteline="false" altitudefree="False" headingfree="False" tiltfree="False" flycircle="False" alongline="False">
+<style>
+<geostyle3d>
+<linecolor>RGBA(147,112,219,255)</linecolor>
+<linewidth>2</linewidth>
+<altitudeMode>Absolute</altitudeMode>
+<bottomAltitude>4.00</bottomAltitude>
+</geostyle3d>
+</style>
+</route>
+</SceneRoute>

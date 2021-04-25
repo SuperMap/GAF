@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthUserRoleMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthUserRole">
+        <result column="user_role_id" jdbcType="VARCHAR" property="userRoleId" />
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_role_id,
+        user_id,
+        role_id,
+        status,
+        sort_sn,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <update id="deleteByUserIdAndRoleIds">
+        UPDATE "auth_user_role"
+        SET status = false
+        WHERE user_id = #{userId} AND status = true  AND role_id IN
+        <foreach collection="roleIds" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_role"
+        WHERE user_role_id = #{userRoleId}
+    </select>
+    <select id="getByUserIds" resultType="java.lang.String">
+        select user_id from "auth_user_role"
+        WHERE status = true and role_id = #{roleId}
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserRoleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_role"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserRoleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_role"
+        where status = true
+		<if test ='null != searchFieldName'>and ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_user_role"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.user_role_id, a.user_id, a.role_id, a.status, a.sort_sn, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_user_role" a,(
+            select user_role_id 
+            From "auth_user_role" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.user_role_id = b.user_role_id 
+    </select>
+
+    <select id="listUserRole" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_role"
+        WHERE status = true and  user_id = #{userId} and role_id = #{roleId}
+    </select>
+
+    <select id="listByUser" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_role"
+        WHERE status = true and user_id = #{userId}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_user_role"
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="user_role_id" keyProperty="userRoleId" parameterType="com.supermap.gaf.authority.commontype.AuthUserRole">
+        INSERT INTO "auth_user_role"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != userRoleId'>user_role_id,</if>
+				<if test ='null != userId'>user_id,</if>
+				<if test ='null != roleId'>role_id,</if>
+				<if test ='null != status'>status,</if>
+				<if test ='null != sortSn'>sort_sn,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != userRoleId'>#{userRoleId},</if>
+				<if test ='null != userId'>#{userId},</if>
+				<if test ='null != roleId'>#{roleId},</if>
+				<if test ='null != status'>#{status},</if>
+				<if test ='null != sortSn'>#{sortSn},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_user_role"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.userRoleId}  ,  #{item.userId}  ,  #{item.roleId}  ,  #{item.status}  ,  #{item.sortSn}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE "auth_user_role"
+        SET status = false
+        WHERE status = true and user_role_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE "auth_user_role"
+        SET status = false
+        WHERE status = true and user_role_id = #{userRoleId}
+    </update>
+    <update id="deleteByUserId" >
+        UPDATE "auth_user_role"
+        SET status = false
+        WHERE status = true and user_id = #{userId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthUserRole">
+        UPDATE "auth_user_role"
+        <set>
+				<if test ='null != userId'>user_id = #{userId},</if>				
+				<if test ='null != roleId'>role_id = #{roleId},</if>				
+				<if test ='null != status'>status = #{status},</if>				
+				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>				
+        </set>
+        WHERE user_role_id = #{userRoleId}
+    </update>
+
+</mapper>

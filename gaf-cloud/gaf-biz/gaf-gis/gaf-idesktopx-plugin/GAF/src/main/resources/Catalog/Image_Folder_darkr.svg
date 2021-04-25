@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>16-Image_Folder</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-14.000000, -1820.000000)">
+            <g id="16" transform="translate(14.000000, 1713.000000)">
+                <g id="Catalog" transform="translate(0.000000, 65.000000)">
+                    <g id="16-Image_Folder" transform="translate(0.000000, 42.000000)">
+                        <g id="Image_Folder" transform="translate(1.000000, 1.000000)">
+                            <path d="M5.5,0.5 L0.5,0.5 L0.5,13.5 L6,13.5 L13.5,13.5 L13.5,2.5 L5.5,2.5 L5.5,0.5 Z" id="合并形状" stroke="#F0F0F0"></path>
+                            <rect id="矩形" fill="#F0F0F0" fill-rule="nonzero" x="0" y="5" width="14" height="1"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

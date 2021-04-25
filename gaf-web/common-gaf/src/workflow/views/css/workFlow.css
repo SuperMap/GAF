@@ -1,0 +1,505 @@
+/* .layout-hide {
+  display: none;
+}
+
+.btn-box div {
+  float: left;
+}
+
+.func-top {
+  height: 50px;
+  border-bottom: 1px solid rgb(243, 243, 243);
+  background-color: rgb(243, 243, 243);
+}
+
+.func-box span {
+  font-size: 18px;
+  color: black;
+  font-weight: bolder;
+  margin-left: 2%;
+  line-height: 50px;
+}
+
+.func-box {
+  position: absolute;
+  margin-left: 2%;
+  width: 600px;
+}
+
+.btn-box {
+  line-height: 50px;
+  float: right;
+  margin-right: 3%;
+}
+
+.btn-blue {
+  color: white;
+  background-color: rgb(109, 138, 204);
+}
+
+.btn-deepblue {
+  color: white;
+  background-color: rgb(24, 113, 186);
+}
+
+.btn-red {
+  color: white;
+  background-color: rgb(233, 77, 77);
+}
+
+.btn-menu {
+  border: 1px solid rgb(24, 113, 186);
+  color: rgb(24, 113, 186);
+}
+
+.menu-title {
+  color: rgb(24, 113, 186);
+} */
+
+/*  .ant-menu-item-active {
+    display: none;
+  } */
+
+/*.all-top {
+  border-bottom: 1px solid gray;
+}
+
+.all-box {
+  position: relative;
+  width: 100%;
+  border: none;
+}
+
+.all-box li {
+  list-style: none;
+  padding: 3px;
+}
+
+.layout-vertical {
+  margin-top: 30%;
+  margin: 390px 2% 0 2%;
+  border-radius: 15px;
+  font-size: 18px;
+  width: 65%;
+  position: absolute;
+  z-index: 99;
+}
+
+.bg-color-4 {
+  background-color: rgb(245, 247, 250);
+  height: 330px;
+}
+
+.tab-smallbox {
+  border: 5px solid white;
+  height: 85vh;
+}
+
+.ant-tabs-tabpane-active {}
+
+.row {
+  position: absolute;
+  width: 40px;
+  height: 30px;
+  left: -50px;
+  top: 5px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.row:hover {
+  transform: scale(1.1);
+}
+
+.primaryBtnS {
+  top: 43px;
+}
+
+.box-left {
+  margin: 1% 2%;
+  border-radius: 15px;
+  position: absolute;
+  font-size: 18px;
+  height: 370px;
+  width: 65%;
+  background-color: rgb(245, 247, 250);
+}
+
+.box-right {
+  float: right;
+  width: 30%;
+}
+
+.left-l span {
+  font-weight: bolder;
+  font-size: 19px;
+  color: rgb(96, 108, 136);
+}
+
+.left-r span {
+  font-weight: bolder;
+  font-size: 19px;
+  color: rgb(96, 108, 136);
+}
+
+.left-l {
+  width: 40%;
+  float: left;
+  margin: 1% 8% 0 12%;
+}
+
+.title-top {
+  color: black;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.red-color span:nth-child(2) {
+  color: red;
+}
+
+.left-r {
+  margin: 4% 0 0 5%;
+}
+
+.start-txt {
+  font-size: 17px;
+  font-weight: bolder;
+}
+
+.zc-btn {
+  border-top: 1px solid #ccc;
+  padding-top: 2%;
+}
+
+.zc-btn div:nth-child(1) {
+  float: left;
+}
+
+.zc-btn div:nth-child(2) {
+  margin-left: 75%;
+}
+
+.transfer-input {
+  width: 100%;
+  margin-top: 7%;
+}
+
+.tree-height {
+  overflow: hidden;
+}
+
+#zc-modal-txt {
+  width: 100%;
+  margin-top: 5%;
+}
+
+.yesAndno {
+  margin: 10px 10px 5px 65%;
+}
+
+.tags_proinststate {
+  color: white;
+  font-weight: lighter;
+}
+
+.tags_proinsttype {
+  color: white;
+  font-weight: lighter;
+}
+
+.Normal {
+  background-color: rgb(30, 144, 255);
+  padding: 3px 8px 3px 4px;
+}
+
+.ProLong {
+  background-color: rgb(226, 174, 63);
+  padding: 3px 8px 3px 4px;
+}
+
+.LogOut {
+  background-color: rgb(230, 53, 53);
+  padding: 3px 8px 3px 4px;
+}
+
+.Complete {
+  background-color: rgb(151, 216, 66);
+  padding: 3px 8px 3px 4px;
+}
+
+.HangingUp {
+  background-color: rgb(255, 215, 0);
+  padding: 3px 8px 3px 4px;
+}
+
+.Locked {
+  background-color: rgb(190, 188, 188);
+  padding: 3px 8px 3px 4px;
+}
+
+.Supervised {
+  background-color: rgb(34, 156, 140);
+  padding: 3px 8px 3px 4px;
+}
+
+.OverDue {
+  background-color: rgb(245, 232, 58);
+  padding: 3px 8px 3px 4px;
+}
+
+.Urgent {
+  background-color: rgb(221, 68, 114);
+  padding: 3px 8px 3px 4px;
+}
+
+.Assigned {
+  background-color: rgb(183, 53, 206);
+  padding: 3px 8px 3px 4px;
+}
+
+.GreenChannel {
+  background-color: rgb(85, 206, 55);
+  padding: 3px 8px 3px 4px;
+}
+
+.ant-menu-horizontal>.ant-menu-item:hover {
+  color: gray;
+}
+
+.btn-skip {
+  border: none;
+  width: 23%;
+  height: 70px;
+  float: left;
+  margin: 1%;
+  font-size: 24px;
+  font-weight: bolder;
+  background-color: rgb(240, 242, 245);
+  overflow: hidden;
+  border-top-right-radius: 35px;
+  border-bottom-left-radius: 35px;
+  text-align: left;
+  transition: all 0.2s linear;
+}
+
+.btn-skip:hover {
+  background-color: rgb(24, 113, 186);
+  color: white;
+  font-size: 26px;
+}
+
+.svg-right {
+  float: right;
+}
+
+.svg-left {
+  float: left;
+}
+
+.model-txt {
+  margin-left: 70px;
+}
+
+.ant-form-item-label label {
+  width: 50px;
+  margin-left: -10px;
+  font-size: 18px;
+}*/
+
+/* .ant-btn-primary {
+    margin: 15px 0 0 120px;
+  } */
+/* .nowTxt {
+  font-weight: bolder;
+  font-size: 19px;
+  color: black;
+}
+
+.bread-btn {
+  color: rgb(96, 108, 136);
+  font-weight: bolder;
+  font-size: 19px;
+}
+
+.a-table-style {
+  margin-top: 1%;
+}
+
+.ant-table-body div,
+td {
+  text-align: center;
+}
+
+.ab-ain {
+  background-color: rgb(196, 228, 225);
+  border: 1px solid red;
+}
+
+.layout-badge-green {
+  background: rgb(30, 178, 114);
+  color: white;
+  padding: 0 3%;
+  border-radius: 5px;
+}
+
+.layout-badge-blue {
+  background: rgb(66, 105, 233);
+  color: white;
+  padding: 0 3%;
+  border-radius: 5px;
+}
+
+.layout-badge-orange {
+  background: rgb(230, 121, 38);
+  color: white;
+  padding: 0 3%;
+  border-radius: 5px;
+}
+
+.layout-badge-red {
+  background: rgb(233, 77, 77);
+  color: white;
+  padding: 0 3%;
+  border-radius: 5px;
+}
+
+.ab-pin {
+  font-weight: bolder;
+}
+
+.ab-aied {
+  border: 1px solid rgb(251, 229, 230);
+  background: rgb(251, 229, 230);
+  color: rgb(212, 0, 56);
+  border-radius: 15px;
+  padding: 2% 6%;
+}
+
+#handle-func {
+  float: left;
+}
+
+#del-func {
+  border: none;
+  color: rgb(24, 144, 255);
+  padding: 0 20px 8px 0;
+  background-color: transparent;
+}
+
+#del-func:hover {
+  color: rgba(255, 0, 0, 0.719);
+}
+
+.txt-bg {
+  background-color: rgb(251, 229, 230);
+  color: rgb(212, 0, 15);
+}
+
+.txt {
+  float: left;
+  font-weight: bolder;
+  padding-left: 10%;
+}
+
+.time {
+  width: 240px;
+}
+
+#bg-color {
+  height: 40px;
+  line-height: 40px;
+  border-radius: 15px;
+  width: 260px;
+  margin-left: 30%;
+  background-color: rgb(255, 241, 234);
+  color: rgb(255, 121, 52);
+}
+
+.hanging-right {
+  background-color: rgb(221, 244, 234);
+  color: black;
+  height: 30%;
+  border-radius: 5px;
+  margin: 3% 5% 0 0;
+  padding: 3% 15%;
+}
+
+.RollBackOut {
+  color: rgb(255, 30, 30);
+  font-weight: bolder;
+}
+
+.RollBack {
+  color: rgb(121, 3, 29);
+  font-weight: bolder;
+}
+
+.HangUp {
+  color: rgb(233, 222, 72);
+  font-weight: bolder;
+}
+
+.Transfer {
+  color: rgb(158, 156, 54);
+  font-weight: bolder;
+}
+
+.RollJumpBack {
+  color: rgb(19, 101, 156);
+  font-weight: bolder;
+}
+
+.Copy {
+  color: rgb(190, 192, 78);
+  font-weight: bolder;
+}
+
+.Accept {
+  color: rgb(149, 219, 103);
+  font-weight: bolder;
+}
+
+.RollBackOutBg {
+  background-color: rgba(255, 30, 30, 0.1);
+}
+
+.RollBackBg {
+  background-color: rgba(121, 3, 29, 0.1);
+}
+
+.HangUpBg {
+  background-color: rgba(233, 222, 72, 0.1);
+}
+
+.TransferBg {
+  background-color: rgba(158, 156, 54, 0.1);
+}
+
+.RollJumpBackBg {
+  background-color: rgba(19, 101, 156, 0.1);
+}
+
+.CopyBg {
+  background-color: rgba(190, 192, 78, 0.1);
+}
+
+.AcceptBg {
+  background-color: rgba(149, 219, 103, 0.1);
+}
+
+.box-rightTxt {
+  float: right;
+  color: white;
+  font-size: 20px;
+  font-weight: bolder;
+  background-color: rgba(36, 158, 158, 0.4);
+  padding: 3px 15px;
+  border-radius: 15px;
+}
+
+.ant-table-thead tr th {
+  text-align: center;
+}
+ */

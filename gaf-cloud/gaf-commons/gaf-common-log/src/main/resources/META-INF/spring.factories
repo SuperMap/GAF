@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.supermap.gaf.log.commontypes.FluentdConfig

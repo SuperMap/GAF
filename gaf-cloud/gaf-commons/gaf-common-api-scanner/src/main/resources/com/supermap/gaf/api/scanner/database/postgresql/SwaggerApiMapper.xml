@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.api.scanner.dao.SwaggerAuthResourceApiMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.api.scanner.entity.AuthResourceApi">
+        <result column="resource_api_id" jdbcType="VARCHAR" property="resourceApiId" />
+        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
+        <result column="api_catalog_id" jdbcType="VARCHAR" property="apiCatalogId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="route_url" jdbcType="VARCHAR" property="routeUrl" />
+        <result column="method" jdbcType="VARCHAR" property="method" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        resource_api_id,
+        sys_component_id,
+        api_catalog_id,
+        name,
+        route_url,
+        method,
+        type,
+        status,
+        sort_sn,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="resource_api_id" keyProperty="resourceApiId" parameterType="com.supermap.gaf.api.scanner.entity.AuthResourceApi">
+        INSERT INTO "auth_resource_api"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != resourceApiId'>resource_api_id,</if>
+            <if test ='null != sysComponentId'>sys_component_id,</if>
+            <if test ='null != apiCatalogId'>api_catalog_id,</if>
+            <if test ='null != name'>name,</if>
+            <if test ='null != routeUrl'>route_url,</if>
+            <if test ='null != method'>method,</if>
+            <if test ='null != type'>type,</if>
+            <if test ='null != status'>status,</if>
+            <if test ='null != sortSn'>sort_sn,</if>
+            created_time,
+            <if test ='null != createdBy'>created_by,</if>
+            updated_time,
+            <if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != resourceApiId'>#{resourceApiId},</if>
+            <if test ='null != sysComponentId'>#{sysComponentId},</if>
+            <if test ='null != apiCatalogId'>#{apiCatalogId},</if>
+            <if test ='null != name'>#{name},</if>
+            <if test ='null != routeUrl'>#{routeUrl},</if>
+            <if test ='null != method'>#{method},</if>
+            <if test ='null != type'>#{type},</if>
+            <if test ='null != status'>#{status},</if>
+            <if test ='null != sortSn'>#{sortSn},</if>
+            now(),
+            <if test ='null != createdBy'>#{createdBy},</if>
+            now(),
+            <if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+    <select id="listByCatalogId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_api"
+        WHERE api_catalog_id = #{catalogId}
+    </select>
+
+
+</mapper>

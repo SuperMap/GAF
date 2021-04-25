@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthDepartmentMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthDepartment">
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="department_type" jdbcType="VARCHAR" property="departmentType" />
+        <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+        <result column="brief_name" jdbcType="VARCHAR" property="briefName" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="admin_id" jdbcType="VARCHAR" property="adminId" />
+        <result column="is_third_party" jdbcType="BIT" property="isThirdParty" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        department_id,
+        tenant_id,
+        parent_id,
+        sort_sn,
+        department_type,
+        department_name,
+        name_en,
+        brief_name,
+        code,
+        status,
+        description,
+        admin_id,
+        is_third_party,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_department"
+        WHERE department_id = #{departmentId}
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthDepartmentSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_department"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_department"
+        where tenant_id = #{tenantId} and status = true
+        <if test ='null != selectVo.searchFieldName and null != selectVo.searchFieldValue'>and ${selectVo.searchFieldName} LIKE CONCAT('%', #{selectVo.searchFieldValue}, '%')</if>
+		<if test ='null != selectVo.orderFieldName'>order by ${selectVo.orderFieldName} ${selectVo.orderMethod}</if>
+        LIMIT #{selectVo.pageSize}
+        <if test ='null != selectVo.offset'>OFFSET #{selectVo.offset}</if>
+    </select>
+    <select id="searchWholeMatchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthDepartmentSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_department"
+        where tenant_id = #{tenantId} and status = true and ${selectVo.searchFieldName} = #{selectVo.searchFieldValue}
+        <if test ='null != selectVo.orderFieldName'>order by ${selectVo.orderFieldName} ${selectVo.orderMethod}</if>
+        LIMIT #{selectVo.pageSize}
+        <if test ='null != selectVo.offset'>OFFSET #{selectVo.offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_department"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.department_id, a.tenant_id, a.parent_id, a.sort_sn, a.department_type, a.department_name, a.name_en, a.brief_name, a.code, a.status, a.description, a.admin_id, a.is_third_party, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_department" a,(
+            select department_id 
+            From "auth_department" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.department_id = b.department_id 
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_department"
+    </select>
+    <select id="selectByCombination" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM auth_department
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != departmentId'>department_id = #{departmentId} AND </if>
+            <if test ='null != tenantId'>tenant_id = #{tenantId} AND </if>
+            <if test ='null != parentId'>parent_id = #{parentId} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != departmentType'>department_type = #{departmentType} AND </if>
+            <if test ='null != departmentName'>department_name = #{departmentName} AND </if>
+            <if test ='null != nameEn'>name_en = #{nameEn} AND </if>
+            <if test ='null != briefName'>brief_name = #{briefName} AND</if>
+            <if test ='null != code'>code = #{code} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != description'>description = #{description} AND </if>
+            <if test ='null != adminId'>admin_id = #{adminId} AND </if>
+            <if test ='null != isThirdParty'>is_third_party = #{isThirdParty} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+        </trim>
+    </select>
+    <select id="countByCombination" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM auth_department
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != departmentId'>department_id = #{departmentId} AND </if>
+            <if test ='null != tenantId'>tenant_id = #{tenantId} AND </if>
+            <if test ='null != parentId'>parent_id = #{parentId} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != departmentType'>department_type = #{departmentType} AND </if>
+            <if test ='null != departmentName'>department_name = #{departmentName} AND </if>
+            <if test ='null != nameEn'>name_en = #{nameEn} AND </if>
+            <if test ='null != briefName'>brief_name = #{briefName} AND</if>
+            <if test ='null != code'>code = #{code} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != description'>description = #{description} AND </if>
+            <if test ='null != adminId'>admin_id = #{adminId} AND </if>
+            <if test ='null != isThirdParty'>is_third_party = #{isThirdParty} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+        </trim>
+    </select>
+    <select id="selectByIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM auth_department
+        WHERE status = true and  department_id IN
+        <foreach collection="collection" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectAllParentIds" resultType="java.lang.String">
+        SELECT DISTINCT parent_id
+        FROM auth_department
+        WHERE status = true and  tenant_id = #{tenantId}
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="department_id" keyProperty="departmentId" parameterType="com.supermap.gaf.authority.commontype.AuthDepartment">
+        INSERT INTO "auth_department"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test ='null != departmentId'>department_id,</if>
+                <if test ='null != tenantId'>tenant_id,</if>
+                <if test ='null != parentId'>parent_id,</if>
+                <if test ='null != sortSn'>sort_sn,</if>
+                <if test ='null != departmentType'>department_type,</if>
+                <if test ='null != departmentName'>department_name,</if>
+                <if test ='null != nameEn'>name_en,</if>
+                <if test ='null != briefName'>brief_name,</if>
+                <if test ='null != code'>code,</if>
+                <if test ='null != status'>status,</if>
+                <if test ='null != description'>description,</if>
+                <if test ='null != adminId'>admin_id,</if>
+                <if test ='null != isThirdParty'>is_third_party,</if>
+                created_time,
+                <if test ='null != createdBy'>created_by,</if>
+                updated_time,
+                <if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test ='null != departmentId'>#{departmentId},</if>
+                <if test ='null != tenantId'>#{tenantId},</if>
+                <if test ='null != parentId'>#{parentId},</if>
+                <if test ='null != sortSn'>#{sortSn},</if>
+                <if test ='null != departmentType'>#{departmentType},</if>
+                <if test ='null != departmentName'>#{departmentName},</if>
+                <if test ='null != nameEn'>#{nameEn},</if>
+                <if test ='null != briefName'>#{briefName},</if>
+                <if test ='null != code'>#{code},</if>
+                <if test ='null != status'>#{status},</if>
+                <if test ='null != description'>#{description},</if>
+                <if test ='null != adminId'>#{adminId},</if>
+                <if test ='null != isThirdParty'>#{isThirdParty},</if>
+                now(),
+                <if test ='null != createdBy'>#{createdBy},</if>
+                now(),
+                <if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_department"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.departmentId}, #{item.tenantId}, #{item.parentId}, #{item.sortSn}, #{item.departmentType}, #{item.departmentName}, #{item.nameEn}, #{item.briefName}, #{item.code}, #{item.status}, #{item.description}, #{item.adminId}, #{item.isThirdParty}, now(), #{item.createdBy}, now(), #{item.updatedBy})
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE "auth_department"
+        SET status = false
+        WHERE status = true and  department_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE "auth_department"
+        SET status = false
+        WHERE status = true and department_id = #{departmentId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthDepartment">
+        UPDATE "auth_department"
+        <set>
+                <if test ='null != sortSn'>sort_sn = #{sortSn},</if>
+                <if test ='null != departmentType'>department_type = #{departmentType},</if>
+                <if test ='null != departmentName'>department_name = #{departmentName},</if>
+                <if test ='null != nameEn'>name_en = #{nameEn},</if>
+                <if test ='null != briefName'>brief_name = #{briefName},</if>
+                <if test ='null != code'>code = #{code},</if>
+                <if test ='null != status'>status = #{status},</if>
+                <if test ='null != description'>description = #{description},</if>
+                <if test ='null != adminId'>admin_id = #{adminId},</if>
+                updated_time = now(),
+                <if test ='null != updatedBy'>updated_by = #{updatedBy},</if>
+        </set>
+        WHERE department_id = #{departmentId}
+    </update>
+    <update id="updateSortSnByCombination">
+        UPDATE auth_department
+        <set>
+            <if test ='addOrSub'>sort_sn = sort_sn + 1</if>
+            <if test ='addOrSub == false'>sort_sn = sort_sn - 1</if>
+        </set>
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != queryCondition.departmentId'>department_id = #{queryCondition.departmentId} AND </if>
+            <if test ='null != queryCondition.tenantId'>tenant_id = #{queryCondition.tenantId} AND </if>
+            <if test ='null != queryCondition.parentId'>parent_id = #{queryCondition.parentId} AND </if>
+            <if test ='null != queryCondition.departmentType'>department_type = #{queryCondition.departmentType} AND </if>
+            <if test ='null != queryCondition.departmentName'>department_name = #{queryCondition.departmentName} AND </if>
+            <if test ='null != queryCondition.nameEn'>name_en = #{queryCondition.nameEn} AND </if>
+            <if test ='null != queryCondition.briefName'>brief_name = #{queryCondition.briefName} AND </if>
+            <if test ='null != queryCondition.code'>code = #{queryCondition.code} AND </if>
+            <if test ='null != queryCondition.status'>status = #{queryCondition.status} AND </if>
+            <if test ='null != queryCondition.description'>description = #{queryCondition.description} AND </if>
+            <if test ='null != queryCondition.adminId'>admin_id = #{queryCondition.adminId} AND </if>
+            <if test ='null != queryCondition.isThirdParty'>is_third_party = #{queryCondition.isThirdParty} AND </if>
+            <if test ='null != queryCondition.createdTime'>created_time = #{queryCondition.createdTime} AND </if>
+            <if test ='null != queryCondition.createdBy'>created_by = #{queryCondition.createdBy} AND </if>
+            <if test ='null != queryCondition.createdBy'>updated_time = #{queryCondition.updatedTime} AND </if>
+            <if test ='null != queryCondition.updatedBy'>updated_by = #{queryCondition.updatedBy} AND </if>
+        </trim>
+        AND #{endSortSn} > sort_sn
+        AND sort_sn > #{startSortSn}
+    </update>
+
+</mapper>

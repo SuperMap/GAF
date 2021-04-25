@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthUserParttimeMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthUserParttime">
+        <result column="user_parttime_id" jdbcType="VARCHAR" property="userParttimeId" />
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+        <result column="post_id" jdbcType="VARCHAR" property="postId" />
+        <result column="post_type" jdbcType="VARCHAR" property="postType" />
+        <result column="expiration_time" jdbcType="TIMESTAMP" property="expirationTime" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_parttime_id,
+        user_id,
+        department_id,
+        post_id,
+        post_type,
+        expiration_time,
+        status,
+        sort_sn,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        tenant_id
+    </sql>
+    <update id="deleteByUserId">
+        UPDATE "auth_user_parttime"
+        SET status = false
+        WHERE status = true and user_id = #{userId}
+    </update>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_parttime"
+        WHERE user_parttime_id = #{userParttimeId}
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_parttime"
+        WHERE status = true
+        <if test ='null != searchFieldName'>and ${searchFieldName} = #{searchFieldValue} </if>
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_parttime"
+        where status = true
+		<if test ='null != searchFieldName'>and ${searchFieldName} = #{searchFieldValue} </if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_user_parttime"
+        WHERE status = true
+		<if test ='null != fieldName'>AND ${fieldName} = #{fieldValue}</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.user_parttime_id, a.user_id, a.department_id, a.post_id, a.post_type, a.expiration_time, a.status, a.sort_sn, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_user_parttime" a,(
+            select user_parttime_id 
+            From "auth_user_parttime"
+            WHERE status = true
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.user_parttime_id = b.user_parttime_id 
+    </select>
+
+    <select id="listUserParttime" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_parttime"
+        WHERE status = true and post_id = #{postId} and user_id = #{userId}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_user_parttime"
+        WHERE status = true
+    </select>
+    <select id="selectByCombination" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user_parttime"
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != userParttimeId'>user_parttime_id = #{userParttimeId} AND </if>
+            <if test ='null != userId'>user_id = #{userId} AND </if>
+            <if test ='null != departmentId'>department_id = #{departmentId} AND </if>
+            <if test ='null != postId'>post_id = #{postId} AND </if>
+            <if test ='null != postType'>post_type = #{postType} AND </if>
+            <if test ='null != expirationTime'>expiration_time = #{expirationTime} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+            <if test ='null != tenantId'>tenant_id = #{tenantId} AND</if>
+        </trim>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="user_parttime_id" keyProperty="userParttimeId" parameterType="com.supermap.gaf.authority.commontype.AuthUserParttime">
+        INSERT INTO "auth_user_parttime"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != userParttimeId'>user_parttime_id,</if>
+				<if test ='null != userId'>user_id,</if>
+				<if test ='null != departmentId'>department_id,</if>
+				<if test ='null != postId'>post_id,</if>
+				<if test ='null != postType'>post_type,</if>
+				<if test ='null != expirationTime'>expiration_time,</if>
+				<if test ='null != status'>status,</if>
+				<if test ='null != sortSn'>sort_sn,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+                <if test ='null != tenantId'>tenant_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != userParttimeId'>#{userParttimeId},</if>
+				<if test ='null != userId'>#{userId},</if>
+				<if test ='null != departmentId'>#{departmentId},</if>
+				<if test ='null != postId'>#{postId},</if>
+				<if test ='null != postType'>#{postType},</if>
+				<if test ='null != expirationTime'>#{expirationTime},</if>
+				<if test ='null != status'>#{status},</if>
+				<if test ='null != sortSn'>#{sortSn},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+                <if test ='null != tenantId'>#{tenantId},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_user_parttime"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.userParttimeId}  ,  #{item.userId}  ,  #{item.departmentId}  ,  #{item.postId}  ,  #{item.postType}  ,  #{item.expirationTime}  ,  #{item.status}  ,  #{item.sortSn}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy},  #{item.tenantId}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE "auth_user_parttime"
+        SET status = false
+        WHERE status = true and user_parttime_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE "auth_user_parttime"
+        SET status = false
+        WHERE status = true and user_parttime_id = #{userParttimeId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthUserParttime">
+        UPDATE "auth_user_parttime"
+        <set>
+				<if test ='null != userId'>user_id = #{userId},</if>				
+				<if test ='null != departmentId'>department_id = #{departmentId},</if>				
+				<if test ='null != postId'>post_id = #{postId},</if>				
+				<if test ='null != postType'>post_type = #{postType},</if>				
+				<if test ='null != expirationTime'>expiration_time = #{expirationTime},</if>				
+				<if test ='null != status'>status = #{status},</if>				
+				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>
+                <if test ='null != tenantId'>tenant_id = #{tenantId},</if>
+        </set>
+        WHERE user_parttime_id = #{userParttimeId}
+    </update>
+
+</mapper>

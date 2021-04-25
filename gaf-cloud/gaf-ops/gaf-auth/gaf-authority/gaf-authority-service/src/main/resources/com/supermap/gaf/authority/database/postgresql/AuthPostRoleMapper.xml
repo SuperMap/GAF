@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthPostRoleMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthPostRole">
+        <result column="post_role_id" jdbcType="VARCHAR" property="postRoleId" />
+        <result column="post_id" jdbcType="VARCHAR" property="postId" />
+        <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="status" jdbcType="BIT" property="status" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        post_role_id,
+        post_id,
+        role_id,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        sort_sn,
+        status    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_post_role"
+        WHERE post_role_id = #{postRoleId}
+    </select>
+    <select id="getByPostIds" resultType="java.lang.String">
+        select post_id from "auth_post_role"
+        WHERE status = true and role_id = #{roleId}
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthPostRoleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_post_role"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthPostRoleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_post_role"
+        where status = true
+		<if test ='null != searchFieldName'>and ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_post_role"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.post_role_id, a.post_id, a.role_id, a.created_time, a.created_by, a.updated_time, a.updated_by, a.sort_sn, a.status        FROM "auth_post_role" a,(
+            select post_role_id 
+            From "auth_post_role" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.post_role_id = b.post_role_id 
+    </select>
+    <update id="batchUpdate" parameterType="java.util.List">
+        UPDATE "auth_post_role"
+        set status = true
+        WHERE post_role_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+    <select id="listPostRole" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_post_role"
+        WHERE status = true and post_id = #{postId} and role_id = #{roleId}
+    </select>
+    <select id="getByPostId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_post_role"
+        WHERE status = #{status} and post_id = #{postId}
+    </select>
+    <select id="getByPostAndRole" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_post_role"
+        where post_id = #{postId} and role_id = #{roleId} and status = #{status}
+    </select>
+    <select id="listByPost" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_post_role"
+        WHERE status = true and post_id = #{postId}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_post_role"
+    </select>
+    <select id="selectByPostIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_post_role"
+        WHERE status = true and post_id IN
+        <foreach collection="postIds" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="post_role_id" keyProperty="postRoleId" parameterType="com.supermap.gaf.authority.commontype.AuthPostRole">
+        INSERT INTO "auth_post_role"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != postRoleId'>post_role_id,</if>
+				<if test ='null != postId'>post_id,</if>
+				<if test ='null != roleId'>role_id,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+				<if test ='null != sortSn'>sort_sn,</if>
+				<if test ='null != status'>status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != postRoleId'>#{postRoleId},</if>
+				<if test ='null != postId'>#{postId},</if>
+				<if test ='null != roleId'>#{roleId},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+				<if test ='null != sortSn'>#{sortSn},</if>
+				<if test ='null != status'>#{status},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_post_role"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.postRoleId}  ,  #{item.postId}  ,  #{item.roleId}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  ,  #{item.sortSn}  ,  #{item.status}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE "auth_post_role"
+        SET status = false
+        WHERE status = true and post_role_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE "auth_post_role"
+        SET status = false
+        WHERE status = true and post_role_id = #{postRoleId}
+    </update>
+    <update id="deleteByPostId" >
+        UPDATE "auth_post_role"
+        SET status = false
+        WHERE status = true and post_id = #{postId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthPostRole">
+        UPDATE "auth_post_role"
+        <set>
+				<if test ='null != postId'>post_id = #{postId},</if>				
+				<if test ='null != roleId'>role_id = #{roleId},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>				
+				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>				
+				<if test ='null != status'>status = #{status},</if>				
+        </set>
+        WHERE post_role_id = #{postRoleId}
+    </update>
+
+</mapper>

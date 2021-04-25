@@ -1,0 +1,14 @@
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmlkIl0sInVzZXJfbmFtZSI6InN5c19hZG1pbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2MTkxNDU3MDUsIm1lc3NhZ2UiOiJoZWxsbyB3b3JsZCIsImF1dGhvcml0aWVzIjpbIuW6lOeUqOeuoeeQhuWRmCIsIuW5s-WPsOeuoeeQhuWRmCJdLCJqdGkiOiI5ODUxOGJkZS0wYTdjLTRiNTItOTg4Ni1iYTI0ODMyZDQwNzEiLCJjbGllbnRfaWQiOiJjdXN0b21fY2xpZW50In0.BCUJLL5xvFsDDKR0q2s09h7PQn-lHQs5u-wvpJDMeis",
+    "proxy": {
+        "/api/": {
+            "target": "http://192.168.11.118:31111/",
+            "pathRewrite": {
+                "^/api/": ""
+            },
+            "cookieDomainRewrite": "*",
+            "cookiePathRewrite": "/",
+            "startsWith": "/"
+        }
+    }
+}

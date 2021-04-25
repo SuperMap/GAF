@@ -1,0 +1,64 @@
+{
+    "name": "common-mapapp",
+    "version": "1.0.1",
+    "main": "src/index.js",
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build --target lib --name gafui ./src/index.js",
+        "lint": "vue-cli-service lint"
+    },
+    "publishConfig": {
+        "registry": "https://nexus.gaf.net.cn/repository/gaf-npm"
+    },
+    "dependencies": {
+        "@ant-design/colors": "^3.2.2",
+        "@ant-design/icons": "^2.1.1",
+        "@ant-design/icons-vue": "^2.0.0",
+        "@babel/core": "^7.7.7",
+        "ant-design-vue": "^1.7.2",
+        "core-js": "^2.6.5",
+        "gaf-web-common": "^2.0.7",
+        "grunt": "^1.0.4",
+        "monaco-editor": "^0.22.3",
+        "monaco-editor-webpack-plugin": "^3.0.0",
+        "vue": "^2.6.12"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "^3.7.0",
+        "@vue/cli-plugin-eslint": "^3.7.0",
+        "@vue/cli-service": "^3.7.0",
+        "babel-eslint": "^10.0.1",
+        "eslint": "^5.16.0",
+        "eslint-plugin-vue": "^5.0.0",
+        "less": "^3.10.3",
+        "less-loader": "^5.0.0",
+        "vue-template-compiler": "^2.6.10"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended"
+        ],
+        "rules": {},
+        "parserOptions": {
+            "parser": "babel-eslint"
+        },
+        "globals": {
+            "SuperMap": true,
+            "Cesium": true
+        }
+    },
+    "postcss": {
+        "plugins": {
+            "autoprefixer": {}
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions"
+    ]
+}

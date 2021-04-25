@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthDepartmentQueryMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthDepartment">
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="department_type" jdbcType="VARCHAR" property="departmentType" />
+        <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+        <result column="brief_name" jdbcType="VARCHAR" property="briefName" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="admin_id" jdbcType="VARCHAR" property="adminId" />
+        <result column="is_third_party" jdbcType="BIT" property="isThirdParty" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        department_id,
+        tenant_id,
+        parent_id,
+        sort_sn,
+        department_type,
+        department_name,
+        name_en,
+        brief_name,
+        code,
+        status,
+        description,
+        admin_id,
+        is_third_party,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_department"
+        WHERE department_id = #{departmentId}
+    </select>
+</mapper>

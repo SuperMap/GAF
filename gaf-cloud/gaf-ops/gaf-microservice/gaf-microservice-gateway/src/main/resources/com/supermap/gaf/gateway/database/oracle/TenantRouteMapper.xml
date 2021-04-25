@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.gateway.dao.RouteDao">
+
+    <update id="CreateRoutes">
+        CREATE TABLE routes (
+            id VARCHAR(50) NOT NULL,
+            routeId varchar(64) DEFAULT NULL ,
+            routeUri varchar(128) DEFAULT NULL ,
+            routeOrder int(11) DEFAULT NULL ,
+            predicates text,
+            filters text,
+            enable tinyint(1) DEFAULT NULL,
+            createTime datetime DEFAULT NULL,
+            updateTime datetime DEFAULT NULL,
+            type  VARCHAR(10) DEFAULT NULL,
+            tenantId  VARCHAR(50) DEFAULT NULL,
+          PRIMARY KEY (id)
+        )
+    </update>
+
+    <sql id="searchParamSql">
+        <where>
+            1=1
+            <if test="tenantId != null">
+                and tenantId = ${tenantId}
+            </if>
+            <if test="type != null">
+                and type = ${type}
+            </if>
+            <choose>
+                <when test="enable != null and enable==false">
+                    and enable=0
+                </when>
+                <otherwise>
+                    and enable=1
+                </otherwise>
+            </choose>
+            <if test="ids != null and ids.size() > 0 ">
+                and id in
+                <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <insert id="addRoute" parameterType="com.supermap.gaf.gateway.commontypes.GatewayRouteEntity">
+        insert into routes values (#{id},#{routeId},#{routeUri},#{routeOrder},
+        #{enable},#{createTime},#{updateTime},#{predicates},#{filters},#{type},#{tenantId});
+    </insert>
+
+    <select id="queryRoutes" parameterType="com.supermap.gaf.gateway.commontypes.RouteSearchParam"
+            resultType="com.supermap.gaf.gateway.commontypes.GatewayRouteEntity">
+        select * from routes<include refid="searchParamSql"/>;
+    </select>
+    <delete id="deleteRoute">
+        delete from routes where id=#{id}
+    </delete>
+    <update id="updateRoute" parameterType="com.supermap.gaf.gateway.commontypes.GatewayRouteEntity">
+        update routes
+        <set>
+            routeId=#{routeId},routeUri=#{routeUri},routeOrder=#{routeOrder},enable=#{enable},
+            updateTime=#{updateTime},predicates=#{predicates},filters=#{filters}
+        </set>
+        where id=#{id}
+    </update>
+    <select id="queryRoute" resultType="com.supermap.gaf.gateway.commontypes.GatewayRouteEntity">
+        select * from routes where id=#{id}
+    </select>
+    <delete id="batchDeleteRoute" parameterType="list">
+        delete from routes where id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

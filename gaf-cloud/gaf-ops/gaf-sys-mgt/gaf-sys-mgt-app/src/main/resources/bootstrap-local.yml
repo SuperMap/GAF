@@ -1,0 +1,85 @@
+server:
+  port: 8096
+#feign:
+#  client:
+#    config:
+#      default:
+#        connectTimeout: '3000'
+#        readTimeout: '16000'
+fluentd:
+  enable: 'true'
+  host: 192.168.11.118
+  port: '31100'
+  tagPrefix: gaf-dev
+gaf:
+  database:
+    secretKey: 1q2w3e4r5t6y7u8i
+  redis:
+    database: '3'
+    enable: 'true'
+    host: 192.168.11.118
+    maxActive: '16'
+    maxIdle: '-1'
+    maxWait: '16'
+    minIdle: '0'
+    port: '30839'
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: 'true'
+  mapper-locations: classpath*:com/supermap/gaf/**/database/postgresql/*.xml
+  type-aliases-package: com.supermap.gaf.sys.mgt.commontype
+pagehelper:
+  reasonable: 'true'
+shiro:
+  loginUrl: /login
+  serviceUrl: /
+  successUrl: /portal/view/index.html
+  urlFilters:
+  - /login, keycloakSecurityFilter
+  - /callback, callbackFilter
+  - /portal/manager/**, authc
+  - /portal/manager**, authc
+  - /portal/view/**, anon
+  - /portal/view**, anon
+  - /portal/**, anon
+  - /portal**, anon
+spring:
+  jersey:
+    application-path: /sys-mgt
+  application:
+    name: gaf-sys-mgt
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: '123456'
+    url: jdbc:postgresql://192.168.11.118:32222/gaf
+    username: admin
+  sleuth:
+    sampler:
+      probability: '1'
+  zipkin:
+    base-url: http://192.168.11.118:32027
+    sender:
+      type: web
+#minio:
+#  mode: SINGLE_NODE_MULTI_PATH
+#  single-config:
+#    access-key: admin
+#    bucket-name: test2
+#    secret-key: admin123456
+#    service-endpoint: http://192.168.11.118:9000
+eureka:
+#  instance:
+#    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+#    prefer-ip-address: true
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+      fetchRegistry: false
+      register-with-eureka: false
+    server:
+      waitTimeInMsWhenSyncEmpty: 0

@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.sys.mgt.dao.SysCatalogMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.sys.mgt.commontype.SysCatalog">
+        <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
+        <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="biz_type_code" jdbcType="VARCHAR" property="bizTypeCode" />
+    </resultMap>
+
+    <resultMap id="TreeResultMap" type="com.supermap.gaf.sys.mgt.commontype.SysCatalog">
+        <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="biz_type_code" jdbcType="VARCHAR" property="bizTypeCode" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        catalog_id,
+        parent_id,
+        sort_sn,
+        name,
+        type,
+        code,
+        sys_component_id,
+        icon_url,
+        description,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        tenant_id,
+        biz_type_code
+    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_catalog"
+        WHERE catalog_id = #{catalogId} AND status =true
+    </select>
+    <select id="selectByOneField" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_catalog"
+        <if test ='null != fieldName'>where ${fieldName} = #{fieldValue}</if>
+    </select>
+    <select id="selectByParentIdAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_catalog"
+        WHERE parent_id = #{parentId} AND status = #{status}
+    </select>
+    <select id="selectParentIds" resultType="java.lang.String">
+        SELECT parent_id FROM "sys_catalog"
+    </select>
+    <select id="selectByOneFieldAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM "sys_catalog" WHERE ${fieldName} = #{fieldValue} AND status = true
+    </select>
+    <select id="selectByIdsAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_catalog"
+        WHERE status = #{status}
+        AND catalog_id IN
+        <foreach collection="catalogIds" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectByNameAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE status=#{status} AND name LIKE CONCAT('%', #{name}, '%')
+    </select>
+    <select id="selectByIdAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE catalog_id=#{id} AND status=#{status}
+    </select>
+    <select id="selectByParentIdOrTenantId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE (parent_id = #{parentId}  OR tenant_id = #{tenantId} )  AND status = true
+    </select>
+    <select id="selectByTenantId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE (tenant_id = #{tenantIdOne}  OR tenant_id = #{tenantIdTwo} )  AND status = true
+    </select>
+    <select id="countByParentId" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM sys_catalog
+        WHERE parent_id = #{parentId}  AND status = true
+    </select>
+    <select id="selectByParentIdsAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE parent_id IN
+        <foreach collection="parentIds" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        AND status = #{status}
+    </select>
+    <select id="selectByTenantIdAndTypeAndStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE tenant_id = #{tenantId} AND type = #{type} AND status = #{status}
+    </select>
+    <select id="selectByCombination" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != parentId'>parent_id = #{parentId} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != name'>name = #{name} AND </if>
+            <if test ='null != type'>type = #{type} AND </if>
+            <if test ='null != code'>code = #{code} AND </if>
+            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
+            <if test ='null != iconUrl'>icon_url = #{iconUrl} AND </if>
+            <if test ='null != description'>description = #{description} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != updatedTime'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+            <if test ='null != tenantId'>tenant_id = #{tenantId} AND </if>
+            <if test ='null != bizTypeCode'>biz_type_code = #{bizTypeCode} AND </if>
+        </trim>
+    </select>
+    <select id="countByCombination" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM sys_catalog
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != parentId'>parent_id = #{parentId} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != name'>name = #{name} AND </if>
+            <if test ='null != type'>type = #{type} AND </if>
+            <if test ='null != code'>code = #{code} AND </if>
+            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
+            <if test ='null != iconUrl'>icon_url = #{iconUrl} AND </if>
+            <if test ='null != description'>description = #{description} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != updatedTime'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+            <if test ='null != tenantId'>tenant_id = #{tenantId} AND </if>
+            <if test ='null != bizTypeCode'>biz_type_code = #{bizTypeCode} AND </if>
+        </trim>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="catalog_id" keyProperty="catalogId" parameterType="com.supermap.gaf.sys.mgt.commontype.SysCatalog">
+        INSERT INTO "sys_catalog"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != catalogId'>catalog_id,</if>
+				<if test ='null != parentId'>parent_id,</if>
+				<if test ='null != sortSn'>sort_sn,</if>
+				<if test ='null != name'>name,</if>
+				<if test ='null != type'>type,</if>
+				<if test ='null != code'>code,</if>
+				<if test ='null != sysComponentId'>sys_component_id,</if>
+				<if test ='null != iconUrl'>icon_url,</if>
+				<if test ='null != description'>description,</if>
+				<if test ='null != status'>status,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+				<if test ='null != tenantId'>tenant_id,</if>
+				<if test ='null != bizTypeCode'>biz_type_code,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != catalogId'>#{catalogId},</if>
+				<if test ='null != parentId'>#{parentId},</if>
+				<if test ='null != sortSn'>#{sortSn},</if>
+				<if test ='null != name'>#{name},</if>
+				<if test ='null != type'>#{type},</if>
+				<if test ='null != code'>#{code},</if>
+				<if test ='null != sysComponentId'>#{sysComponentId},</if>
+				<if test ='null != iconUrl'>#{iconUrl},</if>
+				<if test ='null != description'>#{description},</if>
+				<if test ='null != status'>#{status},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+				<if test ='null != tenantId'>#{tenantId},</if>
+                <if test ='null != bizTypeCode'>#{bizTypeCode},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "sys_catalog"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.catalogId}  ,  #{item.parentId}  ,  #{item.sortSn}  ,  #{item.name}  ,  #{item.type}  ,  #{item.code}  ,  #{item.sysComponentId}  ,  #{item.iconUrl}  ,  #{item.description}  ,  #{item.status}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy} , #{item.tenantId}, #{item.bizTypeCode} )
+        </foreach>
+    </insert>
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "sys_catalog" 
+        WHERE catalog_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+	<delete id="delete" >
+        DELETE FROM "sys_catalog"
+        WHERE catalog_id = #{catalogId}
+    </delete>
+    <update id="update" parameterType="com.supermap.gaf.sys.mgt.commontype.SysCatalog">
+        UPDATE "sys_catalog"
+        <set>
+				<if test ='null != parentId'>parent_id = #{parentId},</if>				
+				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>				
+				<if test ='null != name'>name = #{name},</if>				
+				<if test ='null != type'>type = #{type},</if>				
+				<if test ='null != code'>code = #{code},</if>				
+				<if test ='null != sysComponentId'>sys_component_id = #{sysComponentId},</if>				
+				<if test ='null != iconUrl'>icon_url = #{iconUrl},</if>				
+				<if test ='null != description'>description = #{description},</if>				
+				<if test ='null != status'>status = #{status},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>
+				<if test ='null != tenantId'>tenant_id = #{tenantId},</if>
+                <if test ='null != bizTypeCode'>biz_type_code = #{bizTypeCode},</if>
+        </set>
+        WHERE catalog_id = #{catalogId}
+    </update>
+    <update id="updateStatusBatch">
+        UPDATE "sys_catalog"
+        <set>
+            status = #{status}
+        </set>
+        WHERE catalog_id IN
+        <foreach collection="all" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+    <update id="updateSortSnByCombination">
+        UPDATE "sys_catalog"
+        SET
+        <if test ='addOrSub'> sort_sn = sort_sn + 1 </if>
+        <if test ='addOrSub == false'> sort_sn = sort_sn - 1 </if>
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != queryCondition.parentId'>parent_id = #{queryCondition.parentId} AND </if>
+            <if test ='null != queryCondition.name'>name = #{queryCondition.name} AND </if>
+            <if test ='null != queryCondition.type'>type = #{queryCondition.type} AND </if>
+            <if test ='null != queryCondition.code'>code = #{queryCondition.code} AND </if>
+            <if test ='null != queryCondition.sysComponentId'>sys_component_id = #{queryCondition.sysComponentId} AND </if>
+            <if test ='null != queryCondition.iconUrl'>icon_url = #{queryCondition.iconUrl} AND </if>
+            <if test ='null != queryCondition.description'>description = #{queryCondition.description} AND </if>
+            <if test ='null != queryCondition.status'>status = #{queryCondition.status} AND </if>
+            <if test ='null != queryCondition.createdTime'>created_time = #{queryCondition.createdTime} AND </if>
+            <if test ='null != queryCondition.createdBy'>created_by = #{queryCondition.createdBy} AND </if>
+            <if test ='null != queryCondition.updatedTime'>updated_time = #{queryCondition.updatedTime} AND </if>
+            <if test ='null != queryCondition.updatedBy'>updated_by = #{queryCondition.updatedBy} AND </if>
+            <if test ='null != queryCondition.tenantId'>tenant_id = #{queryCondition.tenantId} AND </if>
+            <if test ='null != queryCondition.bizTypeCode'>biz_type_code = #{queryCondition.bizTypeCode} AND </if>
+        </trim>
+        AND #{endSortSn} > sort_sn
+        AND sort_sn > #{startSortSn}
+    </update>
+
+    <select id="getByComponentAndType" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE sys_component_id = #{componentId} AND type = #{type} AND status = true
+    </select>
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM sys_catalog
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != searchFieldName'>${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%') AND </if>
+            <if test ='null != queryCatalog'>
+            <if test ='null != queryCatalog.parentId'>parent_id = #{queryCatalog.parentId} AND </if>
+            <if test ='null != queryCatalog.sortSn'>sort_sn = #{queryCatalog.sortSn} AND </if>
+            <if test ='null != queryCatalog.name'>name = #{queryCatalog.name} AND </if>
+            <if test ='null != queryCatalog.type'>type = #{queryCatalog.type} AND </if>
+            <if test ='null != queryCatalog.code'>code = #{queryCatalog.code} AND </if>
+            <if test ='null != queryCatalog.sysComponentId'>sys_component_id = #{queryCatalog.sysComponentId} AND </if>
+            <if test ='null != queryCatalog.iconUrl'>icon_url = #{queryCatalog.iconUrl} AND </if>
+            <if test ='null != queryCatalog.description'>description = #{queryCatalog.description} AND </if>
+            <if test ='null != queryCatalog.status'>status = #{queryCatalog.status} AND </if>
+            <if test ='null != queryCatalog.createdTime'>created_time = #{queryCatalog.createdTime} AND </if>
+            <if test ='null != queryCatalog.createdBy'>created_by = #{queryCatalog.createdBy} AND </if>
+            <if test ='null != queryCatalog.updatedTime'>updated_time = #{queryCatalog.updatedTime} AND </if>
+            <if test ='null != queryCatalog.updatedBy'>updated_by = #{queryCatalog.updatedBy} AND </if>
+            <if test ='null != queryCatalog.tenantId'>tenant_id = #{queryCatalog.tenantId} AND </if>
+            <if test ='null != queryCatalog.bizTypeCode'>biz_type_code = #{queryCatalog.bizTypeCode} AND </if>
+            </if>
+        </trim>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if>
+    </select>
+
+    <select id="getCatalogTreeListByRootId" resultMap="TreeResultMap">
+      WITH RECURSIVE T AS (
+        SELECT catalog_id, name, parent_id,type,biz_type_code,sort_sn
+        FROM sys_catalog
+        WHERE catalog_id = #{rootId} AND status = true
+        UNION ALL
+        SELECT D.catalog_id, D.name, D.parent_id,D.type,D.biz_type_code,D.sort_sn
+        FROM sys_catalog D,T
+        where D.PARENT_ID = T.catalog_id AND status = true
+      )
+      SELECT catalog_id, name, parent_id,type,biz_type_code,sort_sn FROM T
+    </select>
+</mapper>

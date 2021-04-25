@@ -1,0 +1,86 @@
+GRAFANA_URL: http://grafana.gaf.net.cn
+server:
+  port: 7000
+eureka:
+  instance:
+    metadataMap:
+      prometheus:
+        path: /actuator/prometheus
+        port: '8080'
+        scrape: 'true'
+fluentd:
+  enable: 'true'
+  host: 192.168.11.118
+  port: '31100'
+  tagPrefix: gaf-dev
+gaf:
+  datasource:
+    dbName: gaf
+    dbType: POSTGRESQL
+    enable: 'true'
+    mapperLocations: classpath*:com/supermap/gaf/**/database/postgresql/*Mapper.xml
+    password: '123456'
+    port: '32222'
+    server: 192.168.11.118
+    username: admin
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: 'true'
+    prometheus:
+      enabled: 'true'
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: 'true'
+    tags:
+      application: ${spring.application.name}
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: 'true'
+  mapper-locations: classpath*:com/supermap/gaf/**/postgresql/*Mapper.xml
+shiro:
+  loginUrl: /login
+  serviceUrl: /
+  successUrl: /portal/view/index.html
+  urlFilters:
+  - /login, keycloakSecurityFilter
+  - /callback, callbackFilter
+  - /portal/manager/**, authc
+  - /portal/manager**, authc
+  - /portal/view/**, anon
+  - /portal/view**, anon
+  - /portal/**, anon
+  - /portal**, anon
+spring:
+  jersey:
+    application-path: /portal
+  application:
+    name: gaf-portal
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: '123456'
+    url: jdbc:postgresql://192.168.11.118:32222/gaf
+    username: admin
+  redis:
+    database: '0'
+    host: 192.168.11.118
+    lettuce:
+      pool:
+        max-active: '16'
+        max-idle: '16'
+        max-wait: '-1'
+        min-idle: '0'
+    port: '30839'
+    timeout: 5000ms
+swagger:
+  enable: 'true'
+workflow:
+  api:
+    url: http://workflow.gaf.net.cn/cloud-portal/open/api

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthP3UserMappingMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthP3UserMapping">
+        <result column="user_mapping_id" jdbcType="VARCHAR" property="userMappingId" />
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="p3_user_id" jdbcType="VARCHAR" property="p3UserId" />
+        <result column="p3_component_id" jdbcType="VARCHAR" property="p3ComponentId" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="p3_tenant_id" jdbcType="VARCHAR" property="p3TenantId" />
+        <result column="p3_department_id" jdbcType="VARCHAR" property="p3DepartmentId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_mapping_id,
+        user_id,
+        p3_user_id,
+        p3_component_id,
+        status,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        p3_tenant_id,
+        p3_department_id    </sql>
+     <insert id="insert" useGeneratedKeys="true" keyColumn="user_mapping_id" keyProperty="userMappingId" parameterType="com.supermap.gaf.authority.commontype.AuthP3UserMapping">
+        INSERT INTO "auth_p3_user_mapping"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test ='null != userMappingId'>user_mapping_id,</if>
+                <if test ='null != userId'>user_id,</if>
+                <if test ='null != p3UserId'>p3_user_id,</if>
+                <if test ='null != p3ComponentId'>p3_component_id,</if>
+                <if test ='null != status'>status,</if>
+                <if test ='null != description'>description,</if>
+                created_time,
+                <if test ='null != createdBy'>created_by,</if>
+                updated_time,
+                <if test ='null != updatedBy'>updated_by,</if>
+                <if test ='null != p3TenantId'>p3_tenant_id,</if>
+                <if test ='null != p3DepartmentId'>p3_department_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test ='null != userMappingId'>#{userMappingId},</if>
+                <if test ='null != userId'>#{userId},</if>
+                <if test ='null != p3UserId'>#{p3UserId},</if>
+                <if test ='null != p3ComponentId'>#{p3ComponentId},</if>
+                <if test ='null != status'>#{status},</if>
+                <if test ='null != description'>#{description},</if>
+                now(),
+                <if test ='null != createdBy'>#{createdBy},</if>
+                now(),
+                <if test ='null != updatedBy'>#{updatedBy},</if>
+                <if test ='null != p3TenantId'>#{p3TenantId},</if>
+                <if test ='null != p3DepartmentId'>#{p3DepartmentId},</if>
+        </trim>
+    </insert>
+    <delete id="delete" >
+        DELETE FROM "auth_p3_user_mapping"
+        WHERE user_mapping_id = #{userMappingId}
+    </delete>
+
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthP3UserMapping">
+        UPDATE "auth_p3_user_mapping"
+        <set>
+                <if test ='null != userId'>user_id = #{userId},</if>
+                <if test ='null != p3UserId'>p3_user_id = #{p3UserId},</if>
+                <if test ='null != p3ComponentId'>p3_component_id = #{p3ComponentId},</if>
+                <if test ='null != status'>status = #{status},</if>
+                <if test ='null != description'>description = #{description},</if>
+                updated_time = now(),
+                <if test ='null != updatedBy'>updated_by = #{updatedBy},</if>
+                <if test ='null != p3TenantId'>p3_tenant_id = #{p3TenantId},</if>
+                <if test ='null != p3DepartmentId'>p3_department_id = #{p3DepartmentId},</if>
+        </set>
+        WHERE user_mapping_id = #{userMappingId}
+    </update>
+
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_p3_user_mapping"
+        WHERE user_mapping_id = #{userMappingId}
+    </select>
+
+    <select id="getByUserId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_p3_user_mapping"
+        WHERE user_id = #{userId} AND p3_component_id = #{p3ComponentId}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthP3UserMappingSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_p3_user_mapping"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthP3UserMappingSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_p3_user_mapping"
+		<if test ='null != searchFieldName'>where ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.user_mapping_id, a.user_id, a.p3_user_id, a.p3_component_id, a.status, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by, a.p3_tenant_id, a.p3_department_id        FROM "auth_p3_user_mapping" a,(
+            select user_mapping_id 
+            From "auth_p3_user_mapping" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.user_mapping_id = b.user_mapping_id 
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM "auth_p3_user_mapping"
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_p3_user_mapping"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.userMappingId}, #{item.userId}, #{item.p3UserId}, #{item.p3ComponentId}, #{item.status}, #{item.description}, #{item.createdTime}, #{item.createdBy}, #{item.updatedTime}, #{item.updatedBy}, #{item.p3TenantId}, #{item.p3DepartmentId})
+        </foreach>
+    </insert>
+    <delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "auth_p3_user_mapping" 
+        WHERE user_mapping_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{userMappingId}
+        </foreach>
+    </delete>
+
+</mapper>

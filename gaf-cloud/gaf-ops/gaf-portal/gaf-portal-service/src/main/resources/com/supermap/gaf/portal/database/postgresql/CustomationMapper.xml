@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.supermap.gaf.portal.menu.dao.CustomationDao">
+	<select id="queryCustomation" parameterType="java.lang.String" resultType="com.supermap.gaf.portal.menu.commontypes.CustomationInfo">
+	    SELECT *
+	    FROM customation
+	    WHERE tenant_id = #{tenantId}
+	</select>
+
+	<insert id="addCustomation" parameterType="com.supermap.gaf.portal.menu.commontypes.CustomationInfo">
+        INSERT INTO customation("loginAdress",
+        "logoutAdress",
+        "profileAdress",
+        "logo",
+
+        "title",
+        "color",
+        "multipleTabs",
+        "user",
+        "layoutType",
+        "configInfo",
+        "defaultConfigInfo",
+        tenant_id,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        id)
+        VALUES(#{loginAdress},
+        #{logoutAdress},
+        #{profileAdress},
+        #{logo},
+        #{title},
+        #{color},
+        #{multipleTabs},
+        #{user},
+        #{layoutType},
+        #{configInfo},
+        #{defaultConfigInfo},
+        #{tenantId},
+        now(),
+        #{createdBy},
+        now(),
+        #{updatedBy},
+        #{id})
+    </insert>
+
+	<update id="updateCustomation" parameterType="com.supermap.gaf.portal.menu.commontypes.CustomationInfo">
+	    UPDATE customation
+	    SET "loginAdress" = #{loginAdress},
+        "logoutAdress" = #{logoutAdress},
+        "profileAdress" = #{profileAdress},
+	    "logo" = #{logo},
+        "title" = #{title},
+        "color" = #{color},
+        "multipleTabs" = #{multipleTabs},
+        "layoutType" = #{layoutType},
+        "defaultConfigInfo" = #{defaultConfigInfo},
+        tenant_id = #{tenantId},
+        updated_time = now(),
+        updated_by = #{updatedBy}
+        WHERE tenant_id = #{tenantId} and tenant_id != 'tenant_000000_gaf'
+    </update>
+
+	<update id="updateConfigInfo" parameterType="com.supermap.gaf.portal.menu.commontypes.CustomationInfo">
+	    UPDATE customation
+	    SET "configInfo" = #{configInfo}
+	    WHERE tenant_id = #{tenantId}
+	</update>
+
+	<update id="updateConfigInfo2Default" parameterType="com.supermap.gaf.portal.menu.commontypes.CustomationInfo">
+	    UPDATE customation
+	    SET "configInfo" = #{configInfo},
+        "defaultConfigInfo" = #{configInfo}
+        WHERE tenant_id = #{tenantId}
+	</update>
+
+	<update id="updateDefault2ConfigInfo" parameterType="java.lang.String">
+	    UPDATE customation
+	    SET "configInfo" = "defaultConfigInfo"
+	    WHERE tenant_id = #{tenantId}
+	</update>
+
+</mapper>

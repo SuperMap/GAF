@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthTenantMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthTenant">
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="tenant_name" jdbcType="VARCHAR" property="tenantName" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+        <result column="brief_name_en" jdbcType="VARCHAR" property="briefNameEn" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="status" jdbcType="SMALLINT" property="status" />
+        <result column="admin_id" jdbcType="VARCHAR" property="adminId" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        tenant_id,
+        tenant_name,
+        description,
+        type,
+        name_en,
+        brief_name_en,
+        code,
+        status,
+        admin_id,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_tenant"
+        WHERE tenant_id = #{tenantId}
+    </select>
+    <select id="selectByAdminId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_tenant"
+        WHERE admin_id IN
+        <foreach collection="adminIds" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        order by updated_time desc
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+    <select id="selectByStatus" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_tenant"
+        WHERE status = #{status}
+        order by updated_time desc
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthTenantSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_tenant"
+        order by updated_time desc
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthTenantSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_tenant"
+		<if test ='null != searchFieldName'>where ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+
+    <select id="searchWholeMatchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthTenantSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_tenant"
+        where ${selectVo.searchFieldName} = #{selectVo.searchFieldValue}
+        <if test ='null != selectVo.orderFieldName'>order by ${selectVo.orderFieldName} ${selectVo.orderMethod}</if>
+        LIMIT #{selectVo.pageSize}
+        <if test ='null != selectVo.offset'>OFFSET #{selectVo.offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_tenant"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="countByAdmin" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_tenant"
+        WHERE admin_id IN
+        <foreach collection="adminIds" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="countByStatus" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_tenant"
+        WHERE status = #{status}
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.tenant_id, a.tenant_name, a.description, a.type, a.name_en, a.brief_name_en, a.code, a.status, a.admin_id, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_tenant" a,(
+            select tenant_id 
+            From "auth_tenant" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.tenant_id = b.tenant_id 
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_tenant"
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="tenant_id" keyProperty="tenantId" parameterType="com.supermap.gaf.authority.commontype.AuthTenant">
+        INSERT INTO "auth_tenant"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != tenantId'>tenant_id,</if>
+				<if test ='null != tenantName'>tenant_name,</if>
+				<if test ='null != description'>description,</if>
+				<if test ='null != type'>type,</if>
+				<if test ='null != nameEn'>name_en,</if>
+				<if test ='null != briefNameEn'>brief_name_en,</if>
+				<if test ='null != code'>code,</if>
+				<if test ='null != status'>status,</if>
+				<if test ='null != adminId'>admin_id,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != tenantId'>#{tenantId},</if>
+				<if test ='null != tenantName'>#{tenantName},</if>
+				<if test ='null != description'>#{description},</if>
+				<if test ='null != type'>#{type},</if>
+				<if test ='null != nameEn'>#{nameEn},</if>
+				<if test ='null != briefNameEn'>#{briefNameEn},</if>
+				<if test ='null != code'>#{code},</if>
+				<if test ='null != status'>#{status},</if>
+				<if test ='null != adminId'>#{adminId},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_tenant"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.tenantId}  ,  #{item.tenantName}  ,  #{item.description}  ,  #{item.type}  ,  #{item.nameEn}  ,  #{item.briefNameEn}  ,  #{item.code}  ,  #{item.status}  ,  #{item.adminId}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "auth_tenant" 
+        WHERE tenant_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+	<delete id="delete" >
+        DELETE FROM "auth_tenant"
+        WHERE tenant_id = #{tenantId}
+    </delete>
+    <update id="setAuthTenantStatus">
+        UPDATE "auth_tenant"
+        set status = #{status}
+        WHERE tenant_id = #{tenantId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthTenant">
+        UPDATE "auth_tenant"
+        <set>
+				<if test ='null != tenantName'>tenant_name = #{tenantName},</if>				
+				<if test ='null != description'>description = #{description},</if>				
+				<if test ='null != type'>type = #{type},</if>				
+				<if test ='null != nameEn'>name_en = #{nameEn},</if>				
+				<if test ='null != briefNameEn'>brief_name_en = #{briefNameEn},</if>				
+				<if test ='null != code'>code = #{code},</if>				
+				<if test ='null != status'>status = #{status},</if>				
+				<if test ='null != adminId'>admin_id = #{adminId},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>				
+        </set>
+        WHERE tenant_id = #{tenantId}
+    </update>
+
+</mapper>

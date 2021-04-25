@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>24-Image_Refresh</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-44.000000, -1876.000000)" fill="#F0F0F0" fill-rule="nonzero">
+            <g id="24" transform="translate(14.000000, 1876.000000)">
+                <g id="24-Image_Refresh" transform="translate(30.000000, 0.000000)">
+                    <g id="Image_Refresh" transform="translate(3.000000, 3.000000)">
+                        <path d="M11,16.747965 C14.4504544,15.8598794 17,12.7276789 17,9 C17,5.27232114 14.4504544,2.14012056 11,1.25203497 L11,0.223016424 C15.0079774,1.13247475 18,4.71682521 18,9 C18,13.2831748 15.0079774,16.8675252 11,17.7769836 L11,16.747965 Z M7,1.25203497 C3.54954557,2.14012056 1,5.27232114 1,9 C1,12.7276789 3.54954557,15.8598794 7,16.747965 L7,17.7769836 C2.9920226,16.8675252 0,13.2831748 0,9 C0,4.71682521 2.9920226,1.13247475 7,0.223016424 L7,1.25203497 Z" id="合并形状"></path>
+                        <path d="M16,1 L12,1 L12,5 L11,5 L11,0 L16,0 L16,1 Z" id="合并形状"></path>
+                        <path d="M7,14 L3,14 L3,18 L2,18 L2,13 L7,13 L7,14 Z" id="合并形状" transform="translate(4.500000, 15.500000) rotate(-180.000000) translate(-4.500000, -15.500000) "></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

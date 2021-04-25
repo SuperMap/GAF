@@ -1,0 +1,64 @@
+server:
+  port: 5000
+eureka:
+  instance:
+    metadataMap:
+      prometheus:
+        path: /actuator/prometheus
+        port: '8080'
+        scrape: 'true'
+fluentd:
+  enable: 'true'
+  host: 192.168.11.118
+  port: '31100'
+  tagPrefix: gaf-dev
+gateway:
+  security:
+    centerLoginUrl: /authentication/login/center
+    centerLogoutUrl: /authentication/logout
+    gatewayLoginUrl: /login
+    gatewayLogoutUrl: /logout
+    indexUrl: /viewer/#/
+    publicUrls: /viewer/**,/monitor/**,/grafana/**,/**/actuator/**,/authentication/**,/authority/tenant/**,/base/fileservice/file/upload/swagger/*,/cloud-portal/**,/logout,/oauth/**,/oauth2/**,/login/**,/api/**,/**/view/**,
+      /**/*.js,/*.*, /lang/**,/img/**,/**/static/**,/**/_static/**, /docs/**,/security/token/**,/config/**,/_static/**,/samples/**,/portal/customization**,/portal/user/profile**,/es/**,/log/env/logFluentdEsUrl,/map/webgis-view/**,/map/webgis-apps/*/config
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: 'true'
+    prometheus:
+      enabled: 'true'
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: 'true'
+    tags:
+      application: ${spring.application.name}
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: 'true'
+  mapper-locations: classpath*:com/supermap/gaf/**/postgresql/*Mapper.xml
+ribbon:
+  ConnectTimeout: '5000'
+  ReadTimeout: '50000'
+spring:
+  application:
+    name: gaf-microservice-gateway
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: '123456'
+    url: jdbc:postgresql://192.168.11.118:32222/gaf
+    username: admin
+  sleuth:
+    sampler:
+      probability: '1'
+  zipkin:
+    base-url: http://192.168.11.118:32027
+    sender:
+      type: web
+tenantId: system

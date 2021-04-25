@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog logicalFilePath="no-matter-file-name.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <include file="./component/common-auth.xml" relativeToChangelogFile="true"/>
+    <include file="../ddl/config_properties.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/webgis_button.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/webgis_catalog_layer.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/webgis_data_service_field.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/webgis_roam_route.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/webgis_roam_stop.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/webgis_service_association.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/webgis_service.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/webgis_toolbar_button.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/webgis_toolbar.sql" relativeToChangelogFile="true"/>
+
+    <include file="../ddl/sys_dict.sql" relativeToChangelogFile="true"/>
+    <include file="../changelog/dict/base_0catalog.sql" relativeToChangelogFile="true"/>
+    <include file="../changelog/dict/ServiceType.sql" relativeToChangelogFile="true"/>
+    <include file="../changelog/dict/XZQH.sql" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

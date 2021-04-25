@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.SysComponentMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.SysComponent">
+        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="name_cn" jdbcType="VARCHAR" property="nameCn" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        sys_component_id,
+        name,
+        name_cn,
+        code,
+        type,
+        status,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by
+    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_component"
+        WHERE sys_component_id = #{sysComponentId}
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.SysComponentSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_component"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.SysComponentSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_component"
+		<if test ='null != searchFieldName'>where ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+    <select id="searchWholeMatchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.SysComponentSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_component"
+        where name = #{searchFieldValue}
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "sys_component"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.sys_component_id, a.name, a.name_cn, a.code, a.type, a.status, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "sys_component" a,(
+            select sys_component_id 
+            From "sys_component" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.sys_component_id = b.sys_component_id 
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "sys_component"
+    </select>
+    <select id="getAllIdAndNameCn" resultMap="BaseResultMap">
+        SELECT sys_component_id,name_cn
+        FROM sys_component
+        WHERE status = true
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="sys_component_id" keyProperty="sysComponentId" parameterType="com.supermap.gaf.authority.commontype.SysComponent">
+        INSERT INTO "sys_component"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != sysComponentId'>sys_component_id,</if>
+				<if test ='null != name'>name,</if>
+				<if test ='null != nameCn'>name_cn,</if>
+				<if test ='null != code'>code,</if>
+				<if test ='null != type'>type,</if>
+				<if test ='null != status'>status,</if>
+				<if test ='null != description'>description,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != sysComponentId'>#{sysComponentId},</if>
+				<if test ='null != name'>#{name},</if>
+				<if test ='null != nameCn'>#{nameCn},</if>
+				<if test ='null != code'>#{code},</if>
+				<if test ='null != type'>#{type},</if>
+				<if test ='null != status'>#{status},</if>
+				<if test ='null != description'>#{description},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "sys_component"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.sysComponentId}  ,  #{item.name}  ,  #{item.nameCn}  ,  #{item.code}  ,  #{item.type}  ,  #{item.status}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "sys_component" 
+        WHERE sys_component_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+	<delete id="delete" >
+        DELETE FROM "sys_component"
+        WHERE sys_component_id = #{sysComponentId}
+    </delete>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.SysComponent">
+        UPDATE "sys_component"
+        <set>
+				<if test ='null != name'>name = #{name},</if>				
+				<if test ='null != nameCn'>name_cn = #{nameCn},</if>				
+				<if test ='null != code'>code = #{code},</if>				
+				<if test ='null != type'>type = #{type},</if>				
+				<if test ='null != status'>status = #{status},</if>				
+				<if test ='null != description'>description = #{description},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>				
+        </set>
+        WHERE sys_component_id = #{sysComponentId}
+    </update>
+
+    <select id="selectByOneField" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_component"
+        <if test ='null != fieldName'>where ${fieldName} = #{fieldValue}</if>
+    </select>
+
+</mapper>

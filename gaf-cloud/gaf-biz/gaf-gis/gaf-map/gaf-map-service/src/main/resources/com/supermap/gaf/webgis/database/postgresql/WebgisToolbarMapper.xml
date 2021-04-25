@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.webgis.dao.WebgisToolbarMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.webgis.entity.WebgisToolbar">
+        <result column="toolbar_id" jdbcType="VARCHAR" property="toolbarId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="toolbar_location" jdbcType="VARCHAR" property="toolbarLocation" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    </resultMap>
+    <resultMap id="WebgisToolbarDoResultMap" type="com.supermap.gaf.webgis.domain.WebgisToolbarDo">
+        <result column="toolbar_id" jdbcType="VARCHAR" property="toolbarId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="toolbar_location" jdbcType="VARCHAR" property="toolbarLocation" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <collection property="webgisToolbarButtonDos" select="com.supermap.gaf.webgis.dao.WebgisToolbarButtonMapper.selectDosByToolbarId" column="toolbar_id"></collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        toolbar_id,
+        name,
+        toolbar_location,
+        description,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        type
+    </sql>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_toolbar"
+        WHERE toolbar_id = #{toolbarId}
+    </select>
+
+    <select id="getDoById" resultMap="WebgisToolbarDoResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_toolbar"
+        WHERE toolbar_id = #{toolbarId} and status = true
+    </select>
+
+	<select id="selectByOneField" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_toolbar"
+		WHERE status = true
+        <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+         <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_toolbar"
+        WHERE status = true
+        <if test='toolbarId != null'>and toolbar_id = #{toolbarId}</if>
+        <if test='name != null'>and name = #{name}</if>
+        <if test='toolbarLocation != null'>and toolbar_location = #{toolbarLocation}</if>
+        <if test='description != null'>and description = #{description}</if>
+        <if test='createdTime != null'>and created_time = #{createdTime}</if>
+        <if test='createdBy != null'>and created_by = #{createdBy}</if>
+        <if test='updatedTime != null'>and updated_time = #{updatedTime}</if>
+        <if test='updatedBy != null'>and updated_by = #{updatedBy}</if>
+        <if test='type != null'>and type = #{type}</if>
+        <if test ='null != equalFieldName'> AND ${equalFieldName}
+            <choose>
+                <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                <otherwise>  is null </otherwise>
+            </choose>
+         </if>
+        <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+         <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="toolbar_id" keyProperty="toolbarId" parameterType="com.supermap.gaf.webgis.entity.WebgisToolbar">
+        INSERT INTO "webgis_toolbar"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != toolbarId'>toolbar_id,</if>
+			<if test ='null != name'>name,</if>
+			<if test ='null != toolbarLocation'>toolbar_location,</if>
+			<if test ='null != description'>description,</if>
+			status,
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+			<if test ='null != type'>type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != toolbarId'>#{toolbarId},</if>
+			<if test ='null != name'>#{name},</if>
+			<if test ='null != toolbarLocation'>#{toolbarLocation},</if>
+			<if test ='null != description'>#{description},</if>
+			true,
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+			<if test ='null != type'>#{type},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "webgis_toolbar"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.toolbarId}  ,  #{item.name}  ,  #{item.toolbarLocation}  ,  #{item.description}  ,  true  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  ,  #{item.type}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE webgis_toolbar SET status = false
+        WHERE toolbar_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE webgis_toolbar SET status = false
+        WHERE toolbar_id = #{toolbarId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.webgis.entity.WebgisToolbar">
+        UPDATE "webgis_toolbar"
+        <set>
+			<if test ="null != name and '' != name">name = #{name},</if>				
+			toolbar_location = #{toolbarLocation},
+			description = #{description},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+			type = #{type},
+        </set>
+        WHERE toolbar_id = #{toolbarId}  AND status = true
+    </update>
+
+</mapper>

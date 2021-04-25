@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Class-Path: MachineLearning.jar PlotAvoidRegion.jar RealspaceEditor.ja
+ r RealspaceEffect.jar PlotPanelControl.jar RealspaceBuilder.jar Linea
+ rReferencing.jar RealspaceSpatialAnalyst.jar SituationEvolutionEditor
+ .jar SpatialStatisticsAnalyst.jar
+Main-Class: com.supermap.desktop.develop.MyStartUp
+

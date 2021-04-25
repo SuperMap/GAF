@@ -1,0 +1,60 @@
+server:
+  port: 8989
+eureka:
+  instance:
+    metadataMap:
+      prometheus:
+        path: /actuator/prometheus
+        port: '8080'
+        scrape: 'true'
+fluentd:
+  enable: 'true'
+  host: 192.168.11.118
+  port: '31100'
+  tagPrefix: gaf-dev
+login:
+  loginSuccessRedirect: /viewer/#/
+  loginUrl: /viewer/#/authentication/login
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: 'true'
+    prometheus:
+      enabled: 'true'
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: 'true'
+    tags:
+      application: ${spring.application.name}
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: 'true'
+  mapper-locations: classpath*:com/supermap/gaf/**/postgresql/*Mapper.xml
+spring:
+  jersey:
+    application-path: /authentication
+  application:
+    name: gaf-authentication
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: '123456'
+    url: jdbc:postgresql://192.168.11.118:32222/gaf
+    username: admin
+  redis:
+    database: '5'
+    host: 192.168.11.118
+    port: '30839'
+  sleuth:
+    sampler:
+      probability: '1'
+  zipkin:
+    base-url: http://192.168.11.118:32027
+    sender:
+      type: web

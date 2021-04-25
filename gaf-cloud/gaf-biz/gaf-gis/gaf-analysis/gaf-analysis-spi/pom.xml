@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>gaf-analysis</artifactId>
+        <groupId>com.supermap.gaf</groupId>
+        <version>2.1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <version>2.1.0-SNAPSHOT</version>
+    <artifactId>gaf-analysis-spi</artifactId>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.supermap.gaf</groupId>
+            <artifactId>gaf-common-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.supermap.iserver</groupId>
+            <artifactId>server-host-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap.iserver</groupId>
+            <artifactId>service-model</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap.iserver</groupId>
+            <artifactId>iserver-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap.iserver</groupId>
+            <artifactId>rest-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap.iserver</groupId>
+            <artifactId>commons-utils-ugc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap</groupId>
+            <artifactId>com.supermap.data</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap</groupId>
+            <artifactId>com.supermap.data.conversion</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap</groupId>
+            <artifactId>com.supermap.mapping</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap</groupId>
+            <artifactId>com.supermap.analyst.spatialanalyst</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

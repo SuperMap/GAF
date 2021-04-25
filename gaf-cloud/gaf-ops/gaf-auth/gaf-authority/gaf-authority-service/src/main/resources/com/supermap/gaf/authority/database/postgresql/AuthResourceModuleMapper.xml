@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthResourceModuleMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthResourceModule">
+        <result column="resource_module_id" jdbcType="VARCHAR" property="resourceModuleId" />
+        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
+        <result column="module_catalog_id" jdbcType="VARCHAR" property="moduleCatalogId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="target" jdbcType="VARCHAR" property="target" />
+        <result column="module_url" jdbcType="VARCHAR" property="moduleUrl" />
+        <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        resource_module_id,
+        sys_component_id,
+        module_catalog_id,
+        name,
+        name_en,
+        type,
+        target,
+        module_url,
+        icon_url,
+        status,
+        sort_sn,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        path
+    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_module"
+        WHERE resource_module_id = #{resourceModuleId}
+    </select>
+
+    <select id="listModules" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_module"
+        where status = true
+    </select>
+
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthResourceModuleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_module"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthResourceModuleSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_module"
+		<if test ='null != searchFieldName'>where ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_resource_module"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.resource_module_id, a.sys_component_id, a.module_catalog_id, a.name, a.name_en, a.type, a.target,
+            a.module_url, a.icon_url, a.status, a.sort_sn, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by, a.path
+            FROM "auth_resource_module" a,(
+            select resource_module_id 
+            From "auth_resource_module" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.resource_module_id = b.resource_module_id 
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_resource_module"
+    </select>
+    <select id="countByCombination" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_resource_module"
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != resourceModuleId'>resource_module_id = #{resourceModuleId} AND </if>
+            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
+            <if test ='null != moduleCatalogId'>module_catalog_id = #{moduleCatalogId} AND </if>
+            <if test ='null != name'>name = #{name} AND </if>
+            <if test ='null != nameEn'>name_en = #{nameEn} AND </if>
+            <if test ='null != type'>type = #{type} AND </if>
+            <if test ='null != target'>target = #{target} AND </if>
+            <if test ='null != moduleUrl'>module_url = #{moduleUrl} AND </if>
+            <if test ='null != iconUrl'>icon_url = #{iconUrl} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != description'>description = #{description} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+            <if test ='null != path'>path = #{path} AND </if>
+        </trim>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="resource_module_id" keyProperty="resourceModuleId" parameterType="com.supermap.gaf.authority.commontype.AuthResourceModule">
+        INSERT INTO "auth_resource_module"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != resourceModuleId'>resource_module_id,</if>
+				<if test ='null != sysComponentId'>sys_component_id,</if>
+				<if test ='null != moduleCatalogId'>module_catalog_id,</if>
+				<if test ='null != name'>name,</if>
+                <if test ='null != nameEn'>name_en,</if>
+				<if test ='null != type'>type,</if>
+                <if test ='null != target'>target,</if>
+				<if test ='null != moduleUrl'>module_url,</if>
+				<if test ='null != iconUrl'>icon_url,</if>
+				<if test ='null != status'>status,</if>
+				<if test ='null != sortSn'>sort_sn,</if>
+				<if test ='null != description'>description,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+                <if test ='null != path'>path,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != resourceModuleId'>#{resourceModuleId},</if>
+				<if test ='null != sysComponentId'>#{sysComponentId},</if>
+				<if test ='null != moduleCatalogId'>#{moduleCatalogId},</if>
+				<if test ='null != name'>#{name},</if>
+                <if test ='null != nameEn'>#{nameEn},</if>
+				<if test ='null != type'>#{type},</if>
+                <if test ='null != target'>#{target},</if>
+				<if test ='null != moduleUrl'>#{moduleUrl},</if>
+				<if test ='null != iconUrl'>#{iconUrl},</if>
+				<if test ='null != status'>#{status},</if>
+				<if test ='null != sortSn'>#{sortSn},</if>
+				<if test ='null != description'>#{description},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+                <if test ='null != path'>#{path},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_resource_module"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.resourceModuleId}  ,  #{item.sysComponentId}  ,  #{item.moduleCatalogId}  ,  #{item.name},  #{item.nameEn}  ,  #{item.type}  ,  #{item.target}  ,
+              #{item.moduleUrl}  ,  #{item.iconUrl}  ,  #{item.status}  ,  #{item.sortSn}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}, #{path}  )
+        </foreach>
+    </insert>
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "auth_resource_module" 
+        WHERE resource_module_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+	<delete id="delete" >
+        DELETE FROM "auth_resource_module"
+        WHERE resource_module_id = #{resourceModuleId}
+    </delete>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthResourceModule">
+        UPDATE "auth_resource_module"
+        <set>
+				<if test ='null != sysComponentId'>sys_component_id = #{sysComponentId},</if>				
+				<if test ='null != moduleCatalogId'>module_catalog_id = #{moduleCatalogId},</if>				
+				<if test ='null != name'>name = #{name},</if>
+                <if test ='null != nameEn'>name_en = #{nameEn},</if>
+                <if test ='null != type'>type = #{type},</if>
+                <if test ='null != target'>target = #{target},</if>
+				<if test ='null != moduleUrl'>module_url = #{moduleUrl},</if>				
+				<if test ='null != iconUrl'>icon_url = #{iconUrl},</if>				
+				<if test ='null != status'>status = #{status},</if>				
+				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>				
+				<if test ='null != description'>description = #{description},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>
+                <if test ='null != path'>path = #{path},</if>
+        </set>
+        WHERE resource_module_id = #{resourceModuleId}
+    </update>
+
+</mapper>

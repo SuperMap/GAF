@@ -1,0 +1,28 @@
+server:
+  port: 8763
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+#    fetchRegistry: false
+#    register-with-eureka: false
+    server:
+      waitTimeInMsWhenSyncEmpty: 0
+
+spring:
+  application:
+    name: gaf-map
+  jersey:
+    application-path: /map
+  cloud:
+    config:
+      uri: http://192.168.11.118:30131
+      label: master
+      profile: prod
+#logging:
+#  level:
+#    com.supermap.gaf: debug

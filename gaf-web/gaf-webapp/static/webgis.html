@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGIS</title>
+    <link href="./iframe/antd.min.css" rel="stylesheet" />
+    <link href="./webGL/Cesium/Widgets/widgets.css" rel="stylesheet" />
+    <link href="./iframe/css/font_577982_beimm7aom3g.css" rel="stylesheet" />
+    <link href="./iframe/css/geoFont/iconfont.css" rel="stylesheet" />
+
+    <style>
+      #draggable {
+        background-color: var(--bg-color, rgba(25, 40, 58, 0.6));
+        border-width: 0;
+        color: var(--font-color, #fff);
+        margin-left: 30px;
+        padding: 0 15px 0;
+        font-size: 14px;
+      }
+      .ant-tree li .ant-tree-node-content-wrapper:hover,
+      .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected {
+        background-color: transparent;
+      }
+    </style>
+    <link rel="stylesheet" href="./iframe/iview.css" />
+    <script src="./iframe/vue.min.js"></script>
+    <script src="./iframe/iview.js"></script>
+    <script src="./webGL/Cesium/Cesium.js"></script>
+    <script src="./iframe/antd.min.js"></script>
+    <script src="./iframe/gafmapui.umd.js"></script>
+    <script src="./iframe/vue-iclient3d-webgl.min.js"></script>
+    <script src="./iframe/echarts.min.js"></script>
+    <script src="./iframe/tooltip.js"></script>
+    <script src="./iframe/axios.min.js"></script>
+    <script src="./classic/SuperMap.Include.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      new Vue({
+        el: '#app',
+        template: `<gaf-map-viewer :serviceList="serviceList">
+    <gaf-map-tool-bar :content="right" type="vertical" ></gaf-map-tool-bar>
+    <gaf-map-tool-bar :content="home" type="horizontal" ></gaf-map-tool-bar>
+  </gaf-map-viewer>`,
+        name: 'GafMaiewer',
+        beforeCreate() {
+          Vue.prototype.$bus = new Vue()
+          this.$bus.$on('common-tools-item-click', (name) => {
+            console.log('common-tools-item-click', name)
+          })
+        },
+        data() {
+          return {
+            positionH: 'bottom',
+            positionV: 'bottomRight',
+            right: [
+              {
+                title: '初始化视角',
+                name: 'flyTo',
+                icon: 'icon-chushihuashijiao',
+                params: [
+                  {
+                    altitude: 237.02558519727847,
+                    heading: 4.577567816832631,
+                    latitude: 30.624635512479735,
+                    longitude: 114.2644153328619,
+                    tilt: 76.79984572685618,
+                  },
+                ],
+              },
+              {
+                title: '放大',
+                name: 'zoomIn',
+                icon: 'icon-jiahao',
+              },
+              {
+                title: '缩小',
+                name: 'zoomOut',
+                icon: 'icon-jianhaocu',
+              },
+              {
+                title: '二维视图|三维视图',
+                name: 'switchMode',
+                icon: 'icon-diqiu',
+              },
+              {
+                title: '全屏|取消全屏',
+                name: 'fullScreen',
+                icon: 'icon-quanping1',
+              },
+              {
+                title: '清除',
+                name: 'mapClear',
+                icon: 'icon-clear',
+              },
+              {
+                title: '鹰眼',
+                name: 'GafMapBirdEye',
+                icon: 'icon-quyudingwei',
+                toggle: true,
+              },
+            ],
+            home: [
+              {
+                name: 'measure',
+                icon: 'icon-xiankuang',
+                title: '量算',
+                children: [
+                  {
+                    title: '距离量算',
+                    name: 'measureDistance',
+                    icon: 'icon-ceju',
+                    closePanel: true,
+                    selectedName: 'measure',
+                    actions: ['splitScreenNone'],
+                  },
+                  {
+                    title: '面积量算',
+                    name: 'measureArea',
+                    icon: 'icon-xiankuang',
+                    closePanel: true,
+                    selectedName: 'measure',
+                    actions: ['splitScreenNone'],
+                  },
+                  {
+                    title: '高度量算',
+                    name: 'measureHeight',
+                    icon: 'icon-cegao',
+                    closePanel: true,
+                    selectedName: 'measure',
+                    actions: ['splitScreenNone'],
+                  },
+                  {
+                    title: '清除量算',
+                    name: 'mapClear',
+                    icon: 'icon-clear',
+                    closePanel: false,
+                    closedName: 'measure',
+                    actions: ['splitScreenNone', 'mapClear'],
+                  },
+                ],
+              },
+              {
+                title: '剖切',
+                name: 'gaf-map-profile',
+                icon: 'icon-pouqie',
+                type: 'panel',
+                actions: ['mapClear'],
+                // actions: ['clear']
+              },
+              {
+                title: '综合查询',
+                name: 'GafMapQuery',
+                icon: 'icon-dianxuan1',
+                params: {
+                  serverDatas: [
+                    {
+                      url:
+                        'http://support.supermap.com.cn:8090/iserver/services/data-jingjin/rest/data/datasources/Jingjin/datasets/BaseMap_P',
+                      title: 'BaseMap_P',
+                      fields: ['SmID', 'NAME', 'CODE'],
+                      alias: ['id', '名称', '编号'],
+                    },
+                    {
+                      url:
+                        'http://support.supermap.com.cn:8090/iserver/services/data-jingjin/rest/data/datasources/Jingjin/datasets/BaseMap_L',
+                      title: 'BaseMap_L',
+                      fields: ['SmID', 'NAME', 'CODE'],
+                      alias: ['id', '名称', '编号'],
+                    },
+                    {
+                      url:
+                        'http://support.supermap.com.cn:8090/iserver/services/data-jingjin/rest/data/datasources/Jingjin/datasets/BaseMap_R',
+                      title: 'BaseMap_R',
+                      fields: ['SmID', 'NAME', 'CITY'],
+                      alias: ['id', '名称', '城市'],
+                    },
+                  ],
+                },
+              },
+              {
+                title: '点选',
+                name: 'pointSelect',
+                icon: 'icon-dianxuan1',
+                actions: ['releaseSelection'],
+                params: ['red'],
+                toggle: true,
+              },
+              {
+                title: '模型编辑',
+                name: 'modelEditor',
+                icon: 'icon-dianxuan1',
+                actions: ['clearModel'],
+                params: [
+                  './gltf/客机模型/客机模型.gltf', //模型路径
+                  [114.279080101051, 30.6001413808849, 20], //模型添加位置
+                ],
+                toggle: true,
+              },
+              {
+                title: '泛光扫描线',
+                name: 'gaf-map-flood-light',
+                icon: 'icon-dingwei',
+                actions: ['mapClear'],
+              },
+
+              {
+                title: '区域查询定位',
+                name: 'gaf-map-locate',
+                icon: 'icon-quyudingwei',
+                type: 'panel',
+                // actions: ['clear'],
+                actions: ['mapClear'],
+                params: {
+                  info: {
+                    city: '武汉市',
+                    code: 420100,
+                    // 'dataUrl': 'http://10.10.137.19:8090/iserver/services/data-xzqh/rest',
+                    // 'dataSourceName': 'xzqh',
+                    // 'dataSetName': 'BJDT_2019_XZQH_ALL_L12',
+                    dataUrl:
+                      'http://1.202.165.56:8090/iserver/services/data-cim_gis/rest',
+                    // 'dataUrl': 'http://1.202.165.56:8090/iserver/services/data-cim_gis/rest',
+                    // 'dataUrl': 'http://192.168.105.60:8090/iserver/services/data-cim_gis/rest',
+                    dataSourceName: 'cim-base',
+                    dataSetName: 'XZQH_ALL_L12',
+                    fillColor: 'blue',
+                    borderColor: 'red',
+                    filterField: 'QHBM',
+                  },
+                  districts: [
+                    {
+                      name: '江岸区',
+                      code: 420102,
+                    },
+                    {
+                      name: '江汉区',
+                      code: 420103,
+                    },
+                    {
+                      name: '硚口区',
+                      code: 420104,
+                    },
+                    {
+                      name: '汉阳区',
+                      code: 420105,
+                    },
+                    {
+                      name: '武昌区',
+                      code: 420106,
+                    },
+                    {
+                      name: '青山区',
+                      code: 420107,
+                    },
+                    {
+                      name: '洪山区',
+                      code: 420111,
+                    },
+                    {
+                      name: '东西湖区',
+                      code: 420112,
+                    },
+                    {
+                      name: '汉南区',
+                      code: 420113,
+                    },
+                    {
+                      name: '蔡甸区',
+                      code: 420114,
+                    },
+                    {
+                      name: '江夏区',
+                      code: 420115,
+                    },
+                    {
+                      name: '黄陂区',
+                      code: 420116,
+                    },
+                    {
+                      name: '新洲区',
+                      code: 420117,
+                    },
+                  ],
+                },
+              },
+              {
+                title: '视点管理',
+                name: 'gaf-map-viewpoint-manage',
+                icon: 'icon-shidian',
+                actions: ['mapClear'],
+              },
+
+              {
+                title: '环境模拟',
+                name: 'GafMapWeather',
+                icon: 'icon-tianqi1',
+                children: [
+                  {
+                    title: '光影变化',
+                    name: 'gaf-map-light-shadow',
+                    icon: 'icon-tianqi1',
+                    actions: ['mapClear'],
+                    selectedName: 'environment',
+                  },
+                  {
+                    title: '天气变化',
+                    name: 'GafMapWeather',
+                    icon: 'icon-tianqi1',
+                    actions: ['mapClear'],
+                    selectedName: 'environment',
+                  },
+                ],
+              },
+              {
+                title: '压平',
+                name: 'GafMapFlatten',
+                icon: 'icon-xuanze',
+                // actions: ['clear'],
+                actions: ['mapClear'],
+              },
+
+              {
+                title: '三维漫游',
+                name: 'RoamingGaf',
+                icon: 'icon-manyou1',
+                // actions: ['clear'],
+                actions: ['mapClear'],
+                params: { mySpeed: 60, useMySpeed: true },
+              },
+            ],
+            serviceList: [
+              {
+                resourceId: 2001,
+                resourceName: '3D-CBD',
+                location: true,
+                resourceLocation:
+                  'http://www.supermapol.com/realspace/services/3D-CBD/rest/realspace',
+                resourceTag: 'RESTREALSPACE',
+              },
+            ],
+          }
+        },
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthRoleQueryMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthRole">
+        <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="role_catalog_id" jdbcType="VARCHAR" property="roleCatalogId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+        <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+        <result column="code" jdbcType="VARCHAR" property="code" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id,
+        tenant_id,
+        role_catalog_id,
+        sort_sn,
+        role_name,
+        name_en,
+        code,
+        status,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        type    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role"
+        WHERE role_id = #{roleId}
+    </select>
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.gateway.dao.RouteDao">
+
+    <resultMap id="RouteMap" type="com.supermap.gaf.gateway.commontypes.GatewayRouteEntity">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="route_id" jdbcType="VARCHAR" property="routeId"/>
+        <result column="route_uri" jdbcType="VARCHAR" property="routeUri"/>
+        <result column="route_order" jdbcType="TINYINT" property="routeOrder"/>
+        <result column="predicates" jdbcType="VARCHAR" property="predicates"/>
+        <result column="filters" jdbcType="VARCHAR" property="filters"/>
+        <result column="enable" jdbcType="BOOLEAN" property="enable"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+    </resultMap>
+    
+    <update id="CreateRoutes">
+        CREATE TABLE routes (
+            id VARCHAR(50) NOT NULL,
+            route_id varchar(64) DEFAULT NULL ,
+            route_uri varchar(128) DEFAULT NULL ,
+            route_order int DEFAULT NULL ,
+            predicates text,
+            filters text,
+            enable boolean DEFAULT NULL,
+            create_time timestamp(0) without time zone  DEFAULT NULL,
+            update_time timestamp(0) without time zone  DEFAULT NULL,
+            type  VARCHAR(10) DEFAULT NULL,
+            tenant_id  VARCHAR(50) DEFAULT NULL,
+            PRIMARY KEY (id)
+        )
+    </update>
+
+    <sql id="searchParamSql">
+        <where>
+            1=1
+            <if test="tenantId != null">
+                and tenant_id = #{tenantId}
+            </if>
+            <if test="ids != null and ids.size() > 0 ">
+                and id in
+                <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <insert id="addRoute" parameterType="com.supermap.gaf.gateway.commontypes.GatewayRouteEntity">
+        insert into routes(id, route_id, route_uri, route_order, enable, create_time, update_time, predicates, filters, type, tenant_id) 
+        values (#{id},#{routeId},#{routeUri},#{routeOrder},
+        #{enable},
+        TO_TIMESTAMP(#{createTime}, 'yyyy-mm-dd hh24:mi:ss'),
+        TO_TIMESTAMP(#{updateTime}, 'yyyy-mm-dd hh24:mi:ss'),
+        #{predicates},#{filters},#{type},#{tenantId});
+    </insert>
+
+    <select id="queryRoutes" parameterType="com.supermap.gaf.gateway.commontypes.RouteSearchParam"
+            resultMap="RouteMap">
+        select * from routes<include refid="searchParamSql"/>;
+    </select>
+    <delete id="deleteRoute">
+        delete from routes where id=#{id}
+    </delete>
+    <update id="updateRoute" parameterType="com.supermap.gaf.gateway.commontypes.GatewayRouteEntity">
+        update routes
+        <set>
+            route_id=#{routeId},route_uri=#{routeUri},route_order=#{routeOrder},enable=#{enable},
+            update_time=TO_TIMESTAMP(#{updateTime}, 'yyyy-mm-dd hh24:mi:ss'),predicates=#{predicates},filters=#{filters}
+        </set>
+        where id=#{id}
+    </update>
+    <select id="queryRoute" resultMap="RouteMap">
+        select * from routes where id=#{id}
+    </select>
+    <delete id="batchDeleteRoute" parameterType="list">
+        delete from routes where id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

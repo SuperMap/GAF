@@ -1,0 +1,296 @@
+version: '3'
+
+networks:
+  gaf-net:
+    external: true
+
+services:
+  gaf-microservice-rigister:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-rigister
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    ports:
+    - 8761:8080
+    container_name: gaf-microservice-rigister
+    restart: always
+  gaf-microservice-conf:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-conf
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-microservice-conf
+    restart: always
+  gaf-microservice-api:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-api
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    restart: always
+    container_name: gaf-microservice-api
+  gaf-microservice-gateway:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-gateway
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    ports:
+    - 30777:8080
+    restart: always
+    container_name: gaf-microservice-gateway
+  gaf-sys-mgt:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-sys-mgt/gaf-sys-mgt-app
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-sys-mgt
+    restart: always
+  gaf-authentication:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-auth/gaf-authentication/gaf-authentication-app
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-authentication
+    restart: always
+  gaf-authority:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-auth/gaf-authority/gaf-authority-app
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-authority
+    restart: always
+  gaf-microservice-governance:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-governance
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-microservice-governance
+    restart: always
+  gaf-portal:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-portal/gaf-portal-app
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-portal
+    restart: always
+  gaf-map:
+    build:
+      context: ../../../gaf-cloud/gaf-biz/gaf-gis/gaf-map/gaf-map-app
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    ports:
+    - 1947
+    volumes:
+    - ${GAF_VOL_DIR}/License:/opt/SuperMap/License
+    - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-map
+    restart: always
+  gaf-data-mgt:
+    build:
+      context: ../../../gaf-cloud/gaf-biz/gaf-gis/gaf-data-mgt/gaf-data-mgt-app
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    volumes:
+    - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs
+    restart: always
+    container_name: gaf-data-mgt
+  gaf-storage:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-storage/gaf-storage-app
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-storage
+    restart: always
+  gaf-monitor:
+    build:
+      context: ../../../gaf-cloud/gaf-ops/gaf-monitor
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-monitor
+    restart: always
+  gaf-analysis:
+    build:
+      context: ../../../gaf-cloud/gaf-biz/gaf-gis/gaf-analysis/gaf-analysis-app
+      dockerfile: src/main/k8s/Dockerfile
+    networks:
+    - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-analysis
+    restart: always
+  gaf-webapp:
+    build:
+      context: ../../../gaf-web/gaf-webapp
+      dockerfile: Dockerfile
+    networks:
+    - gaf-net
+    restart: always
+    container_name: gaf-webapp
+  gaf-mapapp:
+    build:
+      context: ../../../gaf-web/gaf-mapapp
+      dockerfile: Dockerfile
+    networks:
+    - gaf-net
+    restart: always
+    container_name: gaf-mapapp
+
+
+  gaf-postgres:
+    image: harbor.gaf.net.cn/library/postgres:10.10
+    networks:
+    - gaf-net
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: gaf
+    volumes:
+    - ${GAF_VOL_DIR}/vol_pg-data:/var/lib/postgresql/data
+    container_name: gaf-postgres
+    command: postgres -c 'max_connections=2000'
+  gaf-redis:
+    image: harbor.gaf.net.cn/library/redis:5
+    networks:
+    - gaf-net
+    volumes:
+    - ${GAF_VOL_DIR}/vol_redis/redis.conf:/usr/local/etc/redis/redis.conf
+    container_name: gaf-redis
+    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
+  gaf-minio:
+    image: harbor.gaf.net.cn/library/minio:latest
+    networks:
+    - gaf-net
+    ports:
+    - 9000:9000
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin123456
+      MINIO_API_CORS_ALLOW_ORIGIN: '*'
+    volumes:
+    - ${GAF_VOL_DIR}/mnt/data:/data
+    container_name: gaf-minio
+    command: server /data
+  gaf-s3fs-mount:
+    image: harbor.gaf.net.cn/library/gaf-s3fs-mount:latest
+    networks:
+    - gaf-net
+    privileged: true
+    environment:
+      GAF_USERNAME: sys_admin
+      GAF_PASSWORD: 123456
+      GAF_TOKEN_URL: http://gaf-authentication:8080/authentication/token
+      GAF_CONFIG_URL: http://gaf-authority:8080/authority/auth-tenants/s3-config
+    volumes:
+    - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs:shared
+    container_name: gaf-s3fs-mount
+  gaf-cadvisor:
+    image: harbor.gaf.net.cn/library/google/cadvisor:v0.33.0
+    networks:
+    - gaf-net
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:rw
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    container_name: gaf-cadvisor
+  gaf-node-exporter:
+    image: harbor.gaf.net.cn/library/prom/node-exporter:v1.0.1
+    networks:
+    - gaf-net
+    volumes:
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /:/rootfs:ro
+    command:
+    - '--path.procfs=/host/proc'
+    - '--path.sysfs=/host/sys'
+    - '--collector.filesystem.ignored-mount-points="^(/rootfs|/host|)/(sys|proc|dev|host|etc)($$|/)"'
+    - '--collector.filesystem.ignored-fs-types="^(sys|proc|auto|cgroup|devpts|ns|au|fuse\.lxc|mqueue)(fs|)$$"'
+    container_name: gaf-node-exporter
+  gaf-prometheus:
+    image: harbor.gaf.net.cn/library/prom/prometheus:v2.23.0
+    networks:
+    - gaf-net
+    ports:
+    - 9090:9090
+    volumes:
+    - ${GAF_VOL_DIR}/vol_prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    - ${GAF_VOL_DIR}/vol_prometheus/data:/prometheus
+    container_name: gaf-prometheus
+    restart: always
+    command: ["--config.file=/etc/prometheus/prometheus.yml","--storage.tsdb.path=/prometheus"]
+  gaf-grafana:
+    image: harbor.gaf.net.cn/library/grafana/grafana:7.3.1-ubuntu
+    networks:
+    - gaf-net
+    ports:
+    - 3000:3000
+    volumes:
+    - ${GAF_VOL_DIR}/vol_grafana/grafana.ini:/etc/grafana/grafana.ini
+    - ${GAF_VOL_DIR}/vol_grafana/index.html:/usr/share/grafana/public/views/index.html
+    container_name: gaf-grafana
+  gaf-elasticsearch:
+    image: harbor.gaf.net.cn/library/elasticsearch:7.9.3
+    networks:
+    - gaf-net
+    ports:
+    - 9200:9200
+    environment:
+      discovery.type: single-node
+    volumes:
+    - ${GAF_VOL_DIR}/vol_elasticsearch/data:/usr/share/elasticsearch/data
+    container_name: gaf-elasticsearch
+    restart: always
+  gaf-fluentd-es:
+    image: harbor.gaf.net.cn/library/fluentd-es:1.0
+    networks:
+    - gaf-net
+    volumes:
+    - ${GAF_VOL_DIR}/vol_fluentd-es/fluent.conf:/fluentd/etc/fluent.conf
+    container_name: gaf-fluentd-es
+  gaf-zipkin:
+    image: harbor.gaf.net.cn/library/openzipkin/zipkin:2
+    networks:
+    - gaf-net
+    environment:
+      STORAGE_TYPE: elasticsearch
+      ES_HOSTS: http://gaf-elasticsearch:9200
+    container_name: gaf-zipkin

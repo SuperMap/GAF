@@ -1,0 +1,80 @@
+feign:
+  bigdata:
+    url: 1x1
+  security:
+    url: 1x1
+fluentd:
+  enable: 'true'
+  host: 192.168.11.118
+  port: '31100'
+  tagPrefix: gaf-dev
+gaf:
+  service-catalog:
+    enable: 'true'
+  service-layer:
+    enable: 'true'
+
+info:
+  dependencies:
+    service-dir: service-dir
+    service-gis: service-gis
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: 'true'
+  mapper-locations: classpath*:com/supermap/gaf/**/database/postgresql/*.xml
+pagehelper:
+  reasonable: 'true'
+require:
+  security: 'false'
+shiro:
+  apiauthz:
+    enable: 'false'
+  loginUrl: /login
+  publicUrls:
+    - /map/view/**
+    - /map/view**
+    - /map/authdefines/**
+    - /favicon.ico
+    - /index.html**
+  serviceUrl: /
+  successUrl: /
+  urlFilters:
+    - /login, keycloakSecurityFilter
+    - /callback, callbackFilter
+    - /** anon
+spring:
+  application:
+    name: gaf-map
+  jersey:
+    application-path: /map
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: '123456'
+    url: jdbc:postgresql://192.168.11.118:32222/gaf
+    username: admin
+  mail:
+    default-encoding: utf-8
+webgis:
+  host: http://10.10.199.123:8763
+server:
+  port: 8763
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    fetchRegistry: false
+    register-with-eureka: false
+#logging:
+#  level:
+#    com.supermap.gaf: debug
+minio:
+  single-config:
+    service-endpoint: http://192.168.11.118:9000
+    access-key: admin
+    secret-key: admin123456
+    bucket-name: gaf
+  mode: SINGLE_NODE_MULTI_PATH
+#  mode: NONE

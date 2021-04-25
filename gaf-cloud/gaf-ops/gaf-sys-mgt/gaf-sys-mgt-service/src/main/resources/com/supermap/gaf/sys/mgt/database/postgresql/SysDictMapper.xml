@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.sys.mgt.dao.SysDictMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.sys.mgt.commontype.SysDict">
+        <result column="data_dict_id" jdbcType="VARCHAR" property="dataDictId" />
+        <result column="dict_code" jdbcType="VARCHAR" property="dictCode" />
+        <result column="dict_name" jdbcType="VARCHAR" property="dictName" />
+        <result column="dict_value" jdbcType="VARCHAR" property="dictValue" />
+        <result column="dict_class" jdbcType="VARCHAR" property="dictClass" />
+        <result column="seq" jdbcType="INTEGER" property="seq" />
+        <result column="pid" jdbcType="VARCHAR" property="pid" />
+        <result column="dict_desc" jdbcType="VARCHAR" property="dictDesc" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="visibility" jdbcType="BIT" property="visibility" />
+        <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+        <result column="ext_properties" jdbcType="VARCHAR" property="extProperties" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        data_dict_id,
+        dict_code,
+        dict_name,
+        dict_value,
+        dict_class,
+        seq,
+        pid,
+        dict_desc,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        tenant_id,
+        visibility,
+        catalog_id ,
+        ext_properties   </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_dict"
+        WHERE data_dict_id = #{dataDictId}
+    </select>
+	<select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_dict"
+		WHERE status = true
+        <if test ='null != dataDictId'> AND data_dict_id = #{dataDictId} </if>
+        <if test ='null != dictCode'> AND dict_code = #{dictCode} </if>
+        <if test ='null != dictName'> AND dict_name = #{dictName} </if>
+        <if test ='null != dictValue'> AND dict_value = #{dictValue} </if>
+        <if test ='null != seq'> AND seq = #{seq} </if>
+        <if test ='null != pid'> AND pid = #{pid} </if>
+        <if test ='null != dictDesc'> AND dict_desc = #{dictDesc} </if>
+        <if test ='null != createdTime'> AND created_time = #{createdTime} </if>
+        <if test ='null != createdBy'> AND created_by = #{createdBy} </if>
+        <if test ='null != updatedTime'> AND updated_time = #{updatedTime} </if>
+        <if test ='null != updatedBy'> AND updated_by = #{updatedBy} </if>
+        <if test ='null != tenantId'> AND tenant_id = #{tenantId} </if>
+        <if test ='null != visibility'> AND visibility = #{visibility} </if>
+        <if test ='null != catalogId'> AND catalog_id = #{catalogId} </if>
+        <if test ='null != extProperties'> AND ext_properties = #{extProperties} </if>
+        <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+        <if test ='null != orderFieldName and null != orderMethod'>order by ${orderFieldName} ${orderMethod}</if>
+    </select>
+    <select id="selectChildren" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_dict"
+        WHERE status = true AND dict_code = #{dictTypeCode} AND data_dict_id != #{dictTypeId}
+    </select>
+    <select id="selectByIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_dict"
+        WHERE status = true AND data_dict_id in
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectByParentIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_dict"
+        WHERE status = true AND pid in
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="data_dict_id" keyProperty="dataDictId" parameterType="com.supermap.gaf.sys.mgt.commontype.SysDict">
+        INSERT INTO "sys_dict"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != dataDictId'>data_dict_id,</if>
+			<if test ='null != dictCode'>dict_code,</if>
+			<if test ='null != dictName'>dict_name,</if>
+			<if test ='null != dictValue'>dict_value,</if>
+			<if test ='null != dictClass'>dict_class,</if>
+			<if test ='null != seq'>seq,</if>
+			<if test ='null != pid'>pid,</if>
+			<if test ='null != dictDesc'>dict_desc,</if>
+			status,
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+			<if test ='null != tenantId'>tenant_id,</if>
+			<if test ='null != visibility'>visibility,</if>
+			<if test ='null != catalogId'>catalog_id,</if>
+            <if test ='null != extProperties and "" != extProperties'>ext_properties,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != dataDictId'>#{dataDictId},</if>
+			<if test ='null != dictCode'>#{dictCode},</if>
+			<if test ='null != dictName'>#{dictName},</if>
+			<if test ='null != dictValue'>#{dictValue},</if>
+			<if test ='null != dictClass'>#{dictClass},</if>
+			<if test ='null != seq'>#{seq},</if>
+			<if test ='null != pid'>#{pid},</if>
+			<if test ='null != dictDesc'>#{dictDesc},</if>
+			true,
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+			<if test ='null != tenantId'>#{tenantId},</if>
+			<if test ='null != visibility'>#{visibility},</if>
+			<if test ='null != catalogId'>#{catalogId},</if>
+            <if test ='null != extProperties and "" != extProperties'>#{extProperties},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "sys_dict"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.dataDictId}  ,  #{item.dictCode}  ,  #{item.dictName}  ,  #{item.dictValue}  ,  #{item.dictClass}  ,  #{item.seq}  ,  #{item.pid}  ,  #{item.dictDesc}  ,  true  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  ,  #{item.tenantId}  ,  #{item.visibility}  ,  #{item.catalogId} ,#{item.extProperties} )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE sys_dict SET status = false
+        WHERE data_dict_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE sys_dict SET status = false
+        WHERE data_dict_id = #{dataDictId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.sys.mgt.commontype.SysDict">
+        UPDATE "sys_dict"
+        <set>
+			<if test ="null != dictCode and '' != dictCode">dict_code = #{dictCode},</if>				
+			<if test ="null != dictName and '' != dictName">dict_name = #{dictName},</if>
+            <if test ="null != dictValue">dict_value = #{dictValue},</if>
+            <if test ="null != dictClass">dict_class = #{dictClass},</if>
+            <if test ="null != seq">seq = #{seq},</if>
+            <if test ="null != pid">pid = #{pid},</if>
+			dict_desc = #{dictDesc},
+			updated_time = now(),
+            <if test ="null != updatedBy">updated_by = #{updatedBy},</if>
+            <if test ="null != tenantId">tenant_id = #{tenantId},</if>
+            <if test ="null != visibility">visibility = #{visibility},</if>
+            <if test ="null != catalogId">catalog_id = #{catalogId},</if>
+            ext_properties = #{extProperties},
+        </set>
+        WHERE data_dict_id = #{dataDictId}  AND status = true
+    </update>
+
+</mapper>

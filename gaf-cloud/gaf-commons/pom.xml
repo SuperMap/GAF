@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.supermap.gaf</groupId>
+        <artifactId>gaf-cloud</artifactId>
+        <version>2.1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>gaf-commons</artifactId>
+    <version>2.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>gaf-common-utils</module>
+        <module>gaf-common-rest</module>
+        <module>gaf-common-auth</module>
+        <module>gaf-common-auth-starter</module>
+        <module>gaf-common-boot</module>
+        <module>gaf-common-cloud</module>
+        <module>gaf-common-log</module>
+        <module>gaf-common-data-access</module>
+        <module>gaf-common-api-scanner</module>
+        <module>gaf-common-cache</module>
+        <module>gaf-common-storage</module>
+        <module>gaf-common-license-starter</module>
+        <module>gaf-common-base-data</module>
+        <module>gaf-common-gateway</module>
+        <module>gaf-common-sys-mgt</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jersey2-jaxrs</artifactId>
+        </dependency>
+    </dependencies>
+
+
+</project>

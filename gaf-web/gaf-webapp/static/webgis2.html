@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGIS</title>
+    <link href="./iframe/antd.min.css" rel="stylesheet" />
+    <link href="./webGL/Cesium/Widgets/widgets.css" rel="stylesheet" />
+    <link href="./iframe/css/font_577982_beimm7aom3g.css" rel="stylesheet" />
+    <link href="./iframe/css/geoFont/iconfont.css" rel="stylesheet" />
+    <style>
+      .ant-input {
+        background: transparent;
+        border: 1px solid #545c64;
+      }
+      #draggable {
+        background-color: rgba(25, 40, 58, 0.6);
+        border-width: 0;
+        color: #ffffff;
+        margin-left: 30px;
+        padding: 0 15px 0;
+      }
+      #draggable .ant-slider-mark-text {
+        color: #ffffff;
+      }
+      #draggable .sm-profile3d-content {
+        background-color: transparent;
+      }
+      #draggable .sm-content {
+        background-color: transparent;
+      }
+      #draggable.GafMapProfile .draggable .header {
+        background: transparent;
+      }
+      #treeComponent .ant-tree li .ant-tree-node-content-wrapper:hover {
+        background-color: transparent;
+      }
+      #treeComponent
+        .ant-tree
+        li
+        .ant-tree-node-content-wrapper.ant-tree-node-selected {
+        background-color: transparent;
+      }
+      #treeComponent .ant-input {
+        color: #ffffff;
+        background-color: transparent;
+      }
+      #treeComponent .ant-input-search-icon {
+        color: #ffffff;
+      }
+      #treeComponent .ant-tree-checkbox-inner {
+        background-color: transparent;
+      }
+      .bottom {
+        position: absolute;
+        right: -138px;
+        bottom: 20px;
+      }
+      .map-type p {
+        float: right !important;
+        background-size: cover !important;
+      }
+      .ant-tooltip-inner {
+        background-color: black;
+      }
+      .Treetooltip {
+        z-index: 10000;
+      }
+    </style>
+    <link rel="stylesheet" href="./iframe/iview.css" />
+    <script src="./iframe/vue.min.js"></script>
+    <script src="./iframe/iview.js"></script>
+    <script src="./webGL/Cesium/Cesium.js"></script>
+    <script src="./iframe/antd.min.js"></script>
+    <script src="./iframe/gafmapui.umd.js"></script>
+    <script src="./iframe/vue-iclient3d-webgl.min.js"></script>
+    <script src="./iframe/echarts.min.js"></script>
+    <script src="./iframe/tooltip.js"></script>
+    <script src="./iframe/axios.min.js"></script>
+    <script src="./classic/SuperMap.Include.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+          new Vue({
+            el: '#app',
+            template: `<div>
+              <gaf-map-basic-element v-if="loaded"/>
+              <gaf-map-viewer
+                :mvtLayerList="mvtLayerList"
+                :smSceneList="smSceneList"
+                :smSceneDataList="smSceneDataList"
+                :smLayerList="smLayerList"
+                :tinDemLayerList="tinDemLayerList"
+                :gridDemLayerList="gridDemLayerList"
+                :tiandituLayerList="tiandituLayerList"
+                  :token="token"
+                  @initialize="onViewerLoaded"
+                  ></gaf-map-viewer>
+              <div v-if="mapApp">
+                  <gaf-map-tool-bar-horizontal v-for="horizontalToolbar in mapApp.horizontalToolbars" :content="horizontalToolbar.buttons" :position="horizontalToolbar.position"/>
+                  <gaf-map-tool-bar-vertical v-for="verticalToolbar in mapApp.verticalToolbars" :content="verticalToolbar.buttons" :position="verticalToolbar.position"/>
+                  <gaf-map-draggable
+                  visible="true"
+                  title="资源目录"
+                  :width="280"
+                  >
+                  <gaf-map-tree
+                  :replaceFields="mapApp.resourceTree.replaceFields"
+                  :data-list="mapApp.resourceTree.allDataList"
+                  :searchInputShow="true"
+                  :check="onTreeNodeChecked"
+                  :select="onSelect"
+                  :allCheckable="false"
+                  :leafnodeCheckable="true"
+                  :someNodeCheckable="false"
+                  />
+                  </gaf-map-draggable>
+                  <gaf-map-bottom
+                  @mapBottomChange="handleMapBottomChange"
+                  :bottomList="mapApp.bottomLayers"
+                  />
+              </div>
+          </div>`,
+            name: 'GafMapViewer',
+            data() {
+              return {
+                loaded: false,
+                mapApp: null,
+                location: null,
+                layerList: [],
+                token: null,
+                bottomLayer: null,
+              }
+            },
+            beforeCreate() {
+              Vue.prototype.$bus = new Vue()
+              Vue.prototype.$mapActions = gafmapui.mapActions
+            },
+            computed: {
+              mvtLayerList() {
+                return this.layerList.filter(
+                  (item) => item && item.resourceTag === 'MVT'
+                )
+              },
+              smSceneList() {
+                return this.layerList.filter(
+                  (item) => item && item.resourceTag === 'RESTREALSPACE'
+                )
+              },
+              smSceneDataList() {
+                const data = this.layerList.filter(
+                  (item) => item && item.resourceTag === 'RESTREALSPACE-DATA'
+                )
+                console.log(data)
+                return data
+              },
+              tinDemLayerList() {
+                return this.layerList.filter(
+                  (item) => item && item.resourceTag === 'TIN_DEM'
+                )
+              },
+              gridDemLayerList() {
+                return this.layerList.filter(
+                  (item) => item && item.resourceTag === 'GRID_DEM'
+                )
+              },
+              smLayerList() {
+                return this.layerList.filter(
+                  (item) => item && item.resourceTag === 'RESTMAP'
+                )
+              },
+              tiandituLayerList() {
+                return this.layerList.filter(
+                  (item) =>
+                    item &&
+                    item.resourceTag === 'MAPWORLD' &&
+                    item.isBaseLayer === true
+                )
+              },
+            },
+            watch: {
+              location(val) {
+                debugger
+                this.$mapActions.setView(val)
+              },
+            },
+
+            methods: {
+              getQueryVariable(variable) {
+                let query = window.location.search.substring(1)
+                let vars = query.split('&')
+                for (let i = 0; i < vars.length; i++) {
+                  let pair = vars[i].split('=')
+                  if (pair[0] == variable) {
+                    return pair[1]
+                  }
+                }
+              },
+              async loadAppConfig() {
+                const previewCode = this.getQueryVariable('previewCode')
+                let url = 'http://gaf.gaf-dev.chengdu/map/webgis-apps/test-1/config'
+                // if (previewCode != undefined) {
+                //     url += '?previewCode=' + previewCode
+                // }
+                // const response = await axios.get(url)
+                const mapApp = {
+                  horizontalToolbars: [
+                    {
+                      buttons: [
+                        {
+                          name: 'measure',
+                          icon: 'icon-xiankuang',
+                          title: '量算',
+                          children: [
+                            {
+                              title: '距离量算',
+                              name: 'measureDistance',
+                              icon: 'icon-ceju',
+                              closePanel: true,
+                              selectedName: 'measure',
+                              actions: ['splitScreenNone'],
+                            },
+                            {
+                              title: '面积量算',
+                              name: 'measureArea',
+                              icon: 'icon-xiankuang',
+                              closePanel: true,
+                              selectedName: 'measure',
+                              actions: ['splitScreenNone'],
+                            },
+                            {
+                              title: '高度量算',
+                              name: 'measureHeight',
+                              icon: 'icon-cegao',
+                              closePanel: true,
+                              selectedName: 'measure',
+                              actions: ['splitScreenNone'],
+                            },
+                            {
+                              title: '清除量算',
+                              name: 'mapClear',
+                              icon: 'icon-clear',
+                              closePanel: false,
+                              closedName: 'measure',
+                              actions: ['splitScreenNone', 'mapClear'],
+                            },
+                          ],
+                        },
+                        {
+                          name: 'GafMapSplitScreen',
+                          icon: 'icon-fenping1',
+                          children: [
+                            {
+                              title: '水平分屏',
+                              name: 'GafMapSplitScreen',
+                              icon: '',
+                              actions: [],
+                              selectedName: 'GafMapSplitScreen',
+                              params: {
+                                type: 'splitScreenHorizontal',
+
+                                one: {
+                                  splitLayersData: [
+                                    {
+                                      resourceId: 7189,
+                                      pid: '',
+                                      resourceName: '分层分户楼层',
+                                      resourceLocation:
+                                        host +
+                                        '/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_fcfh',
+                                      resourceTag: 'RESTREALSPACE-DATA',
+                                      resourceTagCN: '三维服务',
+                                      sourceType: 'SUPERMAP',
+                                      sourceTypeName: 'SuperMap',
+                                      opacity: 1,
+                                      isAttributesSave: true,
+                                      isHierarchicalHousehold: true, //是否支持分层分户
+                                      cameraCoordinate: {
+                                        altitude: 62.46821991822186,
+                                        heading: 6.2730744988966975,
+                                        latitude: 30.484909153821587,
+                                        tilt: 72.7806564730819,
+                                        longitude: 114.30882900103435,
+                                      },
+                                    },
+                                  ],
+                                  checkedLayerKeys: [7169, 7189],
+                                  link: true,
+                                },
+                                two: {
+                                  splitLayersData: [
+                                    {
+                                      resourceId: 7169,
+                                      pid: '',
+                                      resourceName: 'G_V01',
+                                      resourceLocation:
+                                        host +
+                                        '/iserver/services/3D-cim_gis/rest/realspace/datas/G_V01',
+                                      resourceTag: 'RESTREALSPACE-DATA',
+                                      resourceTagCN: '地图服务',
+                                      sourceType: 'SUPERMAP',
+                                      sourceTypeName: 'SuperMap',
+                                      opacity: 1,
+                                      cameraCoordinate: {
+                                        altitude: 114.3764743079913,
+                                        heading: 5.654236538948201,
+                                        latitude: 30.466650989920087,
+                                        tilt: 70.60882457049563,
+                                        longitude: 114.25722359896619,
+                                      },
+                                    },
+                                    {
+                                      resourceId: 7189,
+                                      pid: '',
+                                      resourceName: '分层分户楼层',
+                                      resourceLocation:
+                                        host +
+                                        '/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_fcfh',
+                                      resourceTag: 'RESTREALSPACE-DATA',
+                                      resourceTagCN: '三维服务',
+                                      sourceType: 'SUPERMAP',
+                                      sourceTypeName: 'SuperMap',
+                                      opacity: 1,
+                                      isAttributesSave: true,
+                                      isHierarchicalHousehold: true, //是否支持分层分户
+                                      cameraCoordinate: {
+                                        altitude: 62.46821991822186,
+                                        heading: 6.2730744988966975,
+                                        latitude: 30.484909153821587,
+                                        tilt: 72.7806564730819,
+                                        longitude: 114.30882900103435,
+                                      },
+                                    },
+                                  ],
+                                  checkedLayerKeys: [7169, 7189],
+                                  link: true,
+                                },
+                              },
+                            },
+                            {
+                              title: '垂直分屏',
+                              name: 'GafMapSplitScreen',
+                              icon: '',
+                              actions: [],
+                              selectedName: 'GafMapSplitScreen',
+                              params: {
+                                type: 'splitScreenVertical',
+
+                                one: {
+                                  splitLayersData: [
+                                    {
+                                      resourceId: 7189,
+                                      pid: '',
+                                      resourceName: '分层分户楼层',
+                                      resourceLocation:
+                                        host +
+                                        '/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_fcfh',
+                                      resourceTag: 'RESTREALSPACE-DATA',
+                                      resourceTagCN: '三维服务',
+                                      sourceType: 'SUPERMAP',
+                                      sourceTypeName: 'SuperMap',
+                                      opacity: 1,
+                                      isAttributesSave: true,
+                                      isHierarchicalHousehold: true, //是否支持分层分户
+                                      cameraCoordinate: {
+                                        altitude: 62.46821991822186,
+                                        heading: 6.2730744988966975,
+                                        latitude: 30.484909153821587,
+                                        tilt: 72.7806564730819,
+                                        longitude: 114.30882900103435,
+                                      },
+                                    },
+                                  ],
+                                  checkedLayerKeys: [7169, 7189],
+                                  link: true,
+                                },
+                                two: {
+                                  splitLayersData: [
+                                    {
+                                      resourceId: 7169,
+                                      pid: '',
+                                      resourceName: 'G_V01',
+                                      resourceLocation:
+                                        host +
+                                        '/iserver/services/3D-cim_gis/rest/realspace/datas/G_V01',
+                                      resourceTag: 'RESTREALSPACE-DATA',
+                                      resourceTagCN: '地图服务',
+                                      sourceType: 'SUPERMAP',
+                                      sourceTypeName: 'SuperMap',
+                                      opacity: 1,
+                                      cameraCoordinate: {
+                                        altitude: 114.3764743079913,
+                                        heading: 5.654236538948201,
+                                        latitude: 30.466650989920087,
+                                        tilt: 70.60882457049563,
+                                        longitude: 114.25722359896619,
+                                      },
+                                    },
+                                    {
+                                      resourceId: 7189,
+                                      pid: '',
+                                      resourceName: '分层分户楼层',
+                                      resourceLocation:
+                                        host +
+                                        '/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_fcfh',
+                                      resourceTag: 'RESTREALSPACE-DATA',
+                                      resourceTagCN: '三维服务',
+                                      sourceType: 'SUPERMAP',
+                                      sourceTypeName: 'SuperMap',
+                                      opacity: 1,
+                                      isAttributesSave: true,
+                                      isHierarchicalHousehold: true, //是否支持分层分户
+                                      cameraCoordinate: {
+                                        altitude: 62.46821991822186,
+                                        heading: 6.2730744988966975,
+                                        latitude: 30.484909153821587,
+                                        tilt: 72.7806564730819,
+                                        longitude: 114.30882900103435,
+                                      },
+                                    },
+                                  ],
+                                  checkedLayerKeys: [7169, 7189],
+                                  link: true,
+                                },
+                              },
+                            },
+                          ],
+                        },
+                        {
+                          title: '剖切',
+                          name: 'gaf-map-profile',
+                          icon: 'icon-pouqie',
+                          type: 'panel',
+                          actions: ['mapClear'],
+                          // actions: ['clear']
+                        },
+                        // {
+                        //   title: '图层管理',
+                        //   name: 'gaf-map-bim',
+                        //   icon: 'icon-bim',
+                        //   type: 'panel'
+                        // },
+                        // {
+                        //   title: '地图基本要素',
+                        //   name: 'gaf-map-basic-element',
+                        //   icon: 'icon-jibenyaosu',
+                        //   actions: [],
+                        // },
+                        {
+                          title: '点选',
+                          name: 'pointSelect',
+                          icon: 'icon-dianxuan1',
+                          actions: ['releaseSelection'],
+                          params: ['red'],
+                          toggle: true,
+                        },
+                        // {
+                        //   title: '三维漫游',
+                        //   name: 'GafMapRoaming',
+                        //   icon: 'icon-manyou1',
+                        //   actions: [],
+                        //   params: { fpfUrl: '/fpf/sceneRoaming.fpf' }
+                        // },
+                        {
+                          title: '卷帘',
+                          name: 'RollerShutterType',
+                          icon: 'icon-juanlian1',
+                          type: 'panel',
+                          children: [
+                            {
+                              title: '左右卷帘',
+                              name: 'RollerShutter',
+                              icon: '',
+                              params: {
+                                type: 'vertical',
+
+        one: {
+          RollerLayersData: [{
+              resourceId: 17169,
+              pid: '',
+              resourceName: '模型1',
+              resourceLocation: host + '/iserver/services/3D-cim_gis/rest/realspace/datas/J_V01',
+              resourceTag: 'RESTREALSPACE-DATA',
+              resourceTagCN: '三维服务',
+              sourceType: 'SUPERMAP',
+              sourceTypeName: 'SuperMap',
+              opacity: 1,
+              location: true,
+              supportDataService: true, // 是否支持数据服务查询
+              layerName: 'Building@CBD', //可查询数据服务得图层名称
+              dataSetName: 'Building', //可查询数据服务得数据集名称
+              cameraCoordinate: {
+                altitude: 114.3764743079913,
+                heading: 5.654236538948201,
+                latitude: 30.466650989920087,
+                tilt: 70.60882457049563,
+                longitude: 114.25722359896619
+              }
+            },
+            {
+              resourceId: 689,
+              pid: '',
+              resourceName: 'ChinaDark',
+              resourceLocation: 'http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/ChinaDark',
+              resourceTag: 'RESTMAP',
+              resourceTagCN: '地图服务',
+              sourceType: 'SUPERMAP',
+              sourceTypeName: 'SuperMap',
+              opacity: 1
+            }
+          ],
+          checkedLayerKeys: [17169]
+        },
+        two: {
+          RollerLayersData: [{
+              resourceId: 7169,
+              pid: '',
+              resourceName: '模型2',
+              resourceLocation: host + '/iserver/services/3D-cim_gis/rest/realspace/datas/G_V01',
+              resourceTag: 'RESTREALSPACE-DATA',
+              resourceTagCN: '地图服务',
+              sourceType: 'SUPERMAP',
+              sourceTypeName: 'SuperMap',
+              opacity: 1,
+              cameraCoordinate: {
+                altitude: 114.3764743079913,
+                heading: 5.654236538948201,
+                latitude: 30.466650989920087,
+                tilt: 70.60882457049563,
+                longitude: 114.25722359896619
+              }
+            },
+            {
+              resourceId: 688,
+              pid: '',
+              resourceName: 'China',
+              resourceLocation: 'http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/China',
+              resourceTag: 'RESTMAP',
+              resourceTagCN: '地图服务',
+              sourceType: 'SUPERMAP',
+              location: true,
+              sourceTypeName: 'SuperMap',
+              opacity: 1
+            }
+          ],
+          checkedLayerKeys: [7169]
+                              },
+                              selectedName: 'RollerShutterType',
+                            },
+                            {
+                              title: '上下卷帘',
+                              name: 'RollerShutter',
+                              icon: '',
+                              params: {
+                                type: 'horizontal',
+
+        one: {
+          RollerLayersData: [{
+              resourceId: 17169,
+              pid: '',
+              resourceName: '模型1',
+              resourceLocation: host + '/iserver/services/3D-cim_gis/rest/realspace/datas/J_V01',
+              resourceTag: 'RESTREALSPACE-DATA',
+              resourceTagCN: '三维服务',
+              sourceType: 'SUPERMAP',
+              sourceTypeName: 'SuperMap',
+              opacity: 1,
+              location: true,
+              supportDataService: true, // 是否支持数据服务查询
+              layerName: 'Building@CBD', //可查询数据服务得图层名称
+              dataSetName: 'Building', //可查询数据服务得数据集名称
+              cameraCoordinate: {
+                altitude: 114.3764743079913,
+                heading: 5.654236538948201,
+                latitude: 30.466650989920087,
+                tilt: 70.60882457049563,
+                longitude: 114.25722359896619
+              }
+            },
+            {
+              resourceId: 689,
+              pid: '',
+              resourceName: 'ChinaDark',
+              resourceLocation: 'http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/ChinaDark',
+              resourceTag: 'RESTMAP',
+              resourceTagCN: '地图服务',
+              sourceType: 'SUPERMAP',
+              sourceTypeName: 'SuperMap',
+              opacity: 1
+            }
+          ],
+          checkedLayerKeys: [17169]
+        },
+        two: {
+          RollerLayersData: [{
+              resourceId: 7169,
+              pid: '',
+              resourceName: '模型2',
+              resourceLocation: host + '/iserver/services/3D-cim_gis/rest/realspace/datas/G_V01',
+              resourceTag: 'RESTREALSPACE-DATA',
+              resourceTagCN: '地图服务',
+              sourceType: 'SUPERMAP',
+              sourceTypeName: 'SuperMap',
+              opacity: 1,
+              cameraCoordinate: {
+                altitude: 114.3764743079913,
+                heading: 5.654236538948201,
+                latitude: 30.466650989920087,
+                tilt: 70.60882457049563,
+                longitude: 114.25722359896619
+              }
+            },
+            {
+              resourceId: 688,
+              pid: '',
+              resourceName: 'China',
+              resourceLocation: 'http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/China',
+              resourceTag: 'RESTMAP',
+              resourceTagCN: '地图服务',
+              sourceType: 'SUPERMAP',
+              location: true,
+              sourceTypeName: 'SuperMap',
+              opacity: 1
+            }
+          ],
+          checkedLayerKeys: [7169]
+                              },
+                              selectedName: 'RollerShutterType',
+                            },
+                          ],
+                        },
+                        {
+                          title: '泛光扫描线',
+                          name: 'gaf-map-flood-light',
+                          icon: 'icon-dingwei',
+                          actions: ['mapClear'],
+                        },
+                        {
+                          title: '属性查询',
+                          name: 'gaf-map-attribute-select',
+                          icon: 'icon-dianxuan',
+                          type: 'panel',
+                          params: { color: 'red',   dataServiceConfig: {
+        url: host + '/iserver/services/data-cim_gis/rest/data',
+        dataSourceName: 'cim-busi', //数据源
+        keyWord: 'SmID'
+      } },
+                        },
+                        {
+                          title: '区域查询定位',
+                          name: 'gaf-map-locate',
+                          icon: 'icon-quyudingwei',
+                          type: 'panel',
+                          // actions: ['clear'],
+                          actions: ['mapClear'],
+                          params: {
+                            info: {
+                              city: '武汉市',
+                              code: 420100,
+                              // 'dataUrl': 'http://10.10.137.19:8090/iserver/services/data-xzqh/rest',
+                              // 'dataSourceName': 'xzqh',
+                              // 'dataSetName': 'BJDT_2019_XZQH_ALL_L12',
+                              dataUrl:
+                                'http://1.202.165.56:8090/iserver/services/data-cim_gis/rest',
+                              // 'dataUrl': 'http://1.202.165.56:8090/iserver/services/data-cim_gis/rest',
+                              // 'dataUrl': 'http://192.168.105.60:8090/iserver/services/data-cim_gis/rest',
+                              dataSourceName: 'cim-base',
+                              dataSetName: 'XZQH_ALL_L12',
+                              fillColor: 'blue',
+                              borderColor: 'red',
+                              filterField: 'QHBM',
+                            },
+                            districts: [
+                              {
+                                name: '江岸区',
+                                code: 420102,
+                              },
+                              {
+                                name: '江汉区',
+                                code: 420103,
+                              },
+                              {
+                                name: '硚口区',
+                                code: 420104,
+                              },
+                              {
+                                name: '汉阳区',
+                                code: 420105,
+                              },
+                              {
+                                name: '武昌区',
+                                code: 420106,
+                              },
+                              {
+                                name: '青山区',
+                                code: 420107,
+                              },
+                              {
+                                name: '洪山区',
+                                code: 420111,
+                              },
+                              {
+                                name: '东西湖区',
+                                code: 420112,
+                              },
+                              {
+                                name: '汉南区',
+                                code: 420113,
+                              },
+                              {
+                                name: '蔡甸区',
+                                code: 420114,
+                              },
+                              {
+                                name: '江夏区',
+                                code: 420115,
+                              },
+                              {
+                                name: '黄陂区',
+                                code: 420116,
+                              },
+                              {
+                                name: '新洲区',
+                                code: 420117,
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          title: '视点管理',
+                          name: 'gaf-map-viewpoint-manage',
+                          icon: 'icon-shidian',
+                          actions: ['mapClear'],
+                        },
+                        {
+                          title: '白模',
+                          name: 'GafMapWhiteModel',
+                          icon: 'icon-moxing2',
+                          actions: ['mapClear'],
+                          params: {
+
+      whiteModelName: 'WuHanBaiMo',
+      //灯光配置
+      dayLights: {
+        pointLights: [],
+        directionalLights: [{
+            position: [106.282013734667, 29.7615756638933, 630],
+            targetposition: [106.756840202248, 29.3980661015228, 500],
+            options: {
+              color: [0.6, 0.6, 0.6, 1],
+              intensity: 0.4
+            }
+          },
+          {
+            position: [106.756840202248, 29.3980661015228, 500],
+            targetposition: [106.282013734667, 29.7615756638933, 630],
+            options: {
+              color: [0.7, 0.7, 0.7, 1],
+              intensity: 0.6
+            }
+          },
+          {
+            position: [106.452, 29.573, 1],
+            targetposition: [106.454, 29.581, 91],
+            options: {
+              color: [0.5, 0.5, 0.5, 1],
+              intensity: 0.6
+            }
+          },
+          {
+            position: [106.571378546495, 29.5603965436718, 1000],
+            targetposition: [106.571378546495, 29.5603965436718, 10],
+            options: {
+              color: [0.7, 0.7, 0.7, 1],
+              intensity: 0.65
+            }
+          }
+        ],
+                          },
+                        },
+                        {
+                          title: '环境模拟',
+                          name: 'GafMapWeather',
+                          icon: 'icon-tianqi1',
+                          children: [
+                            {
+                              title: '光影变化',
+                              name: 'gaf-map-light-shadow',
+                              icon: 'icon-tianqi1',
+                              actions: ['mapClear'],
+                              selectedName: 'environment',
+                            },
+                            {
+                              title: '天气变化',
+                              name: 'GafMapWeather',
+                              icon: 'icon-tianqi1',
+                              actions: ['mapClear'],
+                              selectedName: 'environment',
+                            },
+                          ],
+                        },
+                        {
+                          title: '压平',
+                          name: 'GafMapFlatten',
+                          icon: 'icon-xuanze',
+                          // actions: ['clear'],
+                          actions: ['mapClear'],
+                        },
+                        {
+                          title: '分层分户查询',
+                          name: 'gaf-map-hierarchical-household',
+                          icon: 'icon-jianzhu',
+                          actions: ['mapClear'],
+                          params: {
+                              dataServiceConfig: {
+        url: host + '/iserver/services/data-cim_gis/rest/data',
+        dataSourceName: 'cim-busi', //数据源
+        keyWord: 'SmID'
+      },
+                          },
+                        },
+                        // {
+                        //   title: '三维漫游',
+                        //   name: 'roaming',
+                        //   icon: 'icon-manyou1',
+                        //   // actions: ['clear'],
+                        //   actions: ['mapClear'],
+                        //   params: { mySpeed: 60, useMySpeed: true }
+                        // },
+                        // 对接Gaf漫游后端
+                        {
+                          title: '三维漫游',
+                          name: 'RoamingGaf',
+                          icon: 'icon-manyou1',
+                          // actions: ['clear'],
+                          actions: ['mapClear'],
+                          params: { mySpeed: 60, useMySpeed: true },
+                        },
+                        // {
+                        //   title: '可视域分析',
+                        //   name: 'visible-region',
+                        //   icon: 'icon-manyou1',
+                        //   actions: ['clear'],
+                        // }
+                      ],
+                      id: '555ad6b4-ed11-4842-8a88-7fb8926c288a',
+                      position: 'bottom',
+                    },
+                  ],
+                  verticalToolbars: [
+                    {
+                      buttons: [
+                        {
+                          title: '初始化视角',
+                          name: 'flyTo',
+                          icon: 'icon-chushihuashijiao',
+                          params: [
+                            {
+                              altitude: 237.02558519727847,
+                              heading: 4.577567816832631,
+                              latitude: 30.624635512479735,
+                              longitude: 114.2644153328619,
+                              tilt: 76.79984572685618,
+                            },
+                          ],
+                        },
+                        {
+                          title: '放大',
+                          name: 'zoomIn',
+                          icon: 'icon-jiahao',
+                        },
+                        {
+                          title: '缩小',
+                          name: 'zoomOut',
+                          icon: 'icon-jianhaocu',
+                        },
+                        {
+                          title: '二维视图|三维视图',
+                          name: 'switchMode',
+                          icon: 'icon-diqiu',
+                        },
+                        {
+                          title: '全屏|取消全屏',
+                          name: 'fullScreen',
+                          icon: 'icon-quanping1',
+                        },
+                        {
+                          title: '清除',
+                          name: 'mapClear',
+                          icon: 'icon-clear',
+                        },
+                        {
+                          title: '鹰眼',
+                          name: 'GafMapBirdEye',
+                          icon: 'icon-quyudingwei',
+                          toggle: true,
+                        },
+                        // {
+                        //   title: 'VR模式',
+                        //   name: 'gaf-map-measure',
+                        //   icon: 'icon-vr'
+                        // },
+                        // {
+                        //   title: '操作帮助',
+                        //   name: 'splitScreenHorizontal',
+                        //   icon: 'icon-bangzhu'
+                        // }
+                      ],
+                      id: '815c6d97-0545-4bf6-9cf4-9410668fd311',
+                      position: 'topRight',
+                    },
+                  ],
+                  resourceTree: {
+                    allDataList: [
+                      {
+                        resourceId: 680,
+                        pid: '',
+                        resourceName: '京津地区地图',
+                        resourceLocation:
+                          'http://www.supermapol.com/realspace/services/map-mvt-JingJinDiQuDiTu/restjsr/v1/vectortile/maps/京津地区地图',
+                        resourceTag: 'MVT',
+                        resourceTagCN: '地图服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        zIndex: 6,
+                      },
+                      {
+                        resourceId: 688,
+                        pid: '',
+                        resourceName: 'China',
+                        resourceLocation:
+                          'http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/China',
+                        resourceTag: 'RESTMAP',
+                        resourceTagCN: '地图服务',
+                        sourceType: 'SUPERMAP',
+                        location: true,
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                      },
+                      {
+                        resourceId: 689,
+                        pid: '',
+                        resourceName: 'ChinaDark',
+                        resourceLocation:
+                          'http://support.supermap.com.cn:8090/iserver/services/map-china400/rest/maps/ChinaDark',
+                        resourceTag: 'RESTMAP',
+                        resourceTagCN: '地图服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        zIndex: 5,
+                      },
+                      {
+                        resourceId: 1,
+                        resourceName: '2维图层',
+                        pid: '',
+                      },
+                      {
+                        resourceId: 2,
+                        resourceName: '3维数据',
+                        pid: '',
+                      },
+                      {
+                        resourceId: 23,
+                        resourceName: '地形',
+                        pid: 2,
+                      },
+                      {
+                        resourceId: 24,
+                        resourceName: '倾斜',
+                        pid: 2,
+                      },
+                      {
+                        resourceId: 25,
+                        resourceName: 'BIM',
+                        pid: 2,
+                      },
+                      {
+                        resourceId: 7166,
+                        pid: 1,
+                        resourceName: 'China400',
+                        resourceLocation:
+                          'http://www.supermapol.com/realspace/services/map-China400/rest/maps/China400',
+                        resourceTag: 'RESTMAP',
+                        resourceTagCN: '地图服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                      },
+                      {
+                        resourceId: 7180,
+                        pid: 1,
+                        resourceName: '湖北行政区',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/hub_xzqh',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                      },
+                      {
+                        resourceId: 7181,
+                        pid: 1,
+                        resourceName: '武汉行政区',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_xzqh',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                      },
+                      {
+                        resourceId: 7169,
+                        pid: 1,
+                        resourceName: '规划用地',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/ghyd_4490',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        isAttributesSave: true,
+                        queryField: ['city', 'class_name'],
+                        dataSetName: 'ghyd_4490',
+                        legendData: [
+                          {
+                            name: '中小学用地',
+                            rgb: '#FF80FF',
+                          },
+                          {
+                            name: '体育用地',
+                            rgb: '#004D00',
+                          },
+                          {
+                            name: '公园绿地',
+                            rgb: '#00CC00',
+                          },
+                          {
+                            name: '医疗卫生用地',
+                            rgb: '#FFBF80',
+                          },
+                          {
+                            name: '商业用地',
+                            rgb: '#FF0000',
+                          },
+                          {
+                            name: '居住用地',
+                            rgb: '#FFFF00',
+                          },
+                          {
+                            name: '文化设施用地',
+                            rgb: '#FF809F',
+                          },
+                          {
+                            name: '水域',
+                            rgb: '#00FFFF',
+                          },
+                          {
+                            name: '物流仓储用地',
+                            rgb: '#39004D',
+                          },
+                          {
+                            name: '行政办公用地',
+                            rgb: '#FF80BF',
+                          },
+                          {
+                            name: '耕地',
+                            rgb: '#90EE90',
+                          },
+                          {
+                            name: '防护绿地',
+                            rgb: '#00FF80',
+                          },
+                        ],
+                      },
+                      {
+                        resourceId: 7170,
+                        pid: 1,
+                        resourceName: '退界红线',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/dlhx',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        dataSetName: 'dlhx',
+                        isAttributesSave: true,
+                      },
+                      {
+                        resourceId: 7191,
+                        pid: 1,
+                        resourceName: '武汉底图',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/map-mvt-DiTuMVT/rest/maps/%E5%BA%95%E5%9B%BEMVT',
+                        resourceTag: 'RESTMAP',
+                        resourceTagCN: '地图服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        zIndex: 9,
+                      },
+                      {
+                        resourceId: 7171,
+                        pid: 1,
+                        resourceName: '影像1-17',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/wuh-img',
+                        resourceTag: 'RESTMAP',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        zIndex: 10,
+                        opacity: 1,
+                        optionCon: {
+                          transparentBackColor: '#ffffff',
+                          transparentBackColorTolerance: 0.02,
+                        },
+                      },
+                      {
+                        resourceId: 7172,
+                        pid: 23,
+                        resourceName: '地形2W',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/Dem30',
+                        resourceTag: 'DEM',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                      },
+                      {
+                        resourceId: 7173,
+                        pid: 24,
+                        resourceName: '万达广场',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/WDGC',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                      },
+                      {
+                        resourceId: 7174,
+                        pid: 24,
+                        resourceName: '体育馆',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_qingx',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                      },
+                      {
+                        resourceId: 7175,
+                        pid: '',
+                        resourceName: '武汉白模',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/WuHanBaiMo',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        location: false,
+                        queryField: [
+                          'SmArea',
+                          'SmPerimeter',
+                          'SmGeometrySize',
+                          'SmGeoPosition',
+                          'Floor',
+                          'Height',
+                        ],
+                        opacity: 1,
+                        dataSetName: 'vec_building',
+                        isWhiteModel: true,
+                        isAttributesSave: true,
+                        fillColor: [255, 255, 255, 1],
+                        borderColor: [0, 0, 0, 0.6],
+                      },
+                      {
+                        resourceId: 7185,
+                        pid: '',
+                        resourceName: '武汉白模2',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/WuHanBaiMo2',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        isAttributesSave: true,
+                        disabled: true,
+                      },
+                      {
+                        resourceId: 7176,
+                        pid: 25,
+                        resourceName: '不动产档案馆（J_V01）',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/J_V01@BIM_DAG',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        dataSetName: 'J_V01',
+                        isAttributesSave: true,
+                      },
+                      {
+                        resourceId: 7177,
+                        pid: 25,
+                        resourceName: '不动产档案馆（G_V01）',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/G_V01@BIM_DAG',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        dataSetName: 'G_V01',
+                        isAttributesSave: true,
+                        cameraCoordinate: {
+                          altitude: 114.3764743079913,
+                          heading: 5.654236538948201,
+                          latitude: 30.466650989920087,
+                          tilt: 70.60882457049563,
+                          longitude: 114.25722359896619,
+                        },
+                      },
+                      {
+                        resourceId: 7178,
+                        pid: 25,
+                        resourceName: '不动产档案馆（外立面）',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/J_WaiLiMian@BIM_DAG',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        queryField: ['SmUserID'],
+                        dataSetName: 'J_WaiLiMian',
+                        isAttributesSave: true,
+                      },
+                      {
+                        resourceId: 7189,
+                        pid: 25,
+                        resourceName: '分层分户楼层',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_fcfh',
+                        resourceTag: 'RESTREALSPACE-DATA',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        isAttributesSave: true,
+                        isHierarchicalHousehold: true, //是否支持分层分户
+                        dataSetName: 'FCFH',
+                        cameraCoordinate: {
+                          altitude: 62.46821991822186,
+                          heading: 6.2730744988966975,
+                          latitude: 30.484909153821587,
+                          tilt: 72.7806564730819,
+                          longitude: 114.30882900103435,
+                        },
+                      },
+                      {
+                        resourceId: 7199,
+                        pid: '',
+                        resourceName: '底图路网',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-3Dmvt-DiTu/rest/realspace/datas/DiTu',
+                        resourceTag: 'MVT',
+                        resourceTagCN: '三维服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        location: false,
+                        selectEnabled: false,
+                        zIndex: 8,
+                      },
+                      {
+                        resourceId: 2001,
+                        pid: '',
+                        resourceName: '路网',
+                        resourceLocation:
+                          'http://1.202.165.56:8090' +
+                          '/iserver/services/3D-wuh_bjdt1/rest/realspace',
+                        resourceTag: 'RESTREALSPACE',
+                        resourceTagCN: '地图服务',
+                        sourceType: 'SUPERMAP',
+                        sourceTypeName: 'SuperMap',
+                        opacity: 1,
+                        location: false,
+                      },
+                    ],
+                    replaceFields: {
+                      title: 'resourceName',
+                      key: 'resourceId',
+                    },
+                  },
+                  bottomLayers: [
+                    {
+                      resourceId: 9999,
+                      isDefault: false,
+                      resourceName: '地图',
+                      isBaseLayer: true,
+                      sourceType: 'MAPWORLD',
+                      serviceType: 'VEC_C',
+                      // thumbnailAddr: "./img/map_thumb_btn1.png"
+                    },
+                    {
+                      resourceId: 9998,
+                      isDefault: false,
+                      resourceName: '地形',
+                      isBaseLayer: true,
+                      sourceType: 'MAPWORLD',
+                      serviceType: 'TER_C',
+                      // thumbnailAddr: "./img/map_thumb_btn2.png"
+                    },
+                    {
+                      resourceId: 9997,
+                      isDefault: true,
+                      resourceName: '影像',
+                      isBaseLayer: true,
+                      sourceType: 'MAPWORLD',
+                      serviceType: 'IMG_C',
+                      // thumbnailAddr: "./img/map_thumb_btn3.png"
+                    },
+                  ],
+                  location: {
+                    altitude: 169.75064630011397,
+                    heading: 6.283185307179586,
+                    latitude: 30.584125661226473,
+                    tilt: 80.76092553923964,
+                    longitude: 114.35792029762224,
+                  },
+                  token: 'de8a949b283cb793ef2d5c98f2f50fe5',
+                  timestamp: 0,
+                }
+
+                // const mapApp = response.data
+                this.location = mapApp.location
+                if (
+                  mapApp.bottomLayers !== null &&
+                  mapApp.bottomLayers.length > 0
+                ) {
+                  const bottomLayer = mapApp.bottomLayers.filter(
+                    (item) => item.isDefault
+                  )
+                  if (bottomLayer.length > 0) {
+                    this.bottomLayer = bottomLayer[0]
+                  } else {
+                    this.bottomLayer = mapApp.bottomLayers[0]
+                    mapApp.bottomLayers[0].isDefault = true
+                  }
+                  this.layerList = [this.bottomLayer]
+                }
+                this.token = mapApp.token
+                console.log(mapApp.bottomLayers)
+                this.mapApp = mapApp
+              },
+              handleMapBottomChange(resourceId) {
+                this.layerList.splice(0, 1)
+                this.bottomLayer = this.mapApp.bottomLayers.filter(
+                  (item) => item.resourceId === resourceId
+                )[0]
+                this.layerList.unshift(this.bottomLayer)
+              },
+              onTreeNodeChecked(checkedKeys, info) {
+                const self = this
+                const layerList = []
+                checkedKeys.forEach((key) => {
+                  const data = self.mapApp.resourceTree.allDataList.find((item) => {
+                    return item.resourceId.toString() === key.toString()
+                  })
+                  if (data) {
+                    layerList.push(data)
+                  }
+                })
+                if (self.bottomLayer != null) {
+                  layerList.unshift(self.bottomLayer)
+                }
+                self.layerList = layerList
+              },
+              onSelect2(selectedKeys, info) {
+                const self = this
+                const selectedKey = selectedKeys[0]
+                const layers = self.layerList.map((item) => {
+                  if (item.resourceId === selectedKey) {
+                    const newLayer = { ...item, location: true }
+                    return newLayer
+                  }
+                  return item
+                })
+                this.layerList = layers
+              },
+              onSelect(selectedKeys, info) {
+                const self = this
+                if (!selectedKeys.length) {
+                  selectedKeys = self.allSelectedKeys
+                } else {
+                  self.allSelectedKeys = selectedKeys
+                }
+
+                self.onSelect2(selectedKeys, info)
+                if (true) {
+                  let sceneLayers =
+                    window.SMWEBGIS.sceneLayers[selectedKeys[0]] || {}
+                  if (self.screenId) {
+                    sceneLayers =
+                      window['sceneViewer' + self.screenId].sceneLayers[
+                        selectedKeys[0]
+                      ]
+                  }
+                  console.log('sceneLayers', sceneLayers)
+                  if (sceneLayers) {
+                    const { destination, layer, layers, visible } = sceneLayers
+                    if (
+                      layers &&
+                      layers[0] &&
+                      layers[0].layerInfo &&
+                      layers[0].layerInfo.cameraCoordinate
+                    ) {
+                      flyTo(
+                        layers[0].layerInfo.cameraCoordinate,
+                        window[self.sceneName]
+                      )
+                    } else if (destination && visible) {
+                      window.viewer.camera.flyTo({ destination })
+                    } else if (layer) {
+                      window.viewer.flyTo(layer)
+                    }
+                  }
+                }
+              },
+              onViewerLoaded() {
+                this.loaded = true
+                const toolMethods = this.$mapActions
+                toolMethods.setView({
+                  altitude: 169.75064630011397,
+                  heading: 6.283185307179586,
+                  latitude: 30.584125661226473,
+                  tilt: 80.76092553923964,
+                  longitude: 114.35792029762224,
+                })
+              },
+            },
+            beforeMount() {
+              this.loadAppConfig()
+            },
+          })
+    </script>
+  </body>
+</html>

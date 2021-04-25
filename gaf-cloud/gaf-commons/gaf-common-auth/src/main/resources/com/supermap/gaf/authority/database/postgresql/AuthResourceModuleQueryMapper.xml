@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthResourceModuleQueryMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthResourceModule">
+        <result column="resource_module_id" jdbcType="VARCHAR" property="resourceModuleId" />
+        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
+        <result column="module_catalog_id" jdbcType="VARCHAR" property="moduleCatalogId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="name_cn" jdbcType="VARCHAR" property="nameEn" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="target" jdbcType="VARCHAR" property="target" />
+        <result column="module_url" jdbcType="VARCHAR" property="moduleUrl" />
+        <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        resource_module_id,
+        sys_component_id,
+        module_catalog_id,
+        name,
+        name_en,
+        type,
+        target,
+        module_url,
+        icon_url,
+        status,
+        sort_sn,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        path
+    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_module"
+        WHERE resource_module_id = #{resourceModuleId}
+    </select>
+
+</mapper>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthRoleMenuMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthRoleMenu">
+        <result column="role_menu_id" jdbcType="VARCHAR" property="roleMenuId" />
+        <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+        <result column="resource_menu_id" jdbcType="VARCHAR" property="resourceMenuId" />
+        <result column="resource_module_id" jdbcType="VARCHAR" property="resourceModuleId" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_menu_id,
+        role_id,
+        resource_menu_id,
+        resource_module_id,
+        status,
+        sort_sn,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by
+    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role_menu"
+        WHERE role_menu_id = #{roleMenuId}
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthRoleMenuSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role_menu"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+    <select id="getByRoleId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role_menu"
+        WHERE status = #{status} and role_id = #{roleId}
+    </select>
+    <select id="getByRoleAndMenu" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role_menu"
+        where role_id = #{roleId} and resource_menu_id = #{menuId} and status = #{status}
+    </select>
+    <update id="batchUpdate" parameterType="java.util.List">
+        UPDATE "auth_role_menu"
+        set status = true
+        WHERE role_menu_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthRoleMenuSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role_menu"
+        where status = true
+		<if test ='null != searchFieldName'>and ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_role_menu"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.role_menu_id, a.role_id, a.resource_menu_id, a.resource_module_id, a.status, a.sort_sn, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_role_menu" a,(
+            select role_menu_id
+            From "auth_role_menu" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.role_menu_id = b.role_menu_id 
+    </select>
+    <select id="listRoleMenu" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role_menu"
+        WHERE status = true and role_id = #{roleId} and resource_menu_id = #{resourceMenuId}
+    </select>
+    <select id="listByRole" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_role_menu"
+        WHERE status = true and role_id = #{roleId}
+    </select>
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_role_menu"
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="role_menu_id" keyProperty="roleMenuId" parameterType="com.supermap.gaf.authority.commontype.AuthRoleMenu">
+        INSERT INTO "auth_role_menu"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != roleMenuId'>role_menu_id,</if>
+				<if test ='null != roleId'>role_id,</if>
+				<if test ='null != resourceMenuId'>resource_menu_id,</if>
+                <if test ='null != resourceModuleId'>resource_module_id,</if>
+				<if test ='null != status'>status,</if>
+				<if test ='null != sortSn'>sort_sn,</if>
+				<if test ='null != description'>description,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != roleMenuId'>#{roleMenuId},</if>
+				<if test ='null != roleId'>#{roleId},</if>
+				<if test ='null != resourceMenuId'>#{resourceMenuId},</if>
+                <if test ='null != resourceModuleId'>#{resourceModuleId},</if>
+				<if test ='null != status'>#{status},</if>
+				<if test ='null != sortSn'>#{sortSn},</if>
+				<if test ='null != description'>#{description},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_role_menu"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.roleMenuId}  ,  #{item.roleId}  ,  #{item.resourceMenuId}  ,#{item.resourceModuleId},  #{item.status}  ,  #{item.sortSn}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE "auth_role_menu"
+        SET status = false
+        WHERE status = true and role_menu_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE "auth_role_menu"
+        SET status = false
+        WHERE status = true and role_menu_id = #{roleMenuId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthRoleMenu">
+        UPDATE "auth_role_menu"
+        <set>
+				<if test ='null != roleId'>role_id = #{roleId},</if>				
+				<if test ='null != resourceMenuId'>resource_menu_id = #{resourceMenuId},</if>
+                <if test ='null != resourceModuleId'>resource_module_id = #{resourceModuleId},</if>
+                <if test ='null != status'>status = #{status},</if>
+				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>				
+				<if test ='null != description'>description = #{description},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>				
+        </set>
+        WHERE role_menu_id = #{roleMenuId}
+    </update>
+
+</mapper>

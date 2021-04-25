@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.webgis.dao.WebgisToolbarButtonMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.webgis.entity.WebgisToolbarButton">
+        <result column="toolbar_button_id" jdbcType="VARCHAR" property="toolbarButtonId" />
+        <result column="toolbar_id" jdbcType="VARCHAR" property="toolbarId" />
+        <result column="button_id" jdbcType="VARCHAR" property="buttonId" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="params" jdbcType="VARCHAR" property="params" />
+        <result column="actions" jdbcType="VARCHAR" property="actions" />
+        <result column="toggle" jdbcType="BIT" property="toggle" />
+        <result column="close_other_panel" jdbcType="BIT" property="closeOtherPanel" />
+        <result column="more_properties" jdbcType="VARCHAR" property="moreProperties" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="sub_toolbar_id" jdbcType="VARCHAR" property="subToolbarId" />
+    </resultMap>
+    <resultMap id="DoResultMap" type="com.supermap.gaf.webgis.domain.WebgisToolbarButtonDo">
+        <result column="toolbar_button_id" jdbcType="VARCHAR" property="toolbarButtonId" />
+        <result column="toolbar_id" jdbcType="VARCHAR" property="toolbarId" />
+        <result column="button_id" jdbcType="VARCHAR" property="buttonId" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="method" jdbcType="VARCHAR" property="method" />
+        <result column="params" jdbcType="VARCHAR" property="params" />
+        <result column="actions" jdbcType="VARCHAR" property="actions" />
+        <result column="toggle" jdbcType="BIT" property="toggle" />
+        <result column="close_other_panel" jdbcType="BIT" property="closeOtherPanel" />
+        <result column="more_properties" jdbcType="VARCHAR" property="moreProperties" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="sub_toolbar_id" jdbcType="VARCHAR" property="subToolbarId" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        toolbar_button_id,
+        toolbar_id,
+        button_id,
+        icon,
+        params,
+        actions,
+        toggle,
+        close_other_panel,
+        more_properties,
+        sort_sn,
+        description,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        sub_toolbar_id    </sql>
+
+    <sql id="Do_Column_List">
+        tbb.toolbar_button_id,
+        tbb.toolbar_id,
+        tbb.button_id,
+        b.name,
+        b.type,
+        b.method,
+        COALESCE (tbb.icon, b.icon) as icon,
+        tbb.params,
+        tbb.actions,
+        tbb.toggle,
+        tbb.close_other_panel,
+        tbb.more_properties,
+        tbb.sort_sn,
+        tbb.description,
+        tbb.status,
+        tbb.created_time,
+        tbb.created_by,
+        tbb.updated_time,
+        tbb.updated_by,
+        sub_toolbar_id
+    </sql>
+    <select id="getDoById" resultMap="DoResultMap">
+        SELECT <include refid="Do_Column_List" />
+        FROM "webgis_toolbar_button" tbb
+        JOIN webgis_button b on tbb.button_id = b.button_id and b.status = true
+        WHERE tbb.toolbar_button_id = #{toolbarButtonId} and tbb.status = true
+    </select>
+    <select id="selectDosByToolbarId" resultMap="DoResultMap">
+        SELECT <include refid="Do_Column_List" />
+        FROM "webgis_toolbar_button" tbb
+        JOIN webgis_button b on tbb.button_id = b.button_id and b.status = true
+        WHERE tbb.toolbar_id = #{toolbarId} and tbb.status = true
+        order by tbb.sort_sn
+    </select>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_toolbar_button"
+        WHERE toolbar_button_id = #{toolbarButtonId}
+    </select>
+
+	<select id="selectByOneField" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_toolbar_button"
+		WHERE status = true
+        <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+         <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_toolbar_button"
+        where status = true
+        <if test='toolbarButtonId != null'>and toolbar_button_id = #{toolbarButtonId}</if>
+        <if test='toolbarId != null'>and toolbar_id = #{toolbarId}</if>
+        <if test='buttonId != null'>and button_id = #{buttonId}</if>
+        <if test='icon != null'>and icon = #{icon}</if>
+        <if test='params != null'>and params = #{params}</if>
+        <if test='actions != null'>and actions = #{actions}</if>
+        <if test='toggle != null'>and toggle = #{toggle}</if>
+        <if test='closeOtherPanel != null'>and close_other_panel = #{closeOtherPanel}</if>
+        <if test='moreProperties != null'>and more_properties = #{moreProperties}</if>
+        <if test='sortSn != null'>and sort_sn = #{sortSn}</if>
+        <if test='description != null'>and description = #{description}</if>
+        <if test='createdTime != null'>and created_time = #{createdTime}</if>
+        <if test='createdBy != null'>and created_by = #{createdBy}</if>
+        <if test='updatedTime != null'>and updated_time = #{updatedTime}</if>
+        <if test='updatedBy != null'>and updated_by = #{updatedBy}</if>
+        <if test='subToolbarId != null'>and sub_toolbar_id = #{subToolbarId}</if>
+        <if test ='null != equalFieldName'> AND ${equalFieldName}
+            <choose>
+                <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                <otherwise>  is null </otherwise>
+            </choose>
+        </if>
+        <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+         <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="toolbar_button_id" keyProperty="toolbarButtonId" parameterType="com.supermap.gaf.webgis.entity.WebgisToolbarButton">
+        INSERT INTO "webgis_toolbar_button"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != toolbarButtonId'>toolbar_button_id,</if>
+			<if test ='null != toolbarId'>toolbar_id,</if>
+			<if test ='null != buttonId'>button_id,</if>
+			<if test ='null != icon'>icon,</if>
+			<if test ='null != params'>params,</if>
+			<if test ='null != actions'>actions,</if>
+			<if test ='null != toggle'>toggle,</if>
+			<if test ='null != closeOtherPanel'>close_other_panel,</if>
+			<if test ='null != moreProperties'>more_properties,</if>
+			<if test ='null != sortSn'>sort_sn,</if>
+			<if test ='null != description'>description,</if>
+            <if test ='null != subToolbarId'>sub_toolbar_id,</if>
+			status,
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != toolbarButtonId'>#{toolbarButtonId},</if>
+			<if test ='null != toolbarId'>#{toolbarId},</if>
+			<if test ='null != buttonId'>#{buttonId},</if>
+			<if test ='null != icon'>#{icon},</if>
+			<if test ='null != params'>#{params},</if>
+			<if test ='null != actions'>#{actions},</if>
+			<if test ='null != toggle'>#{toggle},</if>
+			<if test ='null != closeOtherPanel'>#{closeOtherPanel},</if>
+			<if test ='null != moreProperties'>#{moreProperties},</if>
+			<if test ='null != sortSn'>#{sortSn},</if>
+			<if test ='null != description'>#{description},</if>
+            <if test ='null != subToolbarId'>#{subToolbarId},</if>
+			true,
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "webgis_toolbar_button"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.toolbarButtonId}  ,  #{item.toolbarId}  ,  #{item.buttonId}  ,  #{item.icon}  ,  #{item.params}  ,  #{item.actions}  ,  #{item.toggle}  ,  #{item.closeOtherPanel}  ,  #{item.moreProperties}  ,  #{item.sortSn}  ,  #{item.description}  ,  true  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}, #{item.subToolbarId}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE webgis_toolbar_button SET status = false
+        WHERE toolbar_button_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+    <update id="batchDeleteByButtonIds" parameterType="java.util.List">
+        UPDATE webgis_toolbar_button SET status = false
+        WHERE button_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+    <update id="batchDeleteByToolbarIds" parameterType="java.util.List">
+        UPDATE webgis_toolbar_button SET status = false
+        WHERE toolbar_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE webgis_toolbar_button SET status = false
+        WHERE toolbar_button_id = #{toolbarButtonId}
+    </update>
+    <update id="deleteByButtonId" >
+        UPDATE webgis_toolbar_button SET status = false
+        WHERE button_id = #{buttonId}
+    </update>
+    <update id="deleteByToolBarId" >
+        UPDATE webgis_toolbar_button SET status = false
+        WHERE toolbar_id = #{toolbarId}
+    </update>
+    <update id="deletePhysicalByToolBarId" >
+        DELETE FROM "webgis_toolbar_button"
+        WHERE toolbar_id = #{toolbarId}
+    </update>
+
+    <update id="update" parameterType="com.supermap.gaf.webgis.entity.WebgisToolbarButton">
+        UPDATE "webgis_toolbar_button"
+        <set>
+			<if test ="null != toolbarId and '' != toolbarId">toolbar_id = #{toolbarId},</if>				
+			<if test ="null != buttonId and '' != buttonId">button_id = #{buttonId},</if>				
+			icon = #{icon},
+			params = #{params},
+			actions = #{actions},
+			toggle = #{toggle},
+			close_other_panel = #{closeOtherPanel},
+			more_properties = #{moreProperties},
+			sort_sn = #{sortSn},
+			description = #{description},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+            sub_toolbar_id = #{subToolbarId},
+        </set>
+        WHERE toolbar_button_id = #{toolbarButtonId}  AND status = true
+    </update>
+
+</mapper>

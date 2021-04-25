@@ -1,0 +1,37 @@
+{
+  "success": "true",
+  "data": [
+    {
+      "id": "3943",
+      "name": "淹没分析_影像",
+      "type": "RESTMAP",
+      "pid": "",
+      "url": "https://dev.virtualearth.net",
+      "isLeafNode": false
+    },
+    {
+      "id": "4973",
+      "name": "beijingmap",
+      "url": "http://support.supermap.com.cn:8090/iserver/services/map-beijing/rest/maps/beijingMap",
+      "pid": "3943",
+      "type": "RESTMAP",
+      "isLeafNode": true
+    },
+    {
+      "id": "5525",
+      "name": "三维缓存服务_本地",
+      "pid": "3943",
+      "type": "RESTREALSPACE",
+      "url": "http://192.168.40.183:8090/iserver/services/3D-ZRZModel/rest/realspace/scenes/ModelScene",
+      "isLeafNode": true
+    },
+    {
+      "id": "5518",
+      "name": "YANGQUAN",
+      "pid": "3943",
+      "type": "RESTMAP",
+      "url": "https://iserver.supermap.io/iserver/services/map-jingjin/rest/maps/京津地区地图",
+      "isLeafNode": true
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+# 注：eureka.client.serviceUrl.defaultZone系统变量中设置
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+
+spring:
+  application:
+    name: gaf-storage
+  jersey:
+    application-path: /storage
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: gaf-microservice-conf
+      enabled: true
+      fail-fast: true
+      label: master

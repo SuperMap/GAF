@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProtalDBStructure">
+    <update id="createCustomation">
+       create table customation(
+        "loginAdress" VARCHAR (255) NOT NULL DEFAULT '',
+        "logoutAdress" VARCHAR (255) NOT NULL DEFAULT '',
+        "profileAdress" VARCHAR (255) NOT NULL DEFAULT '',
+        "logo" VARCHAR (255) NOT NULL DEFAULT 'gaf',
+        "title" VARCHAR (255) NOT NULL DEFAULT 'GAF',
+        "color" VARCHAR (255) NOT NULL DEFAULT 'gray',
+        "multipleTabs" bool NOT NULL DEFAULT 'false',
+        "user" VARCHAR (255) NOT NULL DEFAULT 'admin',
+        "layoutType" VARCHAR (255) NOT NULL DEFAULT 'group',
+        "configInfo" text NOT NULL DEFAULT '',
+        "defaultConfigInfo" text NOT NULL DEFAULT ''
+        )
+    </update>
+
+    <update id="createMenus">
+        create table menus(
+        "id" VARCHAR (255) PRIMARY KEY NOT NULL,
+        "pid" VARCHAR (255) NOT NULL DEFAULT '',
+        "path" VARCHAR (255) NOT NULL DEFAULT '',
+        "name" VARCHAR (255) NOT NULL DEFAULT '',
+        "target" VARCHAR (255) NOT NULL DEFAULT '',
+        "icon" VARCHAR (255) NOT NULL DEFAULT '',
+        "order" INT NOT NULL DEFAULT '0',
+        "visible" bool NOT NULL DEFAULT true,
+        "isEmbed" bool,
+        "embedUrl" VARCHAR (255) NOT NULL DEFAULT '',
+        "flag" VARCHAR (255) NOT NULL DEFAULT ''
+        )
+    </update>
+
+    <update id="createThemes">
+        create table themes(
+        "id" VARCHAR (255) PRIMARY KEY NOT NULL,
+        "color" VARCHAR (255) NOT NULL DEFAULT 'red',
+        "multipleTabs" bool,
+        "user" VARCHAR (255) NOT NULL DEFAULT ''
+        )
+    </update>
+
+</mapper>

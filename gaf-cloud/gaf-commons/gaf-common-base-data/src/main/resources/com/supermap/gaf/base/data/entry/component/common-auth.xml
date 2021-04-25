@@ -1,0 +1,27 @@
+<?sql version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog logicalFilePath="no-matter-file-name.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <include file="../../ddl/auth_department.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_module_api.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_p3_tenant_mapping.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_p3_user_mapping.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_post_role.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_resource_api.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_resource_menu.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_resource_module.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_role_api.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_role_menu.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_role_module.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_role.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_tenant.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_user_parttime.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_user.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/auth_user_role.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/sys_catalog.sql" relativeToChangelogFile="true"/>
+    <include file="../../ddl/sys_component.sql" relativeToChangelogFile="true"/>
+    <includeAll  path="../../changelog/common-auth/" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>

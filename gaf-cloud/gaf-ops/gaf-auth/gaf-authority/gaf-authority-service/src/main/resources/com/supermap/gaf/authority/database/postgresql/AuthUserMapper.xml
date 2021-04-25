@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthUserMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthUser">
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="real_name" jdbcType="VARCHAR" property="realName" />
+        <result column="id_number" jdbcType="VARCHAR" property="idNumber" />
+        <result column="mobile_number" jdbcType="VARCHAR" property="mobileNumber" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="post_id" jdbcType="VARCHAR" property="postId" />
+        <result column="expiration_time" jdbcType="TIMESTAMP" property="expirationTime" />
+        <result column="is_third_party" jdbcType="BIT" property="isThirdParty" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,
+        tenant_id,
+        department_id,
+        sort_sn,
+        name,
+        real_name,
+        id_number,
+        mobile_number,
+        email,
+        address,
+        post_id,
+        expiration_time,
+        is_third_party,
+        status,
+        description,
+        last_login_time,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by
+    </sql>
+    <sql id="Base_Column_List_WithPassword">
+        user_id,
+        tenant_id,
+        department_id,
+        sort_sn,
+        name,
+        password,
+        real_name,
+        id_number,
+        mobile_number,
+        email,
+        address,
+        post_id,
+        expiration_time,
+        is_third_party,
+        status,
+        description,
+        last_login_time,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by
+    </sql>
+    <delete id="deletePhysicsById">
+        DELETE FROM auth_user WHERE user_id = #{userId}
+    </delete>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user"
+        WHERE user_id = #{userId}
+    </select>
+    <select id="selectWithPassword" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List_WithPassword" />
+        FROM "auth_user"
+        WHERE user_id = #{userId} and status =true
+    </select>
+    <select id="selectByTenantId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user"
+        WHERE tenant_id = #{tenantId} and status =true
+    </select>
+    <select id="countGetListByTenantId" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_user"
+        WHERE tenant_id = #{tenantId} and status =true
+        <if test ='null != realName'> and real_name LIKE CONCAT('%', #{realName}, '%')</if>
+    </select>
+    <select id="pageListByTenantId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user"
+        WHERE tenant_id = #{tenantId} and status =true
+        <if test ='null != realName'> and real_name LIKE CONCAT('%', #{realName}, '%')</if>
+        LIMIT #{size}
+        <if test ='null != current'>OFFSET #{current}</if>
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user"
+		<if test ='null != selectVo.searchFieldName and null != selectVo.searchFieldValue'>where ${selectVo.searchFieldName} LIKE CONCAT('%', #{selectVo.searchFieldValue}, '%')</if>
+		<if test ='null != selectVo.orderFieldName'>order by ${selectVo.orderFieldName} ${selectVo.orderMethod}</if>
+        LIMIT #{selectVo.pageSize}
+        <if test ='null != selectVo.offset'>OFFSET #{selectVo.offset}</if>
+    </select>
+    <select id="searchWholeMatchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_user"
+        where ${selectVo.searchFieldName} = #{selectVo.searchFieldValue}
+        <if test ='null != selectVo.orderFieldName'>order by ${selectVo.orderFieldName} ${selectVo.orderMethod}</if>
+        LIMIT #{selectVo.pageSize}
+        <if test ='null != selectVo.offset'>OFFSET #{selectVo.offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_user"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.user_id, a.tenant_id, a.department_id, a.sort_sn, a.name, a.password, a.real_name, a.id_number, a.mobile_number, a.email, a.address, a.post_id, a.expiration_time, a.is_third_party, a.status, a.description, a.last_login_time, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_user" a,(
+            select user_id 
+            From "auth_user" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.user_id = b.user_id 
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_user"
+    </select>
+    <select id="selectByCombination" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM auth_user
+        WHERE
+        <trim suffixOverrides="AND">
+        <if test ='null != userId'>user_id = #{userId} AND </if>
+        <if test ='null != tenantId'>tenant_id = #{tenantId} AND </if>
+        <if test ='null != departmentId'>department_id = #{departmentId} AND </if>
+        <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+        <if test ='null != name'>name = #{name} AND </if>
+        <if test ='null != password'>password = #{password} AND </if>
+        <if test ='null != realName'>real_name = #{realName} AND </if>
+        <if test ='null != idNumber'>id_number = #{idNumber} AND </if>
+        <if test ='null != mobileNumber'>mobile_number = #{mobileNumber} AND </if>
+        <if test ='null != email'>email = #{email} AND </if>
+        <if test ='null != address'>address = #{address} AND </if>
+        <if test ='null != postId'>post_id = #{postId} AND </if>
+        <if test ='null != expirationTime'>expiration_time = #{expirationTime} AND </if>
+        <if test ='null != isThirdParty'>is_third_party = #{isThirdParty} AND </if>
+        <if test ='null != status'>status = #{status} AND </if>
+        <if test ='null != description'>description = #{description} AND </if>
+        <if test ='null != lastLoginTime'>last_login_time = #{lastLoginTime} AND </if>
+        <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+        <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+        <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+        <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+        </trim>
+    </select>
+    <select id="selectByDepartmentIdAndTenantIdWithSort" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM auth_user
+        WHERE tenant_id = #{tenantId} AND department_id = #{departmentId}
+        order by status desc, created_time asc
+    </select>
+    <select id="countByCombination" resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM auth_user
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != userId'>user_id = #{userId} AND </if>
+            <if test ='null != tenantId'>tenant_id = #{tenantId} AND </if>
+            <if test ='null != departmentId'>department_id = #{departmentId} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != name'>name = #{name} AND </if>
+            <if test ='null != password'>password = #{password} AND </if>
+            <if test ='null != realName'>real_name = #{realName} AND </if>
+            <if test ='null != idNumber'>id_number = #{idNumber} AND </if>
+            <if test ='null != mobileNumber'>mobile_number = #{mobileNumber} AND </if>
+            <if test ='null != email'>email = #{email} AND </if>
+            <if test ='null != address'>address = #{address} AND </if>
+            <if test ='null != postId'>post_id = #{postId} AND </if>
+            <if test ='null != expirationTime'>expiration_time = #{expirationTime} AND </if>
+            <if test ='null != isThirdParty'>is_third_party = #{isThirdParty} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != description'>description = #{description} AND </if>
+            <if test ='null != lastLoginTime'>last_login_time = #{lastLoginTime} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+        </trim>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="user_id" keyProperty="userId" parameterType="com.supermap.gaf.authority.commontype.AuthUser">
+        INSERT INTO "auth_user"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != userId'>user_id,</if>
+				<if test ='null != tenantId'>tenant_id,</if>
+				<if test ='null != departmentId'>department_id,</if>
+				<if test ='null != sortSn'>sort_sn,</if>
+				<if test ='null != name'>name,</if>
+				<if test ='null != password'>password,</if>
+				<if test ='null != realName'>real_name,</if>
+				<if test ='null != idNumber'>id_number,</if>
+				<if test ='null != mobileNumber'>mobile_number,</if>
+				<if test ='null != email'>email,</if>
+				<if test ='null != address'>address,</if>
+				<if test ='null != postId'>post_id,</if>
+				<if test ='null != expirationTime'>expiration_time,</if>
+				<if test ='null != isThirdParty'>is_third_party,</if>
+				<if test ='null != status'>status,</if>
+				<if test ='null != description'>description,</if>
+				<if test ='null != lastLoginTime'>last_login_time,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != userId'>#{userId},</if>
+				<if test ='null != tenantId'>#{tenantId},</if>
+				<if test ='null != departmentId'>#{departmentId},</if>
+				<if test ='null != sortSn'>#{sortSn},</if>
+				<if test ='null != name'>#{name},</if>
+				<if test ='null != password'>#{password},</if>
+				<if test ='null != realName'>#{realName},</if>
+				<if test ='null != idNumber'>#{idNumber},</if>
+				<if test ='null != mobileNumber'>#{mobileNumber},</if>
+				<if test ='null != email'>#{email},</if>
+				<if test ='null != address'>#{address},</if>
+				<if test ='null != postId'>#{postId},</if>
+				<if test ='null != expirationTime'>#{expirationTime},</if>
+				<if test ='null != isThirdParty'>#{isThirdParty},</if>
+				<if test ='null != status'>#{status},</if>
+				<if test ='null != description'>#{description},</if>
+				<if test ='null != lastLoginTime'>#{lastLoginTime},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_user"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.userId}  ,  #{item.tenantId}  ,  #{item.departmentId}  ,  #{item.sortSn}  ,  #{item.name}  ,  #{item.password}  ,  #{item.realName}  ,  #{item.idNumber}  ,  #{item.mobileNumber}  ,  #{item.email}  ,  #{item.address}  ,  #{item.postId}  ,  #{item.expirationTime}  ,  #{item.isThirdParty}  ,  #{item.status}  ,  #{item.description}  ,  #{item.lastLoginTime}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE "auth_user"
+        SET status = false
+        WHERE status = true and user_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE "auth_user"
+        SET status = false
+        WHERE status = true and user_id = #{userId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthUser">
+        UPDATE "auth_user"
+        <set>
+                <if test ='null != departmentId'>department_id = #{departmentId},</if>
+				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>
+				<if test ='null != name'>name = #{name},</if>				
+				<if test ='null != password'>password = #{password},</if>				
+				<if test ='null != realName'>real_name = #{realName},</if>				
+				<if test ='null != idNumber'>id_number = #{idNumber},</if>				
+				<if test ='null != mobileNumber'>mobile_number = #{mobileNumber},</if>				
+				<if test ='null != email'>email = #{email},</if>				
+				<if test ='null != address'>address = #{address},</if>
+                post_id = #{postId},
+				<if test ='null != expirationTime'>expiration_time = #{expirationTime},</if>
+				<if test ='null != status'>status = #{status},</if>				
+				<if test ='null != description'>description = #{description},</if>				
+				<if test ='null != lastLoginTime'>last_login_time = #{lastLoginTime},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>				
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+</mapper>

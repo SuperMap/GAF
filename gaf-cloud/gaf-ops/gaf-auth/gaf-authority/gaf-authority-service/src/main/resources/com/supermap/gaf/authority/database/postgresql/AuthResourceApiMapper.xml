@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.authority.dao.AuthResourceApiMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthResourceApi">
+        <result column="resource_api_id" jdbcType="VARCHAR" property="resourceApiId" />
+        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
+        <result column="api_catalog_id" jdbcType="VARCHAR" property="apiCatalogId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="route_url" jdbcType="VARCHAR" property="routeUrl" />
+        <result column="method" jdbcType="VARCHAR" property="method" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        resource_api_id,
+        sys_component_id,
+        api_catalog_id,
+        name,
+        route_url,
+        method,
+        type,
+        status,
+        sort_sn,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_api"
+        WHERE resource_api_id = #{resourceApiId}
+    </select>
+    <select id="listByCatalogId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_api"
+        WHERE api_catalog_id = #{catalogId}
+    </select>
+	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthResourceApiSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_api"
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	
+	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthResourceApiSelectVo">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_api"
+		<if test ='null != searchFieldName'>where ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')</if>
+		<if test ='null != orderFieldName'>order by ${orderFieldName} ${orderMethod}</if> 
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+	<select id="countOneField" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_resource_api"
+		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+    </select>
+    <select id="bigOffsetPageList" resultMap="BaseResultMap">
+        SELECT  a.resource_api_id, a.sys_component_id, a.api_catalog_id, a.name, a.route_url, a.method, a.type, a.status, a.sort_sn, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_resource_api" a,(
+            select resource_api_id 
+            From "auth_resource_api" 
+            LIMIT #{pageSize} OFFSET #{offset}
+            ) b 
+        WHERE a.resource_api_id = b.resource_api_id 
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_resource_api"
+    </select>
+    <select id="countByCombination" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM "auth_resource_api"
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != resourceApiId'>resource_api_id = #{resourceApiId} AND </if>
+            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
+            <if test ='null != apiCatalogId'>api_catalog_id = #{apiCatalogId} AND </if>
+            <if test ='null != name'>name = #{name} AND </if>
+            <if test ='null != routeUrl'>route_url = #{routeUrl} AND </if>
+            <if test ='null != method'>method = #{method} AND </if>
+            <if test ='null != type'>type = #{type} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+        </trim>
+    </select>
+    <select id="selectByCombination" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_api"
+        WHERE
+        <trim suffixOverrides="AND">
+            <if test ='null != resourceApiId'>resource_api_id = #{resourceApiId} AND </if>
+            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
+            <if test ='null != apiCatalogId'>api_catalog_id = #{apiCatalogId} AND </if>
+            <if test ='null != name'>name = #{name} AND </if>
+            <if test ='null != routeUrl'>route_url = #{routeUrl} AND </if>
+            <if test ='null != method'>method = #{method} AND </if>
+            <if test ='null != type'>type = #{type} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
+            <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
+            <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
+            <if test ='null != createdBy'>updated_time = #{updatedTime} AND </if>
+            <if test ='null != updatedBy'>updated_by = #{updatedBy} AND </if>
+        </trim>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="resource_api_id" keyProperty="resourceApiId" parameterType="com.supermap.gaf.authority.commontype.AuthResourceApi">
+        INSERT INTO "auth_resource_api"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test ='null != resourceApiId'>resource_api_id,</if>
+				<if test ='null != sysComponentId'>sys_component_id,</if>
+				<if test ='null != apiCatalogId'>api_catalog_id,</if>
+				<if test ='null != name'>name,</if>
+				<if test ='null != routeUrl'>route_url,</if>
+				<if test ='null != method'>method,</if>
+				<if test ='null != type'>type,</if>
+				<if test ='null != status'>status,</if>
+				<if test ='null != sortSn'>sort_sn,</if>
+				created_time,
+				<if test ='null != createdBy'>created_by,</if>
+				updated_time,
+				<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+				<if test ='null != resourceApiId'>#{resourceApiId},</if>
+				<if test ='null != sysComponentId'>#{sysComponentId},</if>
+				<if test ='null != apiCatalogId'>#{apiCatalogId},</if>
+				<if test ='null != name'>#{name},</if>
+				<if test ='null != routeUrl'>#{routeUrl},</if>
+				<if test ='null != method'>#{method},</if>
+				<if test ='null != type'>#{type},</if>
+				<if test ='null != status'>#{status},</if>
+				<if test ='null != sortSn'>#{sortSn},</if>
+				now(),
+				<if test ='null != createdBy'>#{createdBy},</if>
+				now(),
+				<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "auth_resource_api"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.resourceApiId}  ,  #{item.sysComponentId}  ,  #{item.apiCatalogId}  ,  #{item.name}  ,  #{item.routeUrl}  ,  #{item.method}  ,  #{item.type}  ,  #{item.status}  ,  #{item.sortSn}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "auth_resource_api" 
+        WHERE resource_api_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+	<delete id="delete" >
+        DELETE FROM "auth_resource_api"
+        WHERE resource_api_id = #{resourceApiId}
+    </delete>
+    <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthResourceApi">
+        UPDATE "auth_resource_api"
+        <set>
+				<if test ='null != sysComponentId'>sys_component_id = #{sysComponentId},</if>				
+				<if test ='null != apiCatalogId'>api_catalog_id = #{apiCatalogId},</if>				
+				<if test ='null != name'>name = #{name},</if>				
+				<if test ='null != routeUrl'>route_url = #{routeUrl},</if>				
+				<if test ='null != method'>method = #{method},</if>				
+				<if test ='null != type'>type = #{type},</if>				
+				<if test ='null != status'>status = #{status},</if>				
+				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>
+				updated_time = now(),
+				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>				
+        </set>
+        WHERE resource_api_id = #{resourceApiId}
+    </update>
+
+</mapper>
