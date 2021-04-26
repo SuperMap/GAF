@@ -34,18 +34,14 @@ SuperMap GAF（SuperMap GIS Application Framework，超图GIS应用框架）基�
 
 - 演示地址:https://gaf.net.cn
 
-# 开源协议
-Apache Licence 2.0 （英文原文） Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议和BSD类似，同样鼓励代码共享和尊重原作者的著作权，同样允许代码修改，再发布（作为开源或商业软件）。 
-
-# 用户权益
-
-- 对未经过授权和不遵循 Apache 2.0 协议二次开源或者商业化我们将追究到底。
 
 # 技术文档
 
 https://github.com/SuperMap/GAF/wiki/
 
-# 关于我们
+# 开源协议
+
+Apache Licence 2.0。
 
 
 
