@@ -77,14 +77,6 @@
 *~
 ._*
 
-**/bootstrap*.yml
-**/application*.yml
-**/application*.properties
-!**/bootstrap-prod.yml
-!**/bootstrap-dev.yml
-!**/bootstrap-local.yml
-!**/application-local.yml
-
 **/static
 !**/gaf-microservice-api/**/static
 !**/gaf-web/**/static
