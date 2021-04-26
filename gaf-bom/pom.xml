@@ -1519,11 +1519,6 @@
             </dependency>
             <dependency>
                 <groupId>com.supermap.gaf</groupId>
-                <artifactId>gaf-common-license-starter</artifactId>
-                <version>${gaf.common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.supermap.gaf</groupId>
                 <artifactId>gaf-common-boot</artifactId>
                 <version>${gaf.common.version}</version>
             </dependency>

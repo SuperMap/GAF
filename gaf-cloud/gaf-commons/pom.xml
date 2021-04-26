@@ -25,7 +25,6 @@
         <module>gaf-common-api-scanner</module>
         <module>gaf-common-cache</module>
         <module>gaf-common-storage</module>
-        <module>gaf-common-license-starter</module>
         <module>gaf-common-base-data</module>
         <module>gaf-common-gateway</module>
         <module>gaf-common-sys-mgt</module>
