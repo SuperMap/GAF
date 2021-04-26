@@ -89,6 +89,7 @@
 !**/gaf-microservice-api/**/static
 !**/gaf-web/**/static
 !**/gaf-common-rest/**/static
+!obfuscator.jar
 
 
 # 前端
