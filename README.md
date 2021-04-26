@@ -1,58 +1,16 @@
 # SuperMap GAF（SuperMap GIS Application Framework，超图GIS应用框架）
+
+
+
 # 项目介绍
+    SuperMap GAF（SuperMap GIS Application Framework，超图GIS应用框架）基于SuperMap GIS基础软件进行研发，是连接GIS基础软件与行业应用的重要纽带。采用微服务、云原生、持续集成等先进成熟的IT技术，实现从GIS基础软件到行业应用的快速开发和自动化维护，将极大的缩短行业应用开发时间，持续提升并保持行业应用技术先进性。SuperMap GAF 通过开源协同的研发模式建立统一开发规范和开发框架，集成各应用单位及个人的经验成果，提高应用软件研发和项目实施效率。
 - 采用前后端分离的模式
 
-## 架构图
 
-## 工程结构
-```
-SuperMap GAF
-├── gaf-bom
-├── gaf-boot
-├── gaf-cloud
-|   ├── gaf-biz
-|   |   ├── gaf-gis
-|   |       ├── gaf-data-mgt
-|   |       ├── gaf-idesktopx-plugin
-|   |       ├── gaf-map
-|   ├── gaf-commons
-|   |   ├── gaf-common-auth
-|   |   ├── gaf-common-auth-starter
-|   |   ├── gaf-common-boot
-|   |   ├── gaf-common-cache
-|   |   ├── gaf-common-cloud
-|   |   ├── gaf-common-license-starter
-|   |   ├── gaf-common-base-data
-|   |   ├── gaf-common-log
-|   |   ├── gaf-common-rest
-|   |   ├── gaf-common-storage
-|   |   ├── gaf-common-swagger
-|   |   ├── gaf-common-data-access
-|   |   ├── gaf-common-utils
-|   ├── gaf-ops
-|       ├── gaf-auth
-|       |   ├── gaf-authentication
-|       |   ├── gaf-authority
-|       ├── gaf-microservice
-|       |   ├── gaf-microservice-api  -- SwaggerApi
-|       |   ├── gaf-microservice-conf -- 配置中心
-|       |   ├── gaf-microservice-gateway  -- Spring-Cloud网关
-|       |   ├── gaf-microservice-governance  --
-|       |   ├── gaf-microservice-rigister  -- 注册中心
-|       ├── gaf-monitor
-|       ├── gaf-storage
-|       ├── gaf-portal  -- 门户模块
-├── gaf-web
-|   ├── common-gaf
-|   ├── common-mapapp
-|   ├── common-webapp
-|   ├── gaf-mapapp
-|   ├── gaf-webapp
-```
 ## 官网
 ## 在线演示
-## 项目地址
-- GitHub地址:https://github.com/SuperMap/GAF
+
+- GitHub地址:https://gaf.net.cn
 
 # 开源协议
 Apache Licence 2.0 （英文原文） Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议和BSD类似，同样鼓励代码共享和尊重原作者的著作权，同样允许代码修改，再发布（作为开源或商业软件）。 需要满足的条件如下：
@@ -69,31 +27,8 @@ Apache Licence 2.0 （英文原文） Apache Licence是著名的非盈利开源�
 # 界面
 # 技术文档
 
+https://github.com/SuperMap/GAF/wiki/
 
-## 《开发者指南-前端》 
-### 1. 前端技术
-* Vue, Vuex, Vue-Router
-* Nuxt.js
-* Ant Design
-* SuperMap iClient
-* SuperMap iClient3D for WebGL
-* ...
-### 2. 运行启动
-```
-2.1 进入gaf-webapp
-$ cd gaf-webapp
-
-2.2 安装
-$ yarn install
-
-2.3 运行
-$ yarn dev
-
-2.4 打包
-$ yarn build
-$ yarn start
-
-```
 # 关于我们
 
 
