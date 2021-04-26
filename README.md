@@ -17,6 +17,7 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 ## 快速开始
 
 
+
 ### Step 1:构建部署前准备
 
 - Linux系统-系统要求CentOS7.5
@@ -47,6 +48,7 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 - 使用`docker ps`查看各个容器服务的状态,status都为Health时表明各服务都已成功运行部署
 - 当全部容器health时，就可以在客户端通过浏览器访问部署完成后提示的GAF地址
 
+
 ## 用户权益
 
 - 对未经过授权和不遵循 Apache 2.0 协议二次开源或者商业化我们将追究到底。
@@ -55,7 +57,9 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 
 https://github.com/SuperMap/GAF/wiki/
 
+
 [《开发者指南-后端》](https://github.com/SuperMap/GAF/wiki/%E3%80%8A%E5%BC%80%E5%8F%91%E8%80%85%E6%8C%87%E5%8D%97-%E5%90%8E%E7%AB%AF%E3%80%8B)
+
 
 
 ## 关于我们
