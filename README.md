@@ -1,8 +1,9 @@
-# SuperMap GAF（SuperMap GIS Application Framework，超图GIS应用框架）
+# SuperMap GAF
+超图GIS应用框架
 
 
 
-# 项目介绍
+# 介绍
 
 SuperMap GAF（SuperMap GIS Application Framework，超图GIS应用框架）基于SuperMap GIS基础软件进行研发，是连接GIS基础软件与行业应用的重要纽带。采用微服务、云原生、持续集成等先进成熟的IT技术，实现从GIS基础软件到行业应用的快速开发和自动化维护，将极大的缩短行业应用开发时间，持续提升并保持行业应用技术先进性。SuperMap GAF 通过开源协同的研发模式建立统一开发规范和开发框架，集成各应用单位及个人的经验成果，提高应用软件研发和项目实施效率。
 
