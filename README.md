@@ -23,7 +23,7 @@ SuperMap GAF（SuperMap GIS Application Framework，超图GIS应用框架）基�
 
 **权限控制**
 
-提供组件统一授权管理，通过多租户的方式对不同应用进行集中管理。基于RBAC（Role-Based Access Control）权限管理模型，进行基于角色的权限访问控制。
+提供组件统一授权管理，通过多租户的方式对不同应用进行集中管理。基于RBAC（Role-Based Access Control）权限管理模型，构建基于角色的权限访问控制体系。
 
 **统一身份认证**
 
