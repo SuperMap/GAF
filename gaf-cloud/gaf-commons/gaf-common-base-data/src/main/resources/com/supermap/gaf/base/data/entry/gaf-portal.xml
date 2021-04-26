@@ -11,4 +11,6 @@
 
     <includeAll  path="../changelog/gaf-portal/" relativeToChangelogFile="true"/>
 
+    <include file="../changelog/component-module-menu/gaf-portal.sql" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

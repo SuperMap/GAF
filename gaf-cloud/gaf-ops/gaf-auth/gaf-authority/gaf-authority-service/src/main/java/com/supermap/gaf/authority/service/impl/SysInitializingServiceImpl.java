@@ -64,7 +64,7 @@ public class SysInitializingServiceImpl implements SysInitializingService {
                             .sysComponentId(UUID.randomUUID().toString())
                             .type(ComponentTypeEnum.FRONT_BACK_END.getValue())
                             .name(applicationName)
-                            .nameCn(APPLICATION_NAME_CN)
+                            .nameCn(applicationName)
                             .type(ComponentTypeEnum.BACKEND.getValue())
                             .status(true)
                             .build();
