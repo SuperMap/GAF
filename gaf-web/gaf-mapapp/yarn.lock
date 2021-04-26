@@ -2881,10 +2881,10 @@ common-gaf@^2.0.4:
     monaco-editor-webpack-plugin "^3.0.0"
     vue "^2.6.12"
 
-common-mapapp@^1.0.1:
-  version "1.0.1"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-mapapp/-/common-mapapp-1.0.1.tgz#b9130dc5bd7f72dd0a816239747a4c88e7f18c64"
-  integrity sha512-Cd+EGvmyw+mngSDXb/GKZg6QHYpyJjvakw1V3vOK/28kISE4zSeR5mCSzVtBuOId+NIJNFSFr6xb3BhJeWHi7A==
+common-mapapp@^1.0.2:
+  version "1.0.2"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-mapapp/-/common-mapapp-1.0.2.tgz#48617eb6f62d0389f80acc930a07e404d4f435c4"
+  integrity sha512-STcsWTynQocwhtBvCBrF/D/GtXw4Z87CbeZ+YBznLGx4Ztu6b2Hc6qqeGlK/bBTWiowfbBBGuvQXIbUwSEhWQQ==
   dependencies:
     "@ant-design/colors" "^3.2.2"
     "@ant-design/icons" "^2.1.1"
