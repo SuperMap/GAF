@@ -63,7 +63,7 @@
 </template>
 <script>
 let camerca = {};
-import GafMapBus from "~/utils/GafMapBus";
+import { bus } from "~/utils/cimBus";
 export default {
   name: "RollerShutter",
   data() {
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     quit() {
-      GafMapBus && GafMapBus.$emit("closePannel");
+      bus && bus.$emit("closePannel");
       this.$bus && this.$bus.$emit("closePannel");
     },
     handleParams() {
