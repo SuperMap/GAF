@@ -1,7 +1,6 @@
 # 单机容器环境的源码构建部署步骤
 
-
-## 构建部署前准备
+### Step 1:构建部署前准备
 
 - Linux系统-系统要求CentOS7.5
 - Docker[[帮助]](#docker)-容器运行环境
@@ -12,23 +11,23 @@
 - Maven[[帮助]](#maven)-后端应用构建工具
 - node.js环境、yarn命令[[帮助]](#node-yarn)-用于构建打包前端项目
 
-## 1.克隆代码
+### Step 2:克隆代码
 
-`git clone <本代码仓库>`
+`git clone https://github.com/SuperMap/GAF`
 
-## 2.源码构建部署
-### 2.1.编辑配置文件
+### Step 3.源码构建部署
+#### 3.1.编辑配置文件
 
 - 对配置文件进行查看修改，文件内部有参数修改说明
 - 配置文件位置`script/deploy/docker/.env`
 
 
-### 2.2.一键部署GAF
+#### 3.2.一键部署GAF
 - 项目根目录执行：
 `./script/deploy/docker/deploy.sh all`
 
-### 2.3.进入GAF
-- 使用`docker ps`查看各个容器服务的状态
+### Step 4.进入GAF
+- 使用`docker ps`查看各个容器服务的状态,status都为Health时表明各服务都已成功运行部署
 - 当全部容器health时，就可以在客户端通过浏览器访问部署完成后提示的GAF地址
 
 ## 环境帮助

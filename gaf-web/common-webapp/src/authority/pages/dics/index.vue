@@ -83,6 +83,7 @@
               @delete-success="afterDeleteCatalogSuccess"
               addButtonName="新增分组"
               @onAddCatalog="onAddCatalog"
+              :rootNode="rootNode"
             ></add-catalog>
           </div>
         </a-tab-pane>
@@ -155,7 +156,8 @@
       typeList: [],
       openAddCatalog: true,
       openAddType: false,
-      openCatalogForm: false
+      openCatalogForm: false,
+      rootNode: ''
     }
   },
   computed: {
@@ -174,6 +176,7 @@
   },
   async mounted() {
     await this.getTree()
+    this.rootNode = this.dataOfTree[0].key
     this.catalogList = this.dataOfTree[0].children.filter(item => item.type === 12)
   },
   methods: {
@@ -365,7 +368,7 @@
             this.catalogEditData = {...catalog}
             this.dicTypeEditData = {catalogId: catalog.catalogId}
             this.openCatalogForm = true
-            if (catalog.catalogId === '1'){
+            if (catalog.catalogId === this.rootNode){
               this.openCatalogForm = false
               this.activeKey = '5'
             }
