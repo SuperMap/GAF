@@ -124,6 +124,10 @@ export default {
     operation: {
       type: String,
       default: 'add'
+    },
+    rootNode: {
+      type: String,
+      dafault: ''
     }
   },
   data() {
@@ -143,7 +147,7 @@ export default {
       }
     },
     treeDataWithRoot() {
-        const rootNode = [{key: '0',title: '字典根目录',value:'0'}]
+        const rootNode = [{key: this.rootNode,title: '字典根目录',value:this.rootNode}]
         return rootNode.concat(this.treeData)
     },
     title() {
@@ -187,7 +191,6 @@ export default {
     this.addOrEditForm = this.$form.createForm(this, { name: 'addOrEditForm' })
   },
   mounted() {
-    // this.editData.parentId = this.editData.catalogId
     delete this.editData.code
     delete this.editData.status
     delete this.editData.createdTime
@@ -203,7 +206,7 @@ export default {
     } else if(this.operation === 'add') {
       this.dataId = null
       if (!this.editData.catalogId){
-        this.editData.catalogId = '1'
+        this.editData.catalogId = this.rootNode
       }
       this.addOrEditForm.setFieldsValue({parentId: this.editData.catalogId})
     }

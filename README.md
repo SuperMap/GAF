@@ -14,6 +14,9 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 - 演示地址:https://gaf.net.cn
 
 
+## 开源协议
+Apache Licence 2.0 （英文原文） Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议和BSD类似，同样鼓励代码共享和尊重原作者的著作权，同样允许代码修改，再发布（作为开源或商业软件）。 需要满足的条件如下：
+
 ## 快速开始
 
 
@@ -63,6 +66,7 @@ https://github.com/SuperMap/GAF/wiki/
 
 
 ## 关于我们
+
 
 
 
