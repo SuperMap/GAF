@@ -102,6 +102,7 @@
         @update-success="afterUpdateCatalogSuccess"
         @delete-success="afterDeleteCatalogSuccess"
         @back="handleBack"
+        :rootNode="rootNode"
       ></dic-catalog-form>
     </a-modal>
   </div>
@@ -139,6 +140,10 @@ export default {
       default: 'add'
     },
     addButtonName: {
+      type: String,
+      dafault: ''
+    },
+    rootNode: {
       type: String,
       dafault: ''
     }
