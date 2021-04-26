@@ -9,5 +9,6 @@
     <include  file="./gaf-sys-mgt.xml" relativeToChangelogFile="true"/>
     <include  file="./gaf-portal.xml" relativeToChangelogFile="true"/>
     <include  file="./gaf-map.xml" relativeToChangelogFile="true"/>
+    <include  file="./gaf-analysis.xml" relativeToChangelogFile="true"/>
     <include file="../changelog/gaf-boot/delete_overage.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

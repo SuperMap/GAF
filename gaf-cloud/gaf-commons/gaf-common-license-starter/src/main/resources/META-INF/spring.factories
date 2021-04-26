@@ -1,4 +1,0 @@
-# Auto Configure
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.supermap.gaf.license.autoconfigure.GafLicenseAutoConfiguration,\
-com.supermap.gaf.license.autoconfigure.LicenseDefaultConfig
