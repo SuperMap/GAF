@@ -116,3 +116,8 @@ sudo yum install yarn
 `./script/deploy/docker/deploy.sh delete-all`
 ### 获取命令帮助
 `./script/deploy/docker/deploy.sh help`
+### GAF-MONITOR
+- GAF监控相关应用部署
+```
+./script/deploy/docker/deploy.sh monitor
+```
