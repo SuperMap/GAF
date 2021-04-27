@@ -46,7 +46,7 @@ base() {
 
     #启动GAF基础环境数据存储应用
     LOAD_SERVICE="gaf-postgres gaf-redis gaf-minio gaf-s3fs-mount"
-    docker-compose up -d LOAD_SERVICE
+    docker-compose up -d $LOAD_SERVICE
 
     #启动GAF优先启动应用
     LOAD_SERVICE="gaf-microservice-rigister gaf-microservice-conf"
@@ -59,6 +59,7 @@ base() {
     LOAD_SERVICE="gaf-microservice-api gaf-microservice-gateway gaf-sys-mgt gaf-authentication gaf-authority gaf-microservice-governance gaf-portal gaf-map gaf-data-mgt gaf-storage gaf-analysis gaf-webapp gaf-mapapp"
     docker-compose up -d $LOAD_SERVICE
     #等待启动完成
+    LOAD_SERVICE="gaf-microservice-api gaf-microservice-gateway gaf-sys-mgt gaf-authentication gaf-authority gaf-portal gaf-map gaf-data-mgt gaf-storage gaf-analysis"
     wait_container_health $LOAD_SERVICE
 
     #提示
@@ -69,8 +70,10 @@ monitor() {
     #添加数据库数据
     load_db_data
     #启动GAF基础环境监控应用
-    docker-compose up -d gaf-elasticsearch gaf-fluentd-es gaf-zipkin
-    docker-compose up -d gaf-monitor gaf-cadvisor gaf-node-exporter gaf-prometheus gaf-grafana
+    LOAD_SERVICE="gaf-elasticsearch gaf-fluentd-es gaf-zipkin"
+    docker-compose up -d $LOAD_SERVICE
+    LOAD_SERVICE="gaf-monitor gaf-cadvisor gaf-node-exporter gaf-prometheus gaf-grafana"
+    docker-compose up -d $LOAD_SERVICE
     #修改某些挂载卷的权限
     edit_vol_permission
 }
