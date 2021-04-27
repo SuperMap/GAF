@@ -1,4 +1,4 @@
-FROM harbor.gaf.net.cn/library/ubuntu-jdk8:zh
+FROM harbor.gaf.net.cn/library/backend-base:1.0.0
 MAINTAINER gafci "gaf@supermap.com"
 VOLUME /tmp
 ADD target/*.jar app.jar
