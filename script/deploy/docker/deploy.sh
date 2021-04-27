@@ -25,6 +25,56 @@ workspace() {
     source $Root_Current_Dir/.env
 }
 
+build() {
+    set -euo pipefail
+    #设置工作目录
+    workspace
+
+    #检查命令
+    check_commands
+
+    #创建docker网络
+    create_docker_network gaf-net
+
+    #创建挂载卷
+    mkdir -p ${GAF_VOL_DIR}
+
+    #拷贝挂载数据
+    cp -rf $Root_Current_Dir/data/vol/. ${GAF_VOL_DIR}
+    cp -rf $Root_Current_Dir/conf/GAF_ENV_CONFIG.env ${GAF_VOL_DIR}
+
+    #替换GAF_ENV_CONFIG.env里的变量
+    sed_config_env
+
+    #构建打包所有GAF应用
+    build_all
+}
+
+all() {
+    set -euo pipefail
+    #设置工作目录
+    workspace
+
+    #检查命令
+    check_commands
+
+    #创建docker网络
+    create_docker_network gaf-net
+
+    #创建挂载卷
+    mkdir -p ${GAF_VOL_DIR}
+
+    #拷贝挂载数据
+    cp -rf $Root_Current_Dir/data/vol/. ${GAF_VOL_DIR}
+    cp -rf $Root_Current_Dir/conf/GAF_ENV_CONFIG.env ${GAF_VOL_DIR}
+
+    #替换GAF_ENV_CONFIG.env里的变量
+    sed_config_env
+
+    #构建打包所有GAF应用
+    build_all
+}
+
 #一键部署所有GAF应用
 all() {
     set -euo pipefail
@@ -68,6 +118,8 @@ all() {
     #提示
     echo "启动GAF成功！！！GAF地址：http://${HOSTIP}:30777"
 }
+
+
 
 #一键删除所有GAF应用及挂载
 delete-all() {

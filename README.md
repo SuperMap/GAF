@@ -1,5 +1,5 @@
 # SuperMap GAF
-超图GIS应用框架
+SuperMap GIS Application Framework 超图GIS应用框架
 
 
 ---
@@ -52,9 +52,9 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 
 `git clone https://github.com/SuperMap/GAF`
 
-### Step 3.源码构建部署
+### Step 3:源码构建部署
 #### 3.1.编辑配置文件
-
+- 进入代码工程的根目录`cd GAF`
 - 对配置文件进行查看修改，文件内部有参数修改说明
 - 配置文件位置`script/deploy/docker/.env`
 
@@ -63,14 +63,15 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 - 项目根目录执行：
 `./script/deploy/docker/deploy.sh all`
 
-### Step 4.进入GAF
+### Step 4:进入GAF
 - 使用`docker ps`查看各个容器服务的状态,status都为Health时表明各服务都已成功运行部署
 - 当全部容器health时，就可以在客户端通过浏览器访问部署完成后提示的GAF地址
 
 
 ## 在线演示
 
-- 演示地址:https://gaf.net.cn
+- 演示地址:
+- http://gaf.net.cn
 
 ## 技术文档
 
