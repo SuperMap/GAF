@@ -1,4 +1,4 @@
-FROM harbor.gaf.net.cn/library/ubuntu-jdk8:zh
+FROM harbor.gaf.net.cn/library/backend-base:1.0.0
 MAINTAINER gafci "gaf@supermap.com"
 ENV GAF_ENV_DATASOURCE_URL 'jdbc:postgresql://localhost:5432/postgres'
 ENV GAF_ENV_DATASOURCE_DRIVER 'org.postgresql.Driver'
