@@ -59,9 +59,14 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 - 配置文件位置`script/deploy/docker/.env`
 
 
-#### 3.2.一键部署GAF
+#### 3.2.构建GAF
 - 项目根目录执行：
-`./script/deploy/docker/deploy.sh all`
+`./script/deploy/docker/deploy.sh build`
+
+#### 3.3.部署GAF基础应用
+- 项目根目录执行：
+`./script/deploy/docker/deploy.sh base`
+- GAF监控相关应用部署（可选）[[帮助]](script/deploy/docker/README.md#GAF-MONITOR) 
 
 ### Step 4:进入GAF
 - 使用`docker ps`查看各个容器服务的状态,status都为Health时表明各服务都已成功运行部署

@@ -9,6 +9,31 @@ check_container_exist(){
   fi
 }
 
+#检查容器健康状态
+check_container_health(){
+    local health_json=`docker inspect --format '{{json .State.Health}}' $1`
+    local health_pattern="\"Status\":\"healthy\""
+    if [[ $health_json == *"$health_pattern"* ]]; then
+        echo 0
+    else
+        echo 1
+    fi
+}
+
+#等待容器健康状态正常
+wait_container_health(){
+    flag=0
+    echo "wait for $1...";
+    while [ $flag -eq 0 ]; do
+        local check_result=$(check_container_health $1)
+        if [ "$check_result" -eq 0 ]; then
+            flag=1
+        fi
+    done
+}
+
+
+
 #判断命令是否安装
 check_commands(){
   commands=(docker docker-compose psql git java mvn yarn)
