@@ -53,19 +53,24 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 `git clone https://github.com/SuperMap/GAF`
 
 ### Step 3:源码构建部署
-#### 3.1.编辑配置文件
-- 进入代码工程的根目录`cd GAF`
+
+#### 3.1.进入脚本文件目录
+
+`cd GAF/script/deploy/docker`
+
+#### 3.2.编辑配置文件
+
+- 配置文件名称：`.env`
 - 对配置文件进行查看修改，文件内部有参数修改说明
-- 配置文件位置`script/deploy/docker/.env`
 
 
-#### 3.2.构建GAF
+#### 3.3.构建GAF应用镜像
+
+`./build.sh`
+
+#### 3.4.部署GAF基础应用
 - 项目根目录执行：
-`./script/deploy/docker/deploy.sh build`
-
-#### 3.3.部署GAF基础应用
-- 项目根目录执行：
-`./script/deploy/docker/deploy.sh base`
+`./deploy.sh base`
 - GAF监控相关应用部署（可选）[[帮助]](script/deploy/docker/README.md#GAF-MONITOR) 
 
 ### Step 4:进入GAF

@@ -6,9 +6,7 @@ networks:
 
 services:
   gaf-microservice-rigister:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-rigister
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-microservice-rigister:latest
     networks:
     - gaf-net
     ports:
@@ -16,9 +14,7 @@ services:
     container_name: gaf-microservice-rigister
     restart: always
   gaf-microservice-conf:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-conf
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-microservice-conf:latest
     networks:
     - gaf-net
     env_file:
@@ -26,9 +22,7 @@ services:
     container_name: gaf-microservice-conf
     restart: always
   gaf-microservice-api:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-api
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-microservice-api:latest
     networks:
     - gaf-net
     env_file:
@@ -36,9 +30,7 @@ services:
     restart: always
     container_name: gaf-microservice-api
   gaf-microservice-gateway:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-gateway
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-microservice-gateway:latest
     networks:
     - gaf-net
     env_file:
@@ -48,9 +40,7 @@ services:
     restart: always
     container_name: gaf-microservice-gateway
   gaf-sys-mgt:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-sys-mgt/gaf-sys-mgt-app
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-sys-mgt:latest
     networks:
     - gaf-net
     env_file:
@@ -58,9 +48,7 @@ services:
     container_name: gaf-sys-mgt
     restart: always
   gaf-authentication:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-auth/gaf-authentication/gaf-authentication-app
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-authentication:latest
     networks:
     - gaf-net
     env_file:
@@ -68,9 +56,7 @@ services:
     container_name: gaf-authentication
     restart: always
   gaf-authority:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-auth/gaf-authority/gaf-authority-app
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-authority:latest
     networks:
     - gaf-net
     env_file:
@@ -78,9 +64,7 @@ services:
     container_name: gaf-authority
     restart: always
   gaf-microservice-governance:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-microservice/gaf-microservice-governance
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-microservice-governance:latest
     networks:
     - gaf-net
     env_file:
@@ -88,9 +72,7 @@ services:
     container_name: gaf-microservice-governance
     restart: always
   gaf-portal:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-portal/gaf-portal-app
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-portal:latest
     networks:
     - gaf-net
     env_file:
@@ -98,36 +80,30 @@ services:
     container_name: gaf-portal
     restart: always
   gaf-map:
-    build:
-      context: ../../../gaf-cloud/gaf-biz/gaf-gis/gaf-map/gaf-map-app
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-map:latest
     networks:
     - gaf-net
     ports:
     - 1947
     volumes:
     - ${GAF_VOL_DIR}/License:/opt/SuperMap/License
-    - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs
+    - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs:shared
     env_file:
     - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
     container_name: gaf-map
     restart: always
   gaf-data-mgt:
-    build:
-      context: ../../../gaf-cloud/gaf-biz/gaf-gis/gaf-data-mgt/gaf-data-mgt-app
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-data-mgt:latest
     networks:
     - gaf-net
     env_file:
     - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
     volumes:
-    - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs
+    - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs:shared
     restart: always
     container_name: gaf-data-mgt
   gaf-storage:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-storage/gaf-storage-app
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-storage:latest
     networks:
     - gaf-net
     env_file:
@@ -135,9 +111,7 @@ services:
     container_name: gaf-storage
     restart: always
   gaf-monitor:
-    build:
-      context: ../../../gaf-cloud/gaf-ops/gaf-monitor
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-monitor:latest
     networks:
     - gaf-net
     env_file:
@@ -145,9 +119,7 @@ services:
     container_name: gaf-monitor
     restart: always
   gaf-analysis:
-    build:
-      context: ../../../gaf-cloud/gaf-biz/gaf-gis/gaf-analysis/gaf-analysis-app
-      dockerfile: src/main/k8s/Dockerfile
+    image: docker_gaf-analysis:latest
     networks:
     - gaf-net
     env_file:
@@ -155,17 +127,13 @@ services:
     container_name: gaf-analysis
     restart: always
   gaf-webapp:
-    build:
-      context: ../../../gaf-web/gaf-webapp
-      dockerfile: Dockerfile
+    image: docker_gaf-webapp:latest
     networks:
     - gaf-net
     restart: always
     container_name: gaf-webapp
   gaf-mapapp:
-    build:
-      context: ../../../gaf-web/gaf-mapapp
-      dockerfile: Dockerfile
+    image: docker_gaf-mapapp:latest
     networks:
     - gaf-net
     restart: always
