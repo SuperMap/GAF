@@ -69,8 +69,9 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 `./build.sh`
 
 #### 3.4.部署GAF基础应用
-- 项目根目录执行：
+
 `./deploy.sh base`
+
 - GAF监控相关应用部署（可选）[[帮助]](script/deploy/docker/README.md#GAF-MONITOR) 
 
 ### Step 4:进入GAF
