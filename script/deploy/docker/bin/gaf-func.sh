@@ -22,13 +22,15 @@ check_container_health(){
 
 #等待容器健康状态正常
 wait_container_health(){
-    flag=0
-    echo "wait for $1...";
-    while [ $flag -eq 0 ]; do
-        local check_result=$(check_container_health $1)
-        if [ "$check_result" -eq 0 ]; then
-            flag=1
-        fi
+    for i in $*; do
+        local flag=0
+        echo "wait for $i...";
+        while [ $flag -eq 0 ]; do
+            local check_result=$(check_container_health $i)
+            if [ "$check_result" -eq 0 ]; then
+                flag=1
+            fi
+        done
     done
 }
 
@@ -104,7 +106,7 @@ port(){
 
 
 #构建打包所有GAF应用
-build_all() {
+build_frontend() {
     cd $Root_Current_Dir/../../../
 
     mvn clean package -Dmaven.test.skip=true
@@ -144,6 +146,10 @@ build_all() {
     rm -rf node_modules
 
     cd $Root_Current_Dir
+}
+
+build_images() {
+    mvn clean package dockerfile:build -Ddockerfile.build.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=docker_ -DCUSTOM_TAG=latest
 }
 
 #修改某些挂载卷的权限
