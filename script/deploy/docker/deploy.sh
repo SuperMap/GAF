@@ -9,7 +9,7 @@ usage() {
 	echo ""
 	echo "Commands:"
 	echo "  help          查看帮助"
-    echo "  build         一键构建所有GAF应用的镜像"
+    echo "  build         一键构建所有GAF应用的镜像,设置挂载目录"
 	echo "  base          一键部署基础GAF应用"
 	echo "  monitor       一键部署GAF的监控相关应用"
 	echo "  all           一键部署所有GAF应用"
@@ -36,6 +36,17 @@ build() {
     #检查命令
     check_commands
 
+    #创建docker网络
+    create_docker_network gaf-net
+
+    #创建挂载卷
+    mkdir -p ${GAF_VOL_DIR}
+    #拷贝挂载数据
+    cp -rf $Root_Current_Dir/data/vol/. ${GAF_VOL_DIR}
+    cp -rf $Root_Current_Dir/conf/GAF_ENV_CONFIG.env ${GAF_VOL_DIR}
+    #替换GAF_ENV_CONFIG.env里的变量
+    sed_config_env
+
     #构建打包所有GAF应用
     build_all
 
@@ -49,19 +60,6 @@ base() {
 
     #检查命令
     check_commands
-
-    #创建docker网络
-    create_docker_network gaf-net
-
-    #创建挂载卷
-    mkdir -p ${GAF_VOL_DIR}
-
-    #拷贝挂载数据
-    cp -rf $Root_Current_Dir/data/vol/. ${GAF_VOL_DIR}
-    cp -rf $Root_Current_Dir/conf/GAF_ENV_CONFIG.env ${GAF_VOL_DIR}
-
-    #替换GAF_ENV_CONFIG.env里的变量
-    sed_config_env
 
     #启动GAF基础环境数据存储应用
     docker-compose up -d gaf-postgres gaf-redis gaf-minio gaf-s3fs-mount
