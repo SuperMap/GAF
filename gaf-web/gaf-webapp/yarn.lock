@@ -2852,10 +2852,10 @@ commander@^4.1.1:
   resolved "https://nexus.gaf.net.cn/repository/npm-group/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
   integrity sha1-n9YCvZNilOnp70aj9NaWQESxgGg=
 
-common-gaf@^2.0.4:
-  version "2.0.4"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-gaf/-/common-gaf-2.0.4.tgz#449ce8bea563a24ffb472ec9b73887682e1846b9"
-  integrity sha512-zm78m/WRQ+4xLNX89hDqHTC8JNjunKL96B6tWK4GdLZpR4bMcTKQ8xELpds+AqH1HBQ+/IAdbnuoSP3ewr2nPQ==
+common-gaf@^2.0.5:
+  version "2.0.5"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-gaf/-/common-gaf-2.0.5.tgz#6f85bb36d1fb51d167641c1ed5cd97a924162725"
+  integrity sha512-haCBGIi4PY7hTVeicIVOvelOderU7Msr8MvWEcDKiCkBoktwrsXMvIxETLr63LLDquLi2bhTaW2/PhzHZ/4i9w==
   dependencies:
     "@ant-design/colors" "^3.2.2"
     "@ant-design/icons" "^2.1.1"
@@ -2871,8 +2871,8 @@ common-gaf@^2.0.4:
 
 common-webbase@^2.0.33:
   version "2.0.33"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-webbase/-/common-webbase-2.0.33.tgz#f8b825bf81748e3aba325bcf6df73d5672472c87"
-  integrity sha512-iAhQUZeiwMMQhPRkw2n2NmkxNBVhbnBxHS7bRp/d/y1AyL46n8nMw5dqXNNfFa9Z9yZKVwQxepBgaLNFTd0CZQ==
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-webbase/-/common-webbase-2.0.33.tgz#b544c289363df6cded3d5a10bf6629865af3ad20"
+  integrity sha512-GzIyMQ1glxKTm9W33fLWkGxSFQl/zQ8+Y92CgT+2F9/Ltjf54PbJUJJyKyqRu6tWt1cS8VjC1aepJKy/M6Yd0Q==
   dependencies:
     "@ant-design/colors" "^3.2.2"
     "@ant-design/icons" "^2.1.1"
