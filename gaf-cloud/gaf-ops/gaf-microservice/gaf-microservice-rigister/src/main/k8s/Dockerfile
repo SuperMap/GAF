@@ -1,4 +1,4 @@
-FROM harbor.gaf.net.cn/library/backend-base:1.0.0
+FROM harbor.gaf.net.cn/library/backend-base:debian
 MAINTAINER gafci "gaf@supermap.com"
 VOLUME /tmp
 ADD target/*.jar app.jar
