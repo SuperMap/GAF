@@ -63,7 +63,7 @@
         <a-tab-pane v-if="isShowTab5" key="5" :tab="tab5Name">
           <slot></slot>
         </a-tab-pane>
-        <a-tab-pane v-if="openLeaf" key="6" :tab="tab6Name">
+        <a-tab-pane v-if="openLeaf && rootCatalogId" key="6" :tab="tab6Name">
           <leaf-manage
               :leaf-list="LeafList"
               :data-of-tree="dataOfTree"
