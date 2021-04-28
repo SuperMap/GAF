@@ -34,7 +34,7 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 
 ## 代码工程结构
 
-[GAF工程结构](https://github.com/SuperMap/GAF/wiki/%E5%B7%A5%E7%A8%8B%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84)
+[GAF工程结构](https://github.com/SuperMap/GAF/wiki/GAF%E4%BB%A3%E7%A0%81%E5%B7%A5%E7%A8%8B%E7%BB%93%E6%9E%84)
 
 
 ## 快速开始
