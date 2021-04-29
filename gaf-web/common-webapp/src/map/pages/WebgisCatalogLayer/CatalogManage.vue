@@ -257,7 +257,10 @@
     //   }
     // },
     onSelect(selectedKeys, e) {
-      this.LeafList = e.node.dataRef.children
+      this.LeafList = []
+      if (e.node.dataRef.children){
+        this.LeafList = e.node.dataRef.children
+      }
       if (selectedKeys && selectedKeys.length > 0) {
         if (!e.node.dataRef.children || e.node.dataRef.children.length === 0) {
           this.isShowTab5 = true
