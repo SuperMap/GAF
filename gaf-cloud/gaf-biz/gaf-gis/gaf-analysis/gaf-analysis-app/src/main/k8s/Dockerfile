@@ -16,7 +16,8 @@ ENV GAF_ENV_FLUENTD_PORT 24224
 ENV GAF_ENV_FLUENTD_HOST 'localhost'
 VOLUME /tmp
 ADD target/*.jar app.jar
+COPY src/main/k8s/docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s CMD curl -fs http://localhost:8080/actuator/health || exit 1
-#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar","--spring.profiles.active=prod"]
-CMD /opt/init.sh && java -jar app.jar --spring.profiles.active=prod
+ENTRYPOINT ["/docker-entrypoint.sh"]
