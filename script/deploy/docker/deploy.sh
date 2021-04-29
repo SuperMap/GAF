@@ -33,6 +33,9 @@ base() {
     #检查命令
     check_commands
 
+    #开启防火墙规则
+    port_gaf
+
     #创建docker网络
     create_docker_network gaf-net
 
