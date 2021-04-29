@@ -100,10 +100,16 @@ sed_config_env(){
 
 #开启防火墙端口
 port(){
-	firewall-cmd --add-port=$1/tcp --permanent
+    for i in $*; do
+    	firewall-cmd --add-port=$i/tcp --permanent
+    done
 	service firewalld restart
 }
 
+#开启gaf服务的防火墙端口
+port_gaf() {
+    port 9000 30777
+}
 
 #构建打包所有GAF应用
 build_frontend() {
