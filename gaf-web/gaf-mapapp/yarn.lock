@@ -4711,8 +4711,8 @@ gaf-map-ui@^0.2.35:
 
 gaf-ui@^2.0.13:
   version "2.0.13"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.13.tgz#0fcab9d08566ec62da675b6829f1c30a86a97093"
-  integrity sha512-x8J2h1bE0e/uux8yWuAjw60i3IVxTFVfC8BEX3ry0KhZr+U5EE9y4IHKDvbC3JzZ2BluYDARlONplKog//UQlw==
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.13.tgz#357ac62dd0ce50c7ba6320a63f934f3816c41fd0"
+  integrity sha512-iELbm+BaN1PB+d9+p1kfnyHcgM3BNILHDcPojl8pgamQ8X8F7z+SddpbLA8cMMvyets4apgH/x/avpSnxTPKtg==
   dependencies:
     ant-design-vue "^1.7.2"
     core-js "^2.6.5"
