@@ -152,8 +152,8 @@
       searchText: '',
       searchedColumn: 'name',
       sorter: {
-        order: '',
-        field: '',
+        order: 'ASC',
+        field: 'sort_sn',
       },
       columns: [
         {
@@ -170,6 +170,9 @@
           title: '排序序号',
           dataIndex: 'sortSn',
           key: 'sort_sn',
+          sorter: true,
+          defaultSortOrder: 'ascend',
+          sortDirections: ['descend', 'ascend'],
         },
         {
           title: '是否初始加载',
@@ -270,6 +273,9 @@
       if (sorter) {
         this.sorter.order = sorter.order === 'descend' ? 'DESC' : 'ASC'
         this.sorter.field = sorter.columnKey
+      } else {
+        this.sorter.order = null
+        this.sorter.field = null
       }
       this.getList()
     },

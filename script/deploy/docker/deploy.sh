@@ -33,6 +33,9 @@ base() {
     #检查命令
     check_commands
 
+    #开启防火墙规则
+    port_gaf
+
     #创建docker网络
     create_docker_network gaf-net
 
@@ -84,8 +87,8 @@ monitor() {
 delete-all() {
     #设置工作目录
     workspace
-    #关闭容器，删除容器，删除镜像
-    docker-compose down -v --rmi local
+    #关闭容器，删除容器
+    docker-compose down
     #删除挂载
     rm -rf ${GAF_VOL_DIR}
 }

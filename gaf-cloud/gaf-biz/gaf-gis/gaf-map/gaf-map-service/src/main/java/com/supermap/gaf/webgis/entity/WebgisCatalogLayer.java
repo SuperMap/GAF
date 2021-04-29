@@ -6,7 +6,7 @@
 package com.supermap.gaf.webgis.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.supermap.gaf.annotation.ConfigName;
+import com.supermap.gaf.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -29,7 +30,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ApiModel("图层")
 public class WebgisCatalogLayer implements Serializable{
-
+    @Id
     @NotNull
     @ApiModelProperty("图层目录id")
     private String catalogLayerId;
@@ -38,6 +39,7 @@ public class WebgisCatalogLayer implements Serializable{
     @ApiModelProperty("名称")
     private String name;
     @ApiModelProperty("所属目录")
+    @ParentIdField
     @ConfigName("pid")
     private String layerCatalogId;
     @ConfigName("resourceId")
@@ -58,6 +60,7 @@ public class WebgisCatalogLayer implements Serializable{
     @ConfigName(value = "moreProperties",expand = true)
     private String moreProperties;
 
+    @SortSnField
     @ConfigName("sortSn")
     @ApiModelProperty("排序序号")
     private Integer sortSn;
@@ -67,6 +70,7 @@ public class WebgisCatalogLayer implements Serializable{
     private Boolean initLoad;
     @ApiModelProperty("描述")
     private String description;
+    @LogicDeleteField
     @ApiModelProperty("状态")
     @JSONField(name="isStatus")
     private Boolean status;
@@ -74,6 +78,7 @@ public class WebgisCatalogLayer implements Serializable{
     private Date createdTime;
     @ApiModelProperty("创建人")
     private String createdBy;
+    @UpdatedTimeField
     @ApiModelProperty("修改时间")
     private Date updatedTime;
     @ApiModelProperty("修改人")

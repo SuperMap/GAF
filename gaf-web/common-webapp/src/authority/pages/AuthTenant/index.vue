@@ -225,8 +225,8 @@ export default {
       searchInput: null,
       searchedColumn: 'tenant_name',
       sorter: {
-        order: '',
-        field: ''
+        order: 'DESC',
+        field: 'status'
       },
       // 详情：1，新增：2，编辑：3
       operation: 0,
@@ -253,6 +253,9 @@ export default {
           title: '状态',
           dataIndex: 'status',
           key: 'status',
+          sorter: true,
+          defaultSortOrder: 'ascend',
+          sortDirections: ['descend', 'ascend'],
           scopedSlots: {
             customRender: 'status'
           }
@@ -413,8 +416,11 @@ export default {
         this.pagination.pageSize = pageInfo.pageSize
       }
       if (sorter) {
-        this.sorter.order = sorter.order === 'descend' ? 'DESC' : 'ASC'
+        this.sorter.order = sorter.order === 'descend' ? 'ASC' : 'DESC'
         this.sorter.field = sorter.columnKey
+      } else {
+        this.sorter.order = null
+        this.sorter.field = null
       }
       this.getList()
     },

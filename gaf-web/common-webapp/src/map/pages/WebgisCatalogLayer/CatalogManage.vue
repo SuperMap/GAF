@@ -63,7 +63,7 @@
         <a-tab-pane v-if="isShowTab5" key="5" :tab="tab5Name">
           <slot></slot>
         </a-tab-pane>
-        <a-tab-pane v-if="openLeaf" key="6" :tab="tab6Name">
+        <a-tab-pane v-if="openLeaf && rootCatalogId" key="6" :tab="tab6Name">
           <leaf-manage
               :leaf-list="LeafList"
               :data-of-tree="dataOfTree"
@@ -257,7 +257,10 @@
     //   }
     // },
     onSelect(selectedKeys, e) {
-      this.LeafList = e.node.dataRef.children
+      this.LeafList = []
+      if (e.node.dataRef.children){
+        this.LeafList = e.node.dataRef.children
+      }
       if (selectedKeys && selectedKeys.length > 0) {
         if (!e.node.dataRef.children || e.node.dataRef.children.length === 0) {
           this.isShowTab5 = true
