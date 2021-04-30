@@ -2881,10 +2881,10 @@ common-gaf@^2.0.5:
     monaco-editor-webpack-plugin "^3.0.0"
     vue "^2.6.12"
 
-common-mapapp@^1.0.2:
-  version "1.0.2"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-mapapp/-/common-mapapp-1.0.2.tgz#48617eb6f62d0389f80acc930a07e404d4f435c4"
-  integrity sha512-STcsWTynQocwhtBvCBrF/D/GtXw4Z87CbeZ+YBznLGx4Ztu6b2Hc6qqeGlK/bBTWiowfbBBGuvQXIbUwSEhWQQ==
+common-mapapp@^1.0.3:
+  version "1.0.3"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-mapapp/-/common-mapapp-1.0.3.tgz#debd4f5cab5df44d5cf3f5754763e85ef8fbb031"
+  integrity sha512-EeV9vsA3cDKXT6b4g3Mk/jECscqFN3+4iuOpguAoBxXN9xAMDbyeSWniFWVaugAcJQ0LQNWSsfxO9W7yng8DAQ==
   dependencies:
     "@ant-design/colors" "^3.2.2"
     "@ant-design/icons" "^2.1.1"
@@ -4709,10 +4709,10 @@ gaf-map-ui@^0.2.35:
     lodash "^4.17.20"
     vue "2.6.11"
 
-gaf-ui@^2.0.12:
-  version "2.0.12"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.12.tgz#3ca7b5a707c929ee29899efccf20ecb19657d78f"
-  integrity sha512-pKw9+h1uvhOB+ELf4qm+mg62tutV6AbwjmAp9iCOSyIoOmtbQPkQBbL4uMscdPdk5XXQXnJb3S7eMXox9KMOnQ==
+gaf-ui@^2.0.13:
+  version "2.0.13"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.13.tgz#357ac62dd0ce50c7ba6320a63f934f3816c41fd0"
+  integrity sha512-iELbm+BaN1PB+d9+p1kfnyHcgM3BNILHDcPojl8pgamQ8X8F7z+SddpbLA8cMMvyets4apgH/x/avpSnxTPKtg==
   dependencies:
     ant-design-vue "^1.7.2"
     core-js "^2.6.5"

@@ -255,8 +255,8 @@ export default {
       const tools = window.SMWEBGIS.tools;
       if (this.supportBackEnd) {
         const toolsbasicUrl = `/map/webgis-toolbars/815c6d97-0545-4bf6-9cf4-9410668fd311/config`;
-        const toolscommonUrl = `/map/webgis-toolbars/7dde4f71-8551-4c93-bbfb-cdfe3b1edf16/config`;
-        const resourceUrl = `/map/resource-catalog/8f015b32-2d09-4fce-86c2-c3bb97b010ff/config`;
+        const toolscommonUrl = `/map/webgis-toolbars/a2ce8256-98c9-4f35-90e8-f5b08a5deba9/config`;
+        const resourceUrl = `/map/resource-catalog/814a899b-195d-4f85-9340-5348abdbe07f/config`;
         const toolsRes = await this.$axios.$get(toolsbasicUrl);
         const toolscommonRes = await this.$axios.$get(toolscommonUrl);
         const resourceRes = await this.$axios.$get(resourceUrl);
