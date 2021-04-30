@@ -9,6 +9,33 @@ check_container_exist(){
   fi
 }
 
+#检查容器健康状态
+check_container_health(){
+    local health_json=`docker inspect --format '{{json .State.Health}}' $1`
+    local health_pattern="\"Status\":\"healthy\""
+    if [[ $health_json == *"$health_pattern"* ]]; then
+        echo 0
+    else
+        echo 1
+    fi
+}
+
+#等待容器健康状态正常
+wait_container_health(){
+    for i in $*; do
+        local flag=0
+        echo "wait for $i...";
+        while [ $flag -eq 0 ]; do
+            local check_result=$(check_container_health $i)
+            if [ "$check_result" -eq 0 ]; then
+                flag=1
+            fi
+        done
+    done
+}
+
+
+
 #判断命令是否安装
 check_commands(){
   commands=(docker docker-compose psql git java mvn yarn)
@@ -73,13 +100,19 @@ sed_config_env(){
 
 #开启防火墙端口
 port(){
-	firewall-cmd --add-port=$1/tcp --permanent
+    for i in $*; do
+    	firewall-cmd --add-port=$i/tcp --permanent
+    done
 	service firewalld restart
 }
 
+#开启gaf服务的防火墙端口
+port_gaf() {
+    port 9000 30777
+}
 
 #构建打包所有GAF应用
-build_all() {
+build_frontend() {
     cd $Root_Current_Dir/../../../
 
     mvn clean package -Dmaven.test.skip=true
@@ -119,6 +152,10 @@ build_all() {
     rm -rf node_modules
 
     cd $Root_Current_Dir
+}
+
+build_images() {
+    mvn clean package dockerfile:build -Ddockerfile.build.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=docker_ -DCUSTOM_TAG=latest
 }
 
 #修改某些挂载卷的权限

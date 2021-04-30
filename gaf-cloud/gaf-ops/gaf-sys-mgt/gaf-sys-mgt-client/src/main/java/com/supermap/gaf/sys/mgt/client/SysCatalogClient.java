@@ -25,8 +25,8 @@ import java.util.List;
 @FeignClient(name = "GAF-SYS-MGT"/*,url = "http://localhost:8081"*/,contextId = "sysCatalogClient")
 public interface SysCatalogClient {
     // 目录相关接口
-    @GetMapping("/sy-mgt/sys-catalogs/condition")
+    @GetMapping("/sys-mgt/sys-catalogs/condition")
     MessageResult<List<SysCatalog>> list(@SpringQueryMap SysCatalog queryCatalog);
-    @PostMapping("/sy-mgt/sys-catalogs")
+    @PostMapping("/sys-mgt/sys-catalogs")
     MessageResult<SysCatalog> insertSysCatalog(@RequestBody @NotNull SysCatalog sysCatalog);
 }

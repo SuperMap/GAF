@@ -1,0 +1,53 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+     active: jdbc
+  application:
+     name: gaf-microservice-conf
+  datasource:
+     driver-class-name: ${GAF_ENV_DATASOURCE_DRIVER:org.postgresql.Driver}
+     url: ${GAF_ENV_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+     username: ${GAF_ENV_DATASOURCE_USERNAME:postgres}
+     password: ${GAF_ENV_DATASOURCE_PASSWORD:}
+  cloud:
+     config:
+       label: master
+       server:
+         jdbc:
+           sql: SELECT pro_key, pro_value from config_properties where APPLICATION=? and PROFILE=? and LABEL=?
+  jersey:
+    application-path: /configcenter
+
+
+
+# 注：eureka.client.serviceUrl.defaultZone系统变量中设置
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:http://localhost:8761/eureka/}
+#    fetchRegistry: false
+#    register-with-eureka: false
+#    server:
+#      waitTimeInMsWhenSyncEmpty: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+local-address:
+  ${spring.cloud.client.ip-address}:${server.port}
+
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:com/supermap/gaf/**/postgresql/*Mapper.xml
+
+pagehelper:
+  reasonable: true
