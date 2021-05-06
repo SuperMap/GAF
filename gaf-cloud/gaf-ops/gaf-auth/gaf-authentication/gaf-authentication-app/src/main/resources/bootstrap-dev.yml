@@ -20,6 +20,6 @@ spring:
     name: gaf-authentication
   cloud:
     config:
-      uri: http://192.168.11.118:30131
+      uri: http://192.168.11.118:31576
       label: master
       profile: prod
