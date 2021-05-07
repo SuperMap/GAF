@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+# 注：eureka.client.serviceUrl.defaultZone系统变量中设置
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE:http://localhost:8761/eureka/}
+
+
+spring:
+  application:
+    name: gaf-data-graph
+  jersey:
+    application-path: /data-graph
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: gaf-microservice-conf
+      enabled: true
+      fail-fast: true
+      label: master

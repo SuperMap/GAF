@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>gaf-data-graph</artifactId>
+        <groupId>com.supermap.gaf</groupId>
+        <version>2.1.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <version>2.1.0-SNAPSHOT</version>
+    <artifactId>gaf-data-graph-app</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.supermap.gaf</groupId>
+            <artifactId>gaf-common-cloud</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap.gaf</groupId>
+            <artifactId>gaf-common-log</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap.gaf</groupId>
+            <artifactId>gaf-common-base-data</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap.gaf</groupId>
+            <artifactId>gaf-data-graph-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <configuration>
+                    <dockerfile>${project.basedir}/src/main/k8s/Dockerfile</dockerfile>
+                    <repository>${CUSTOM_REGISTRY}${parent.artifactId}</repository>
+                    <tag>${CUSTOM_TAG}</tag>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <skipDockerInfo>true</skipDockerInfo>
+                    <skipBuild>false</skipBuild>
+                    <skipPush>false</skipPush>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
