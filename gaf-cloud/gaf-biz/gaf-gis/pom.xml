@@ -17,6 +17,7 @@
         <module>gaf-map</module>
         <module>gaf-data-mgt</module>
         <module>gaf-analysis</module>
+        <module>gaf-data-graph</module>
         <!--<module>../../../../gaf-pro/gaf-cloud/gaf-biz/gaf-gis/gaf-bigdata</module>-->
     </modules>
 

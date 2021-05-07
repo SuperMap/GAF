@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.graph.dao.DataGraphSysDictMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.sys.mgt.commontype.SysDict">
+        <result column="data_dict_id" jdbcType="VARCHAR" property="dataDictId" />
+        <result column="dict_code" jdbcType="VARCHAR" property="dictCode" />
+        <result column="dict_name" jdbcType="VARCHAR" property="dictName" />
+        <result column="dict_value" jdbcType="VARCHAR" property="dictValue" />
+        <result column="dict_class" jdbcType="VARCHAR" property="dictClass" />
+        <result column="seq" jdbcType="INTEGER" property="seq" />
+        <result column="pid" jdbcType="VARCHAR" property="pid" />
+        <result column="dict_desc" jdbcType="VARCHAR" property="dictDesc" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+        <result column="visibility" jdbcType="BIT" property="visibility" />
+        <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+        <result column="ext_properties" jdbcType="VARCHAR" property="extProperties" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        data_dict_id,
+        dict_code,
+        dict_name,
+        dict_value,
+        dict_class,
+        seq,
+        pid,
+        dict_desc,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        tenant_id,
+        visibility,
+        catalog_id ,
+        ext_properties   </sql>
+
+    <select id="listSysDictViaExtPropertiesLike" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_dict"
+        WHERE status = true
+        <if test ='null != dictCode'> AND dict_code = #{dictCode} </if>
+        <if test ='null != extProperties'> AND ext_properties like #{extProperties}</if>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog logicalFilePath="no-matter-file-name.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+
+    <include file="../ddl/sys_dict.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/sys_resource_datasource.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/sys_catalog.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/config_properties.sql" relativeToChangelogFile="true"/>
+
+
+    <!--<includeAll  path="../changelog/gaf-data-graph/" relativeToChangelogFile="true"/>-->
+
+</databaseChangeLog>

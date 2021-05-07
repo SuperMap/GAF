@@ -20,7 +20,7 @@ spring:
     application-path: /map
   cloud:
     config:
-      uri: http://192.168.11.118:30131
+      uri: http://192.168.11.118:31576
       label: master
       profile: prod
 #logging:
