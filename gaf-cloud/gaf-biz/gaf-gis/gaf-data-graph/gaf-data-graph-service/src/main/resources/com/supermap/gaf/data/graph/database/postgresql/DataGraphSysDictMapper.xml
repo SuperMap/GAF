@@ -49,4 +49,13 @@
     </select>
 
 
+    <select id="listSysDictByDesc" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "sys_dict"
+        WHERE status = true
+        <if test ='null != dictCode'> AND dict_code = #{dictCode} </if>
+        <if test ='null != dictDesc'> AND dict_desc = #{dictDesc}</if>
+    </select>
+
+
 </mapper>

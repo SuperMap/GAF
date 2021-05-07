@@ -37,6 +37,7 @@ public class DataGraphImportResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/zrzysjtx")
     public MessageResult<String> importZrzysjtx(){
+        dataGraphImportService.importZrzysjtx();
         return MessageResult.successe(String.class).message("操作成功").build();
     }
 }
