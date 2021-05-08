@@ -332,6 +332,9 @@ export default {
       userData.departmentName = parentName
       this.userOperation = 3
       this.userEditData = userData
+      this.$nextTick(function() {
+        this.$refs.departmentUserTable.getList()
+      })
     },
     cancleWhenAddUser(formData) {
       this.showAddform = false
