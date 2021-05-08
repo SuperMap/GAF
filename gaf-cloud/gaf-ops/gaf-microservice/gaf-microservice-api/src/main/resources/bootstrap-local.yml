@@ -6,3 +6,8 @@ spring:
     name: gaf-microservice-api
   jersey:
     application-path: /docs
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: '123456'
+    url: jdbc:postgresql://192.168.11.118:32222/gaf
+    username: admin
