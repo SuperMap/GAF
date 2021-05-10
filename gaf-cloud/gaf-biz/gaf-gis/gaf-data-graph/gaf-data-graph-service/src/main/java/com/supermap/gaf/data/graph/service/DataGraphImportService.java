@@ -14,4 +14,13 @@ public interface DataGraphImportService {
      * 自然资源数据体系字典数据导入图谱
      */
     void importZrzysjtx();
+
+    /**
+     * 年时间轴导入图谱
+     */
+    void importYearChain();
+    /**
+     * 分类要素字典数据导入图谱
+     */
+    void importFeature();
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -34,13 +35,15 @@ public class DataGraphImportServiceImpl implements DataGraphImportService {
     private static final String FIRSTCLASS = "一级分类";
     private static final String SECONDCLASS = "二级分类";
     private static final String THIRDCLASS = "三级分类";
+    private static final String FEATURE = "要素";
 
     private static final String XZQH_DICT_CODE = "XZQH";
-    private static final String ZRZYSJTX_DICT_CODE = "ZRZYSJTX";
+    private static final String ZRZYSJTX_DICT_CODE = "NR_DATA_CATEGORY";
 
     private static final String COUNTYCSV_FILEUPLOADPATH = "public/county.csv";
     private static final String CITYCSV_FILEUPLOADPATH = "public/city.csv";
     private static final String PROVINCECSV_FILEUPLOADPATH = "public/province.csv";
+    private static final String FEATURECSV_FILEUPLOADPATH = "public/feature.csv";
 
     private static final String FIRSTCLASSCSV_FILEUPLOADPATH = "public/firstclass.csv";
     private static final String SECONDCLASSCSV_FILEUPLOADPATH = "public/secondclass.csv";
@@ -140,9 +143,58 @@ public class DataGraphImportServiceImpl implements DataGraphImportService {
             }
         }
         //导入neo4j
-        //导入neo4j
         try (Neo4jAutoCloseable neo4j = new Neo4jAutoCloseable(neo4jProperties)){
             importZrzysjtxToNeo4j(neo4j,firstCsvUrl,secondCsvUrl,thirdCsvUrl);
+        }
+    }
+
+    @Override
+    public void importYearChain() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int yearRange = 20;
+
+        try (Neo4jAutoCloseable neo4j = new Neo4jAutoCloseable(neo4jProperties)){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = year - yearRange; i < year + yearRange; i++) {
+                stringBuilder.append(String.format("MERGE (n%d:年份 {name: \"%d\"})\n",i,i));
+            }
+            for (int i = year - yearRange; i < year + yearRange - 1; i++) {
+                stringBuilder.append(String.format("MERGE (n%d)-[:NEXT_YEAR]->(n%d)\n",i,i+1));
+            }
+            neo4j.execute(stringBuilder.toString());
+        }
+    }
+
+    @Override
+    public void importFeature() {
+        List<String[]> feature = sysDictConvertToZrzysjtxStringArrList(dataGraphSysDictMapper.listSysDictByDesc(ZRZYSJTX_DICT_CODE,FEATURE));
+        //转为csv
+        File featureCsv = null;
+        try {
+            featureCsv = ConvertToFileUtil.stringArrListToTempCsv(feature);
+        }catch (Exception e){
+            log.error("feature字典数据转为csv文件失败");
+        }
+        //上传csv
+        String featureCsvUrl = "";
+        try {
+            featureCsvUrl = uploadTempFile(FEATURECSV_FILEUPLOADPATH,featureCsv);
+        }catch (Exception e){
+            log.error("feature-csv文件上传到minio失败");
+        }finally {
+            if (featureCsv != null){
+                featureCsv.delete();
+            }
+        }
+        //导入neo4j
+        try (Neo4jAutoCloseable neo4j = new Neo4jAutoCloseable(neo4jProperties)){
+            neo4j.execute( String.format(
+                    "LOAD CSV WITH HEADERS FROM '%s' AS row\n" +
+                            "MATCH (l3:三级分类 {id: row.pid})\n" +
+                            "MERGE (l4:要素 {name: row.name, id:row.id, pid:row.pid})\n" +
+                            "MERGE (l3)-[r3:要素]->(l4)"
+                    , featureCsvUrl));
         }
     }
 
