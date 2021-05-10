@@ -162,7 +162,7 @@ public class DataGraphImportServiceImpl implements DataGraphImportService {
             for (int i = year - yearRange; i < year + yearRange - 1; i++) {
                 stringBuilder.append(String.format("MERGE (n%d)-[:NEXT_YEAR]->(n%d)\n",i,i+1));
             }
-            neo4j.execute(stringBuilder.toString());
+            neo4j.write(stringBuilder.toString());
         }
     }
 
@@ -189,7 +189,7 @@ public class DataGraphImportServiceImpl implements DataGraphImportService {
         }
         //导入neo4j
         try (Neo4jAutoCloseable neo4j = new Neo4jAutoCloseable(neo4jProperties)){
-            neo4j.execute( String.format(
+            neo4j.write( String.format(
                     "LOAD CSV WITH HEADERS FROM '%s' AS row\n" +
                             "MATCH (l3:三级分类 {id: row.pid})\n" +
                             "MERGE (l4:要素 {name: row.name, id:row.id, pid:row.pid})\n" +
@@ -207,23 +207,23 @@ public class DataGraphImportServiceImpl implements DataGraphImportService {
      */
     private void importZrzysjtxToNeo4j(Neo4jAutoCloseable neo4j,String firstCsvUrl,String secondCsvUrl,String thirdCsvUrl){
         //导入根节点
-        neo4j.execute("MERGE (l0:自然资源数据体系 {name: \"自然资源数据体系\"})");
+        neo4j.write("MERGE (l0:自然资源数据体系 {name: \"自然资源数据体系\"})");
         //导入一级分类,建立根节点到一级分类的联系
-        neo4j.execute( String.format(
+        neo4j.write( String.format(
                 "LOAD CSV WITH HEADERS FROM '%s' AS row\n" +
                         "MATCH (l0:自然资源数据体系)\n" +
                         "MERGE (l1:一级分类 {name: row.name, id:row.id, pid:row.pid})\n" +
                         "MERGE (l0)-[r1:一级分类]->(l1)"
                 , firstCsvUrl));
         //导入二级分类，建立一级分类到二级分类的联系
-        neo4j.execute( String.format(
+        neo4j.write( String.format(
                 "LOAD CSV WITH HEADERS FROM '%s' AS row\n" +
                         "MATCH (l1:一级分类 {id: row.pid})\n" +
                         "MERGE (l2:二级分类 {name: row.name, id:row.id, pid:row.pid})\n" +
                         "MERGE (l1)-[r2:二级分类]->(l2)"
                 , secondCsvUrl));
         //导入县级，建立二级分类到三级分类的联系
-        neo4j.execute( String.format(
+        neo4j.write( String.format(
                 "LOAD CSV WITH HEADERS FROM '%s' AS row\n" +
                         "MATCH (l2:二级分类 {id: row.pid})\n" +
                         "MERGE (l3:三级分类 {name: row.name, id:row.id, pid:row.pid})\n" +
@@ -240,23 +240,23 @@ public class DataGraphImportServiceImpl implements DataGraphImportService {
      */
     private void importXzqhToNeo4j(Neo4jAutoCloseable neo4j,String provinceCsvUrl,String cityCsvUrl,String countyCsvUrl){
         //导入根节点
-        neo4j.execute("MERGE (l0:中华人民共和国行政区划 {name: \"中华人民共和国行政区划\"})");
+        neo4j.write("MERGE (l0:中华人民共和国行政区划 {name: \"中华人民共和国行政区划\"})");
         //导入省级,建立根节点到省级的联系
-        neo4j.execute( String.format(
+        neo4j.write( String.format(
                         "LOAD CSV WITH HEADERS FROM '%s' AS row\n" +
                         "MATCH (l0:中华人民共和国行政区划)\n" +
                         "MERGE (l1:省级 {name: row.name, code: row.code, id:row.id, pid:row.pid})\n" +
                         "MERGE (l0)-[r1:省级]->(l1)"
                         , provinceCsvUrl));
         //导入地级，建立省级节点到地级的联系
-        neo4j.execute( String.format(
+        neo4j.write( String.format(
                         "LOAD CSV WITH HEADERS FROM '%s' AS row\n" +
                         "MATCH (l1:省级 {id: row.pid})\n" +
                         "MERGE (l2:地级 {name: row.name, code: row.code, id:row.id, pid:row.pid})\n" +
                         "MERGE (l1)-[r2:地级]->(l2)"
                 , cityCsvUrl));
         //导入县级，建立县级父节点到县级的联系
-        neo4j.execute( String.format(
+        neo4j.write( String.format(
                         "LOAD CSV WITH HEADERS FROM '%s' AS row\n" +
                         "MATCH (lx)  where lx:省级 or lx:地级 MATCH (lx) where lx.id=row.pid\n" +
                         "MERGE (l3:县级 {name: row.name, code: row.code, id:row.id, pid:row.pid})\n" +
