@@ -141,6 +141,9 @@
     }
   },
   computed: {
+    // isShowTab5: function() {
+    //   return !(this.dataOfTree[0].children && this.dataOfTree[0].children.length > 0)
+    // },
     showAddEditForm: function() {
       return this.dataOfTree && this.dataOfTree.length > 0
     },
@@ -260,6 +263,7 @@
             }
           )
         }
+        this.isShowTab5 = !(this.dataOfTree[0].children && this.dataOfTree[0].children.length > 0)
         let datatree = JSON.parse(JSON.stringify(this.dataOfTree))
         this.$emit('getTreeData', datatree)
       } else {

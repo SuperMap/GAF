@@ -291,6 +291,7 @@ export default {
           }
           this.getList()
         })
+        this.selectedRowKeys = []
       } else {
         this.$message.warn('请选择您要删除的内容')
       }

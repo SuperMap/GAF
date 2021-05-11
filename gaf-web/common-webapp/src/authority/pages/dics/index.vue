@@ -56,7 +56,7 @@
             ></dic-catalog-form>
           </div>
         </a-tab-pane>
-        <a-tab-pane key="4" v-if="groupShow && openAddType" tab="新增类别">
+        <a-tab-pane key="4" v-if="groupShow && openAddType" tab="类别列表">
           <div class="margin-15">
             <add-type
               ref="dicTypeForm"
@@ -71,7 +71,7 @@
             ></add-type>
           </div>
         </a-tab-pane>
-        <a-tab-pane key="5" v-if="groupShow && openAddCatalog" tab="新增分组">
+        <a-tab-pane key="5" v-if="groupShow && openAddCatalog" tab="子组列表">
           <div class="margin-15">
             <add-catalog
               ref="dicCatalogForm"

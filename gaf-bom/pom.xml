@@ -1770,6 +1770,11 @@
                 <artifactId>liquibase-core</artifactId>
                 <version>3.6.3</version>
             </dependency>
+            <dependency>
+                <groupId>org.neo4j.driver</groupId>
+                <artifactId>neo4j-java-driver</artifactId>
+                <version>4.2.5</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
