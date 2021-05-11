@@ -341,7 +341,7 @@ export default {
     },
     async batchDel() {
       const url = '/srv-governance/config/configurations'
-      const selectedRowKeys = this.selectedRowKeys
+      let selectedRowKeys = this.selectedRowKeys
       if (selectedRowKeys.length !== 0) {
         const rst = await this.$axios.delete(url, {data: this.selectedRows})
         if (rst.data.isSuccessed) {
@@ -358,6 +358,7 @@ export default {
       } else {
         this.$message.warn('请选择您要删除的内容')
       }
+      this.selectedRowKeys = []
     },
     cancelDeleteConfigServerInfo: function() {
       this.deletePropertyVisible = false
