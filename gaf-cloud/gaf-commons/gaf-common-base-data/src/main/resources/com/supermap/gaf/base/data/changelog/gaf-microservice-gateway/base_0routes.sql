@@ -20,3 +20,5 @@ INSERT INTO routes (id, route_id, route_uri, route_order, predicates, filters, "
 INSERT INTO routes (id, route_id, route_uri, route_order, predicates, filters, "enable", create_time, update_time, "type", tenant_id) VALUES('Bje6be', 'gaf-storage', 'lb://gaf-storage', 0, '[{"args":"/storage/**","name":"Path"}]', '[{"args":"0","name":"StripPrefix"}]', true, '2021-04-22 06:18:06.000', '2021-04-22 08:38:32.000', NULL, 'system');
 INSERT INTO routes (id, route_id, route_uri, route_order, predicates, filters, "enable", create_time, update_time, "type", tenant_id) VALUES('nYFNBz', 'gaf-webapp', 'http://gaf-webapp:80/viewer/', 0, '[{"args":"/viewer/**","name":"Path"}]', '[{"args":"0","name":"StripPrefix"}]', true, '2021-01-11 07:54:53.000', '2021-04-23 03:02:09.000', NULL, 'system');
 
+-- changeset SYS:20210506-0
+INSERT INTO routes (id, route_id, route_uri, route_order, predicates, filters, "enable", create_time, update_time, "type", tenant_id) VALUES('nYFxNBz', 'gaf-data-graph', 'lb://gaf-data-graph', 0, '[{"args":"/data-graph/**","name":"Path"}]', '[{"args":"0","name":"StripPrefix"}]', true, '2021-01-11 07:54:53.000', '2021-04-23 03:02:09.000', NULL, 'system');
