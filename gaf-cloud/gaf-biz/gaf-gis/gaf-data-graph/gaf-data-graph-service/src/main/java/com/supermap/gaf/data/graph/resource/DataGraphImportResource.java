@@ -37,6 +37,25 @@ public class DataGraphImportResource {
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/zrzysjtx")
     public MessageResult<String> importZrzysjtx(){
+        dataGraphImportService.importZrzysjtx();
+        return MessageResult.successe(String.class).message("操作成功").build();
+    }
+
+    @ApiOperation(value = "年数据导入图谱", notes = "年数据导入图谱")
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/year_chain")
+    public MessageResult<String> importyearChain(){
+        dataGraphImportService.importYearChain();
+        return MessageResult.successe(String.class).message("操作成功").build();
+    }
+
+    @ApiOperation(value = "分类要素数据导入图谱", notes = "分类要素数据导入图谱")
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/feature")
+    public MessageResult<String> importFeature(){
+        dataGraphImportService.importFeature();
         return MessageResult.successe(String.class).message("操作成功").build();
     }
 }

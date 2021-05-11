@@ -13,5 +13,19 @@ import java.util.List;
  */
 @Component
 public interface DataGraphSysDictMapper {
+    /**
+     * 通过extProperties扩展字段模糊查询查询字典
+     * @param dictCode
+     * @param extProperties
+     * @return
+     */
     List<SysDict> listSysDictViaExtPropertiesLike(@Param("dictCode") String dictCode, @Param("extProperties")String extProperties);
+
+    /**
+     * 通过dictDesc字典描述查询字典
+     * @param dictCode
+     * @param dictDesc
+     * @return
+     */
+    List<SysDict> listSysDictByDesc(@Param("dictCode") String dictCode, @Param("dictDesc")String dictDesc);
 }

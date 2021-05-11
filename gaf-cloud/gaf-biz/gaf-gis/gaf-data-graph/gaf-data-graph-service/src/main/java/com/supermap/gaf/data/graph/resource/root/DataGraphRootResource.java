@@ -7,6 +7,7 @@ package com.supermap.gaf.data.graph.resource.root;
 
 
 import com.supermap.gaf.data.graph.resource.DataGraphImportResource;
+import com.supermap.gaf.data.graph.resource.DataGraphQueryResource;
 import io.swagger.annotations.Api;
 import org.springframework.stereotype.Component;
 
@@ -29,5 +30,8 @@ public class DataGraphRootResource {
         return DataGraphImportResource.class;
     }
 
-
+    @Path("/query")
+    public Class<DataGraphQueryResource> dataGraphQueryResourceClass(){
+        return DataGraphQueryResource.class;
+    }
 }
