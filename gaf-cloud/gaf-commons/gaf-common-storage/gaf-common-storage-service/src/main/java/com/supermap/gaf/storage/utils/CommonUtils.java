@@ -39,7 +39,6 @@ public class CommonUtils {
     public static void uploadByPreSignedUrl(PresignUploadRequest uploadRequest, InputStream in) throws FileUploadException {
         HttpURLConnection connection = null;
         OutputStream out = null;
-        BufferedReader reader = null;
         try{
             String preSignedUrl = uploadRequest.getPresignUrl();
             String base64Md5 = uploadRequest.getContentMd5();
@@ -73,7 +72,6 @@ public class CommonUtils {
             throw new FileUploadException();
         }finally {
             try {
-                reader.close();
                 out.flush();
                 out.close();
                 connection.disconnect();
