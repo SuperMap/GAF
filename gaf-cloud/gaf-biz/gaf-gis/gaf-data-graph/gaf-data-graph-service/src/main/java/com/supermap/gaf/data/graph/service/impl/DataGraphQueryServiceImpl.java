@@ -94,8 +94,15 @@ public class DataGraphQueryServiceImpl implements DataGraphQueryService {
     private Map<String, Object> convertRel(Map<String, Object> row,Map<String, Object> startNode,Map<String, Object> endNode){
         InternalRelationship relationship = (InternalRelationship)row.get(QUERY_REL_FIELD);
         Map<String, Object> relationshipMap = new HashMap<>(relationship.asMap());
-        relationshipMap.put(SOURCE, startNode.get(NAME));
-        relationshipMap.put(TARGET, endNode.get(NAME));
+        long startId = relationship.startNodeId();
+        long endId = relationship.endNodeId();
+        if ((long)startNode.get(IDENTITY) == startId && (long)endNode.get(IDENTITY) == endId){
+            relationshipMap.put(SOURCE, startNode.get(NAME));
+            relationshipMap.put(TARGET, endNode.get(NAME));
+        }else if ((long)endNode.get(IDENTITY) == startId && (long)startNode.get(IDENTITY) == endId){
+            relationshipMap.put(SOURCE, endNode.get(NAME));
+            relationshipMap.put(TARGET, startNode.get(NAME));
+        }
         relationshipMap.put(TYPE,  relationship.type());
         relationshipMap.put(IDENTITY, relationship.id());
         return relationshipMap;
