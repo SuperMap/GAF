@@ -22,6 +22,8 @@ import com.supermap.gaf.storage.service.MinioConfigHandlerI;
 import com.supermap.gaf.storage.service.S3ClientService;
 import com.supermap.gaf.storage.service.TenantMinioConfigService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -44,6 +46,8 @@ import static com.supermap.gaf.storage.enums.TenantMode.SINGLE_NODE_MULTI_BUCKET
  */
 @Service
 public class S3ClientServiceImpl implements S3ClientService {
+
+    private static final Logger logger = LoggerFactory.getLogger(S3ClientServiceImpl.class);
 
     @Autowired
     private MinioConfigHandlerI minioConfigHandlerI;
@@ -80,7 +84,7 @@ public class S3ClientServiceImpl implements S3ClientService {
                 s3Client.createBucket(minioConfig.getBucketName());
                 initBucketPolicy(s3Client,minioConfig.getBucketName());
             }catch (Exception e){
-                e.printStackTrace();
+                logger.info("已初始化桶:{}",minioConfig.getBucketName());
             }
         }
     }

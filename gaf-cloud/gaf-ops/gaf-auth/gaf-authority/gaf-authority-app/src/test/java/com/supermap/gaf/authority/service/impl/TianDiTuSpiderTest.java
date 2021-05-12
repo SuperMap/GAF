@@ -29,7 +29,7 @@ import java.util.*;
  */
 @SpringBootTest(classes = Application.class)
 @RunWith(SpringRunner.class)
-@ActiveProfiles("dev")
+@ActiveProfiles("local")
 public class TianDiTuSpiderTest {
 
     @Autowired
@@ -91,12 +91,12 @@ public class TianDiTuSpiderTest {
     }
     private void areaConvertToSysDict(Area area,SysDict sysDict) {
         sysDict.setTenantId("tenant_000000");
-        sysDict.setDictCode("XZQU");
+        sysDict.setDictCode("XZQH");
         sysDict.setStatus(true);
         sysDict.setDictName(area.getName());
         sysDict.setVisibility(true);
-        sysDict.setCreatedBy("wxl");
-        sysDict.setUpdatedBy("wxl");
+        sysDict.setCreatedBy("sys_admin");
+        sysDict.setUpdatedBy("sys_admin");
         sysDict.setDictValue(area.getCityCode());
         map.put("level", area.getLevel());
         map.put("nameabbrevation",area.getNameabbrevation());
