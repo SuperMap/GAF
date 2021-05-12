@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.mgt.dao.DataDatasetMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.data.mgt.entity.DataDataset">
+        <result column="dataset_id" jdbcType="VARCHAR" property="datasetId" />
+        <result column="dataset_name" jdbcType="VARCHAR" property="datasetName" />
+        <result column="datasource_id" jdbcType="VARCHAR" property="datasourceId" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="category_factor_code" jdbcType="VARCHAR" property="categoryFactorCode" />
+        <result column="is_sdx" jdbcType="BIT" property="isSdx" />
+        <result column="map_services" jdbcType="VARCHAR" property="mapServices" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dataset_id,
+        dataset_name,
+        datasource_id,
+        sort_sn,
+        category_factor_code,
+        is_sdx,
+        map_services,
+        description,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "data_dataset"
+        WHERE dataset_id = #{datasetId}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "data_dataset"
+        WHERE status = true
+        <trim>
+            <if test='datasetId != null'> AND dataset_id = #{datasetId}</if>
+            <if test='datasetName != null'> AND dataset_name = #{datasetName}</if>
+            <if test='datasourceId != null'> AND datasource_id = #{datasourceId}</if>
+            <if test='sortSn != null'> AND sort_sn = #{sortSn}</if>
+            <if test='categoryFactorCode != null'> AND category_factor_code = #{categoryFactorCode}</if>
+            <if test='isSdx != null'> AND is_sdx = #{isSdx}</if>
+            <if test='mapServices != null'> AND map_services = #{mapServices}</if>
+            <if test='description != null'> AND description = #{description}</if>
+            <if test='status != null'> AND status = #{status}</if>
+            <if test='createdTime != null'> AND created_time = #{createdTime}</if>
+            <if test='createdBy != null'> AND created_by = #{createdBy}</if>
+            <if test='updatedTime != null'> AND updated_time = #{updatedTime}</if>
+            <if test='updatedBy != null'> AND updated_by = #{updatedBy}</if>
+            <if test ='null != equalFieldName'> AND ${equalFieldName}
+                <choose>
+                    <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                    <otherwise>  is null </otherwise>
+                </choose>
+            </if>
+            <if test ='null != searchFieldName and null != searchFieldValue'> AND ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%') </if>
+        </trim>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="dataset_id" keyProperty="datasetId" parameterType="com.supermap.gaf.data.mgt.entity.DataDataset">
+        INSERT INTO "data_dataset"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != datasetId'>dataset_id,</if>
+			<if test ='null != datasetName'>dataset_name,</if>
+			<if test ='null != datasourceId'>datasource_id,</if>
+			<if test ='null != sortSn'>sort_sn,</if>
+			<if test ='null != categoryFactorCode'>category_factor_code,</if>
+			<if test ='null != isSdx'>is_sdx,</if>
+			<if test ='null != mapServices'>map_services,</if>
+			<if test ='null != description'>description,</if>
+			status,
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != datasetId'>#{datasetId},</if>
+			<if test ='null != datasetName'>#{datasetName},</if>
+			<if test ='null != datasourceId'>#{datasourceId},</if>
+			<if test ='null != sortSn'>#{sortSn},</if>
+			<if test ='null != categoryFactorCode'>#{categoryFactorCode},</if>
+			<if test ='null != isSdx'>#{isSdx},</if>
+			<if test ='null != mapServices'>#{mapServices},</if>
+			<if test ='null != description'>#{description},</if>
+			true,
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "data_dataset"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.datasetId}  ,  #{item.datasetName}  ,  #{item.datasourceId}  ,  #{item.sortSn}  ,  #{item.categoryFactorCode}  ,  #{item.isSdx}  ,  #{item.mapServices}  ,  #{item.description}  ,  true  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE data_dataset SET status = false
+        WHERE dataset_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE data_dataset SET status = false
+        WHERE dataset_id = #{datasetId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.data.mgt.entity.DataDataset">
+        UPDATE "data_dataset"
+        <set>
+			<if test ="null != datasetName and '' != datasetName">dataset_name = #{datasetName},</if>				
+			<if test ="null != datasourceId and '' != datasourceId">datasource_id = #{datasourceId},</if>				
+			sort_sn = #{sortSn},
+			category_factor_code = #{categoryFactorCode},
+			is_sdx = #{isSdx},
+			map_services = #{mapServices},
+			description = #{description},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+        </set>
+        WHERE dataset_id = #{datasetId}  AND status = true
+    </update>
+
+</mapper>

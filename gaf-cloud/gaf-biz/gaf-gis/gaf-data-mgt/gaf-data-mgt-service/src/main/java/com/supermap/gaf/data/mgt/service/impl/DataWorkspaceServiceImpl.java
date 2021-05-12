@@ -15,7 +15,7 @@ import com.supermap.data.WorkspaceVersion;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.data.mgt.common.IServerManager;
 import com.supermap.gaf.data.mgt.entity.DataWorkspace;
-import com.supermap.gaf.data.mgt.mapper.DataWorkspaceMapper;
+import com.supermap.gaf.data.mgt.dao.DataWorkspaceMapper;
 import com.supermap.gaf.data.mgt.service.DataWorkspaceService;
 import com.supermap.gaf.data.mgt.service.publisher.config.UrlConfig;
 import com.supermap.gaf.data.mgt.util.Page;
