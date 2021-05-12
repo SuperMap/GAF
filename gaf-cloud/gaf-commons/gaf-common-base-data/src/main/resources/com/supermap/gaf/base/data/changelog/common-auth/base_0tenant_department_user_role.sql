@@ -12,3 +12,6 @@ INSERT INTO "auth_user"("user_id", "tenant_id", "department_id", "sort_sn", "nam
 INSERT INTO "auth_user_role"("user_role_id", "user_id", "role_id", "status", "sort_sn", "created_time", "created_by", "updated_time", "updated_by", "tenant_id") VALUES ('user_role_000000', 'user_000000', 'role_000000', 't', 1, '2020-10-30 08:38:18', 'SYS', NULL, 'SYS', 'tenant_000000');
 INSERT INTO "auth_user_role"("user_role_id", "user_id", "role_id", "status", "sort_sn", "created_time", "created_by", "updated_time", "updated_by", "tenant_id") VALUES ('c40ab9d1-037e-47b4-91f7-a94ba04d48a1', '262abacb-bbce-4886-a622-fafd82a2bee6', 'role_000000', 't', NULL, '2021-04-01 13:08:11.427137', 'SYS', '2021-04-01 13:08:11.427137', 'SYS', 'tenant_000000');
 
+-- changeset SYS:20210512-0
+INSERT INTO "auth_role"("role_id", "tenant_id", "role_catalog_id", "sort_sn", "role_name", "name_en", "code", "status", "description", "created_time", "created_by", "updated_time", "updated_by", "type") VALUES ('role_000001', 'tenant_000000', 'catalog_sys_authority_000000', 2, '租户管理员', 'tenant_admin', NULL, 't', '权限控制组件内置角色，勿删', '2020-10-29 22:30:08', 'zhuhongming', NULL, NULL, '1');
+

@@ -17,3 +17,6 @@ INSERT INTO "auth_role_menu"("role_menu_id", "role_id", "resource_module_id", "s
 
 
 
+
+-- changeset SYS:20210-0
+INSERT INTO "auth_role_menu"("role_menu_id", "role_id", "resource_module_id", "status", "sort_sn", "description", "created_time", "created_by", "updated_time", "updated_by", "resource_menu_id") VALUES ('5c3c06c1-ff55-4b0f-8982-ee6cadec2270', 'role_000001', '2b6f1cb5-c469-4cc0-9afa-09e76a28f818', 't', 1, NULL, '2021-03-23 08:26:41.927204', NULL, '2021-03-23 08:26:41.927204', NULL, 'c7e91d31-c0cf-4758-a247-dcc6398399af');
