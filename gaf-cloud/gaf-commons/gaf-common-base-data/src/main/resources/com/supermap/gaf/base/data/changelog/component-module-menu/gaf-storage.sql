@@ -12,11 +12,4 @@ INSERT INTO "sys_catalog"("catalog_id", "parent_id", "sort_sn", "name", "type", 
 INSERT INTO "auth_resource_menu"("resource_menu_id", "menu_catalog_id", "name", "resource_module_id", "icon", "visible", "status", "sort_sn", "description", "created_time", "created_by", "updated_time", "updated_by", "params") VALUES ('c7e91d31-c0cf-4758-a247-dcc6398399af', '9b37a916-2374-48e8-ac23-1e2e9f7ef80d', '附件管理', '2b6f1cb5-c469-4cc0-9afa-09e76a28f818', NULL, 't', 't', 1, NULL, '2021-03-22 11:47:46.299534', 'SYS', '2021-03-22 11:47:46.299534', 'SYS', NULL);
 
 INSERT INTO "auth_role_menu"("role_menu_id", "role_id", "resource_module_id", "status", "sort_sn", "description", "created_time", "created_by", "updated_time", "updated_by", "resource_menu_id") VALUES ('b91ad613-83a4-4bda-903f-d0ef1bba24b2', 'role_000000', NULL, 't', 1, NULL, '2021-03-22 11:48:07.982979', 'SYS', '2021-03-22 11:48:07.982979', 'SYS', 'c7e91d31-c0cf-4758-a247-dcc6398399af');
-
-
-
-
-
-
--- changeset SYS:20210-0
 INSERT INTO "auth_role_menu"("role_menu_id", "role_id", "resource_module_id", "status", "sort_sn", "description", "created_time", "created_by", "updated_time", "updated_by", "resource_menu_id") VALUES ('5c3c06c1-ff55-4b0f-8982-ee6cadec2270', 'role_000001', '2b6f1cb5-c469-4cc0-9afa-09e76a28f818', 't', 1, NULL, '2021-03-23 08:26:41.927204', NULL, '2021-03-23 08:26:41.927204', NULL, 'c7e91d31-c0cf-4758-a247-dcc6398399af');
