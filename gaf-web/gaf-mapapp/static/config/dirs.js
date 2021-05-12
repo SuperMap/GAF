@@ -8,6 +8,7 @@ const host = 'http://1.202.165.56:8090'
     root.SMWEBGIS.TreeLayers = {}
     root.SMWEBGIS.isDebug = true
     root.SMWEBGIS.bottomInDir = false
+    // true 支持后端  false 前端
     root.SMWEBGIS.supportBackEnd = true
     root.SMWEBGIS.host = host
     root.SMWEBGIS.backEndUrl = 'http://10.80.253.150:8080'
