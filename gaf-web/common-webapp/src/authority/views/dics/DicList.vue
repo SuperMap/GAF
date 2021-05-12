@@ -44,7 +44,7 @@
       <template #default>
         <gaf-table-with-page
           :showXH="false"
-          :scroll="{x: 1300 , y: 570}"
+          :scroll="{x: 1300 , y: '47vh'}"
           :pagination="pagination"
           :data-source="sysDictList"
           :loading="loading"
@@ -205,7 +205,7 @@ export default {
           title: '操作',
           key: 'operation',
           scopedSlots: { customRender: 'operation' },
-          fixed: 'right',
+          // fixed: 'right',
           width: 400
         }
       ]
