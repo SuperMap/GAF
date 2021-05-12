@@ -243,8 +243,11 @@
 
 .ant-table-body {
   margin: 0 !important;
+  overflow: auto;
 }
-
+table {
+  white-space: nowrap;
+}
 /* 详情按钮 */
 .btn-view {
   border: 1px solid transparent;
