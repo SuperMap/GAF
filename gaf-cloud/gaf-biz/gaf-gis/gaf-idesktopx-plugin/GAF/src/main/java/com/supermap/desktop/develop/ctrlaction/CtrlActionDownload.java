@@ -78,7 +78,9 @@ public class CtrlActionDownload extends CtrlAction {
                     CommonUtils.downloadAsync("/datas/"+downloadPath.getFileName(),downloadPath,evt -> {
                         if (evt.getPropertyName().equals("progress")) {
                             Integer progress = (Integer) evt.getNewValue();
-                            System.out.println(downloadPath.getFileName().toString()+progress);
+                            if(progress%10==0){
+                                ApplicationContextUtils.getOutput().output("已下载"+downloadPath.getFileName().toString()+":"+progress+"%");
+                            }
                             if(progress==100){
                                 ApplicationContextUtils.getOutput().output(downloadPath.getFileName().toString()+"下载成功");
                             }
@@ -91,7 +93,9 @@ public class CtrlActionDownload extends CtrlAction {
                         CommonUtils.downloadAsync("/datas/"+uddDownloadPath.getFileName(),uddDownloadPath,evt -> {
                             if (evt.getPropertyName().equals("progress")) {
                                 Integer progress = (Integer) evt.getNewValue();
-                                System.out.println(uddDownloadPath.getFileName().toString()+progress);
+                                if(progress%10==0){
+                                    ApplicationContextUtils.getOutput().output("已下载"+downloadPath.getFileName().toString()+":"+progress+"%");
+                                }
                                 if(progress==100){
                                     ApplicationContextUtils.getOutput().output(uddDownloadPath.getFileName().toString()+"下载成功");
                                 }
