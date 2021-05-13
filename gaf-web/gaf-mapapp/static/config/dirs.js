@@ -8,6 +8,7 @@ const host = 'http://1.202.165.56:8090'
     root.SMWEBGIS.TreeLayers = {}
     root.SMWEBGIS.isDebug = true
     root.SMWEBGIS.bottomInDir = false
+    //工具条和资源目录配置读取： true，gaf-map后端接口;false,前端js数据（位于gaf-mapapp或gaf-webapp的\static\config下的dirs.js资源目录树/tools.js工具条）
     root.SMWEBGIS.supportBackEnd = true
     root.SMWEBGIS.host = host
     root.SMWEBGIS.backEndUrl = 'http://10.80.253.150:8080'
