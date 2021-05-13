@@ -199,13 +199,14 @@ export default {
         {
           title: '描述',
           dataIndex: 'dictDesc',
-          key: 'dict_desc'
+          key: 'dict_desc',
+          width: 300
         },
         {
           title: '操作',
           key: 'operation',
           scopedSlots: { customRender: 'operation' },
-          // fixed: 'right',
+          fixed: 'right',
           width: 400
         }
       ]
