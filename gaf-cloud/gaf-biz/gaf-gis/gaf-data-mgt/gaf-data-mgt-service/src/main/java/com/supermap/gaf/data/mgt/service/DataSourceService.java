@@ -25,4 +25,11 @@ public interface DataSourceService {
      */
     List<GDataset> listDataset(DataSourceInfo dataSourceInfo);
 
+    /**
+     * 根据数据源id获取数据源连接信息，然后获取数据源下的数据集
+     *
+     * @param datasourceId 数据源id
+     * @return 数据集集合
+     */
+    List<GDataset> listDataset(String datasourceId);
 }

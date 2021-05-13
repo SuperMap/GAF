@@ -17,10 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -44,10 +41,21 @@ public class DataSourceResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/list-dataset")
-    public MessageResult<List> getById(DataSourceInfo dataSourceInfo) {
+    public MessageResult<List<GDataset>> listDatasets(DataSourceInfo dataSourceInfo) {
         List<GDataset> result = dataSourceService.listDataset(dataSourceInfo);
-        return MessageResult.successe(List.class).data(result).status(200).message("查询成功").build();
+        return MessageResult.data(result).message("查询成功").build();
     }
+
+    @ApiOperation(value = "根据数据源id查找数据源下的数据集列表",notes = "数据源应该是空间数据源，若未非空间数据源则返回空集合")
+    @ApiImplicitParam(name = "datasourceId",value = "数据源id",paramType = "path",dataTypeClass = String.class)
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{datasourceId}/datasets")
+    public MessageResult<List<GDataset>> listDatasetsById(@PathParam("datasourceId") String datasourceId) {
+        List<GDataset> result = dataSourceService.listDataset(datasourceId);
+        return MessageResult.data(result).message("查询成功").build();
+    }
+
 
 
     @ApiOperation(value = "生成s3m切片", notes = "生成s3m切片")

@@ -73,3 +73,6 @@ hostservers:
       type: GENERALSERVICE
       username: admin
 
+gaf:
+  database:
+    secretKey: 1q2w3e4r5t6y7u8i
