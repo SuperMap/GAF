@@ -29,6 +29,10 @@ public final class DatasourceParser {
     public static Datasource parserDatasource(DataSourceInfo dataSourceInfo) {
         //TODO 增加多连接锁控制
         DatasourceConnectionInfo datasourceConnectionInfo = parserDatasourceConnectionInfo(dataSourceInfo);
+        return openDatasource(datasourceConnectionInfo);
+    }
+
+    public static Datasource openDatasource(DatasourceConnectionInfo datasourceConnectionInfo) {
         if (datasourceConnectionInfo == null) {
             logger.error("解析supermap数据源连接信息失败");
             throw new GafException("解析supermap数据源连接信息失败");
