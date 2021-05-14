@@ -5,10 +5,8 @@
 */
 package com.supermap.gaf.shiro.realms;
 
-import com.supermap.gaf.authority.commontype.AuthResourceApi;
-import com.supermap.gaf.authority.commontype.AuthResourceModule;
-import com.supermap.gaf.authority.commontype.AuthRole;
-import com.supermap.gaf.authority.commontype.AuthUser;
+import com.supermap.gaf.authority.client.AuthUserInfoDetailsClient;
+import com.supermap.gaf.authority.commontype.*;
 import com.supermap.gaf.authority.service.AuthAuthorizationQueryService;
 import com.supermap.gaf.authority.service.AuthUserQueryService;
 import com.supermap.gaf.shiro.JJWTUtils;
@@ -41,10 +39,7 @@ import java.util.Set;
 public class JWTTokenRealm extends AuthorizingRealm {
     @Autowired
     @Lazy
-    private AuthUserQueryService userQueryService;
-    @Autowired
-    @Lazy
-    private AuthAuthorizationQueryService authAuthorizationQueryService;
+    private AuthUserInfoDetailsClient userInfoDetailsClient;
 
     @Override
     public Class<?> getAuthenticationTokenClass() {
@@ -61,13 +56,15 @@ public class JWTTokenRealm extends AuthorizingRealm {
             String username = JJWTUtils.getUserNameFromJwsUntrusted(accessToken,"user_name");
 
             // 获取权限、租户、角色信息(新)
-            AuthUser authUser = userQueryService.getByUserName(username);
+            AuthUserInfoDetails userInfoDetails = userInfoDetailsClient.getAuthUserInfoDetails(username).getData();
+
+            AuthUser authUser = userInfoDetails.getAuthUser();
             String userId = authUser.getUserId();
             profile.setId(userId);
 
-            List<AuthResourceApi> authResourceApis = authAuthorizationQueryService.listAuthorizationApi(userId);
-            List<AuthResourceModule> authResourceModules = authAuthorizationQueryService.listAuthorizationModule(userId);
-            List<AuthRole> authRoles = authAuthorizationQueryService.listAuthorizationRole(userId);
+            List<AuthResourceApi> authResourceApis = userInfoDetails.getAuthResourceApiList();
+            List<AuthResourceModule> authResourceModules = userInfoDetails.getAuthResourceModuleList();
+            List<AuthRole> authRoles = userInfoDetails.getAuthRoleList();
             SecurityUtilsExt.recordKeycloakUser(profile,authUser,authResourceApis,authResourceModules,authRoles);
             final Pac4jPrincipal principal = new Pac4jPrincipal(Arrays.asList(new CommonProfile[] { profile }));
             return new SimpleAuthenticationInfo(principal, Boolean.TRUE, getName());

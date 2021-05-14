@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>com.supermap.gaf</groupId>
-            <artifactId>gaf-common-auth</artifactId>
+            <artifactId>gaf-common-utils</artifactId>
         </dependency>
     </dependencies>
 
