@@ -116,4 +116,10 @@ public class RootResource {
     }
 
 
+    @Path("/auth-user-details")
+    public Class<AuthUserInfoDetailsResource> authUserInfoDetailsResourceClass() {
+        return AuthUserInfoDetailsResource.class;
+    }
+
+
 }
