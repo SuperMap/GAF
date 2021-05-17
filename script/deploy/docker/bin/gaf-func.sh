@@ -101,9 +101,9 @@ sed_config_env(){
 #开启防火墙端口
 port(){
     for i in $*; do
-    	firewall-cmd --add-port=$i/tcp --permanent
+    	firewall-cmd --zone=public --add-port=$i/tcp --permanent
     done
-	service firewalld restart
+	firewall-cmd --reload
 }
 
 #开启gaf服务的防火墙端口
@@ -118,7 +118,6 @@ build_frontend() {
     mvn clean package -Dmaven.test.skip=true
 
     cd gaf-web
-    yarn cache clean
     cd common-gaf
     yarn install --update-checksums
     yarn link
@@ -135,6 +134,7 @@ build_frontend() {
     cd ..
 
     cd gaf-webapp
+    yarn cache clean
     yarn install --update-checksums
     yarn link common-gaf
     yarn link common-webbase
@@ -144,6 +144,7 @@ build_frontend() {
     cd ..
 
     cd gaf-mapapp
+    yarn cache clean
     yarn install --update-checksums
     yarn link common-gaf
     yarn link common-webbase
