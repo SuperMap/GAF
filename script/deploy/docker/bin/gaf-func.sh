@@ -118,7 +118,6 @@ build_frontend() {
     mvn clean package -Dmaven.test.skip=true
 
     cd gaf-web
-    yarn cache clean
     cd common-gaf
     yarn install --update-checksums
     yarn link
@@ -135,6 +134,7 @@ build_frontend() {
     cd ..
 
     cd gaf-webapp
+    yarn cache clean
     yarn install --update-checksums
     yarn link common-gaf
     yarn link common-webbase
@@ -144,6 +144,7 @@ build_frontend() {
     cd ..
 
     cd gaf-mapapp
+    yarn cache clean
     yarn install --update-checksums
     yarn link common-gaf
     yarn link common-webbase
