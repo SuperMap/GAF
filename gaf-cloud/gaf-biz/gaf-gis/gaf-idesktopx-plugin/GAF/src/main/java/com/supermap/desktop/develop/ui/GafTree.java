@@ -69,6 +69,7 @@ public class GafTree extends JTree {
         setCellRenderer(new TreeCellRender());
         setRootVisible(false);
         addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent evt) {
                 treeMousePressed(evt);
             }
@@ -249,7 +250,9 @@ public class GafTree extends JTree {
                     CommonUtils.downloadAsync("/datas/"+downloadPath.getFileName(),downloadPath,evt -> {
                         if (evt.getPropertyName().equals("progress")) {
                             Integer progress = (Integer) evt.getNewValue();
-                            System.out.println(downloadPath.getFileName().toString()+progress);
+                            if(progress%10==0){
+                                ApplicationContextUtils.getOutput().output("已下载"+downloadPath.getFileName().toString()+":"+progress+"%");
+                            }
                             if(progress==100){
                                 ApplicationContextUtils.getOutput().output(downloadPath.getFileName().toString()+"下载成功");
                                 WorkspaceUtilities.openWorkspace(connectionInfo,true);
@@ -297,17 +300,7 @@ public class GafTree extends JTree {
                     return;
                 }else if(re == 0) {
                     Path downloadPath = Paths.get(smFileChoose.getFilePath()+"/"+fileName.get());
-                    connectionInfo.setServer(downloadPath.toString());
-                    // todo: 执行下载
-                    CommonUtils.downloadAsync("/datas/"+downloadPath.getFileName(),downloadPath,evt -> {
-                        if (evt.getPropertyName().equals("progress")) {
-                            Integer progress = (Integer) evt.getNewValue();
-                            System.out.println(downloadPath.getFileName().toString()+progress);
-                            if(progress==100){
-                                ApplicationContextUtils.getOutput().output(downloadPath.getFileName().toString()+"下载成功");
-                            }
-                        }
-                    });
+
                     Path downloadPath2 = downloadPath;
                     if(downloadPath.toString().endsWith(".udb")) {
                         String uddFileName = fileName.get().substring(0,fileName.get().length()-1)+"d";
@@ -315,27 +308,17 @@ public class GafTree extends JTree {
                         CommonUtils.downloadAsync("/datas/"+uddDownloadPath.getFileName(),uddDownloadPath,evt -> {
                             if (evt.getPropertyName().equals("progress")) {
                                 Integer progress = (Integer) evt.getNewValue();
-                                System.out.println(uddDownloadPath.getFileName().toString()+progress);
+                                if(progress%10==0){
+                                    ApplicationContextUtils.getOutput().output("已下载"+uddDownloadPath.getFileName().toString()+":"+progress+"%");
+                                }
                                 if(progress==100){
                                     ApplicationContextUtils.getOutput().output(uddDownloadPath.getFileName().toString()+"下载成功");
-                                    // todo: 执行下载
-                                    try {
-                                        CommonUtils.downloadAsync("/datas/" + downloadPath.getFileName(), downloadPath, e -> {
-                                            if (e.getPropertyName().equals("progress")) {
-                                                Integer progre = (Integer) e.getNewValue();
-                                                if (progre == 100) {
-                                                    ApplicationContextUtils.getOutput().output(downloadPath.getFileName().toString()+"下载成功");
-                                                    ApplicationContextUtils.getWorkspace().getDatasources().open(connectionInfo);
-                                                    ApplicationContextUtils.getOutput().output("数据源打开成功！");
-                                                }
-                                            }
-                                        });
-                                    } catch (FileNotFoundException e) {
-                                        ApplicationContextUtils.getOutput().output(e.getMessage());
-                                    }
+                                    downloadAndOpen(downloadPath,connectionInfo);
                                 }
                             }
                         });
+                    }else{
+                        downloadAndOpen(downloadPath,connectionInfo);
                     }
                 }
             }else{
@@ -347,7 +330,28 @@ public class GafTree extends JTree {
         }catch (Throwable e) {
             ApplicationContextUtils.getOutput().output(e.getMessage());
         }
-
+    }
+    private void downloadAndOpen(Path downloadPath,DatasourceConnectionInfo connectionInfo){
+        try {
+            connectionInfo.setServer(downloadPath.toString());
+            CommonUtils.downloadAsync("/datas/"+downloadPath.getFileName(),downloadPath,evt -> {
+                if (evt.getPropertyName().equals("progress")) {
+                    Integer progress = (Integer) evt.getNewValue();
+                    if(progress%10==0){
+                        ApplicationContextUtils.getOutput().output("已下载"+downloadPath.getFileName().toString()+":"+progress+"%");
+                    }
+                    if(progress==100){
+                        ApplicationContextUtils.getOutput().output(downloadPath.getFileName().toString()+"下载成功");
+                        ApplicationContextUtils.getWorkspace().getDatasources().open(connectionInfo);
+                        ApplicationContextUtils.getOutput().output("数据源打开成功！");
+                    }
+                }
+            });
+        } catch (FileDownloadException e) {
+            ApplicationContextUtils.getOutput().output(e.getMessage()+"下载失败");
+        }catch (Throwable e) {
+            ApplicationContextUtils.getOutput().output(e.getMessage());
+        }
     }
     private void doubleClickHandler(DefaultMutableTreeNode node){
         if(node.getUserObject() instanceof WorkspaceConnectionInfo){

@@ -26,6 +26,13 @@
             <artifactId>gaf-common-sys-mgt</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.supermap.gaf</groupId>
+            <artifactId>gaf-authority-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
@@ -109,5 +116,6 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
+
     </dependencies>
 </project>

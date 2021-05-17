@@ -132,6 +132,7 @@ public class CommonUtils {
     }
 
     public static void uploadAsync(String targetPath, Path source, PropertyChangeListener listener)throws FileUploadException{
+        ApplicationContextUtils.getOutput().output("开始上传"+source.getFileName().toString());
         uploadAsync(targetPath,source,true,listener);
     }
     public static void uploadAsync(String targetPath, Path source, boolean quickUploadEnable, PropertyChangeListener listener) throws FileUploadException {
@@ -226,6 +227,7 @@ public class CommonUtils {
         String preSignedUrl = GafClient.instance().downloadPresignUrl(serverPath);
         FileDownloadWork downloadWork = new FileDownloadWork(preSignedUrl,localPath);
         downloadWork.addPropertyChangeListener(listener);
+        ApplicationContextUtils.getOutput().output("开始下载"+localPath.getFileName().toString());
         downloadWork.execute();
     }
     public static void downloadByPreSignedUrl(String preSignedUrl, Path path) throws FileDownloadException,FileNotFoundException{
@@ -395,6 +397,9 @@ public class CommonUtils {
                 CommonUtils.uploadAsync("/datas/"+wPath.getFileName().toString(),wPath,false,evt -> {
                     if (evt.getPropertyName().equals("progress")) {
                         Integer progress = (Integer) evt.getNewValue();
+                        if(progress%10==0){
+                            ApplicationContextUtils.getOutput().output("已上传"+tmp.getFileName().toString()+":"+progress+"%");
+                        }
                         if(progress==100){
                             try {
                                 ApplicationContextUtils.getOutput().output(tmp.getFileName().toString()+"上传完成");
@@ -466,6 +471,9 @@ public class CommonUtils {
             CommonUtils.uploadAsync("/datas/"+path.getFileName().toString(),path,evt -> {
                 if (evt.getPropertyName().equals("progress")) {
                     Integer progress = (Integer) evt.getNewValue();
+                    if(progress%10==0){
+                        ApplicationContextUtils.getOutput().output("已上传"+path.getFileName().toString()+":"+progress+"%");
+                    }
                     if(progress==100){
                         ApplicationContextUtils.getOutput().output(path.getFileName().toString()+"上传完成");
                     }
@@ -479,6 +487,9 @@ public class CommonUtils {
                     CommonUtils.uploadAsync("/datas/" + uddPath.getFileName().toString(), uddPath, evt -> {
                         if (evt.getPropertyName().equals("progress")) {
                             Integer progress = (Integer) evt.getNewValue();
+                            if(progress%10==0){
+                                ApplicationContextUtils.getOutput().output("已上传"+uddPath.getFileName().toString()+":"+progress+"%");
+                            }
                             if (progress == 100) {
                                 ApplicationContextUtils.getOutput().output(uddPath.getFileName().toString() + "上传完成");
                             }
