@@ -101,9 +101,9 @@ sed_config_env(){
 #开启防火墙端口
 port(){
     for i in $*; do
-    	firewall-cmd --add-port=$i/tcp --permanent
+    	firewall-cmd --zone=public --add-port=$i/tcp --permanent
     done
-	service firewalld restart
+	firewall-cmd --reload
 }
 
 #开启gaf服务的防火墙端口
