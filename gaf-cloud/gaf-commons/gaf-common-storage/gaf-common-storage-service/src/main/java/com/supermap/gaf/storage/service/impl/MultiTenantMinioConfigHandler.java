@@ -16,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.security.sasl.AuthenticationException;
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,16 +55,12 @@ public class MultiTenantMinioConfigHandler implements MinioConfigHandlerI {
 
     @Override
     public String getVolumeRootPath() throws AuthenticationException {
-        File[] roots = File.listRoots();
+        Path root = Paths.get(tenantMinioConfigService.getMountRoot());
         String subPath = "";
         if(tenantMinioConfigService.getMode()!= NONE){
             subPath = tenantInfoI.getTenantId();
         }
-        if(roots == null || roots.length<=0){
-            return Paths.get("/data-s3fs/"+subPath).toString();
-        }else{
-            return roots[0].toPath().resolve("data-s3fs/"+subPath).toString();
-        }
+        return root.resolve(subPath).toString();
     }
 
     @Override
@@ -93,6 +90,7 @@ public class MultiTenantMinioConfigHandler implements MinioConfigHandlerI {
         if(CollectionUtils.isEmpty(configs)){
             return "";
         }
+        String root = tenantMinioConfigService.getMountRoot();
         StringBuilder sb = new StringBuilder("[config]\n");
         sb.append("section=").append(StringUtils.join(configs.keySet(),",")).append("\n");
         for(String configName:configs.keySet()){
@@ -103,9 +101,9 @@ public class MultiTenantMinioConfigHandler implements MinioConfigHandlerI {
             sb.append(String.format("secret=%s\n",config.getSecretKey()));
             sb.append(String.format("bucket=%s\n",config.getBucketName()));
             if("single".equals(configName)){
-                sb.append("mntPoint=/data-s3fs\n");
+                sb.append(String.format("mntPoint=%s\n",root));
             }else{
-                sb.append(String.format("mntPoint=/data-s3fs/%s\n",configName));
+                sb.append(String.format("mntPoint=%s/%s\n",root,configName));
             }
         }
         return new String(sb);

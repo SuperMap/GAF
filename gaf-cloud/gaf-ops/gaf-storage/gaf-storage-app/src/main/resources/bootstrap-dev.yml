@@ -22,3 +22,12 @@ spring:
       uri: http://192.168.11.118:31576
       label: master
       profile: prod
+minio:
+  single-config:
+    service-endpoint: http://192.168.11.118:9000
+    access-key: admin
+    secret-key: admin123456
+    bucket-name: gaf
+#    mode: SINGLE_NODE_MULTI_PATH
+  mount-root: e:/data-s3fs
+  mode: NONE
