@@ -57,4 +57,9 @@ public class TenantMinioConfigServiceImpl implements TenantMinioConfigService {
         }
         return tenantMinioConfig.getConfig();
     }
+
+    @Override
+    public String getMountRoot() {
+        return tenantMinioConfig.getMountRoot();
+    }
 }

@@ -22,8 +22,9 @@ import java.util.Map;
 public class TenantMinioConfig {
     private Map<String, MinioConfig> config;
     private MinioConfig singleConfig;
-    private TenantMode mode = TenantMode.MULTI_NODE;
+    private TenantMode mode = TenantMode.SINGLE_NODE_MULTI_PATH;
     public void setMode(String mode) {
         this.mode = TenantMode.valueOf(mode);
     }
+    private String mountRoot="/data-s3fs";
 }

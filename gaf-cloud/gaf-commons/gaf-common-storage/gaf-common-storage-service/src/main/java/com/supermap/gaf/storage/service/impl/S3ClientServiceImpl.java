@@ -83,6 +83,10 @@ public class S3ClientServiceImpl implements S3ClientService {
             try{
                 s3Client.createBucket(minioConfig.getBucketName());
                 initBucketPolicy(s3Client,minioConfig.getBucketName());
+            }catch (AmazonS3Exception e){
+                if(e.getStatusCode()!=409){
+                    e.printStackTrace();
+                }
             }catch (Exception e){
                 logger.info("已初始化桶:{}",minioConfig.getBucketName());
             }
