@@ -36,6 +36,8 @@ public class DictDataNode extends DictData implements Serializable , ITreeNode<S
     @ApiModelProperty("是否是叶子节点")
     private boolean leaf;
 
+    @ApiModelProperty("层级")
+    private Integer level;
 
     @Override
     public String getKey() {
@@ -78,6 +80,12 @@ public class DictDataNode extends DictData implements Serializable , ITreeNode<S
         this.leaf = leaf;
     }
 
+    public Integer getLevel() {
+        return level;
+    }
 
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
 }
 
