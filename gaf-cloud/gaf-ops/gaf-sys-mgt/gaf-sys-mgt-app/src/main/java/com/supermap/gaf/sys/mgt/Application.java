@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableDiscoveryClient
 @EnableTransactionManagement
 @EnableAspectJAutoProxy(exposeProxy = true)
+@EnableFeignClients(basePackages = "com.supermap.gaf")
 public class Application {
 
     public static void main(String[] args) {
