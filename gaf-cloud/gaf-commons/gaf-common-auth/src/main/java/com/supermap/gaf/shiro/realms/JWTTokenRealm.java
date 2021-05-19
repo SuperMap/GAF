@@ -5,10 +5,7 @@
 */
 package com.supermap.gaf.shiro.realms;
 
-import com.supermap.gaf.authority.client.AuthUserInfoDetailsClient;
 import com.supermap.gaf.authority.commontype.*;
-import com.supermap.gaf.authority.service.AuthAuthorizationQueryService;
-import com.supermap.gaf.authority.service.AuthUserQueryService;
 import com.supermap.gaf.shiro.JJWTUtils;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.JWTToken;
@@ -23,8 +20,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.oauth.profile.OAuth20Profile;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,9 +32,11 @@ import java.util.Set;
  * @date:2021/3/25
 */
 public class JWTTokenRealm extends AuthorizingRealm {
-    @Autowired
-    @Lazy
-    private AuthUserInfoDetailsClient userInfoDetailsClient;
+    private final IauthUserInfoDetails iauthUserInfoDetails;
+
+    public JWTTokenRealm(IauthUserInfoDetails iauthUserInfoDetails) {
+        this.iauthUserInfoDetails = iauthUserInfoDetails;
+    }
 
     @Override
     public Class<?> getAuthenticationTokenClass() {
@@ -56,7 +53,7 @@ public class JWTTokenRealm extends AuthorizingRealm {
             String username = JJWTUtils.getUserNameFromJwsUntrusted(accessToken,"user_name");
 
             // 获取权限、租户、角色信息(新)
-            AuthUserInfoDetails userInfoDetails = userInfoDetailsClient.getAuthUserInfoDetails(username).getData();
+            AuthUserInfoDetails userInfoDetails = iauthUserInfoDetails.getAuthUserInfoDetails(username);
 
             AuthUser authUser = userInfoDetails.getAuthUser();
             String userId = authUser.getUserId();

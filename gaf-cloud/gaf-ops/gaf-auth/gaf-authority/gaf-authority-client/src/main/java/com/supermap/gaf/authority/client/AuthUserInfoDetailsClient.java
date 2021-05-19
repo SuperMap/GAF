@@ -6,6 +6,7 @@
 package com.supermap.gaf.authority.client;
 
 import com.supermap.gaf.authority.commontype.AuthUserInfoDetails;
+import com.supermap.gaf.authority.commontype.IauthUserInfoDetails;
 import com.supermap.gaf.commontypes.MessageResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
  * @author dqc
  */
 @FeignClient(name = "GAF-AUTHORITY", contextId = "authUserInfoClient")
-public interface AuthUserInfoDetailsClient {
+public interface AuthUserInfoDetailsClient extends IauthUserInfoDetails {
     /**
      * 查询用户信息的调用接口
      * @return
      */
     @GetMapping("/authority/auth-user-details")
-    MessageResult<AuthUserInfoDetails> getAuthUserInfoDetails(@RequestParam("username")String username);
+    AuthUserInfoDetails getAuthUserInfoDetails(@RequestParam("username")String username);
 
 }
