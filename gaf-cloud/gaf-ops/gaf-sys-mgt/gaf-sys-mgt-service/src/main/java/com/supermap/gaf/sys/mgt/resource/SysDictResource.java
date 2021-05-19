@@ -8,6 +8,7 @@ package com.supermap.gaf.sys.mgt.resource;
 import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.commontypes.Page;
+import com.supermap.gaf.sys.mgt.client.SysDictClient;
 import com.supermap.gaf.sys.mgt.commontype.SysDict;
 import com.supermap.gaf.sys.mgt.model.DictData;
 import com.supermap.gaf.sys.mgt.model.DictDataNode;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @Api(value = "字典接口")
-public class SysDictResource {
+public class SysDictResource implements SysDictClient {
 
 
     private final SysDictService sysDictService;
@@ -57,6 +58,7 @@ public class SysDictResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{dictTypeCode}/tree")
+    @Override
     public MessageResult<List<DictDataNode>> getDictDataTree(@PathParam("dictTypeCode") String dictTypeCode,
                                                              @QueryParam("value") String value,
                                                              @QueryParam("level") @DefaultValue("0") int level,
@@ -84,6 +86,7 @@ public class SysDictResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{dictTypeCode}/dict-data")
+    @Override
     public MessageResult<List<DictData>> getDictData(@NotEmpty @PathParam("dictTypeCode") String dictTypeCode,
                                                      @DefaultValue("false") @QueryParam("onlyVisible") Boolean onlyVisible) {
         MessageResult<List<DictData>> result = new MessageResult<>();
@@ -114,6 +117,7 @@ public class SysDictResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{dictTypeCode}/{value}/path")
+    @Override
     public MessageResult<List<DictData>> getPath(@NotEmpty @PathParam("dictTypeCode") String dictTypeCode,
                                                  @NotEmpty @PathParam("value") String value) {
         MessageResult<List<DictData>> result = new MessageResult<>();
@@ -136,6 +140,7 @@ public class SysDictResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{dictTypeCode}/detail")
+    @Override
     public MessageResult<DictType> getByTypeCode(@NotEmpty @PathParam("dictTypeCode") String dictTypeCode) {
         DictType dictType = sysDictService.getDictType(dictTypeCode);
         return MessageResult.successe(DictType.class).data(dictType).build();
