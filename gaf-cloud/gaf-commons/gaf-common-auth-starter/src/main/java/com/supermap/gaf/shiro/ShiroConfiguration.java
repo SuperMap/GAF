@@ -12,9 +12,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.sasl.AuthenticationException;
 import javax.servlet.Filter;
 
+import com.supermap.gaf.authority.client.AuthUserInfoDetailsClient;
+import com.supermap.gaf.authority.commontype.IauthUserInfoDetails;
+import com.supermap.gaf.authority.service.impl.AuthUserInfoDetailsDbImpl;
 import com.supermap.gaf.shiro.handler.TenantInfoImpl;
 import com.supermap.gaf.storage.spi.TenantInfoI;
 import org.apache.commons.collections4.CollectionUtils;
@@ -47,9 +49,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.*;
 
 import com.nimbusds.jose.JWSAlgorithm;
 import com.supermap.gaf.shiro.config.KeycloakConfig;
@@ -60,7 +60,6 @@ import com.supermap.gaf.utils.LogUtil;
 import io.buji.pac4j.filter.CallbackFilter;
 import io.buji.pac4j.filter.LogoutFilter;
 import io.buji.pac4j.filter.SecurityFilter;
-import org.springframework.context.annotation.Lazy;
 
 /**
  * shiro全局配置类
@@ -87,10 +86,23 @@ public class ShiroConfiguration {
     @Autowired
     private ShiroConfig shiroConfig;
 
+    @Autowired
+    private AuthUserInfoDetailsClient userInfoDetailsClient;
+    @Autowired
+    private AuthUserInfoDetailsDbImpl authUserInfoDetailsDb;
+
 
     @Bean
-    public JWTTokenRealm jwtTokenRealm() {
-        JWTTokenRealm tokenRealm = new JWTTokenRealm();
+    @ConditionalOnProperty(name = "shiro.jwt-user-details", havingValue = "db", matchIfMissing = true)
+    public JWTTokenRealm jwtTokenRealmDb() {
+        JWTTokenRealm tokenRealm = new JWTTokenRealm(authUserInfoDetailsDb);
+        return tokenRealm;
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "shiro.jwt-user-details", havingValue = "client", matchIfMissing = false)
+    public JWTTokenRealm jwtTokenRealmClient() {
+        JWTTokenRealm tokenRealm = new JWTTokenRealm(userInfoDetailsClient);
         return tokenRealm;
     }
 
