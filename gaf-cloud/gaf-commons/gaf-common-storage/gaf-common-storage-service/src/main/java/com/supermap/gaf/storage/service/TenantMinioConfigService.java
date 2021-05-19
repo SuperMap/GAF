@@ -38,4 +38,9 @@ public interface TenantMinioConfigService {
      * @return the config
      */
     Map<String,MinioConfig> getConfig() throws AuthenticationException;
+
+
+    default String getMountRoot(){
+        return "/data-s3fs";
+    }
 }

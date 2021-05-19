@@ -134,6 +134,7 @@ public class SysDictServiceImpl implements SysDictService {
         if(dictValue == null) {
             if(level != 0) {
                 TreeUtil.deepFirstTraverseTree(all, (dictDataNode, currentLevel) -> {
+                    dictDataNode.setLevel(currentLevel);
                     if(currentLevel.equals(level)) {
                         dictDataNode.setChildren(null);
                         return TreeUtil.VisitResult.SKIP_SUBTREE;
@@ -149,6 +150,7 @@ public class SysDictServiceImpl implements SysDictService {
         }
         if(level != 0) {
             TreeUtil.deepFirstTraverseTree(node.getChildren(), (dictDataNode, currentLevel) -> {
+                dictDataNode.setLevel(currentLevel);
                 if(currentLevel.equals(level)) {
                     dictDataNode.setChildren(null);
                     return TreeUtil.VisitResult.SKIP_SUBTREE;
@@ -392,7 +394,7 @@ public class SysDictServiceImpl implements SysDictService {
     @Transactional(rollbackFor = Exception.class)
 	@Override
     public SysDict deleteSysDict(String dataDictId){
-        com.supermap.gaf.sys.mgt.commontype.SysDict sysDict = sysDictMapper.select(dataDictId);
+        SysDict sysDict = sysDictMapper.select(dataDictId);
         if(Objects.isNull(sysDict)) {
             return null;
         }
