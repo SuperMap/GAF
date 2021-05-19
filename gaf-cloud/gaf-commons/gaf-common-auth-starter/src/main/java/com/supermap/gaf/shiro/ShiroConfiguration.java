@@ -86,7 +86,7 @@ public class ShiroConfiguration {
     @Autowired
     private ShiroConfig shiroConfig;
 
-    @Autowired
+    @Autowired(required = false)
     private AuthUserInfoDetailsClient userInfoDetailsClient;
     @Autowired
     private AuthUserInfoDetailsDbImpl authUserInfoDetailsDb;
