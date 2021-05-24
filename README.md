@@ -50,7 +50,7 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 
 ### Step 2:克隆代码
 
-`git clone https://github.com/SuperMap/GAF`
+`git clone https://gitee.com/supermapgaf/GAF`
 
 ### Step 3:源码构建部署
 
