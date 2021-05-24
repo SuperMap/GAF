@@ -352,6 +352,9 @@ export default {
           const rst = await this.$axios.post(url, data)
           if (rst.data.isSuccessed) {
             this.$message.success('添加成功')
+            if (this.isFirstLevel) {
+              this.$emit('updataRootId', rst.data.data.catalogId)
+            }
             this.$emit('add-success', rst.data.data)
           } else {
             this.$message.error(`添加失败,原因:${rst.data.message}`)

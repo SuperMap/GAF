@@ -77,6 +77,7 @@
           :root-catalog-id="rootCatalogId"
           :biz-types="bizTypes"
           @backToList="backToList"
+          @updataRootId="updataRootId"
         ></webgis-catalog-layer>
       </div>
     </div>
@@ -168,6 +169,9 @@
     this.getBizTypes()
   },
   methods: {
+    updataRootId(rootId) {
+      this.rootCatalogId = rootId
+    },
     // 新增
     onAdd() {
       this.rootCatalogId = null
@@ -218,6 +222,7 @@
             this.pagination.current--
           }
           this.getList()
+          this.selectedRowKeys = []
         })
       } else {
         this.$message.warn('请选择您要删除的内容')
