@@ -9,6 +9,7 @@
       @beforeAddSubCatalog="beforeAddSubCatalog"
       :openLeaf="openLeaf"
       @LayersSelected="LayersSelected"
+      @updataRootId="updataRootId"
     >
       <template v-slot:cmanagement="{ iconNodeType }">
         <a-icon :type="iconNodeType.type === 12 ? 'profile' : 'menu'"></a-icon>
@@ -55,6 +56,9 @@ export default {
     backToList() {
       this.$emit('backToList')
     },
+    updataRootId(rootId) {
+      this.$emit('updataRootId', rootId)
+    },
     onSelected(selectedKeys) {
       this.layerCatalogId = selectedKeys[0]
       // this.layerCatalogPath = path
@@ -64,13 +68,10 @@ export default {
       .get(`/map/webgis-catalog-layers/count/${node.key}`)
       .then((p) => {
         const result = p.data
-        console.log(result,'result')
         if (result.isSuccessed) {
           if (result.data && result.data > 0) {
-            console.log('sssss1')
             this.openLeaf = false
           } else {
-            console.log('sssss2')
             this.openLeaf = true
           }
         }

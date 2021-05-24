@@ -57,6 +57,7 @@
             @update-success="afterFormUpdateSuccess"
             @delete-success="afterDeleteSuccess"
             @cancleWhenAdd="cancleWhenAdd"
+            @updataRootId="updataRootId"
           ></add-edit-form>
           </div>
         </a-tab-pane>
@@ -131,6 +132,14 @@
       openadd: false
     }
   },
+  watch:{
+    async rootCatalogId(newvalue){
+      if (newvalue && newvalue !== '') {
+        await this.getTreeByRoot(newvalue)
+        this.LeafList = this.dataOfTree[0].children
+      }
+    }
+  },
   computed: {
     addButtonName() {
       if (this.dataOfTree && this.dataOfTree.length > 0) {
@@ -160,6 +169,9 @@
     // this.getNodesAndSetByType(this.catalogType)
   },
   methods: {
+    updataRootId(rootId) {
+      this.$emit('updataRootId', rootId)
+    },
     // 返回
     backToList() {
       this.$emit('backToList')
