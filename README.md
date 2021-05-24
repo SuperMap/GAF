@@ -86,10 +86,10 @@ GAF帮助GIS应用开发商构建大中型（省市级）GIS应用平台，支�
 
 ## 技术文档
 
-https://github.com/SuperMap/GAF/wiki/
+wiki
 
 
-[《开发者指南-后端》](https://github.com/SuperMap/GAF/wiki/%E3%80%8A%E5%BC%80%E5%8F%91%E8%80%85%E6%8C%87%E5%8D%97-%E5%90%8E%E7%AB%AF%E3%80%8B)
+[《开发者指南-后端》](https://gitee.com/supermapgaf/GAF/wikis)
 
 ## 开源协议
 Apache Licence 2.0。
