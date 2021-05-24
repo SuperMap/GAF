@@ -40,7 +40,7 @@
             allow-clear
             @change="handleChange"
           >
-            <a-select-option :value="''">-全部-</a-select-option>
+            <!-- <a-select-option :value="''">-全部-</a-select-option> -->
             <a-select-option :value="'1'">-基础类-</a-select-option>
             <a-select-option :value="'2'">-业务类-</a-select-option>
           </a-select>
@@ -498,6 +498,11 @@ export default {
             }
           }
           data.webgisToolbarButtons = notEditButtons;
+          if (data.webgisToolbarButtons.length === 0) {
+            this.$message.error(`未选择按钮`);
+            event.preventDefault();
+            return false;
+          }
           const urlPost = `/map/webgis-toolbars`;
           const rst = await this.$axios.post(urlPost, data);
           if (rst.data.isSuccessed) {

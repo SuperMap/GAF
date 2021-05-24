@@ -197,7 +197,7 @@ export default {
     columns: function() {
       const columns = [
         {
-          title: '岗位名称',
+          title: '类别名称',
           dataIndex: 'title',
           key: 'title',
           // fixed: 'left',

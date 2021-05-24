@@ -205,7 +205,7 @@ export default {
     columns: function() {
       const columns = [
         {
-          title: '部门名称',
+          title: '目录名称',
           dataIndex: 'title',
           key: 'title',
           // fixed: 'left',
