@@ -58,7 +58,7 @@ GAF平台提供了GIS应用开发模板，方便GIS应用开发者通过模板�
 
 镜像仓库地址：https://github.com/SuperMap/GAF
 
-若您拉取代码、提交问题和贡献代码，请到主代码仓库中操作，谢谢。
+若您要拉取代码(pull)、提交问题(new issue)和贡献代码（pull request），请到主代码仓库中操作，谢谢。
 
 
 ### Step 3:源码构建部署
