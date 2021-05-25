@@ -50,7 +50,7 @@ GAF平台提供了GIS应用开发模板，方便GIS应用开发者通过模板�
 
 ### Step 2:克隆代码
 
-`git clone https://gitee.com/supermapgaf/GAF`
+`git clone https://gitee.com/supermapgaf/GAF 或git clone https://github.com/SuperMap/GAF`
 
 ### Step 3:源码构建部署
 
