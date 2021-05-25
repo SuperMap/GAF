@@ -51,7 +51,15 @@ GAF平台提供了GIS应用开发模板，方便GIS应用开发者通过模板�
 ### Step 2:克隆代码
 
 `git clone https://gitee.com/supermapgaf/GAF`
-`或git clone https://github.com/SuperMap/GAF`
+
+特别提示：GAF有两个代码仓库，
+
+主代码仓库地址：https://gitee.com/supermapgaf/GAF
+
+镜像仓库地址：https://github.com/SuperMap/GAF
+
+若您要拉取代码(pull)、提交问题(new issue)和贡献代码（pull request），请到主代码仓库中操作，谢谢。
+
 
 ### Step 3:源码构建部署
 
@@ -87,7 +95,7 @@ GAF平台提供了GIS应用开发模板，方便GIS应用开发者通过模板�
 
 ## 技术文档
 
-开发者指南(https://gitee.com/supermapgaf/GAF/wikis)
+[开发者指南](https://gitee.com/supermapgaf/GAF/wikis)
 
 ## 开源协议
 Apache Licence 2.0。
