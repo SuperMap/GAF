@@ -668,3 +668,10 @@ button.ant-modal-close:hover {
 .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected {
   background-color: rgb(240, 240, 240);
 }
+
+/*  拖动条样式  */
+::-webkit-scrollbar:horizontal   {
+  width: 16px;
+  height: 5px;
+  background-color: #f5f5f5;
+}

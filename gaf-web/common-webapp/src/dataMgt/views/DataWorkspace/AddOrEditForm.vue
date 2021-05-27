@@ -77,6 +77,7 @@
             text="选择" :dir="dirPath"
             minioServiceUrl="/storage/file-storage/"
             @uploadComplate="uploadChange"
+            @fileRemove="fileRemove"
           ></gaf-upload>
         </a-form-item>
         <!-- <a-form-item v-if="!isfiletype" label="服务器地址">
@@ -300,6 +301,11 @@
     uploadChange(file) {
       this.addOrEditForm.setFieldsValue({
         server: file.name
+      })
+    },
+    fileRemove() {
+      this.addOrEditForm.setFieldsValue({
+        server: ''
       })
     },
     moment,
