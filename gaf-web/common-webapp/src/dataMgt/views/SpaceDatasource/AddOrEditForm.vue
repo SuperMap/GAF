@@ -64,7 +64,7 @@
             :load-data="loadData"
             placeholder="请选择数据源类型"
             change-on-select
-            @change="onChange4"
+            @change="typeCodeChange"
           />
         </a-form-item>
 
@@ -345,7 +345,7 @@
             ]"
             :options="option4"
             placeholder="请选择数据源类型"
-            @change="onChange4"
+            @change="typeCodeChange"
           />
         </a-form-item>
         <a-form-item v-show="!isfiletype" label="文件路径">
@@ -808,7 +808,7 @@ export default {
       }
     },
     //根据数据源类型级联change事件判断是否为文件类型
-    onChange4(value) {
+    typeCodeChange(value) {
       if (value[0] === "file") {
         this.isfiletype = false
       } else {
