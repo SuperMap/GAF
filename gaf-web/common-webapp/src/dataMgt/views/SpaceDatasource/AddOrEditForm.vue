@@ -307,7 +307,6 @@
             ]"
             checked-children="是"
             un-checked-children="否"
-            @change="switchChange"
           />
         </a-form-item>
         <a-form-item v-if="isSpatialdb" label="数据源分类">
@@ -349,7 +348,7 @@
             @change="onChange4"
           />
         </a-form-item>
-        <a-form-item v-if="!isfiletype" label="文件路径">
+        <a-form-item v-show="!isfiletype" label="文件路径">
           <a-input
             :disabled="true"
             v-decorator="[
@@ -830,6 +829,7 @@ export default {
     // },
     //上传组件uploadComplate事件给文件路径赋值
     uploadChange(data) {
+      console.log(this.addOrEditForm)
       this.addOrEditForm.setFieldsValue({
         addr: data.name
       })
