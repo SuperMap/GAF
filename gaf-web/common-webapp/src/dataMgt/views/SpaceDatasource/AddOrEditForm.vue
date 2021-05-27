@@ -608,7 +608,7 @@ export default {
         { value: 'SQLSERVER', label: 'SQLSERVER' }
       ],
       //是否文件类型
-      isfiletype: false,
+      isfiletype: true,
        //是否数据库类型
       isSpatialdb: true,
     }
