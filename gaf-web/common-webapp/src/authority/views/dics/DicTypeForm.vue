@@ -74,6 +74,7 @@
         <a-form-item label="排序序号">
           <a-input-number
             v-decorator="['seq']"
+            :precision="0"
             :min="1"
           />
         </a-form-item>
