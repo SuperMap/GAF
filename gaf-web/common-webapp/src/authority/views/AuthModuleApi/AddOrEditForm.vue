@@ -67,6 +67,8 @@
         <a-form-item label="排序序号">
           <a-input-number
             :disabled="operation === 1"
+            :precision="0"
+            :min="1"
             v-decorator="['sortSn']"
           />
         </a-form-item>

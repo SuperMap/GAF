@@ -55,6 +55,8 @@
           v-model="configInfo.index"
           class="fullWidth"
           size="small"
+          :precision="0"
+          :min="1"
         />
       </a-col>
     </a-row>

@@ -224,6 +224,9 @@
 
 .table tr td {
   word-wrap: break-word;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .table tr:nth-child(2n+1) {

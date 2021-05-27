@@ -125,7 +125,7 @@
             allow-clear
           />
         </a-form-item>
-        <a-form-item v-if="!isfiletype" label="文件路径">
+        <a-form-item v-if="!isfiletype && operation === 1" label="文件路径">
           <a-input
             :disabled="operation === 1"
             v-decorator="[
@@ -351,7 +351,7 @@
         </a-form-item>
         <a-form-item v-if="!isfiletype" label="文件路径">
           <a-input
-            :disabled="operation === 1"
+            :disabled="true"
             v-decorator="[
               'addr',
               {
@@ -367,7 +367,7 @@
             allow-clear
             style="width:79%"
           />
-          <gaf-upload accept=".ubd,.udbx,.udd"  text="选择" dir="datas/" minioServiceUrl="/storage/file-storage/" @uploadComplate="uploadChange"></gaf-upload>
+          <gaf-upload @fileRemove="fileRemove" accept=".ubd,.udbx,.udd"  text="选择" dir="datas/" minioServiceUrl="/storage/file-storage/" @uploadComplate="uploadChange"></gaf-upload>
         </a-form-item>
 
 
@@ -608,7 +608,7 @@ export default {
         { value: 'SQLSERVER', label: 'SQLSERVER' }
       ],
       //是否文件类型
-      isfiletype: true,
+      isfiletype: false,
        //是否数据库类型
       isSpatialdb: true,
     }
@@ -834,6 +834,11 @@ export default {
         addr: data.name
       })
     },
+    fileRemove() {
+      this.addOrEditForm.setFieldsValue({
+        addr: ''
+      })
+    }
   }
 }
 </script>
