@@ -430,9 +430,7 @@ export default {
       delete newEditData.updatedBy
       delete newEditData.postName
       if (newEditData.lastLoginTime) {
-        console.log(newEditData.lastLoginTime,'1')
-        newEditData.lastLoginTime = moment(new Date(newEditData.lastLoginTime)).utc().zone(+0).format('YYYY-MM-DD HH:mm:ss')
-        console.log(newEditData.lastLoginTime,'2')
+        newEditData.lastLoginTime = moment(new Date(newEditData.lastLoginTime))
       }
       if (newEditData.expirationTime) {
         newEditData.expirationTime = moment(
@@ -468,8 +466,7 @@ export default {
       }
       callback()
     },
-    departmentChange(value, label, extra) {
-      console.log('value', value, label, extra)
+    departmentChange(value) {
       this.addOrEditForm.setFieldsValue({ postId: null })
       this.getPostList(value)
     },
@@ -479,7 +476,6 @@ export default {
       const res = await this.$axios.$get(url)
       if (res.isSuccessed) {
         const treeData = this.convertToTree(res.data)
-        console.log('treeData', treeData)
         this.deepFirstTraverseTree(
           { key: '0' },
           treeData,

@@ -69,6 +69,9 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         if (StringUtils.isEmpty(secretKey)) {
             throw new GafException("未配置数据库密码秘钥");
         }
+        if(StringUtils.isEmpty(text)) {
+            return text;
+        }
         byte[] key = secretKey.getBytes(StandardCharsets.UTF_8);
         if (key.length != LENGTH_16 && key.length != LENGTH_32) {
             throw new GafException("数据库密码秘钥长度非法，应为16位或32位非中文字符");
@@ -141,7 +144,9 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
 		if (sysResourceDatasources != null && sysResourceDatasources.size() > 0) {
 	        sysResourceDatasources.forEach(sysResourceDatasource -> {
 				sysResourceDatasource.setDatasourceId(UUID.randomUUID().toString());
-                sysResourceDatasource.setPassword(encrypt(sysResourceDatasource.getPassword(), secretKey));
+				if(!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
+                    sysResourceDatasource.setPassword(encrypt(sysResourceDatasource.getPassword(), secretKey));
+                }
             });
             sysResourceDatasourceMapper.batchInsert(sysResourceDatasources);
         }
@@ -160,7 +165,9 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
 	
 	@Override
     public SysResourceDatasource updateSysResourceDatasource(SysResourceDatasource sysResourceDatasource){
-        sysResourceDatasource.setPassword(encrypt(sysResourceDatasource.getPassword(), secretKey) );
+        if(!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
+            sysResourceDatasource.setPassword(encrypt(sysResourceDatasource.getPassword(), secretKey) );
+        }
         sysResourceDatasourceMapper.update(sysResourceDatasource);
         return sysResourceDatasource;
     }
