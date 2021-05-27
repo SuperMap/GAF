@@ -53,7 +53,7 @@
         </a-form-item>
         <a-form-item  :label="isfiletype ? '工作空间文件' : '服务器地址'">
           <a-input
-            :disabled="operation === 1 || operation === 3"
+            :disabled="(operation === 3 || isfiletype) ? true : false"
             v-decorator="[
               'server',
               {

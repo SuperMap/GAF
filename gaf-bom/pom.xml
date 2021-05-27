@@ -1768,7 +1768,7 @@
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-kinesis</artifactId>
-                <version>RELEASE</version>
+                <version>1.11.1024</version>
             </dependency>
             <dependency>
                 <groupId>org.liquibase</groupId>
