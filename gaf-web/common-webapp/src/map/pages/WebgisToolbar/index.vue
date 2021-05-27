@@ -7,10 +7,18 @@
             <a-icon type="plus" />
             <span>新增</span>
           </button>
-          <button class="btn-fun red" @click="batchDel">
-            <a-icon type="delete" />
-            <span>批量删除</span>
-          </button>
+          <a-popconfirm
+            class="btn-fun red"
+            title="删除后无法恢复，确认是否继续?"
+            ok-text="确认"
+            cancel-text="取消"
+            @confirm="() => batchDel()"
+          >
+            <button class="btn-fun red">
+              <a-icon type="delete" />
+              <span>批量删除</span>
+            </button>
+          </a-popconfirm>
         </template>
         <template #filter>
           <div style="margin-top: 5px">
@@ -326,6 +334,7 @@ export default {
             this.pagination.current--
           }
           this.getList()
+          this.selectedRowKeys = []
         })
       } else {
         this.$message.warn('请选择您要删除的内容')

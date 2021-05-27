@@ -9,10 +9,18 @@
           >
            <a-icon type="plus" />新增按钮
           </button>
-          <button class="btn-fun red" @click="batchDel">
-            <a-icon type="delete" />
-            <span>批量删除</span>
-          </button>
+          <a-popconfirm
+            class="btn-fun red"
+            title="删除后无法恢复，确认是否继续?"
+            ok-text="确认"
+            cancel-text="取消"
+            @confirm="() => batchDel()"
+          >
+            <button class="btn-fun red">
+              <a-icon type="delete" />
+              <span>批量删除</span>
+            </button>
+          </a-popconfirm>
         </template>
         <template #filter>
           <a-select
@@ -237,11 +245,11 @@ export default {
     handleSearchFieldChange(value) {
       this.searchedColumn = value
     },
-    async handleFilterChange(value) {
-      if (value === '基础类') {
+    async onSearch(value) {
+      if (value === '基础类' && this.searchedColumn === 'type') {
         value = '1'
       }
-      if (value === '业务类') {
+      if (value === '业务类' && this.searchedColumn === 'type') {
         value = '2'
       }
       this.searchText = value
@@ -249,11 +257,11 @@ export default {
       await this.getList()
     },
     // 搜索查询
-    async onSearch(value) {
-      this.searchText = value
-      this.pagination.current = 1
-      await this.getList()
-    },
+    // async onSearch(value) {
+    //   this.searchText = value
+    //   this.pagination.current = 1
+    //   await this.getList()
+    // },
     /* handleSearch(selectedKeys, confirm, key, clearFilters) {
       if (this.searchedColumn !== key && this.clearFilters) this.clearFilters()
       confirm()
@@ -344,6 +352,7 @@ export default {
             this.pagination.current--
           }
           this.getList()
+          this.selectedRowKeys = []
         })
       } else {
         this.$message.warn('请选择您要删除的内容')

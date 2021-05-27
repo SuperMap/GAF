@@ -115,6 +115,8 @@
         <a-form-item style="width: 300px" class="float-left" label="排序序号">
           <a-input-number
             v-decorator="['sortSn']"
+            :precision="0"
+            :min="1"
             :disabled="operation === 1"
           />
         </a-form-item>

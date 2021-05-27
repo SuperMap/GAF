@@ -177,11 +177,12 @@ export default {
     async getList() {
       this.loading = true
       let url = `/map/webgis-services/layerCatalogId?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`
-      this.optionsSeach.forEach(item => {
-        url = url + item
-      })
       if (this.type && this.type !== '-1') {
         url = url + '&types=' + this.type
+      } else {
+        this.optionsSeach.forEach(item => {
+          url = url + item
+        })
       }
       if (this.layerCatalogId && this.layerCatalogId !== '') {
         url = url + '&layerCatalogId=' + this.layerCatalogId
@@ -209,7 +210,6 @@ export default {
         this.pagination.pageSize = res.data.pageSize
         this.pagination.total = res.data.totalCount
         this.webgisServiceList = res.data.pageList.filter(item => item.typeCode !== 'RESTDATA')
-        console.log(this.webgisServiceList,'data')
       } else {
         this.$message.error(`查询失败,原因:${res.message}`)
       }
