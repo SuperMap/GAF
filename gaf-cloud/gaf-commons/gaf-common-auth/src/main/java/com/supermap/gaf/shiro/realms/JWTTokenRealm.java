@@ -10,6 +10,7 @@ import com.supermap.gaf.shiro.JJWTUtils;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.JWTToken;
 import io.buji.pac4j.subject.Pac4jPrincipal;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -31,6 +32,7 @@ import java.util.Set;
  * @author:yj
  * @date:2021/3/25
 */
+@Slf4j
 public class JWTTokenRealm extends AuthorizingRealm {
     private final IauthUserInfoDetails iauthUserInfoDetails;
 
@@ -66,7 +68,9 @@ public class JWTTokenRealm extends AuthorizingRealm {
             final Pac4jPrincipal principal = new Pac4jPrincipal(Arrays.asList(new CommonProfile[] { profile }));
             return new SimpleAuthenticationInfo(principal, Boolean.TRUE, getName());
         } catch (Exception e) {
-            throw new AuthenticationException("JWT 解析异常:");
+            log.error("获取用户信息失败");
+            e.printStackTrace();
+            throw new AuthenticationException("获取用户信息失败:");
         }
 
     }
