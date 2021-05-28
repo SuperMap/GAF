@@ -64,7 +64,7 @@
             :load-data="loadData"
             placeholder="请选择数据源类型"
             change-on-select
-            @change="onChange4"
+            @change="typeCodeChange"
           />
         </a-form-item>
 
@@ -307,7 +307,6 @@
             ]"
             checked-children="是"
             un-checked-children="否"
-            @change="switchChange"
           />
         </a-form-item>
         <a-form-item v-if="isSpatialdb" label="数据源分类">
@@ -346,10 +345,10 @@
             ]"
             :options="option4"
             placeholder="请选择数据源类型"
-            @change="onChange4"
+            @change="typeCodeChange"
           />
         </a-form-item>
-        <a-form-item v-if="!isfiletype" label="文件路径">
+        <a-form-item v-show="!isfiletype" label="文件路径">
           <a-input
             :disabled="true"
             v-decorator="[
@@ -809,7 +808,7 @@ export default {
       }
     },
     //根据数据源类型级联change事件判断是否为文件类型
-    onChange4(value) {
+    typeCodeChange(value) {
       if (value[0] === "file") {
         this.isfiletype = false
       } else {
@@ -830,6 +829,7 @@ export default {
     // },
     //上传组件uploadComplate事件给文件路径赋值
     uploadChange(data) {
+      console.log(this.addOrEditForm)
       this.addOrEditForm.setFieldsValue({
         addr: data.name
       })
