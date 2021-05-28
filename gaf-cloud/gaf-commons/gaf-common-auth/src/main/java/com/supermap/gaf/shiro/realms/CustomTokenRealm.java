@@ -8,8 +8,10 @@ package com.supermap.gaf.shiro.realms;
 import com.supermap.gaf.authority.commontype.*;
 import com.supermap.gaf.shiro.JJWTUtils;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
+import com.supermap.gaf.shiro.commontypes.CustomToken;
 import com.supermap.gaf.shiro.commontypes.JWTToken;
 import io.buji.pac4j.subject.Pac4jPrincipal;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -33,30 +35,31 @@ import java.util.Set;
  * @date:2021/3/25
 */
 @Slf4j
-public class JWTTokenRealm extends AuthorizingRealm {
-    private final IauthUserInfoDetails iauthUserInfoDetails;
+@Data
+public class CustomTokenRealm extends AuthorizingRealm {
+    private IauthUserInfoDetails iauthUserInfoDetails;
+    private IauthUsername iauthUsername;
 
-    public JWTTokenRealm(IauthUserInfoDetails iauthUserInfoDetails) {
+    public CustomTokenRealm(IauthUsername iauthUsername,IauthUserInfoDetails iauthUserInfoDetails) {
         this.iauthUserInfoDetails = iauthUserInfoDetails;
+        this.iauthUsername = iauthUsername;
     }
 
     @Override
     public Class<?> getAuthenticationTokenClass() {
-        return JWTToken.class;// 此Realm只支持JwtToken
+        return CustomToken.class;
     }
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        JWTToken jwtToken = (JWTToken) token;
+        CustomToken customToken = (CustomToken) token;
         try {
-            String accessToken = (String) jwtToken.getPrincipal();
-
-            OAuth20Profile profile = getOAuth20Profile(accessToken);
-            String username = JJWTUtils.getUserNameFromJwsUntrusted(accessToken,"user_name");
+            String username = iauthUsername.getAuthUsername(customToken);
 
             // 获取权限、租户、角色信息(新)
             AuthUserInfoDetails userInfoDetails = iauthUserInfoDetails.getAuthUserInfoDetails(username);
 
+            CommonProfile profile = new CommonProfile();
             AuthUser authUser = userInfoDetails.getAuthUser();
             String userId = authUser.getUserId();
             profile.setId(userId);
@@ -98,16 +101,5 @@ public class JWTTokenRealm extends AuthorizingRealm {
         return simpleAuthorizationInfo;
     }
 
-
-    private OAuth20Profile getOAuth20Profile(String accessToken){
-        OAuth20Profile profile = new OAuth20Profile() {
-            @Override
-            public void setAccessToken(String accessToken) {
-                super.setAccessToken(accessToken);
-            }
-        };
-        profile.setAccessToken(accessToken);
-        return profile;
-    }
 
 }

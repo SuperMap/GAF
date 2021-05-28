@@ -15,9 +15,10 @@ import java.util.Map;
 import javax.servlet.Filter;
 
 import com.supermap.gaf.authority.client.AuthUserInfoDetailsClient;
-import com.supermap.gaf.authority.commontype.IauthUserInfoDetails;
 import com.supermap.gaf.authority.service.impl.AuthUserInfoDetailsDbImpl;
+import com.supermap.gaf.authority.service.impl.AuthUsernameJwtImpl;
 import com.supermap.gaf.shiro.handler.TenantInfoImpl;
+import com.supermap.gaf.shiro.realms.CustomTokenRealm;
 import com.supermap.gaf.storage.spi.TenantInfoI;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +55,6 @@ import org.springframework.context.annotation.*;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.supermap.gaf.shiro.config.KeycloakConfig;
 import com.supermap.gaf.shiro.config.ShiroConfig;
-import com.supermap.gaf.shiro.realms.JWTTokenRealm;
 import com.supermap.gaf.utils.LogUtil;
 
 import io.buji.pac4j.filter.CallbackFilter;
@@ -86,26 +86,16 @@ public class ShiroConfiguration {
     @Autowired
     private ShiroConfig shiroConfig;
 
-    @Autowired(required = false)
-    private AuthUserInfoDetailsClient userInfoDetailsClient;
     @Autowired
     private AuthUserInfoDetailsDbImpl authUserInfoDetailsDb;
-
-
-    @Bean
-    @ConditionalOnProperty(name = "shiro.jwt-user-details", havingValue = "db", matchIfMissing = true)
-    public JWTTokenRealm jwtTokenRealmDb() {
-        JWTTokenRealm tokenRealm = new JWTTokenRealm(authUserInfoDetailsDb);
-        return tokenRealm;
-    }
+    @Autowired
+    private AuthUsernameJwtImpl authUsernameJwt;
 
     @Bean
-    @ConditionalOnProperty(name = "shiro.jwt-user-details", havingValue = "client", matchIfMissing = false)
-    public JWTTokenRealm jwtTokenRealmClient() {
-        JWTTokenRealm tokenRealm = new JWTTokenRealm(userInfoDetailsClient);
+    public CustomTokenRealm customTokenRealmDb() {
+        CustomTokenRealm tokenRealm = new CustomTokenRealm(authUsernameJwt,authUserInfoDetailsDb);
         return tokenRealm;
     }
-
 
     @Bean
     @SuppressWarnings({ "rawtypes", "unchecked" })
