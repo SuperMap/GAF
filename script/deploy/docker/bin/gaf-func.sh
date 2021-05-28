@@ -115,30 +115,28 @@ port_gaf() {
 build_frontend() {
     cd $Root_Current_Dir/../../../
 
-    mvn clean package -Dmaven.test.skip=true
-
     cd gaf-web
     cd common-gaf
     yarn install --update-checksums
-    yarn link
+    yarn unlink && yarn link
     cd ..
 
     cd common-webapp
     yarn install --update-checksums
-    yarn link
+    yarn unlink && yarn link
     cd ..
 
     cd common-mapapp
     yarn install --update-checksums
-    yarn link
+    yarn unlink && yarn link
     cd ..
 
     cd gaf-webapp
     yarn cache clean
     yarn install --update-checksums
-    yarn link common-gaf
-    yarn link common-webbase
-    yarn link common-mapapp
+    yarn unlink common-gaf && yarn link common-gaf
+    yarn unlink common-webbase && yarn link common-webbase
+    yarn unlink common-mapapp && yarn link common-mapapp
     yarn generate
     rm -rf node_modules
     cd ..
@@ -146,9 +144,9 @@ build_frontend() {
     cd gaf-mapapp
     yarn cache clean
     yarn install --update-checksums
-    yarn link common-gaf
-    yarn link common-webbase
-    yarn link common-mapapp
+    yarn unlink common-gaf && yarn link common-gaf
+    yarn unlink common-webbase && yarn link common-webbase
+    yarn unlink common-mapapp && yarn link common-mapapp
     yarn generate
     rm -rf node_modules
 
