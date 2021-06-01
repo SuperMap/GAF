@@ -40,6 +40,8 @@ public class GatewaySecurityProperties {
 
     private String indexUrl = DEFAULT_INDEX_URL;
 
+    private boolean  apiAuthzEnable = false;
+
     private List<String> publicUrls = Arrays.asList(DEFAULT_PUBLIC_URLS);
 
 
@@ -89,5 +91,13 @@ public class GatewaySecurityProperties {
 
     public void setPublicUrls(List<String> publicUrls) {
         this.publicUrls = publicUrls;
+    }
+
+    public boolean isApiAuthzEnable() {
+        return apiAuthzEnable;
+    }
+
+    public void setApiAuthzEnable(boolean apiAuthzEnable) {
+        this.apiAuthzEnable = apiAuthzEnable;
     }
 }
