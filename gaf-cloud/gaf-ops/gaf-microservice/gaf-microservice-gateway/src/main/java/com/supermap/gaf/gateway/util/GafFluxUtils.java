@@ -38,13 +38,13 @@ public class GafFluxUtils {
      * @return
      */
     public static Mono<Void> unAuth(ServerWebExchange exchange){
-        MessageResult<String> result = MessageResult.failed(String.class).status(HttpStatus.UNAUTHORIZED.value()).message("访问权限不足").build();
+        MessageResult<String> result = MessageResult.failed(String.class).status(HttpStatus.UNAUTHORIZED.value()).message("API资源访问权限不足").build();
         ServerHttpResponse response = exchange.getResponse();
         byte[] bits = JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bits);
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
         // 指定编码，否则在浏览器中会中文乱码
-        response.getHeaders().add("Content-Type", "text/plain;charset=UTF-8");
+        response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
         return response.writeWith(Mono.just(buffer));
     }
 

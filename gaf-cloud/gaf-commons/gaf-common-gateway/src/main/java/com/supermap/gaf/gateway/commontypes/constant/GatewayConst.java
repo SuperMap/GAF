@@ -23,6 +23,7 @@ public class GatewayConst {
 
     public static final int GATEWAY_AUTHENTICATION_QUERY_FILTER_ORDER = -180;
     public static final int GATEWAY_AUTHENTICATION_VALIDATE_FILTER_ORDER = -170;
+    public static final int GATEWAY_AUTHORIZATION_VALIDATE_FILTER_ORDER = -165;
     public static final int GATEWAY_REQUEST_TOKEN_FILTER_ORDER = -160;
     public static final int GATEWAY_TRACE_FILTER_ORDER = -150;
 
