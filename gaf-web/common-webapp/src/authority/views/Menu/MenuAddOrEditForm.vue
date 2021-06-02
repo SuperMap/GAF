@@ -87,7 +87,20 @@
         <a-form-item label="参数">
           <a-textarea
             :disabled="operation === 1"
-            v-decorator="['params']"
+             v-decorator="[
+              'params',
+              {
+                rules: [
+                  {
+                    required: false
+                  },
+                  {
+                    pattern: /^([^=&]+=[^=&]+&)*([^=&]+=[^=&]+){1}$/g,
+                    message: '请输入正确格式的参数'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入参数名和值,使用&分割,例如param1=value1&param2=value2"
             auto-size
           />

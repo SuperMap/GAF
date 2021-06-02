@@ -37,17 +37,17 @@ public class TianDiTuSpiderTest {
 
     private Map<String,Object> map = new HashMap<>();
 
-    @Test
-    public void testPickUp() {
-        Map<String, Object> requestMap = new HashMap<>();
-        requestMap.put("postStr", "{\"searchWord\":\"中华人民共和国\",\"searchType\":\"1\",\"needSubInfo\":\"false\",\"needAll\":\"true\",\"needPre\":\"true\"}");
-        String  areaStr = restTemplate.getForObject("http://api.tianditu.gov.cn/administrative?postStr={postStr}&tk=83c663bd5e7a96b4117636ef5de266b1", String.class,requestMap);
-        R<List<Area>> r = JSONObject.parseObject(areaStr, new TypeReference<R<List<Area>>>() {
-        });
-        List<Area> areas = r.getData();
-        List<SysDict> sysDicts = convert(areas);
-        MybatisBatchUtil.insertOrUpdateBatch(SysDictMapper.class,sysDicts, SysDictMapper::insert);
-    }
+    //@Test
+    //public void testPickUp() {
+    //    Map<String, Object> requestMap = new HashMap<>();
+    //    requestMap.put("postStr", "{\"searchWord\":\"中华人民共和国\",\"searchType\":\"1\",\"needSubInfo\":\"false\",\"needAll\":\"true\",\"needPre\":\"true\"}");
+    //    String  areaStr = restTemplate.getForObject("http://api.tianditu.gov.cn/administrative?postStr={postStr}&tk=83c663bd5e7a96b4117636ef5de266b1", String.class,requestMap);
+    //    R<List<Area>> r = JSONObject.parseObject(areaStr, new TypeReference<R<List<Area>>>() {
+    //    });
+    //    List<Area> areas = r.getData();
+    //    List<SysDict> sysDicts = convert(areas);
+    //    MybatisBatchUtil.insertOrUpdateBatch(SysDictMapper.class,sysDicts, SysDictMapper::insert);
+    //}
 
     private List<SysDict> convert(List<Area> areas) {
         List<SysDict> all = new LinkedList<>();

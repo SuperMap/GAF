@@ -111,7 +111,17 @@
           <a-textarea
             :disabled="isdisabled"
             :value="value"
-            v-decorator="['extraParamJson']"
+            v-decorator="[
+              'extraParamJson',
+              {
+                rules: [
+                  {
+                    message: '请输入符合标准格式的json格式的字符串',
+                    validator: jsonValidater
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入其他参数"
             auto-size
           />
@@ -223,6 +233,18 @@ export default {
   },
   methods: {
     moment,
+    jsonValidater(rule, value, callback) {
+      if(!value || value.trim() === '') {
+        callback()
+      } else {
+        try{
+          JSON.parse(value)
+          callback()
+        } catch (error) {
+          callback(false)
+        }
+      }
+    },
     async addDataOption() {
       const url = `/authority/sys-components/options`
       const res = await this.$axios.get(url)
