@@ -5,9 +5,14 @@
 */
 package com.supermap.gaf.gateway.filters;
 
+import com.supermap.gaf.authentication.client.ValidateClient;
 import com.supermap.gaf.authentication.entity.entity.AuthenticationResult;
+import com.supermap.gaf.authentication.entity.entity.AuthorizationParam;
+import com.supermap.gaf.authority.enums.ResourceApiMethodEnum;
 import com.supermap.gaf.gateway.commontypes.ExchangeAuthenticationAttribute;
 import com.supermap.gaf.gateway.util.GafFluxUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -22,52 +27,43 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.*;
 /**
  * 注意： 该代码对应gaf-boot中的同名的filter,功能逻辑等应该保持一致
  *
- * 此过滤器提供用户验证认证信息的逻辑
+ * 此过滤器提供用户API鉴权的逻辑
  * 验证认证信息
- *      1.1.静态资源和公共资源不用验证
- *      1.2.其他都需要验证
- *          1.2.1验证失败需要清除cookie
- *          1.2.2验证失败如果是index首页，跳转index首页
- *          1.2.3验证失败如果不是index首页，跳转到登录页
+ *      1.如果是indexurl或publicurl直接通过
+ *      2.如果开启网关api验证，则请求接口验证是否有权限通过网关
  * @author : duke
  * @date:2021/3/25
  * @since 2020/11/23 3:44 PM
  */
 @Component
-public class XgatewayAuthenticationValidateFilter implements GlobalFilter, Ordered {
+public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordered {
+    @Autowired
+    private ValidateClient validateClient;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
-        if (attribute.getIsPublicUrl()){
+        AuthorizationParam authorizationParam = new AuthorizationParam();
+        authorizationParam.setUsername(authenticationResult.getUsername());
+        authorizationParam.setUri(exchange.getRequest().getURI().getPath());
+        authorizationParam.setMethod(ResourceApiMethodEnum.valueOf(exchange.getRequest().getMethod().name()).getValue());
+
+        boolean apiAuthzEnabled = attribute.getGatewaySecurityProperties().isApiAuthzEnable();
+        if (attribute.getIsPublicUrl() || attribute.getIsIndexUrl() || !apiAuthzEnabled){
             return chain.filter(exchange);
         }
-        if (attribute.getIsIndexUrl()){
-            removeCookie(exchange);
-            return chain.filter(exchange);
-        }
-        if (authenticationResult == null
-                || StringUtils.isEmpty(authenticationResult.getUsername())
-                || StringUtils.isEmpty(authenticationResult.getJwtToken())){
-            //没有认证信息，直接跳转到登陆界面(index除外)
-            removeCookie(exchange);
-            return GafFluxUtils.redirectTo(exchange,attribute.getGatewaySecurityProperties().getCenterLoginUrl());
+        Boolean result = validateClient.authorization(authorizationParam);
+        if (!BooleanUtils.isTrue(result)){
+            return GafFluxUtils.unAuth(exchange);
         }
         return chain.filter(exchange);
 
     }
 
-    /**
-     * 清楚cookie
-     * @param exchange
-     */
-    private void removeCookie(ServerWebExchange exchange){
-        exchange.getResponse().addCookie(ResponseCookie.from(CUSTOM_LOGIN_SESSION_NAME,null).path("/").maxAge(0).build());
-    }
 
     @Override
     public int getOrder() {
-        return GATEWAY_AUTHENTICATION_VALIDATE_FILTER_ORDER;
+        return GATEWAY_AUTHORIZATION_VALIDATE_FILTER_ORDER;
     }
 }

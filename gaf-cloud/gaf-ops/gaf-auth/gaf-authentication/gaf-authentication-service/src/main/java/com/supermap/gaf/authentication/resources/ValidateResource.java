@@ -9,6 +9,7 @@ package com.supermap.gaf.authentication.resources;
 import com.supermap.gaf.authentication.client.ValidateClient;
 import com.supermap.gaf.authentication.entity.entity.AuthenticationParam;
 import com.supermap.gaf.authentication.entity.entity.AuthenticationResult;
+import com.supermap.gaf.authentication.entity.entity.AuthorizationParam;
 import com.supermap.gaf.authentication.service.ValidateAuthenticationService;
 import com.supermap.gaf.commontypes.MessageResult;
 import io.swagger.annotations.Api;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -47,5 +49,18 @@ public class ValidateResource implements ValidateClient {
     public MessageResult<AuthenticationResult> authentication(AuthenticationParam authenticationParam) {
         AuthenticationResult authenticationResult = validateAuthenticationService.authentication(authenticationParam);
         return MessageResult.successe(AuthenticationResult.class).data(authenticationResult).build();
+    }
+
+    @ApiOperation(value = "api鉴权", notes = "对用户是否拥有api资源访问权限进行鉴权")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "authenticationResult",value = "鉴权请求参数对象",paramType = "body",dataTypeClass = AuthenticationResult.class)
+    })
+    @POST
+    @Produces(APPLICATION_JSON)
+    @Consumes(APPLICATION_JSON)
+    @Path("/authorization")
+    @Override
+    public Boolean authorization(AuthorizationParam authorizationParam) {
+        return validateAuthenticationService.authorization(authorizationParam);
     }
 }

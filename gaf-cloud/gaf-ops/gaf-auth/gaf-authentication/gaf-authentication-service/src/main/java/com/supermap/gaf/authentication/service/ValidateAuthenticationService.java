@@ -8,7 +8,7 @@ package com.supermap.gaf.authentication.service;
 
 import com.supermap.gaf.authentication.entity.entity.AuthenticationParam;
 import com.supermap.gaf.authentication.entity.entity.AuthenticationResult;
-
+import com.supermap.gaf.authentication.entity.entity.AuthorizationParam;
 
 
 /**
@@ -24,5 +24,12 @@ public interface ValidateAuthenticationService {
      * @return
      */
     AuthenticationResult authentication(AuthenticationParam authenticationParam);
+
+    /**
+     * 获取API鉴权结果
+     * @param authorizationParam
+     * @return
+     */
+    Boolean authorization(AuthorizationParam authorizationParam);
 
 }

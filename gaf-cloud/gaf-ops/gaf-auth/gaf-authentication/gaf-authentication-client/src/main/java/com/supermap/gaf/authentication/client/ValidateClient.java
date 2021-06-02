@@ -7,6 +7,7 @@ package com.supermap.gaf.authentication.client;
 
 import com.supermap.gaf.authentication.entity.entity.AuthenticationParam;
 import com.supermap.gaf.authentication.entity.entity.AuthenticationResult;
+import com.supermap.gaf.authentication.entity.entity.AuthorizationParam;
 import com.supermap.gaf.commontypes.MessageResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,13 @@ public interface ValidateClient {
      */
     @PostMapping(value = "/authentication/validate",consumes = APPLICATION_JSON_VALUE)
     MessageResult<AuthenticationResult> authentication(@RequestBody AuthenticationParam authenticationParam);
+
+    /**
+     * 请求认证中心进行鉴权验证
+     * @return
+     */
+    @PostMapping(value = "/authentication/validate/authorization",consumes = APPLICATION_JSON_VALUE)
+    Boolean authorization(@RequestBody AuthorizationParam authorizationParam);
 
 }
 
