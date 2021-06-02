@@ -32,7 +32,18 @@
             <a-select-option value="name"> 名称 </a-select-option>
             <a-select-option value="type"> 类别 </a-select-option>
           </a-select>
+          <a-select
+            v-if="searchedColumn === 'type'"
+            v-model="buttonType"
+            size="large"
+            style="width: 150px; box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.1)"
+            @change="handleButtonTypeChange"
+          >
+            <a-select-option value="1"> 基础类 </a-select-option>
+            <a-select-option value="2"> 业务类 </a-select-option>
+          </a-select>
           <a-input-search
+            v-if="searchedColumn !== 'type'"
             placeholder="请输入条件按回车查询"
             size="large"
             style="width: 320px"
@@ -165,6 +176,7 @@ export default {
       operation: 0,
       // 有无主键
       hasPKField: true,
+      buttonType: '1',
     }
   },
   computed: {
@@ -243,15 +255,28 @@ export default {
   },
   methods: {
     handleSearchFieldChange(value) {
-      this.searchedColumn = value
+      if(value === 'type') {
+        this.searchText = this.buttonType
+      
+      } else {
+        this.searchedColumn = value
+        this.searchText = ''
+      }
+      this.pagination.current = 1
+      this.getList()
+    },
+    handleButtonTypeChange(value) {
+      this.searchText = value
+      this.pagination.current = 1
+      this.getList()
     },
     async onSearch(value) {
-      if (value === '基础类' && this.searchedColumn === 'type') {
-        value = '1'
-      }
-      if (value === '业务类' && this.searchedColumn === 'type') {
-        value = '2'
-      }
+      // if (value === '基础类' && this.searchedColumn === 'type') {
+      //   value = '1'
+      // }
+      // if (value === '业务类' && this.searchedColumn === 'type') {
+      //   value = '2'
+      // }
       this.searchText = value
       this.pagination.current = 1
       await this.getList()

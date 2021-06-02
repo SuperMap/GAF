@@ -103,7 +103,7 @@
             <a-select-option value="">-请选择岗位类别-</a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="过期时间">
+        <a-form-item v-show="false"  label="过期时间">
           <a-date-picker
             :disabled="operation === 1"
             v-decorator="['expirationTime']"

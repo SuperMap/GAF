@@ -41,6 +41,10 @@
             <groupId>com.supermap.gaf</groupId>
             <artifactId>gaf-common-storage-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.supermap.gaf</groupId>

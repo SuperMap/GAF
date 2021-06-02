@@ -17,6 +17,41 @@
         <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
     </resultMap>
 
+    <resultMap id="ExtendResultMap" type="com.supermap.gaf.authority.vo.AuthUserParttimeVo">
+        <result column="user_parttime_id" jdbcType="VARCHAR" property="userParttimeId" />
+        <result column="user_id" jdbcType="VARCHAR" property="userId" />
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+        <result column="post_id" jdbcType="VARCHAR" property="postId" />
+        <result column="post_type" jdbcType="VARCHAR" property="postType" />
+        <result column="expiration_time" jdbcType="TIMESTAMP" property="expirationTime" />
+        <result column="status" jdbcType="BIT" property="status" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="department_name" jdbcType="VARCHAR" property="departmentName"/>
+        <result column="post_name" jdbcType="VARCHAR" property="postName"/>
+    </resultMap>
+
+    <sql id="Extend_Column_List">
+        A.user_parttime_id as user_parttime_id,
+        A.user_id as user_id,
+        A.department_id as department_id,
+        A.post_id as post_id,
+        A.post_type as post_type,
+        A.expiration_time as expiration_time,
+        A.status as status,
+        A.sort_sn as sort_sn,
+        A.created_time as created_time,
+        A.created_by as created_by,
+        A.updated_time as updated_time,
+        A.updated_by as updated_by,
+        A.tenant_id as tenant_id,
+        B.department_name as department_name,
+        C.post_name as post_name
+    </sql>
+
     <sql id="Base_Column_List">
         user_parttime_id,
         user_id,
@@ -50,7 +85,25 @@
         LIMIT #{pageSize}
         <if test ='null != offset'>OFFSET #{offset}</if>
     </select>
-	
+
+    <select id="searchJoinList" resultMap="ExtendResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo">
+        SELECT <include refid="Extend_Column_List" />
+        FROM "auth_user_parttime"  A, "auth_department" B,"auth_post" C
+        where A.department_id = B.department_id and  A.post_id = C.post_id and A.status = true and B.status = true and C.status = true
+        <if test ='null != departmentName'>and B.department_name like CONCAT('%', #{departmentName}, '%') </if>
+        <if test ='null != searchFieldName'>and A.${searchFieldName} = #{searchFieldValue} </if>
+        <if test ='null != orderFieldName'>order by A.${orderFieldName} ${orderMethod}</if>
+        LIMIT #{pageSize}
+        <if test ='null != offset'>OFFSET #{offset}</if>
+    </select>
+    <select id="countJoinList" resultType="java.lang.Integer" parameterType="com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo">
+        SELECT count(1)
+        FROM "auth_user_parttime"  A, "auth_department" B,"auth_post" C
+        where A.department_id = B.department_id and  A.post_id = C.post_id and A.status = true and B.status = true and C.status = true
+        <if test ='null != departmentName'>and B.department_name like CONCAT('%', #{departmentName}, '%') </if>
+        <if test ='null != searchFieldName'>and A.${searchFieldName} = #{searchFieldValue} </if>
+        <if test ='null != orderFieldName'>order by A.${orderFieldName} ${orderMethod}</if>
+    </select>
 	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo">
         SELECT <include refid="Base_Column_List" />
         FROM "auth_user_parttime"
@@ -107,6 +160,7 @@
             <if test ='null != tenantId'>tenant_id = #{tenantId} AND</if>
         </trim>
     </select>
+
     <insert id="insert" useGeneratedKeys="true" keyColumn="user_parttime_id" keyProperty="userParttimeId" parameterType="com.supermap.gaf.authority.commontype.AuthUserParttime">
         INSERT INTO "auth_user_parttime"
         <trim prefix="(" suffix=")" suffixOverrides=",">

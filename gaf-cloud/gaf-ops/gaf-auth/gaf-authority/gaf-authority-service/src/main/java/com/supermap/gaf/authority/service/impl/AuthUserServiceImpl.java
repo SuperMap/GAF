@@ -6,6 +6,7 @@
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.*;
+import com.supermap.gaf.authority.constant.CacheGroupConstant;
 import com.supermap.gaf.authority.constant.CommonConstant;
 import com.supermap.gaf.authority.constant.DbFieldNameConstant;
 import com.supermap.gaf.authority.dao.AuthUserMapper;
@@ -13,25 +14,31 @@ import com.supermap.gaf.authority.enums.CodeBaseRoleEnum;
 import com.supermap.gaf.authority.enums.NodeTypeEnum;
 import com.supermap.gaf.authority.service.*;
 import com.supermap.gaf.authority.util.TreeConvertUtil;
+import com.supermap.gaf.authority.util.email.EmailConstant;
 import com.supermap.gaf.authority.util.email.EmailService;
 import com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo;
 import com.supermap.gaf.authority.vo.AuthUserSelectVo;
+import com.supermap.gaf.authority.vo.EmailChangeVo;
 import com.supermap.gaf.authority.vo.TreeNode;
+import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.project.client.ProjCodeBaseUsersClient;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
-import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.utils.LogUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,6 +74,9 @@ public class AuthUserServiceImpl implements AuthUserService {
     private  AuthUserParttimeService authUserParttimeService;
     @Autowired
     private  EmailService emailService;
+
+    @Autowired
+    public RedisTemplate<String, Object> redisTemplate;
 
     @Autowired(required = false)
     private ProjCodeBaseUsersClient projCodeBaseUsersClient;
@@ -603,6 +613,74 @@ public class AuthUserServiceImpl implements AuthUserService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public String changeEmail(EmailChangeVo emailChangeVo) {
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        AuthUser authUser = Objects.requireNonNull(shiroUser).getAuthUser();
+        if(Objects.equals(authUser.getEmail(),emailChangeVo.getNewEmail())) {
+            return "新旧邮箱相同";
+        }
+
+
+
+        if (!StringUtils.isEmpty(authUser.getEmail())) {
+            // 校验
+            Object oldEmailCheckCode = redisTemplate.opsForValue().get(CacheGroupConstant.CHECK_CODE + ":" + authUser.getEmail());
+            if (Objects.isNull(oldEmailCheckCode)) {
+                return "原邮箱校验码已过时";
+            }
+            if(!Objects.equals(emailChangeVo.getOldEmailCheckCode(),oldEmailCheckCode)) {
+                return "校验码:"+ emailChangeVo.getOldEmailCheckCode()+"错误";
+            }
+        }
+
+
+        Object newEmailCheckCode = redisTemplate.opsForValue().get(CacheGroupConstant.CHECK_CODE + ":" + emailChangeVo.getNewEmail());
+        if (Objects.isNull(newEmailCheckCode)) {
+            return "新邮箱校验码已过时";
+        }
+        if(!Objects.equals(emailChangeVo.getNewEmailCheckCode(),newEmailCheckCode)) {
+            return "校验码:"+ emailChangeVo.getNewEmailCheckCode()+"错误";
+        }
+        AuthUser user = getById(authUser.getUserId());
+        user.setPassword(null);
+        user.setEmail(emailChangeVo.getNewEmail());
+        authUserMapper.update(user);
+        return null;
+    }
+
+    @Override
+    public void sendCheckCode(String email) {
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        AuthUser authUser = Objects.requireNonNull(shiroUser).getAuthUser();
+        if(StringUtils.isEmpty(email)) {
+            email = authUser.getEmail();
+        }
+        if(StringUtils.isEmpty(email)) {
+            throw new GafException("邮箱为空");
+        }
+        String checkCode = generateRandomStr(6);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime after10Min = now.plusMinutes(10);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String format = dtf.format(after10Min);
+        redisTemplate.opsForValue().set(CacheGroupConstant.CHECK_CODE+":"+ email,checkCode, Duration.ofMinutes(10));
+        String context = String.format(EmailConstant.CHECK_CODE_TEXT_TEMPLATE,authUser.getName(),checkCode,"10",format);
+        emailService.sendText(email, EmailConstant.CAHANGE_EMAIL,context);
+    }
+
+    // 生成几位随机数字 不足以0填充
+    private String generateRandomStr(int bit) {
+        int randomNum = generateRandomNum(bit);
+        return String.format("%0"+bit+"d",randomNum);
+    }
+    // 生成几位随机数字
+    private int generateRandomNum(int bit) {
+        Random random = new Random();
+        return random.nextInt((int)Math.pow(10,bit));
+    }
+
 
     /**
      * 随机生成密码
@@ -619,6 +697,12 @@ public class AuthUserServiceImpl implements AuthUserService {
     private void checkUniqueness(List<AuthUser> authUsers) {
         authUsers.forEach(authUser -> checkUniqueness(authUser, false));
     }
+
+    private boolean checkEmailExit(String email) {
+        List<AuthUser> emailAuthUsers = authUserMapper.selectByCombination(AuthUser.builder().status(true).email(email).build());
+        return !CollectionUtils.isEmpty(emailAuthUsers);
+    }
+
 
     /**
      * 唯一性校验
