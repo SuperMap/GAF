@@ -161,7 +161,7 @@ export default {
           key: 'name'
         },
         {
-          title: '中文名称',
+          title: '别名',
           dataIndex: 'nameCn',
           key: 'name_cn'
         },

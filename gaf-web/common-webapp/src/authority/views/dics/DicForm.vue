@@ -86,8 +86,18 @@
         <a-form-item label="扩展属性">
           <a-textarea
             :disabled="operation === 1"
-            v-decorator="['extProperties']"
-            placeholder="请输入json格式字符串"
+            v-decorator="[
+              'extProperties',
+              {
+                rules: [
+                  {
+                    message: '请输入符合标准格式的json格式的字符串',
+                    validator: extValidater
+                  }
+                ]
+              }
+            ]"
+            placeholder='请输入符合标准格式的json格式字符串，如{"xxx": "xxx", "xxxx": "xxxx"}'
             :auto-size="{ minRows: 3, maxRows: 5 }"
           />
         </a-form-item>
@@ -193,6 +203,18 @@
   },
   methods: {
     moment,
+    extValidater(rule, value, callback) {
+      if(!value || value.trim() === '') {
+        callback()
+      } else {
+        try{
+          JSON.parse(value)
+          callback()
+        } catch (error) {
+          callback(false)
+        }
+      }
+    },
     submitForm() {
       this.addOrEditForm.validateFields(async (err) => {
         if (err) {
