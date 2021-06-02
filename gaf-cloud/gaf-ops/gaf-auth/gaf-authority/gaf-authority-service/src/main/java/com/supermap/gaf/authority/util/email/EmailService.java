@@ -48,4 +48,22 @@ public class EmailService {
             logger.error("发送邮件异常", e);
         }
     }
+
+    @Async
+    public void sendText(String receiver, String subject,String context) {
+        try {
+            //true表示支持复杂类型
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
+            messageHelper.setFrom(sender);
+            messageHelper.setTo(receiver.split(","));
+            messageHelper.setSubject(subject);
+            messageHelper.setText(context);
+            messageHelper.setSentDate(new Date());
+            mailSender.send(messageHelper.getMimeMessage());
+            logger.info(String.format("已发送邮件，主题: %s, 内容: %s",subject, context));
+        } catch (Exception e) {
+            logger.error("发送邮件异常", e);
+        }
+    }
+
 }

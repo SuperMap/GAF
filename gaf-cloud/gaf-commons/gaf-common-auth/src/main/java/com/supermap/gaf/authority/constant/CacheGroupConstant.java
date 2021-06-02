@@ -58,4 +58,9 @@ public final class CacheGroupConstant {
      */
     public static final String DICT_DATA_TREE = "dict_data_tree";
 
+    /**
+     * 校验码 修改邮箱时使用
+     */
+    public static final String CHECK_CODE = "check_code";
+
 }

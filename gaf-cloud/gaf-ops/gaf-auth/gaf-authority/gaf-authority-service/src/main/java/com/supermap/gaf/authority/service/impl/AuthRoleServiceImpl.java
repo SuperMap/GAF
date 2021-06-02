@@ -17,13 +17,13 @@ import com.supermap.gaf.authority.service.AuthRoleService;
 import com.supermap.gaf.authority.util.TreeConvertUtil;
 import com.supermap.gaf.authority.vo.AuthRoleSelectVo;
 import com.supermap.gaf.authority.vo.TreeNode;
+import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
 import com.supermap.gaf.sys.mgt.commontype.SysCatalog;
 import com.supermap.gaf.sys.mgt.enums.CatalogTypeEnum;
 import com.supermap.gaf.sys.mgt.service.SysCatalogService;
-import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -150,7 +150,7 @@ public class AuthRoleServiceImpl implements AuthRoleService {
     @Override
     public Map<String, Object> pageList(AuthRoleSelectVo authRoleSelectVo) {
         if (authRoleSelectVo.getPageSize() == null || authRoleSelectVo.getPageSize() == 0) {
-            authRoleSelectVo.setPageSize(50);
+            authRoleSelectVo.setPageSize(10);
         }
         List<AuthRole> pageList;
         if (authRoleSelectVo.getOffset() == null || authRoleSelectVo.getOffset() < CommonConstant.OFFSET_MAX_FOR_SQL_BETTER) {

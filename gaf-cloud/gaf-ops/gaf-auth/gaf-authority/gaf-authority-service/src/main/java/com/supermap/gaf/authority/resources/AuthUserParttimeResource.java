@@ -62,7 +62,8 @@ public class AuthUserParttimeResource {
                                        @QueryParam("orderFieldName") String orderFieldName,
                                        @QueryParam("orderMethod") String orderMethod,
                                        @DefaultValue("1")@QueryParam("pageNum") Integer pageNum,
-                                       @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
+                                       @DefaultValue("10") @QueryParam("pageSize") Integer pageSize,
+                                        @QueryParam("departmentName") String departmentName) {
         if (pageNum == null || pageNum < 1) {
             pageNum = 1;
         }
@@ -74,13 +75,10 @@ public class AuthUserParttimeResource {
                 .orderMethod(orderMethod)
                 .offset(offset)
                 .pageSize(pageSize)
+                .departmentName(departmentName)
                 .build();
         Map<String, Object> result;
-        if (searchFieldName == null & orderFieldName == null) {
-            result = authUserParttimeService.pageList(selectVo);
-        } else {
-            result = authUserParttimeService.searchList(selectVo);
-        }
+        result = authUserParttimeService.searchList(selectVo);
         return MessageResult.data(result).message("查询成功").build();
     }
 

@@ -13,13 +13,12 @@ import com.supermap.gaf.authority.enums.CodeBaseRoleEnum;
 import com.supermap.gaf.authority.service.*;
 import com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo;
 import com.supermap.gaf.authority.vo.AuthUserParttimeVo;
+import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.project.client.ProjCodeBaseUsersClient;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
-import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.utils.LogUtil;
 import org.slf4j.Logger;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,10 +41,6 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
     @Autowired
     private AuthUserParttimeMapper authUserParttimeMapper;
     @Autowired
-    private AuthDepartmentService authDepartmentService;
-    @Autowired
-    private AuthPostService authPostService;
-    @Autowired
     private AuthUserService authUserService;
     @Autowired
     private AuthRoleService authRoleService;
@@ -57,18 +52,6 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
     private ProjCodeBaseUsersClient projCodeBaseUsersClient;
     @Autowired
     private BatchSortAndCodeService batchSortAndCodeService;
-
-//    public AuthUserParttimeServiceImpl(AuthUserParttimeMapper authUserParttimeMapper, AuthDepartmentService authDepartmentService, AuthPostService authPostService, AuthUserService authUserService, AuthRoleService authRoleService, AuthPostRoleService authPostRoleService, AuthUserRoleService authUserRoleService, ProjCodeBaseUsersFeignService projCodeBaseUsersFeignService, BatchSortAndCodeService batchSortAndCodeService) {
-//        this.authUserParttimeMapper = authUserParttimeMapper;
-//        this.authDepartmentService = authDepartmentService;
-//        this.authPostService = authPostService;
-//        this.authUserService = authUserService;
-//        this.authRoleService = authRoleService;
-//        this.authPostRoleService = authPostRoleService;
-//        this.authUserRoleService = authUserRoleService;
-//        this.projCodeBaseUsersFeignService = projCodeBaseUsersFeignService;
-//        this.batchSortAndCodeService = batchSortAndCodeService;
-//    }
 
     @Override
     public AuthUserParttime getById(String userParttimeId) {
@@ -100,50 +83,10 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
     @Override
     public Map<String, Object> searchList(AuthUserParttimeSelectVo authUserParttimeSelectVo) {
         if (authUserParttimeSelectVo.getPageSize() == null || authUserParttimeSelectVo.getPageSize() == 0) {
-            authUserParttimeSelectVo.setPageSize(50);
+            authUserParttimeSelectVo.setPageSize(10);
         }
-        List<AuthUserParttime> pageList;
-        pageList = authUserParttimeMapper.searchList(authUserParttimeSelectVo);
-        List<AuthUserParttimeVo> pageListVo = new ArrayList<>();
-        if (pageList.size() > 0) {
-            Set<String> departmentIds = new HashSet<>(pageList.size());
-            Set<String> postIds = new HashSet<>(pageList.size());
-            pageList.forEach(authUserParttime -> {
-                String postId = authUserParttime.getPostId();
-                if (!StringUtils.isEmpty(postId)) {
-                    postIds.add(postId);
-                }
-                String departmentId = authUserParttime.getDepartmentId();
-                if (!StringUtils.isEmpty(departmentId)) {
-                    departmentIds.add(departmentId);
-                }
-            });
-            Map<String,AuthDepartment> idAndDepartmentMap = new HashMap<>(16);
-            Map<String,AuthPost> idAndPostMap = new HashMap<>(16);
-            if (!CollectionUtils.isEmpty(departmentIds)) {
-                List<AuthDepartment> departments = authDepartmentService.getByIds(departmentIds);
-                if (!CollectionUtils.isEmpty(departmentIds)) {
-                    idAndDepartmentMap = departments.stream().collect(Collectors.toMap(AuthDepartment::getDepartmentId, authDepartment -> authDepartment));
-                }
-            }
-            if (!CollectionUtils.isEmpty(postIds)) {
-                List<AuthPost> posts = authPostService.getByIds(postIds);
-                if (!CollectionUtils.isEmpty(departmentIds)) {
-                    idAndPostMap = posts.stream().collect(Collectors.toMap(AuthPost::getPostId, authPost -> authPost));
-                }
-            }
-            Map<String, AuthDepartment> finalIdAndDepartmentMap = idAndDepartmentMap;
-            Map<String, AuthPost> finalIdAndPostMap = idAndPostMap;
-            pageListVo = pageList.stream().map(authUserParttime -> {
-                AuthUserParttimeVo authUserParttimeVo = new AuthUserParttimeVo();
-                BeanUtils.copyProperties(authUserParttime, authUserParttimeVo);
-                authUserParttimeVo.setDepartmentName(finalIdAndDepartmentMap.get(authUserParttime.getDepartmentId()).getDepartmentName());
-                authUserParttimeVo.setPostName(finalIdAndPostMap.get(authUserParttime.getPostId()).getPostName());
-                return authUserParttimeVo;
-            }).collect(Collectors.toList());
-
-        }
-        Integer totalCount = authUserParttimeMapper.countOneField(authUserParttimeSelectVo.getSearchFieldName(), authUserParttimeSelectVo.getSearchFieldValue());
+        List<AuthUserParttimeVo> pageListVo = authUserParttimeMapper.searchJoinList(authUserParttimeSelectVo);
+        Integer totalCount = authUserParttimeMapper.countJoinList(authUserParttimeSelectVo);
         Map<String, Object> result = new HashMap<>(2);
         result.put(DbFieldNameConstant.PAGE_LIST, pageListVo);
         result.put(DbFieldNameConstant.TOTAL_COUNT, totalCount);

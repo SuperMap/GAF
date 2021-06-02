@@ -144,7 +144,8 @@ export default {
       // 详情：1，新增：2，编辑：3
       operation: 0,
       // 有无主键
-      hasPKField: true
+      hasPKField: true,
+      departmentName: ''
     }
   },
   computed: {
@@ -185,14 +186,14 @@ export default {
         //   dataIndex: 'postType',
         //   key: 'post_type'
         // },
-        {
-          title: '过期时间',
-          scopedSlots: {
-            customRender: 'timeRender'
-          },
-          dataIndex: 'expirationTime',
-          key: 'expiration_time'
-        },
+        // {
+        //   title: '过期时间',
+        //   scopedSlots: {
+        //     customRender: 'timeRender'
+        //   },
+        //   dataIndex: 'expirationTime',
+        //   key: 'expiration_time'
+        // },
         {
           title: '操作',
           scopedSlots: { customRender: 'operation' }
@@ -280,8 +281,8 @@ export default {
       }
     },
     async onSearch(val) {
-      console.log(val)
-      this.searchText = val
+      this.departmentName = val
+      // this.searchText = val
       this.pagination.current = 1
       await this.getList()
     },
@@ -387,6 +388,9 @@ export default {
           this.searchedColumn +
           '&searchFieldValue=' +
           this.searchText.trim()
+      }
+      if(this.departmentName) {
+        url = url + '&departmentName=' + this.departmentName
       }
       if (this.sorter.order && this.sorter.field) {
         url =

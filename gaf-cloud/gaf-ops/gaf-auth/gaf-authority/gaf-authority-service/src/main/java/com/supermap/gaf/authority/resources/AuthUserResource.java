@@ -7,10 +7,7 @@ package com.supermap.gaf.authority.resources;
 
 import com.supermap.gaf.authority.commontype.AuthUser;
 import com.supermap.gaf.authority.service.AuthUserService;
-import com.supermap.gaf.authority.vo.AuthUserSelectVo;
-import com.supermap.gaf.authority.vo.AuthUserVo;
-import com.supermap.gaf.authority.vo.PasswordVo;
-import com.supermap.gaf.authority.vo.TreeNode;
+import com.supermap.gaf.authority.vo.*;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
@@ -20,6 +17,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -266,4 +264,39 @@ public class AuthUserResource {
         authUserService.resetPassword(userId);
         return MessageResult.successe(Void.class).status(200).message("重置密码成功").build();
     }
+
+    @ApiOperation(value = "修改邮箱", notes = "修改邮箱")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "emailChangeVo", value = "修改邮箱所需参数", paramType = "path", dataType = "string", required = true)
+    })
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/email-change")
+    public MessageResult<Void> changeEmail(EmailChangeVo emailChangeVo) {
+        String msg = authUserService.changeEmail(emailChangeVo);
+        if (StringUtils.isEmpty(msg)) {
+            return MessageResult.successe(Void.class).message("修改成功").build();
+        } else {
+            return MessageResult.failed(Void.class).message(msg).build();
+        }
+    }
+
+
+    @ApiOperation(value = "发送校验码", notes = "若不指定邮箱则通过用户的邮箱发送校验码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "email", value = "邮箱。非必须，默认使用当前用户邮箱", paramType = "query", dataType = "string")
+    })
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/checkcode")
+    public MessageResult<Void> sendCheckCode(@QueryParam("email") String email) {
+        authUserService.sendCheckCode(email);
+        return MessageResult.successe(Void.class).status(200).message("发送验证码成功").build();
+    }
+
+
+
+
+
+
 }

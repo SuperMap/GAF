@@ -65,8 +65,8 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-    fetchRegistry: false
-    register-with-eureka: false
+    fetchRegistry: true
+    register-with-eureka: true
 #logging:
 #  level:
 #    com.supermap.gaf: debug
