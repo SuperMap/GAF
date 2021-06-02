@@ -130,7 +130,7 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
             List<WebgisService> webgisServices = webgisServiceMapper.selectList(WebgisServiceSelectVo.builder().address(webgisService.getAddress()).build());
 	        if(!CollectionUtils.isEmpty(webgisServices)){
 
-	            throw new GafException(409);
+	            throw new GafException("服务地址重复",409);
             }
         }
         webgisService.setGisServiceId(UUID.randomUUID().toString());

@@ -19,6 +19,7 @@ import java.util.Set;
  * @date:2021/3/25
  * @since 2020/11/16 10:57 AM
  */
+@SuppressWarnings("unchecked")
 @ConfigurationProperties(prefix = "login.third-party")
 @Component
 public class LoginOidcClientProperties {

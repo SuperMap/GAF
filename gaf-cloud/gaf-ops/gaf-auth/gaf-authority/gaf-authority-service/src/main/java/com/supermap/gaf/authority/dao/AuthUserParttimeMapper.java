@@ -7,6 +7,7 @@ package com.supermap.gaf.authority.dao;
 
 import com.supermap.gaf.authority.commontype.AuthUserParttime;
 import com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo;
+import com.supermap.gaf.authority.vo.AuthUserParttimeVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -43,6 +44,21 @@ public interface AuthUserParttimeMapper {
      */
     List<AuthUserParttime> searchList(AuthUserParttimeSelectVo selectVo);
 
+    /**
+     * 分页查询接口
+     * 连接部门和岗位表查询
+     * @param selectVo 分页参数 如偏移量，每页条数, 等值查询字段名 字段值 排序字段名 排序方式
+     * @return 用户兼职集合
+     */
+    List<AuthUserParttimeVo> searchJoinList(AuthUserParttimeSelectVo selectVo);
+
+    /**
+     * 统计条件查询的数量
+     * 通过连接部门和岗位查询
+     * @param authUserParttimeSelectVo 查询字段名 字段值 部门名
+     * @return 查询的数量
+     */
+    Integer countJoinList(AuthUserParttimeSelectVo authUserParttimeSelectVo);
     /**
      * 分页查询
      * 针对偏移量过大的分页查询sql优化
@@ -122,4 +138,6 @@ public interface AuthUserParttimeMapper {
      * @param userId 用户名
      */
     void deleteByUserId(String userId);
+
+
 }

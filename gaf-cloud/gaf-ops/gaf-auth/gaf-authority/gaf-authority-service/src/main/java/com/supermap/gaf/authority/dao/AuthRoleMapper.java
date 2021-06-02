@@ -33,7 +33,7 @@ public interface AuthRoleMapper{
      * @param tenantId 租户id
      * @return 角色集合
      */
-    List<AuthRole> listRoles(String tenantId);
+    List<AuthRole> listRoles(@Param("tenantId") String tenantId);
 
     /**
      * 分页查询角色

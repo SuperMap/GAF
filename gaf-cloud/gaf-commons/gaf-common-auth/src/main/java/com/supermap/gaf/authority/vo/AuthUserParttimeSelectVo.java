@@ -34,4 +34,6 @@ public class AuthUserParttimeSelectVo {
     private Integer offset;
     @ApiModelProperty("页大小")
     private Integer pageSize;
+    @ApiModelProperty("用户挂职部门名称")
+    private String departmentName;
 }

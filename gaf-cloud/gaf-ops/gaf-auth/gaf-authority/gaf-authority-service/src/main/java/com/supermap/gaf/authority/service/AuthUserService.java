@@ -7,6 +7,7 @@ package com.supermap.gaf.authority.service;
 
 import com.supermap.gaf.authority.commontype.AuthUser;
 import com.supermap.gaf.authority.vo.AuthUserSelectVo;
+import com.supermap.gaf.authority.vo.EmailChangeVo;
 import com.supermap.gaf.authority.vo.TreeNode;
 
 import java.util.List;
@@ -150,4 +151,17 @@ public interface AuthUserService {
      * @param newPassword 新密码
      */
     void changePassword(AuthUser authUser, String oldPassword, String newPassword);
+
+    /**
+     * 当前用户变更邮箱
+     * @param emailChangeVo 变更邮箱参数
+     */
+    String changeEmail(EmailChangeVo emailChangeVo);
+
+    /**
+     * 发送校验码
+     * @param email  邮箱 若邮箱为空则默认使用当前用户邮箱
+     * @return 若为空则表示成功，否则表示失败原因
+     */
+    void sendCheckCode(String email);
 }

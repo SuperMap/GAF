@@ -17,7 +17,6 @@
         <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
         <result column="type" jdbcType="VARCHAR" property="type" />
     </resultMap>
-
     <sql id="Base_Column_List">
         role_id,
         tenant_id,
@@ -41,6 +40,7 @@
 	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthRoleSelectVo">
         SELECT <include refid="Base_Column_List" />
         FROM "auth_role"
+        WHERE status = true
         LIMIT #{pageSize}
         <if test ='null != offset'>OFFSET #{offset}</if>
     </select>
@@ -69,20 +69,22 @@
 	<select id="countOneField" resultType="java.lang.Integer">
         SELECT count(*)
         FROM "auth_role"
-		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+        WHERE status = true
+		<if test ='null != fieldName'>and ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
     </select>
     <select id="bigOffsetPageList" resultMap="BaseResultMap">
         SELECT  a.role_id, a.tenant_id, a.role_catalog_id, a.sort_sn, a.role_name, a.name_en, a.code, a.status, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_role" a,(
             select role_id 
-            From "auth_role" 
+            From "auth_role"
+            where status = true
             LIMIT #{pageSize} OFFSET #{offset}
             ) b 
-        WHERE a.role_id = b.role_id 
+        WHERE a.role_id = b.role_id
     </select>
-
     <select id="pageListCount" resultType="java.lang.Integer">
         SELECT count(*)
         FROM "auth_role"
+        where status = true
     </select>
     <select id="countByCombination" resultType="java.lang.Integer">
         SELECT count(*)
