@@ -16,13 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.*;
+import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME;
+import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.GATEWAY_AUTHORIZATION_VALIDATE_FILTER_ORDER;
 
 /**
  * 注意： 该代码对应gaf-boot中的同名的filter,功能逻辑等应该保持一致
@@ -43,16 +42,17 @@ public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordere
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
+        boolean apiAuthzEnabled = attribute.getGatewaySecurityProperties().isApiAuthzEnable();
+        if (attribute.getIsPublicUrl() || attribute.getIsIndexUrl() || !apiAuthzEnabled){
+            return chain.filter(exchange);
+        }
+
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
         AuthorizationParam authorizationParam = new AuthorizationParam();
         authorizationParam.setUsername(authenticationResult.getUsername());
         authorizationParam.setUri(exchange.getRequest().getURI().getPath());
         authorizationParam.setMethod(ResourceApiMethodEnum.valueOf(exchange.getRequest().getMethod().name()).getValue());
 
-        boolean apiAuthzEnabled = attribute.getGatewaySecurityProperties().isApiAuthzEnable();
-        if (attribute.getIsPublicUrl() || attribute.getIsIndexUrl() || !apiAuthzEnabled){
-            return chain.filter(exchange);
-        }
         Boolean result = validateClient.authorization(authorizationParam);
         if (!BooleanUtils.isTrue(result)){
             return GafFluxUtils.unAuth(exchange);
