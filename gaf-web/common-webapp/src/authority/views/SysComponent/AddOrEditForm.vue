@@ -31,7 +31,7 @@
             allow-clear
           />
         </a-form-item>
-        <a-form-item label="中文名称">
+        <a-form-item label="别名">
           <a-input
             :disabled="operation === 1"
             v-decorator="[
@@ -40,16 +40,16 @@
                 rules: [
                   {
                     required: true,
-                    message: '中文名称不能为空'
+                    message: '别名不能为空'
                   }
                 ]
               }
             ]"
-            placeholder="请输入中文名称"
+            placeholder="请输入别名"
             allow-clear
           />
         </a-form-item>
-        <a-form-item label="编码">
+        <a-form-item v-show="false" label="编码">
           <a-input
             :disabled="operation === 1"
             v-decorator="['code']"
