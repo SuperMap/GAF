@@ -565,7 +565,8 @@
     //获取数据源分类树形数据
     async getDataOfTree() {
       const url = `/sys-mgt/sys-dicts/NR_DATA_CATEGORY/tree`
-      const res = await this.$axios.$get(url)
+      const params = { level: 3 };
+      const res = await this.$axios.$get(url,{ params })
       if (res.isSuccessed) {
         this.dataOfTree1.push(this.searchAllNode)
         this.dataOfTree1 = [...this.dataOfTree1,...this.changePropertyName(res.data)]
