@@ -618,7 +618,7 @@ export default {
     this.getOptions4()
     if (this.operation !== 2) {
        //回显时得到级联选择器路径数据  根据字典类别值和具体要得到路径的值
-      this.getPath1('DataSourceClassification', this.editData.catalogCode)
+      this.getPath1('NR_DATA_CATEGORY', this.editData.catalogCode)
       this.getPath2('DataSourceType', this.editData.typeCode)
     }
   },
@@ -626,7 +626,7 @@ export default {
     //回显数据处理
     this.addOrEditForm.resetFields()
     if(this.operation === 2 && this.catalogCode !== '') {
-      this.getPath1("DataSourceClassification",this.catalogCode)
+      this.getPath1("NR_DATA_CATEGORY",this.catalogCode)
       return;
     }
     const copyData = { ...this.editData }
