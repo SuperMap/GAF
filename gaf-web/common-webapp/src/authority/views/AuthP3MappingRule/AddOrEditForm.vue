@@ -24,6 +24,10 @@
                   {
                     required: true,
                     message: '规则名称不能为空'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ],
                 initialValue: ''

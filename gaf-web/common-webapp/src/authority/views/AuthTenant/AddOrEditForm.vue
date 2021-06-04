@@ -23,6 +23,10 @@
                   {
                     required: true,
                     message: '请输入租户名称'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -34,7 +38,17 @@
         <a-form-item label="租户描述">
           <a-textarea
             :disabled="operation === 1"
-            v-decorator="['description']"
+            v-decorator="[
+              'description',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入租户描述"
             auto-size
           />
@@ -56,7 +70,17 @@
         <a-form-item label="英文名称">
           <a-input
             :disabled="operation === 1"
-            v-decorator="['nameEn']"
+            v-decorator="[
+              'nameEn',
+              {
+                rules: [
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入英文名称"
             allow-clear
           />

@@ -3,8 +3,7 @@
     <div class="title">
       <template>
         <a-breadcrumb separator=">">
-        <span class="vertical-line">| </span>
-        <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
+        <a-breadcrumb-item class="text-bolder"><span class="vertical-line">| </span>{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
       </template>
     </div>
@@ -58,6 +57,10 @@
                 {
                   required: true,
                   message: '名称不能为空！'
+                },
+                {
+                  max: 255,
+                  message: '长度不能超过255个字符'
                 }
               ]
             }
@@ -118,7 +121,17 @@
       <a-form-item label="英文名称">
         <a-input
           :disabled="operation === 1"
-          v-decorator="['nameEn']"
+          v-decorator="[
+            'nameEn',
+            {
+              rules: [
+                {
+                  max: 255,
+                  message: '长度不能超过255个字符'
+                }
+              ]
+            }
+          ]"
           placeholder="请输入英文名称"
           allow-clear
         />
@@ -126,7 +139,17 @@
       <a-form-item label="简称">
         <a-input
           :disabled="operation === 1"
-          v-decorator="['briefName']"
+          v-decorator="[
+            'briefName',
+            {
+              rules: [
+                {
+                  max: 255,
+                  message: '长度不能超过255个字符'
+                }
+              ]
+            }
+          ]"
           placeholder="请输入简称"
           allow-clear
         />
@@ -134,7 +157,17 @@
       <a-form-item label="描述">
         <a-textarea
           :disabled="operation === 1"
-          v-decorator="['description']"
+          v-decorator="[
+            'description',
+             {
+              rules: [
+                {
+                  max: 500,
+                  message: '长度不能超过500个字符'
+                }
+              ]
+            }
+          ]"
           placeholder="请输入描述"
           auto-size
         />
@@ -207,14 +240,14 @@ export default {
   },
   watch: {
     editData: function(newEditData) {
-      this.setEditData(newEditData)
+      this.setEditData({...newEditData})
     }
   },
   beforeMount() {
     this.addOrEditForm = this.$form.createForm(this, { name: 'addOrEditForm' })
   },
   mounted() {
-    this.setEditData(this.editData)
+    this.setEditData({...this.editData})
   },
   methods: {
     moment,
