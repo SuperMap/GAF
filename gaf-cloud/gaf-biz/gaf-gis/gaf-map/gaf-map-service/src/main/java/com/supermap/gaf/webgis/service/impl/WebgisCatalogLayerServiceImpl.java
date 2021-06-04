@@ -50,11 +50,13 @@ public class WebgisCatalogLayerServiceImpl implements WebgisCatalogLayerService{
         }
         WebgisCatalogLayer layer = webgisCatalogLayerMapper.select(catalogLayerId);
         WebgisService service = webgisServiceService.getById(layer.getGisServiceId());
-        layer.setServiceName(service.getName());
-        layer.setServiceNameEn(service.getNameEn());
-        layer.setAddress(service.getAddress());
-        layer.setTypeCode(service.getTypeCode());
-        layer.setMoreProperties(service.getMoreProperties());
+        if(service != null) {
+            layer.setServiceName(service.getName());
+            layer.setServiceNameEn(service.getNameEn());
+            layer.setAddress(service.getAddress());
+            layer.setTypeCode(service.getTypeCode());
+            layer.setMoreProperties(service.getMoreProperties());
+        }
         return  webgisCatalogLayerMapper.select(catalogLayerId);
     }
 	

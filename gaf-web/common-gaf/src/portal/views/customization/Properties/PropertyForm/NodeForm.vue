@@ -11,6 +11,10 @@
                   required: true,
                   message: '请输入标题!',
                 },
+                {
+                  max: 255,
+                  message: '长度不能超过255个字符'
+                }
               ],
             },
           ]"
@@ -26,6 +30,10 @@
                   required: true,
                   message: '请输入描述!',
                 },
+                {
+                  max: 500,
+                  message: '长度不能超过500个字符'
+                }
               ],
             },
           ]"

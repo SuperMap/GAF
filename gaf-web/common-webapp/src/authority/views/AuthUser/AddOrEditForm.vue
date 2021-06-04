@@ -173,7 +173,17 @@
             <a-form-item label="地址">
           <a-input
             :disabled="operation === 1"
-            v-decorator="['address']"
+            v-decorator="[
+              'address',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入地址"
             allow-clear
           />
@@ -277,7 +287,17 @@
         <a-form-item label="描述">
           <a-textarea
             :disabled="operation === 1"
-            v-decorator="['description']"
+            v-decorator="[
+              'description',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入描述"
             auto-size
           />

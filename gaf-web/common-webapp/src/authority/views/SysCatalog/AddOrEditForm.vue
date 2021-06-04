@@ -80,6 +80,10 @@
                   {
                     required: true,
                     message: '请输入目录名称'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -108,7 +112,17 @@
         <a-form-item label="描述">
           <a-textarea
             :disabled="operation === 'detail'"
-            v-decorator="['description']"
+            v-decorator="[
+              'description',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入描述"
             auto-size
           />

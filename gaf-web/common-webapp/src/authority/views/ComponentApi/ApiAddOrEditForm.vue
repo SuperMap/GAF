@@ -71,6 +71,10 @@
                   {
                     required: true,
                     message: '请输入名称'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
