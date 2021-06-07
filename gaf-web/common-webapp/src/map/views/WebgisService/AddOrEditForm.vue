@@ -192,8 +192,9 @@
           <a-button
             class="submit-gray"
             style="margin-left: 53%"
+            type="primary"
+            :loading="loading"
             @click="submitForm"
-            v-preventReClick
           >
             确定
           </a-button>
@@ -274,6 +275,7 @@
       tianditu: false,
       options: [],
       registryType: 'single',
+      loading: false,
       addressPlaceholder: '例:http://nsip.net.cn/iserver/services/3D-CBD/rest/realspace/datas/Ground@CBD'
     }
   },
@@ -320,6 +322,7 @@
         }
       let url = `/map/webgis-services`
       const data = this.addOrEditForm.getFieldsValue()
+      this.loading = true
       if (this.serviceType !== 1) {
         data.displayAttrs = JSON.stringify(this.displayAttrsList)
       }
@@ -380,6 +383,7 @@
           that.addOrEditForm.resetFields()
         }
       }
+      this.loading = false
       })
     },
     handleCancel() {

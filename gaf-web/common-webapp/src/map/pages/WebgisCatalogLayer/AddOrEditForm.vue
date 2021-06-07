@@ -166,9 +166,9 @@
             deleteOrCacel
           }}</button> -->
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <button class="submit-gray" style="color: white" @click="submitForm">
+          <a-button class="submit-gray" type="primary" :loading="loading" style="color: white" @click="submitForm">
             {{ submitButtonText }}
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button class="cancel-modal" v-if="!isFirstLevel && this.operation === 'add'" @click="deleteDataOrCancle">{{
             deleteOrCacel
@@ -215,6 +215,7 @@ export default {
     return {
       dataId: '',
       casecaderDisabled: true,
+      loading: false,
     }
   },
   computed: {
@@ -332,6 +333,7 @@ export default {
         }
         let url = `/sys-mgt/sys-catalogs`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + '/' + this.dataId
           const { name, sortSn, iconUrl, description, parentId } = data
@@ -360,6 +362,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
       })
     },
     async deleteDataOrCancle() {

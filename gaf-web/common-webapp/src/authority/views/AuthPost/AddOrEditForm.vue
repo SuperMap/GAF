@@ -91,9 +91,9 @@
         />
       </a-form-item>
       <div class="btn-div">
-        <button @click="submitForm" class="submit-gray">
+        <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
           {{ operation === 2 ? '新增' : '保存' }}
-        </button>
+        </a-button>
         <button @click="cancelDelete" class="cancel-modal">
           {{ operation === 2 ? '取消' : '删除' }}
         </button>
@@ -117,7 +117,8 @@ export default {
   },
   data() {
     return {
-      dataId: ''
+      dataId: '',
+      loading: false,
     }
   },
   computed: {
@@ -164,6 +165,7 @@ export default {
         }
         let url = `/authority/auth-posts`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + '/' + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -182,6 +184,7 @@ export default {
             this.$message.error('添加失败:' + rst.data.message)
           }
         }
+        this.loading = false
       })
     },
     async cancelDelete() {

@@ -19,6 +19,7 @@
               <a-button
                 @click="submitGatewayRoute"
                 type="primary"
+                :loading="loading1"
                 html-type="submit"
                 class="submit-gray"
               >
@@ -84,7 +85,8 @@ export default {
       columns: columns,
       filtersData: [],
       predicatesData: [],
-      selectedRowKeys: []
+      selectedRowKeys: [],
+      loading1: false,
     }
   },
   watch: {
@@ -111,6 +113,7 @@ export default {
       } else {
         this.routeInfo.uri = this.routeInfo.uriBefore + this.routeInfo.uriAfter
         this.routeInfo.createTime = new Date(this.routeInfo.createTime).getTime()
+        this.loading1 = true
         const updateRst = await this.$axios.put(
           '/srv-governance/routes',
           this.routeInfo
@@ -124,6 +127,7 @@ export default {
             this.$message.error(updateRst.data.message)
           }
         }
+        this.loading1 = false
       }
       
     },

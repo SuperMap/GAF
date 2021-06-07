@@ -179,7 +179,9 @@
       <div style="border: 1px soild blue">
         <a-button
           class="submit-gray"
+          type="primary"
           style="margin-left: 43%"
+          :loading="loading"
           @click="submitForm"
           >确定</a-button
         >
@@ -213,6 +215,7 @@ export default {
         authorization: `Bearer ${token}`,
       },
       templateTypes: [],
+      loading: false,
     }
   },
   beforeMount() {
@@ -240,6 +243,7 @@ export default {
         }
         let url = '/proj/projcodetemplate'
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + '/' + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -256,6 +260,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

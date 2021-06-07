@@ -125,9 +125,9 @@
         <a-button>删除</a-button>
       </a-popconfirm>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-      <button @click="submitForm" class="submit-gray">
+      <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
         {{submitButtonText}}
-      </button>
+      </a-button>
       <button v-if="operation === 2" @click="handleBack" class="submit-gray">
         取消
       </button>
@@ -178,6 +178,7 @@
     return {
       dataId: '',
       treeData: [],
+      loading: false
     }
   },
   watch: {
@@ -231,6 +232,7 @@
         }
         let url = `/sys-mgt/sys-dicts/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url  + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -249,6 +251,7 @@
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

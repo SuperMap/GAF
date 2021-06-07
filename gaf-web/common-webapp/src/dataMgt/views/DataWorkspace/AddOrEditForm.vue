@@ -264,7 +264,7 @@
           </a-form-item>
         </div>
         <div class="btn-div">
-          <a-button @click="submitForm" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             确定
           </a-button>
           <a-button @click="backToList" class="cancel-modal">取消</a-button>
@@ -303,7 +303,8 @@
       //是否文件类型
       isfiletype: false,
       //回显时级联选择器的路径数据
-      optiontypeCode: []
+      optiontypeCode: [],
+      loading: false
     }
   },
   beforeMount() {
@@ -360,6 +361,7 @@
         }
         let url = `/data-mgt/data-workspaces/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         data.typeCode = data.typeCode.slice(-1).join()
         if (this.isfiletype) {
           data.wsName = data.server
@@ -381,6 +383,7 @@
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

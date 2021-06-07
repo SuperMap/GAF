@@ -181,13 +181,15 @@
           <a-input v-decorator="['updatedBy']" allow-clear disabled />
         </a-form-item>
         <div v-show="operation !== 1">
-          <button
+          <a-button
             @click="submitForm"
+            type="primary"
+            :loading="loading"
             class="submit-gray"
             style="margin: 0 10px 0 300px;"
           >
             确定
-          </button>
+          </a-button>
           <button @click="backToList" class="cancel-modal">取消</button>
         </div>
         <div v-show="operation === 1">
@@ -253,7 +255,8 @@ export default {
           name: 'DELETE',
           value: '4'
         }
-      ]
+      ],
+      loading: false
     }
   },
   computed: {
@@ -297,6 +300,7 @@ export default {
         }
         let url = '/authority/auth-resource-apis/'
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -313,6 +317,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

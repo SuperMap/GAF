@@ -57,9 +57,9 @@
               style="margin-bottom: 10px"
               placeholder=""
             />
-            <button class="submit-gray" @click="handleOk(ot.record)">
+            <a-button class="submit-gray" type="primary" :loading="loading" @click="handleOk(ot.record)">
               确认
-            </button>
+            </a-button>
             <button class="cancel-modal" @click="handleCancel">取消</button>
           </a-modal>
           <!-- </div> -->
@@ -86,6 +86,7 @@ export default {
       value: '',
       visible: false,
       id: '',
+      loading: false,
     }
   },
   created() {
@@ -111,6 +112,7 @@ export default {
     },
     async handleOk() {
       this.visible = false
+      this.loading = true
       const url = `/workflow/execute/process/remove`
       const delRecord = await this.$axios.post(url, {
         nowActInstId: this.id,
@@ -123,6 +125,7 @@ export default {
         this.$message.warn(delRecord.data.message)
         this.value = ''
       }
+      this.loading = false
       this.getTable()
     },
     /* 办理 功能 接口 */

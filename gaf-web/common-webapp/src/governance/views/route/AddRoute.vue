@@ -19,6 +19,7 @@
               <a-button
                 @click="addGatewayRoute"
                 type="primary"
+                :loading="loading"
                 html-type="submit"
                 class="submit-gray"
               >
@@ -48,7 +49,8 @@ export default {
   props: {
     visible: {
       type: Boolean,
-      default: false
+      default: false,
+      loading: false
     }
   },
   data: function() {
@@ -75,6 +77,7 @@ export default {
       } else {
         this.newRouteInfo.uri =
         this.newRouteInfo.uriBefore + this.newRouteInfo.uriAfter
+        this.loading = true
       const addRst = await this.$axios.post(
         '/srv-governance/routes',
         this.newRouteInfo
@@ -88,6 +91,7 @@ export default {
           this.$message.error(addRst.data.message)
         }
       }
+      this.loading = false
       }
     }
   }

@@ -179,9 +179,9 @@
         <button @click="setTenantSynchronization" class="submit-gray">
           同步
         </button>
-        <button @click="submitForm" class="submit-gray">
+        <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
           {{ operation === 2 ? '新增' : '保存' }}
-        </button>
+        </a-button>
         <button v-if="operation === 2" @click="cancelDelete" class="cancel-modal">
           取消
         </button>
@@ -224,7 +224,8 @@ export default {
     return {
       dataId: '',
       tenantRst: [],
-      mapList: false
+      mapList: false,
+      loading: false
     }
   },
   computed: {
@@ -280,6 +281,7 @@ export default {
         }
         let url = `/authority/auth-departments`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + '/' + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -298,6 +300,7 @@ export default {
             this.$message.error('添加失败:' + rst.data.message)
           }
         }
+        this.loading = false
       })
     },
     async cancelDelete() {

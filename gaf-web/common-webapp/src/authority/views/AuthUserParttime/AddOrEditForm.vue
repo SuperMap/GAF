@@ -146,13 +146,15 @@
           </a-form-item>
         </div>
         <div class="btn-div">
-          <button
+          <a-button
             v-show="operation !== 1"
             @click="submitForm"
+            type="primary"
+            :loading="loading"
             class="submit-gray"
           >
             确定
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">取消</button>
         </div>
@@ -182,7 +184,8 @@ export default {
     return {
       dataId: '',
       departmentOptions: [],
-      postOptions: []
+      postOptions: [],
+      loading: false
     }
   },
   beforeMount() {
@@ -316,6 +319,7 @@ export default {
         }
         let url = `/authority/auth-user-parttime/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -332,6 +336,7 @@ export default {
             this.$message.error(`添加失败,原因：${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })
