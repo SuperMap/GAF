@@ -203,7 +203,7 @@
         </div>
       </div>
       <div style="float: right; margin-top: 15px">
-        <a-button class="submit-gray" @click="handleSubmitParams">
+        <a-button class="submit-gray" type="primary" :loading="loading" @click="handleSubmitParams">
           提交
         </a-button>
         <a-button class="cancel-modal" @click="handleCancel">取消</a-button>
@@ -350,6 +350,7 @@ export default {
       selectedRowKeys: [],
       selectedGroupIndex: -1,
       requiredRowKeys: null,
+      loading: false
     }
   },
   computed: {
@@ -763,6 +764,7 @@ export default {
 
       if (this.updateOrAddParams.length > 0 || this.deleteParamIds.length > 0) {
         const url = '/proj/projcodetemplateparam/batchHandlerParams'
+        this.loading = true
         const postData = {
           deleteIdsLst: this.deleteParamIds,
           templateParamsLst: this.updateOrAddParams,
@@ -792,6 +794,7 @@ export default {
         } else {
           this.$message.error(`添加失败,原因:${rst.data.message}`)
         }
+        this.loading = false
       } else {
         this.$message.success('操作成功')
         this.$emit('saveConfig')

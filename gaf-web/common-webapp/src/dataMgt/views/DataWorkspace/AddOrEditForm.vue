@@ -43,6 +43,10 @@
                   {
                     required: true,
                     message: '请输入工作空间名称'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -103,7 +107,16 @@
           <a-input
             :disabled="operation === 1 || operation === 3"
             v-decorator="[
-              'database'            ]"
+              'database',
+              {
+                rules: [
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入数据库名称"
             allow-clear
           />
@@ -112,7 +125,16 @@
           <a-input
             :disabled="operation === 1"
             v-decorator="[
-              'userName'            ]"
+              'userName',
+              {
+                rules: [
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入用户名"
             allow-clear
           />
@@ -120,7 +142,17 @@
         <a-form-item label="密码">
           <a-input-password
             :disabled="operation === 1"
-            v-decorator="['password']"
+            v-decorator="[
+              'password',
+              {
+                rules: [
+                  {
+                    max: 50,
+                    message: '长度不能超过50个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入密码"
           />
         </a-form-item>
@@ -128,7 +160,17 @@
           <a-form-item label="描述">
             <a-textarea
               :disabled="operation === 1"
-              v-decorator="['description']"
+              v-decorator="[
+                'description',
+                {
+                  rules: [
+                    {
+                      max: 500,
+                      message: '长度不能超过500个字符'
+                    }
+                  ]
+                }
+              ]"
               placeholder="请输入描述"
               auto-size
             />
@@ -222,7 +264,7 @@
           </a-form-item>
         </div>
         <div class="btn-div">
-          <a-button @click="submitForm" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             确定
           </a-button>
           <a-button @click="backToList" class="cancel-modal">取消</a-button>
@@ -261,7 +303,8 @@
       //是否文件类型
       isfiletype: false,
       //回显时级联选择器的路径数据
-      optiontypeCode: []
+      optiontypeCode: [],
+      loading: false
     }
   },
   beforeMount() {
@@ -318,6 +361,7 @@
         }
         let url = `/data-mgt/data-workspaces/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         data.typeCode = data.typeCode.slice(-1).join()
         if (this.isfiletype) {
           data.wsName = data.server
@@ -339,6 +383,7 @@
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

@@ -25,6 +25,10 @@
                       }
                       callback()
                     }
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ],
                 validateFirst: true
@@ -43,6 +47,10 @@
                   {
                     required: true,
                     message: '请输入真实姓名'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -126,7 +134,19 @@
           />
         </a-form-item>
         <a-form-item label="地址">
-          <a-input v-decorator="['address']" allow-clear />
+          <a-input v-decorator="[
+              'address',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]" 
+            allow-clear 
+          />
         </a-form-item>
         <a-form-item label="状态">
           <a-switch
@@ -139,12 +159,22 @@
           />
         </a-form-item>
         <a-form-item label="描述">
-          <a-textarea v-decorator="['description']" auto-size />
+          <a-textarea v-decorator="[
+            'description',
+            {
+              rules: [
+                {
+                  max: 500,
+                  message: '长度不能超过500个字符'
+                }
+              ]
+            }
+          ]" auto-size />
         </a-form-item>
         <div style="text-align: center; margin-top: 15px;">
-          <button @click="submitForm" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             确定
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
@@ -158,7 +188,8 @@ import moment from 'moment'
 export default {
   data() {
     return {
-      dataId: ''
+      dataId: '',
+      loading: false
     }
   },
   beforeMount() {
@@ -173,7 +204,9 @@ export default {
           return false
         }
         const adminInfo = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         this.$emit('submit', adminInfo)
+        this.loading = false
       })
     },
     // 从新增修改模态框返回列表

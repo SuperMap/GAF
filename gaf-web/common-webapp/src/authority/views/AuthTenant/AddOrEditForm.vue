@@ -23,6 +23,10 @@
                   {
                     required: true,
                     message: '请输入租户名称'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -34,7 +38,17 @@
         <a-form-item label="租户描述">
           <a-textarea
             :disabled="operation === 1"
-            v-decorator="['description']"
+            v-decorator="[
+              'description',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入租户描述"
             auto-size
           />
@@ -56,7 +70,17 @@
         <a-form-item label="英文名称">
           <a-input
             :disabled="operation === 1"
-            v-decorator="['nameEn']"
+            v-decorator="[
+              'nameEn',
+              {
+                rules: [
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入英文名称"
             allow-clear
           />
@@ -142,9 +166,9 @@
           />
         </a-form-item>
         <div style="text-align: center; margin-top: 15px;">
-          <button v-show="operation !== 1" @click="submitForm" class="submit-gray">
+          <a-button v-show="operation !== 1" @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             {{ submitTile }}
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
@@ -193,7 +217,8 @@ export default {
       dataId: '',
       createAdmin: false,
       adminInfo: {},
-      submitTile: '下一步'
+      submitTile: '下一步',
+      loading: false
     }
   },
   beforeMount() {
@@ -245,6 +270,7 @@ export default {
         }
         let url = `/authority/auth-tenants/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -258,6 +284,7 @@ export default {
         } else {
           this.createAdmin = true
         }
+        this.loading = false
       })
     },
     // 从新增修改模态框返回列表

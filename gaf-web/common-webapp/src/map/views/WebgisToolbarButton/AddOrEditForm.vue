@@ -163,13 +163,15 @@
           </a-form-item>
         </div>
         <div>
-          <button
+          <a-button
             style="margin-top: 30px; left: 450px"
             class="submit-gray"
+            type="primary"
+            :loading="loading"
             @click="submitForm"
           >
             确定
-          </button>
+          </a-button>
           <button
             style="top: 30px; right: 15px"
             class="cancel-modal float-right"
@@ -202,6 +204,7 @@ export default {
   data() {
     return {
       dataId: '',
+      loading: false,
     }
   },
   beforeMount() {
@@ -234,6 +237,7 @@ export default {
         }
         let url = `/map/webgis-toolbar-buttons/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -250,6 +254,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

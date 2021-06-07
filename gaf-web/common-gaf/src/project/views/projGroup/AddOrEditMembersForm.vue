@@ -45,6 +45,8 @@
         <a-button
           style="margin: 15px 0 15px 56%"
           class="submit-gray"
+          type="primary"
+          :loading="loading1"
           @click="submitForm"
         >
           确定
@@ -111,6 +113,7 @@ export default {
           value: 40,
         },
       ],
+      loading1: false,
     }
   },
   watch: {
@@ -187,6 +190,7 @@ export default {
           return false
         }
         const data = this.addOrEditMembersForm.getFieldsValue()
+        this.loading1 = true
         if (data.projCodeBaseUserId === '') {
           this.$message.info('请选择人员')
           return
@@ -208,7 +212,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
-
+        this.loading1 = false
         this.$emit('submit')
       })
     },

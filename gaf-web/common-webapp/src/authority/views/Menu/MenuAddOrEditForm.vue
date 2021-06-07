@@ -52,6 +52,10 @@
                   {
                     required: true,
                     message: '请输入菜单名'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -140,7 +144,17 @@
         <a-form-item label="描述">
           <a-textarea
             :disabled="operation === 1"
-            v-decorator="['description']"
+            v-decorator="[
+              'description',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入描述"
             auto-size
           />
@@ -180,9 +194,9 @@
           </a-form-item>
         </div>
         <div class="btn-div">
-          <button v-show="operation !== 1" @click="submitForm" class="submit-gray">
+          <a-button v-show="operation !== 1" @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             确定
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
@@ -223,7 +237,8 @@ export default {
   data() {
     return {
       dataId: '',
-      treeData: []
+      treeData: [],
+      loading: false
     }
   },
   computed: {
@@ -321,6 +336,7 @@ export default {
         }
         let url = `/authority/auth-resource-menus/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -337,6 +353,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

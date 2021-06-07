@@ -80,6 +80,10 @@
                   {
                     required: true,
                     message: '请输入目录名称'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -108,7 +112,17 @@
         <a-form-item label="描述">
           <a-textarea
             :disabled="operation === 'detail'"
-            v-decorator="['description']"
+            v-decorator="[
+              'description',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入描述"
             auto-size
           />
@@ -169,9 +183,9 @@
           >
           </span>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-          <button @click="submitForm" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             {{ submitButtonText }}
-          </button>
+          </a-button>
            <button
             @click="deleteDataOrCancle"
             v-if="operation === 'add'"
@@ -214,7 +228,8 @@ export default {
   data() {
     return {
       dataId: '',
-      casecaderDisabled: false
+      casecaderDisabled: false,
+      loading: false,
     }
   },
   computed: {
@@ -343,7 +358,7 @@ export default {
         }
         let url = `/sys-mgt/sys-catalogs`
         const data = this.addOrEditForm.getFieldsValue()
-        // this.$emit('submit', data.parentPath[data.parentPath.length-1])
+        this.loading = true
         if (this.dataId) {
           url = url + '/' + this.dataId
           const { name, sortSn, iconUrl, description, parentId } = data
@@ -369,6 +384,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
       })
     },
     async deleteDataOrCancle() {

@@ -24,6 +24,10 @@
                   {
                     required: true,
                     message: '规则名称不能为空'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ],
                 initialValue: ''
@@ -175,9 +179,9 @@
           </a-form-item>
         </div>
         <div class="btn-div">
-          <button @click="submitForm" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             确定
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
@@ -208,7 +212,8 @@ export default {
       dataId: '',
       isdisabled: false,
       options: [],
-      value: ''
+      value: '',
+      loading: false,
     }
   },
   beforeMount() {
@@ -261,6 +266,7 @@ export default {
         }
         let url = `/authority/auth-p3-mapping-rule/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -279,6 +285,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

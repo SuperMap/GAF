@@ -46,6 +46,10 @@
                   {
                     required: true,
                     message: '字典编码不能为空'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -63,6 +67,10 @@
                   {
                     required: true,
                     message: '中文名称不能为空'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -87,7 +95,17 @@
         </a-form-item>
         <a-form-item label="描述">
           <a-textarea
-            v-decorator="['dictDesc']"
+            v-decorator="[
+              'dictDesc',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入描述"
             auto-size
           />
@@ -107,9 +125,9 @@
         <a-button>删除</a-button>
       </a-popconfirm>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-      <button @click="submitForm" class="submit-gray">
+      <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
         {{submitButtonText}}
-      </button>
+      </a-button>
       <button v-if="operation === 2" @click="handleBack" class="submit-gray">
         取消
       </button>
@@ -160,6 +178,7 @@
     return {
       dataId: '',
       treeData: [],
+      loading: false
     }
   },
   watch: {
@@ -213,6 +232,7 @@
         }
         let url = `/sys-mgt/sys-dicts/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url  + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -231,6 +251,7 @@
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

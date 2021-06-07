@@ -33,6 +33,10 @@
                   {
                     required: true,
                     message: '数据源名称不能为空'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -72,6 +76,10 @@
                   {
                     required: true,
                     message: '地址不能为空'
+                  },
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
                   }
                 ]
               }
@@ -106,6 +114,10 @@
                   {
                     required: true,
                     message: '数据库名称不能为空'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -124,6 +136,10 @@
                   {
                     required: true,
                     message: '用户名不能为空'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -142,6 +158,10 @@
                   {
                     required: true,
                     message: '密码不能为空'
+                  },
+                  {
+                    max: 255,
+                    message: '长度不能超过255个字符'
                   }
                 ]
               }
@@ -152,7 +172,17 @@
         <a-form-item label="描述">
           <a-textarea
             :disabled="operation === 1"
-            v-decorator="['description']"
+            v-decorator="[
+              'description',
+              {
+                rules: [
+                  {
+                    max: 500,
+                    message: '长度不能超过500个字符'
+                  }
+                ]
+              }
+            ]"
             placeholder="请输入描述"
             auto-size
           />
@@ -192,17 +222,18 @@
           </a-form-item>
         </div>
         <div class="btn-div">
-          <button
+          <a-button
             @click="testConnect"
             type="primary"
+            :loading="loading1"
             class="submit-gray"
           >
             测试连接
-          </button>
+          </a-button>
           &nbsp;&nbsp;
-          <button @click="submitForm" type="primary" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading2" class="submit-gray">
             确定
-          </button>
+          </a-button>
           &nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
@@ -237,7 +268,9 @@
         { value: 'MYSQL', label: 'MYSQL' },
         { value: 'ORACLE', label: 'ORACLE' },
         { value: 'SQLSERVER', label: 'SQLSERVER' }
-      ]
+      ],
+      loading1: false,
+      loading2: false,
     }
   },
   beforeMount() {
@@ -270,6 +303,7 @@
           const url =
             '/sys-mgt/sys-resource-datasources/connection-param/check'
           const data = this.addOrEditForm.getFieldsValue()
+          this.loading1 = true
           const res = await this.$axios.$post(url, {
             datasourceType: data.typeCode,
             host: data.addr,
@@ -283,6 +317,7 @@
           } else {
             this.$message.error(`${res.message}`)
           }
+          this.loading1 = false
         }
       })
     },
@@ -294,6 +329,7 @@
         }
         let url = `/sys-mgt/sys-resource-datasources/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading2 = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -310,6 +346,7 @@
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading2 = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

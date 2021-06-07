@@ -187,7 +187,7 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
 
     @Override
     public List<DefaultTreeNode> getTree() {
-        List<DictDataNode> dataSourceTypeTree = sysDictService.getDictDataTree("NR_DATA_CATEGORY");
+        List<DictDataNode> dataSourceTypeTree = sysDictService.getDictDataTree("NR_DATA_CATEGORY",null,3,false);
         if(dataSourceTypeTree == null || dataSourceTypeTree.size() == 0) {
             return null;
         }
