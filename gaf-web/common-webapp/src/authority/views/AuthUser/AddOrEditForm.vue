@@ -347,9 +347,9 @@
           </a-form-item>
         </div> -->
         <div class="btn-div">
-          <button @click="submitForm" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             {{this.operation === 2 ? "确定" : "保存"}}
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="cancle" class="cancel-modal" v-show="operation !== 3">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
@@ -376,7 +376,8 @@ export default {
     return {
       dataId: '',
       postList: [],
-      treeData: []
+      treeData: [],
+      loading: false
     }
   },
   computed: {
@@ -526,6 +527,7 @@ export default {
         }
         let url = `/authority/auth-users/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -544,6 +546,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
       })
     },
     cancle() {

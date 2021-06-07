@@ -80,6 +80,8 @@
         <a-button
           style="margin: 15px 0 15px 56%"
           class="submit-gray"
+          type="primary"
+          :loading="loading"
           @click="submitForm"
         >
           确定
@@ -115,6 +117,7 @@ export default {
       dataId: '',
       tenantBriefNameEn: '',
       tenants: [],
+      loading: false,
     }
   },
   beforeMount() {
@@ -146,6 +149,7 @@ export default {
           return false
         }
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         data.path = this.tenantBriefNameEn + '/' + data.path
         data.tenantId = this.tenants.filter(
           (item) => item.briefNameEn === this.tenantBriefNameEn
@@ -157,6 +161,7 @@ export default {
         } else {
           this.$message.error(`添加失败,原因:${rst.data.message}`)
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

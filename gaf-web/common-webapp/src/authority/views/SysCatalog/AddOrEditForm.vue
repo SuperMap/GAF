@@ -183,9 +183,9 @@
           >
           </span>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-          <button @click="submitForm" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             {{ submitButtonText }}
-          </button>
+          </a-button>
            <button
             @click="deleteDataOrCancle"
             v-if="operation === 'add'"
@@ -228,7 +228,8 @@ export default {
   data() {
     return {
       dataId: '',
-      casecaderDisabled: false
+      casecaderDisabled: false,
+      loading: false,
     }
   },
   computed: {
@@ -357,7 +358,7 @@ export default {
         }
         let url = `/sys-mgt/sys-catalogs`
         const data = this.addOrEditForm.getFieldsValue()
-        // this.$emit('submit', data.parentPath[data.parentPath.length-1])
+        this.loading = true
         if (this.dataId) {
           url = url + '/' + this.dataId
           const { name, sortSn, iconUrl, description, parentId } = data
@@ -383,6 +384,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
       })
     },
     async deleteDataOrCancle() {

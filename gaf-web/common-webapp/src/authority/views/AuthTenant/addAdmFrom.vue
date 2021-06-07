@@ -172,9 +172,9 @@
           ]" auto-size />
         </a-form-item>
         <div style="text-align: center; margin-top: 15px;">
-          <button @click="submitForm" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             确定
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
@@ -188,7 +188,8 @@ import moment from 'moment'
 export default {
   data() {
     return {
-      dataId: ''
+      dataId: '',
+      loading: false
     }
   },
   beforeMount() {
@@ -203,7 +204,9 @@ export default {
           return false
         }
         const adminInfo = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         this.$emit('submit', adminInfo)
+        this.loading = false
       })
     },
     // 从新增修改模态框返回列表

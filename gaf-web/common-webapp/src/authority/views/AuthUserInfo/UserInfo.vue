@@ -61,14 +61,15 @@
         <button key="back" @click="handleCancel" class="cancel-modal">
           返回
         </button>
-        <button
+        <a-button
           key="submit"
+          type="primary"
           :loading="loading"
           @click="handleOk"
           class="submit-gray"
         >
           提交
-        </button>
+        </a-button>
       </template>
       <change-password ref="passwordForm"></change-password>
     </a-modal>
@@ -106,19 +107,19 @@ export default {
       form.validateFields(async (err) => {
         if (err) {
           event.preventDefault()
-          this.loading = false
           return false
         }
         const url = `/authority/auth-users/password-change`
         const data = form.getFieldsValue()
+        this.loading = true
         const rst = await this.$axios.put(url, data)
-        this.loading = false
         if (rst.data.isSuccessed) {
           this.$message.success('密码变更成功')
           this.visible = false
         } else {
           this.$message.error(`密码变更失败,原因:${rst.data.message}`)
         }
+        this.loading = false
       })
     },
     handleCancel() {

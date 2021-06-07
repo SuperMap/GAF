@@ -169,9 +169,9 @@
           </a-form-item>
         </div>
         <div class="btn-div">
-          <button @click="submitForm" class="submit-gray">
+          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             确定
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">取消</button>
         </div>
@@ -225,7 +225,8 @@ export default {
           name: '概览',
           value: '4'
         }
-      ]
+      ],
+      loading: false,
     }
   },
   beforeMount() {
@@ -260,6 +261,7 @@ export default {
         }
         let url = '/authority/auth-resource-modules/'
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -276,6 +278,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = true
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

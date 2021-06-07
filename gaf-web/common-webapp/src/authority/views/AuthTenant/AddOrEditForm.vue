@@ -166,9 +166,9 @@
           />
         </a-form-item>
         <div style="text-align: center; margin-top: 15px;">
-          <button v-show="operation !== 1" @click="submitForm" class="submit-gray">
+          <a-button v-show="operation !== 1" @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             {{ submitTile }}
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
@@ -217,7 +217,8 @@ export default {
       dataId: '',
       createAdmin: false,
       adminInfo: {},
-      submitTile: '下一步'
+      submitTile: '下一步',
+      loading: false
     }
   },
   beforeMount() {
@@ -269,6 +270,7 @@ export default {
         }
         let url = `/authority/auth-tenants/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -282,6 +284,7 @@ export default {
         } else {
           this.createAdmin = true
         }
+        this.loading = false
       })
     },
     // 从新增修改模态框返回列表

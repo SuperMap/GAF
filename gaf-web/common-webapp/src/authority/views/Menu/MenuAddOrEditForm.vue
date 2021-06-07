@@ -194,9 +194,9 @@
           </a-form-item>
         </div>
         <div class="btn-div">
-          <button v-show="operation !== 1" @click="submitForm" class="submit-gray">
+          <a-button v-show="operation !== 1" @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             确定
-          </button>
+          </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
@@ -237,7 +237,8 @@ export default {
   data() {
     return {
       dataId: '',
-      treeData: []
+      treeData: [],
+      loading: false
     }
   },
   computed: {
@@ -335,6 +336,7 @@ export default {
         }
         let url = `/authority/auth-resource-menus/`
         const data = this.addOrEditForm.getFieldsValue()
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -351,6 +353,7 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })
