@@ -154,7 +154,11 @@ build_frontend() {
 }
 
 build_images() {
-    mvn clean package dockerfile:build -Ddockerfile.build.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=docker_ -DCUSTOM_TAG=latest
+    mvn clean package dockerfile:build -Ddockerfile.build.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY} -DCUSTOM_TAG=${GAF_REGISTRY_TAG}
+}
+
+build_push_images() {
+    mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY} -DCUSTOM_TAG=${GAF_REGISTRY_TAG}
 }
 
 #修改某些挂载卷的权限
