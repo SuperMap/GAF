@@ -40,6 +40,23 @@
 - 使用`docker ps`查看各个容器服务的状态,status都为Health时表明各服务都已成功运行部署
 - 当全部容器health时，就可以在客户端通过浏览器访问部署完成后提示的GAF地址
 
+### 源码构建镜像并推送镜像到镜像仓库--->从线上镜像仓库拉取镜像部署GAF基础应用
+- 1.配置文件修改：对配置文件`.env` 进行修改，配置`GAF_REGISTRY`镜像仓库地址，配置`GAF_REGISTRY_TAG`GAF镜像TAG
+- 2.Maven的配置文件`settings.xml`文件加上
+```xml
+<server>
+  <id><镜像库地址></id>
+  <username><镜像库账号></username>
+  <password><镜像库密码></password>
+  <configuration>
+    <email><邮件地址></email>
+  </configuration>
+</server>
+```
+- 3.构建推送镜像到镜像仓库，执行`./build.sh push`
+- 4.部署GAF基础应用，执行`./deploy.sh base`
+
+
 ## 环境帮助
 ### docker
 - 安装: 

@@ -6,7 +6,7 @@ networks:
 
 services:
   gaf-microservice-rigister:
-    image: docker_gaf-microservice-rigister:latest
+    image: ${GAF_REGISTRY}gaf-microservice-rigister:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     ports:
@@ -14,7 +14,7 @@ services:
     container_name: gaf-microservice-rigister
     restart: always
   gaf-microservice-conf:
-    image: docker_gaf-microservice-conf:latest
+    image: ${GAF_REGISTRY}gaf-microservice-conf:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -22,7 +22,7 @@ services:
     container_name: gaf-microservice-conf
     restart: always
   gaf-microservice-api:
-    image: docker_gaf-microservice-api:latest
+    image: ${GAF_REGISTRY}gaf-microservice-api:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -30,7 +30,7 @@ services:
     restart: always
     container_name: gaf-microservice-api
   gaf-microservice-gateway:
-    image: docker_gaf-microservice-gateway:latest
+    image: ${GAF_REGISTRY}gaf-microservice-gateway:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -40,7 +40,7 @@ services:
     restart: always
     container_name: gaf-microservice-gateway
   gaf-sys-mgt:
-    image: docker_gaf-sys-mgt:latest
+    image: ${GAF_REGISTRY}gaf-sys-mgt:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -48,7 +48,7 @@ services:
     container_name: gaf-sys-mgt
     restart: always
   gaf-authentication:
-    image: docker_gaf-authentication:latest
+    image: ${GAF_REGISTRY}gaf-authentication:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -56,7 +56,7 @@ services:
     container_name: gaf-authentication
     restart: always
   gaf-authority:
-    image: docker_gaf-authority:latest
+    image: ${GAF_REGISTRY}gaf-authority:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -64,7 +64,7 @@ services:
     container_name: gaf-authority
     restart: always
   gaf-microservice-governance:
-    image: docker_gaf-microservice-governance:latest
+    image: ${GAF_REGISTRY}gaf-microservice-governance:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -72,7 +72,7 @@ services:
     container_name: gaf-microservice-governance
     restart: always
   gaf-portal:
-    image: docker_gaf-portal:latest
+    image: ${GAF_REGISTRY}gaf-portal:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -80,7 +80,7 @@ services:
     container_name: gaf-portal
     restart: always
   gaf-map:
-    image: docker_gaf-map:latest
+    image: ${GAF_REGISTRY}gaf-map:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     ports:
@@ -93,7 +93,7 @@ services:
     container_name: gaf-map
     restart: always
   gaf-data-mgt:
-    image: docker_gaf-data-mgt:latest
+    image: ${GAF_REGISTRY}gaf-data-mgt:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -103,7 +103,7 @@ services:
     restart: always
     container_name: gaf-data-mgt
   gaf-storage:
-    image: docker_gaf-storage:latest
+    image: ${GAF_REGISTRY}gaf-storage:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -111,7 +111,7 @@ services:
     container_name: gaf-storage
     restart: always
   gaf-monitor:
-    image: docker_gaf-monitor:latest
+    image: ${GAF_REGISTRY}gaf-monitor:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -119,7 +119,7 @@ services:
     container_name: gaf-monitor
     restart: always
   gaf-analysis:
-    image: docker_gaf-analysis:latest
+    image: ${GAF_REGISTRY}gaf-analysis:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     env_file:
@@ -127,13 +127,13 @@ services:
     container_name: gaf-analysis
     restart: always
   gaf-webapp:
-    image: docker_gaf-webapp:latest
+    image: ${GAF_REGISTRY}gaf-webapp:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     restart: always
     container_name: gaf-webapp
   gaf-mapapp:
-    image: docker_gaf-mapapp:latest
+    image: ${GAF_REGISTRY}gaf-mapapp:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
     restart: always
