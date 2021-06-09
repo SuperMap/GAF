@@ -329,7 +329,6 @@ export default {
     // 功能未实现
     // 搜索查询
     async onSearch(val) {
-      console.log(val)
       this.searchText = val
       this.pagination.current = 1
       // await this.getList()

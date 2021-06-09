@@ -301,13 +301,12 @@ export default {
     // 功能未实现
     // 搜索查询
     onSearch(val) {
-      console.log(val)
       this.searchText = val
       this.pagination.current = 1
       if (val === "") {
         this.LeafList2 = this.searchTextApiList
       } else {
-        this.LeafList2 = this.LeafList2.filter(ltem => ltem.title.includes(val) === true)
+        this.LeafList2 = this.searchTextApiList.filter(ltem => ltem.title.includes(val) === true)
       }
     },
     // 重置查询

@@ -77,7 +77,7 @@
             :override="operation === 3"
             :path="operation === 3 ? editData.server : undefined"
             v-if="isfiletype"
-            accept=".smwu,.smxu"
+            accept=".smwu,.sxwu"
             text="选择" :dir="dirPath"
             minioServiceUrl="/storage/file-storage/"
             @uploadComplate="uploadChange"
