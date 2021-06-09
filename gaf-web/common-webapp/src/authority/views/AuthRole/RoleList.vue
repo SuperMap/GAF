@@ -279,7 +279,6 @@ export default {
   },
   methods: {
     async onSearch(val) {
-      console.log(val)
       this.searchText = val
       this.pagination.current = 1
       // await this.getList()

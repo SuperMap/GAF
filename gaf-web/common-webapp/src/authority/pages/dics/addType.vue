@@ -278,13 +278,12 @@ export default {
     // 功能未实现
     // 搜索查询
     onSearch(val) {
-      console.log(val)
       this.searchText = val
       this.pagination.current = 1
       if (val === "") {
         this.typeList2 = this.searchTextApiList
       } else {
-        this.typeList2 = this.typeList2.filter(ltem => ltem.title.includes(val) === true)
+        this.typeList2 = this.searchTextApiList.filter(ltem => ltem.title.includes(val) === true)
       }
     },
     // 重置查询
