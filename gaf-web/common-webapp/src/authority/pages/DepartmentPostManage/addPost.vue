@@ -293,13 +293,12 @@ export default {
     // 功能未实现
     // 搜索查询
     onSearch(val) {
-      console.log(val)
       this.searchText = val
       this.pagination.current = 1
       if (val === "") {
         this.postList2 = this.searchTextApiList
       } else {
-        this.postList2 = this.postList2.filter(ltem => ltem.title.includes(val) === true)
+        this.postList2 = this.searchTextApiList.filter(ltem => ltem.title.includes(val) === true)
       }
     },
     // 重置查询

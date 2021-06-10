@@ -80,4 +80,13 @@ public interface SysResourceDatasourceService {
      * @return 空间数据源树节点
      */
     List<DefaultTreeNode> getTree();
+
+    /**
+     *
+     * 查询数据源别名是否重复
+     * @param dsName
+     * @param isSdx
+     * @return
+     */
+    List<SysResourceDatasource> getByName(String dsName,Boolean isSdx);
 }

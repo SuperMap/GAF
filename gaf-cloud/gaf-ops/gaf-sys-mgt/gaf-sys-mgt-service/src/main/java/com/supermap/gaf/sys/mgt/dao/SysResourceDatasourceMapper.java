@@ -65,4 +65,12 @@ public interface SysResourceDatasourceMapper{
      * @return 影响的行数即更新的数量
      */
     int update(SysResourceDatasource sysResourceDatasource);
+
+    /**
+     * 查询数据源别名是否重复
+     * @param dsName
+     * @param isSdx
+     * @return
+     */
+    List<SysResourceDatasource> getByName(@Param("dsName")String dsName, @Param("isSdx")Boolean isSdx);
 }

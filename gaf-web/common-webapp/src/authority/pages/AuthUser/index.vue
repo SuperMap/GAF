@@ -134,7 +134,7 @@ export default {
       selectedNodeKeys: [],
       departmentShow: false,
       userEditData: {},
-      userOperation: 3,
+      userOperation: 2,
       activeKey: '1',
       selectedNodeKeyVesion: 1,
       tab1SelectedKeyVesion: 0,
@@ -295,7 +295,7 @@ export default {
         })
       }
       this.userEditData = userData
-      this.selectedNodeKeys = [userData.userId]
+      // this.selectedNodeKeys = [userData.userId]
     },
     afterDeleteUserSuccess(userData) {
       const parentId =
@@ -321,7 +321,7 @@ export default {
       if (this.expandedNodeKeys.indexOf(userData.departmentId) <= -1) {
         this.expandedNodeKeys.push(userData.departmentId)
       }
-      this.selectedNodeKeys = [userData.userId]
+      // this.selectedNodeKeys = [userData.userId]
       let parentName = '无'
       if (userData.departmentId !== '0') {
         const parentNode = this.$refs.myGafTree.getNode(userData.departmentId)

@@ -54,6 +54,12 @@
         FROM "sys_resource_datasource"
         WHERE datasource_id = #{datasourceId} AND status = true
     </select>
+    <select id="getByName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM "sys_resource_datasource"
+        WHERE ds_name = #{dsName} AND status = true and is_sdx = #{isSdx}
+    </select>
     <select id="selectList" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
