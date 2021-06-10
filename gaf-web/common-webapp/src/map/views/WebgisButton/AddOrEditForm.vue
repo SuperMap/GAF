@@ -153,6 +153,9 @@
           <button class="cancel-modal" @click="backToList">
             {{ this.operation === 1 ? "返回" : "取消" }}
           </button>
+          <button class="cancel-modal" @click="backToList">
+            {{ this.operation === 1 ? "返回" : "取消" }}
+          </button>
         </div>
       </a-form>
     </div>
