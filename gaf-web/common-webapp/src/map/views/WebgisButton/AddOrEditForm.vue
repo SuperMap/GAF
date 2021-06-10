@@ -25,6 +25,10 @@
                     required: true,
                     message: '请输入名称',
                   },
+                  {
+                    pattern: /^.{0,255}$/,
+                    message: '长度不能超过255',
+                  },
                 ],
               },
             ]"
@@ -54,6 +58,10 @@
                     required: true,
                     message: '请输入方法',
                   },
+                  {
+                    pattern: /^.{0,255}$/,
+                    message: '长度不能超过255',
+                  },
                 ],
               },
             ]"
@@ -64,7 +72,17 @@
         </a-form-item>
         <a-form-item label="图标">
           <a-input
-            v-decorator="['icon']"
+            v-decorator="[
+              'icon',
+              {
+                rules: [
+                  {
+                    pattern: /^.{0,255}$/,
+                    message: '长度不能超过255',
+                  },
+                ],
+              },
+            ]"
             :disabled="operation === 1"
             placeholder="请输入图标"
             allow-clear
@@ -72,7 +90,17 @@
         </a-form-item>
         <a-form-item label="描述">
           <a-textarea
-            v-decorator="['description']"
+            v-decorator="[
+              'description',
+              {
+                rules: [
+                  {
+                    pattern: /^.{0,500}$/,
+                    message: '长度不能超过500',
+                  },
+                ],
+              },
+            ]"
             :disabled="operation === 1"
             placeholder="请输入描述"
             auto-size
@@ -122,7 +150,12 @@
           >
             确定
           </a-button>
-          <button class="cancel-modal" @click="backToList">{{this.operation === 1 ? "返回" : "取消"}}</button>
+          <button class="cancel-modal" @click="backToList">
+            {{ this.operation === 1 ? "返回" : "取消" }}
+          </button>
+          <button class="cancel-modal" @click="backToList">
+            {{ this.operation === 1 ? "返回" : "取消" }}
+          </button>
         </div>
       </a-form>
     </div>
@@ -130,13 +163,13 @@
 </template>
 
 <script>
-import '~/assets/css/common.css'
-import moment from 'moment'
+import "~/assets/css/common.css";
+import moment from "moment";
 export default {
   props: {
     title: {
       type: String,
-      default: '',
+      default: "",
     },
     editData: {
       type: Object,
@@ -149,67 +182,64 @@ export default {
   },
   data() {
     return {
-      dataId: '',
-      loading: false,
-    }
+      dataId: "",
+    };
   },
   beforeMount() {
-    this.addOrEditForm = this.$form.createForm(this, { name: 'addOrEditForm' })
+    this.addOrEditForm = this.$form.createForm(this, { name: "addOrEditForm" });
   },
   mounted() {
-    const copyData = { ...this.editData }
-    this.dataId = copyData.buttonId
-    delete copyData.buttonId
-    delete copyData.status
+    const copyData = { ...this.editData };
+    this.dataId = copyData.buttonId;
+    delete copyData.buttonId;
+    delete copyData.status;
     if (this.operation !== 1) {
-      delete copyData.createdBy
-      delete copyData.updatedBy
-      delete copyData.createdTime
-      delete copyData.createdBy
+      delete copyData.createdBy;
+      delete copyData.updatedBy;
+      delete copyData.createdTime;
+      delete copyData.createdBy;
     }
     if (copyData.createdTime)
-      copyData.createdTime = moment(new Date(copyData.createdTime))
+      copyData.createdTime = moment(new Date(copyData.createdTime));
     if (copyData.updatedTime)
-      copyData.updatedTime = moment(new Date(copyData.updatedTime))
-    this.addOrEditForm.setFieldsValue({ ...copyData })
+      copyData.updatedTime = moment(new Date(copyData.updatedTime));
+    this.addOrEditForm.setFieldsValue({ ...copyData });
   },
   methods: {
     moment,
     submitForm() {
       this.addOrEditForm.validateFields(async (err) => {
         if (err) {
-          event.preventDefault()
-          return false
+          event.preventDefault();
+          return false;
         }
-        let url = `/map/webgis-buttons/`
-        const data = this.addOrEditForm.getFieldsValue()
-        this.loading = true
+        let url = `/map/webgis-buttons/`;
+        const data = this.addOrEditForm.getFieldsValue();
         if (this.dataId) {
-          url = url + this.dataId
-          const rst = await this.$axios.put(url, data)
+          url = url + this.dataId;
+          const rst = await this.$axios.put(url, data);
           if (rst.data.isSuccessed) {
-            this.$message.success('更新成功')
+            this.$message.success("更新成功");
           } else {
-            this.$message.error(`更新失败,原因:${rst.data.message}`)
+            this.$message.error(`更新失败,原因:${rst.data.message}`);
           }
         } else {
-          const rst = await this.$axios.post(url, data)
+          const rst = await this.$axios.post(url, data);
           if (rst.data.isSuccessed) {
-            this.$message.success('添加成功')
+            this.$message.success("添加成功");
           } else {
-            this.$message.error(`添加失败,原因:${rst.data.message}`)
+            this.$message.error(`添加失败,原因:${rst.data.message}`);
           }
         }
-        this.loading = false
-        this.addOrEditForm.resetFields()
-        this.$emit('submit')
-      })
+        this.addOrEditForm.resetFields();
+        this.$emit("submit");
+      });
     },
     // 从新增修改模态框返回列表
     backToList() {
-      this.addOrEditForm.resetFields()
-      this.$emit('back')
+      this.addOrEditForm.resetFields();
+      this.$emit("back");
     },
   },
-}
+};
 </script>
