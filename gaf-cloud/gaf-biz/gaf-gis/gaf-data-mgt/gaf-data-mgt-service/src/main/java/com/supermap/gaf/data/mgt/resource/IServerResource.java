@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.resource;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -14,10 +14,7 @@ import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -49,6 +46,13 @@ public class IServerResource {
     public MessageResult<List> queryWorkspaces(@QueryParam("serviceType") String serviceType) {
         List<IServerWorkspace> workspaceList = iServerWorkspaceService.queryWorkspaces(serviceType);
         return MessageResult.successe(List.class).data(workspaceList).status(200).message("查询成功").build();
+    }
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/workspaces/remove-by-name")
+    public MessageResult<Boolean> deleteWorkspaces(@QueryParam("workspaceName") String workspaceName) {
+        return iServerWorkspaceService.deleteWorkspacesByName(workspaceName);
     }
 
 }
