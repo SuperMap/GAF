@@ -79,7 +79,7 @@ public class DataWorkspaceServiceImpl implements DataWorkspaceService{
 	@Override
     public Page<DataWorkspace> listByPageCondition(DataWorkspaceSelectVo dataWorkspaceSelectVo, int pageNum, int pageSize) {
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
-	    dataWorkspaceSelectVo.setTenantId(shiroUser.getAuthUser().getTenantId());
+	    dataWorkspaceSelectVo.setTenantId(Objects.requireNonNull(shiroUser).getAuthUser().getTenantId());
         PageInfo<DataWorkspace> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             dataWorkspaceMapper.selectList(dataWorkspaceSelectVo);
         });
