@@ -288,9 +288,9 @@ export default {
       this.$emit("content", this.content);
     },
     // 打开叠加分析
-    openSuperposition() {
-      this.isSuperposition = !this.isSuperposition;
-    },
+    // openSuperposition() {
+    //   this.isSuperposition = !this.isSuperposition;
+    // },
     // async initLayerAndToolsBranch() {
     //   const dirs = window.SMWEBGIS.dirs;
     //   const tools = window.SMWEBGIS.tools;
