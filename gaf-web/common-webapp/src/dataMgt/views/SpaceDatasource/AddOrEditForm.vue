@@ -213,7 +213,7 @@
            />
           </a-form-item>
           <a-form-item label="密码">
-            <a-input
+            <a-input-password
               :disabled="operation === 1"
               v-decorator="[
                 'password',
@@ -745,11 +745,34 @@ export default {
         }
       })
     },
+    //保存时校验数据源别名是否重复
+    async getDatasourceInfo(dsName) {
+      const url = '/sys-mgt/sys-resource-datasources/getDsName'
+      const params = {
+        isSdx: true,
+        dsName,
+      }
+      const res = await this.$axios.$get(url, { params })
+      if(res.successed) {
+        if(res.data && res.data.total > 0) {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return true
+      }
+    },
     //表单提交
     submitForm() {
       this.addOrEditForm.validateFields(async (err) => {
         if (err) {
           event.preventDefault()
+          return false
+        }
+        const isRepeat = this.getDatasourceInfo()
+        if(isRepeat) {
+          this.$message.error('数据源别名重复')
           return false
         }
         let url = `/sys-mgt/sys-resource-datasources/`
