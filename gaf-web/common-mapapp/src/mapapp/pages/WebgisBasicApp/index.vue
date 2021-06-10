@@ -143,11 +143,11 @@ export default {
         (item) => item && item.resourceTag === "GRID_DEM"
       );
     },
-    smLayerList() {
-      return this.layerList.filter(
-        (item) => item && item.resourceTag === "RESTMAP"
-      );
-    },
+    // smLayerList() {
+    //   return this.layerList.filter(
+    //     (item) => item && item.resourceTag === "RESTMAP"
+    //   );
+    // },
     tiandituLayerList() {
       return this.layerList.filter(
         (item) =>
@@ -247,9 +247,9 @@ export default {
     this.$store.commit("setViewerLoaded", false);
   },
   methods: {
-    openSuperposition() {
-      this.isSuperposition = !this.isSuperposition;
-    },
+    // openSuperposition() {
+    //   this.isSuperposition = !this.isSuperposition;
+    // },
     async initLayerAndTools() {
       const dirs = window.SMWEBGIS.dirs;
       const tools = window.SMWEBGIS.tools;
