@@ -34,6 +34,10 @@
                     required: true,
                     message: '请输入名称',
                   },
+                  {
+                    pattern: /^.{0,255}$/,
+                    message: '长度不能超过255',
+                  },
                 ],
               },
             ]"
@@ -176,14 +180,37 @@
         </a-form-item>
         <a-form-item label="扩展属性" v-if="registryType !== 'server'">
           <a-textarea
-            v-decorator="['moreProperties']"
+            v-decorator="['moreProperties',
+            {
+                rules: [
+                  {
+                    pattern: /^.{0,500}$/,
+                    message: '长度不能超过500',
+                  },
+                  {
+                    message: '请输入符合标准格式的json格式的字符串',
+                    validator: extValidater
+                  },
+                ],
+              },
+            ]"
             placeholder="请输入json格式字符串"
             :auto-size="{ minRows: 3, maxRows: 5 }"
           />
         </a-form-item>
         <a-form-item label="描述" v-if="registryType !== 'server'">
           <a-textarea
-            v-decorator="['description']"
+            v-decorator="[
+              'description',
+              {
+                rules: [
+                  {
+                    pattern: /^.{0,500}$/,
+                    message: '长度不能超过500',
+                  },
+                ],
+              },
+            ]"
             placeholder="请输入描述"
             auto-size
           />
@@ -313,6 +340,18 @@
   },
   methods: {
     moment,
+    extValidater(rule, value, callback) {
+      if(!value || value.trim() === '') {
+        callback()
+      } else {
+        try{
+          JSON.parse(value)
+          callback()
+        } catch (error) {
+          callback(false)
+        }
+      }
+    },
     submitForm() {
       const that = this
       that.addOrEditForm.validateFields(async(err) => {

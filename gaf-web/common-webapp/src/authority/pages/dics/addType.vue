@@ -305,7 +305,7 @@ export default {
         this.sorter.order = sorter.order === 'descend' ? 'DESC' : 'ASC'
         this.sorter.field = sorter.columnKey
       }
-      this.getList()
+      // this.getList()
     },
     // 添加数据
     handleAdd() {
@@ -324,7 +324,7 @@ export default {
       this.open = false
       this.modalVisible = false
       this.editData = {}
-      this.getList()
+      // this.getList()
     },
     // 添加修改返回后
     handleBack() {
