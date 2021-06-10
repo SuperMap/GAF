@@ -88,6 +88,10 @@
                     required: true,
                     message: '请输入目录名称',
                   },
+                  {
+                    pattern: /^.{0,255}$/,
+                    message: '长度不能超过255',
+                  },
                 ],
               },
             ]"
@@ -121,7 +125,14 @@
         </a-form-item>
         <a-form-item label="描述">
           <a-textarea
-            v-decorator="['description']"
+            v-decorator="['description',{
+                rules: [
+                  {
+                    pattern: /^.{0,500}$/,
+                    message: '长度不能超过500',
+                  },
+                ],
+              },]"
             :disabled="operation === 'detail'"
             placeholder="请输入描述"
             auto-size
