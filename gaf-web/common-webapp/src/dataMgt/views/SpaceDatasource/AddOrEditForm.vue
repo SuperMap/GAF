@@ -754,7 +754,7 @@ export default {
       }
       const res = await this.$axios.$get(url, { params })
       if(res.successed) {
-        if(res.data && res.data.total > 0) {
+        if(res.data.length > 0) {
           return true
         } else {
           return false
@@ -770,13 +770,13 @@ export default {
           event.preventDefault()
           return false
         }
-        const isRepeat = this.getDatasourceInfo()
+        const data = this.addOrEditForm.getFieldsValue()
+        const isRepeat = await this.getDatasourceInfo(data.dsName)
         if(isRepeat) {
           this.$message.error('数据源别名重复')
           return false
         }
         let url = `/sys-mgt/sys-resource-datasources/`
-        const data = this.addOrEditForm.getFieldsValue()
         this.loading2 = true
         if (data.regionCode) {
           data.regionCode = data.regionCode.join('/')
