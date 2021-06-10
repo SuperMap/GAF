@@ -2,9 +2,10 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.service;
 
+import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.data.mgt.entity.IServerWorkspace;
 
 import java.util.List;
@@ -26,4 +27,11 @@ public interface IServerWorkspaceService {
      */
     List<IServerWorkspace> queryWorkspaces(String serviceType);
 
+    /**
+     * 根据名称删除工作空间
+     *
+     * @param workspaceName
+     * @return
+     */
+    MessageResult<Boolean> deleteWorkspacesByName(String workspaceName);
 }
