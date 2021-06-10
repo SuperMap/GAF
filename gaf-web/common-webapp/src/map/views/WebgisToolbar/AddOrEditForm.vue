@@ -25,6 +25,10 @@
                     required: true,
                     message: '请输入工具条名称',
                   },
+                  {
+                    pattern: /^.{0,255}$/,
+                    message: '长度不能超过255',
+                  },
                 ],
               },
             ]"
