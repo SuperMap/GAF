@@ -55,11 +55,14 @@ public class WrapperRedirectResponseGlobalFilter implements GlobalFilter, Ordere
                     case 301:
                         HttpHeaders headers = getDelegate().getHeaders();
                         String location = headers.getFirst(HttpHeaders.LOCATION);
+                        //可能是oauth的302跳转，直接忽略
+                        if (uri.getPath().startsWith("/oauth/authorize") && location.contains("code=")){
+                            break;
+                        }
                         int i = -1;
                         if (StringUtils.isEmpty(location) || (i = location.indexOf(SEPARATOR, LOCATION_CHAR_NUMBER)) == -1) {
                             break;
                         }
-
                         String newLocation = uri.getScheme() + "://" + uri.getHost() + ":" + (uri.getPort() > 0 ? uri.getPort() : 80) + location.substring(i);
                         List<String> newLocationList = new ArrayList<>();
                         newLocationList.add(newLocation);

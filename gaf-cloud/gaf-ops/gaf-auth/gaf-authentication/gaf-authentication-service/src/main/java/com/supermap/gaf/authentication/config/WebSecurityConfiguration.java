@@ -10,6 +10,7 @@ import com.supermap.gaf.authentication.config.authc.jwtorsession.JwtOrSessionAut
 import com.supermap.gaf.authentication.config.authc.jwtorsession.JwtOrSessionAuthenticationProvider;
 import com.supermap.gaf.authentication.config.authc.jwtorsession.JwtOrSessionAuthenticationSuccessHandler;
 import com.supermap.gaf.authentication.config.authc.jwtorsession.JwtOrSessionLoginConfiguration;
+import com.supermap.gaf.authentication.config.authc.oauth2.Oauth2AuthorizeFilter;
 import com.supermap.gaf.authentication.config.authc.usernamepassword.UsernamePasswordAuthenticationFailureHandler;
 import com.supermap.gaf.authentication.config.authc.usernamepassword.UsernamePasswordAuthenticationSuccessHandler;
 import com.supermap.gaf.authentication.config.authc.usernamepassword.UsernamePasswordLoginConfiguration;
@@ -59,6 +60,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public Oauth2AuthorizeFilter oauth2AuthorizeFilter() throws Exception {
+        Oauth2AuthorizeFilter oauth2AuthorizeFilter = new Oauth2AuthorizeFilter();
+        oauth2AuthorizeFilter.setAuthenticationManager(authenticationManagerBean());
+        return oauth2AuthorizeFilter;
+    }
+
+    @Bean
     public CustomUserDetailsServiceImpl customUserDetailsService(){
         return new CustomUserDetailsServiceImpl();
     }
@@ -83,7 +91,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+            http
+                .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .and()
                 .headers().addHeaderWriter(new StaticHeadersWriter(Arrays.asList(
