@@ -84,6 +84,7 @@
 
 <script>
 import bg from "../../img/bg.png"
+import qs from 'qs'
 
 export default {
   props: {
@@ -144,16 +145,13 @@ export default {
       }
 
       console.log('发送请求')
-      let url = '/authentication/login/username_password'
-      const customSessionId = this.$route.query.CUSTOM_SESSION_ID
-      if (customSessionId) {
-        url = url + '?CUSTOM_SESSION_ID=' + customSessionId
-      }
       const username = this.form.getFieldValue('username')
       const password = this.form.getFieldValue('password')
       const param = new URLSearchParams()
       param.append('username', username)
       param.append('password', password)
+      const query = this.$route.query
+      let url = '/authentication/login/username_password' + '?' + qs.stringify(query)
       this.$axios.$post(url, param).then(res => {
         if (res.status === 302) {
           

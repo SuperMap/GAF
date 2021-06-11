@@ -22,6 +22,14 @@ public interface CustomLoginService {
      * @param username
      * @return
      */
+    OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username,String clientId);
+
+    /**
+     * 使用username手动创建oauth2 token
+     * 默认clientId为CUSTOM_CLIENT
+     * @param username
+     * @return
+     */
     OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username);
 
     /**

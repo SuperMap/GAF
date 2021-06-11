@@ -28,9 +28,9 @@ public class RootResource {
         return TokenResource.class;
     }
 
-    @Path("/oauth")
-    public Class<OauthResource> oAuthResourceClass() {
-        return OauthResource.class;
+    @Path("/user")
+    public Class<UserResource> userResourceClass() {
+        return UserResource.class;
     }
 
     @Path("/logout")

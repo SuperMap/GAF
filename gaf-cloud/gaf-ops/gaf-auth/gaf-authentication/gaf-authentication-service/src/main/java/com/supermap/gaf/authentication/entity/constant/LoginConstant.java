@@ -24,6 +24,11 @@ public class LoginConstant {
 
     public static final String CUSTOM_LOGIN_SESSION_NAME = "CUSTOM_SESSION_ID";
 
+    public static final String CUSTOM_CLIENT = "custom_client";
+    public static final String CLIENT_ID = "client_id";
+    public static final String USER_NAME = "user_name";
+    public static final String RESPONSE_TYPE = "response_type";
+
     public static final String REDIS_LOGIN_SESSION_PREFIX = "login_session_to_user_info:";
 
     public static final String AUTHORIZATION = "Authorization";
@@ -31,6 +36,7 @@ public class LoginConstant {
     public static final String BEARER = "Bearer";
 
     public static final String LOGIN_WITH_JWT_SEESION = "/authentication/login/jwt_session";
+    public static final String OAUTH2_AUTHORIZE = "/oauth/authorize";
 
     public static final String LOGIN_WITH_USERNAME_PASSWORD = "/authentication/login/username_password";
 

@@ -38,7 +38,9 @@ public class JwtOrSessionAuthenticationProvider implements AuthenticationProvide
             throw new BadCredentialsException("");
         }
         UserDetails userDetails = customUserDetailsServiceImpl.loadUserByUsername(authenticationResult.getUsername());
-        return new JwtOrSessionAuthentication(userDetails.getAuthorities(),authenticationResult.getUsername(),authenticationResult.getJwtToken());
+        JwtOrSessionAuthentication result = new JwtOrSessionAuthentication(userDetails.getAuthorities(),authenticationResult.getUsername(),authenticationResult.getJwtToken());
+        result.setAuthenticated(true);
+        return result;
     }
 
     @Override
