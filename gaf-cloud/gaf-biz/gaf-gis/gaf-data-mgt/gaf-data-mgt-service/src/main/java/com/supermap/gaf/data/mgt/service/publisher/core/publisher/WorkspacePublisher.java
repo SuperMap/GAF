@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.service.publisher.core.publisher;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -145,7 +145,14 @@ public class WorkspacePublisher extends AbstractPublisher {
                 if (null == dbWorkspace) {
                     return MessageResult.<String>failed(String.class).message(PublishStatusCode.PUBLISH_EXCEPTION_WORKSPACE_UNAVAILABLE.getDescribe()).build();
                 }
-                dbWorkspace.getDatasources().open(datasourceConnectionInfo);
+                Datasource datasource = dbWorkspace.getDatasources().get(datasourceConnectionInfo.getAlias());
+                if (null == datasource){
+                    return MessageResult.<String>failed(String.class).message(PublishStatusCode.PUBLISH_EXCEPTION_DATASOURCE_UNAVAILABLE.getDescribe()).build();
+                }
+                boolean isOpened = datasource.isOpened();
+                if (!isOpened){
+                    dbWorkspace.getDatasources().open(datasourceConnectionInfo);
+                }
                 // 【注意】如果发布的服务类型中存在地图服务，需要加载地图模板和资源，被允许发布的数据集才能生成在工作空间下生成地图
                 if (workspaceParameter.getServiceTypes().contains(RESTMAP.name())) {
                     // 1、数据库型工作空间添加地图模板，包括配置的默认模板，当传入的参数中模板找不到，则赋予对应空间类型（点、线、面）的默认模板
@@ -160,7 +167,8 @@ public class WorkspacePublisher extends AbstractPublisher {
                         return loadResourceResult;
                     }
                 }
-                workspaceConnectionInfo = CommontypesConversion.getWorkspaceConnectionInfo(dbWorkspace.getConnectionInfo()).toStandardString();
+                WorkspaceConnectionInfo workspaceConnectionInfoWithDatasource = workspaceParser.getWorkspaceConnectionInfo(datasourceConnectionInfo, null);
+                workspaceConnectionInfo = CommontypesConversion.getWorkspaceConnectionInfo(workspaceConnectionInfoWithDatasource).toStandardString();
                 // 修改工作空间后，保存变更
                 dbWorkspace.save();
             } else if (WorkspaceParameter.WORKSPACETYPE.FILE.name().equalsIgnoreCase(workspaceParameter.getWorkspaceType())) {
@@ -297,6 +305,7 @@ public class WorkspacePublisher extends AbstractPublisher {
             logger.error(PublishStatusCode.PUBLISH_EXCEPTION_DATASOURCE_UNAVAILABLE.getDescribe(), e);
         } finally {
             if (null != tempDbWorkspace) {
+                datasourceConnectionInfo.dispose();
                 tempDbWorkspace.close();
                 tempDbWorkspace.dispose();
             }
@@ -485,7 +494,7 @@ public class WorkspacePublisher extends AbstractPublisher {
                 tempMap.setViewBounds(tempMap.getBounds());
             }
             /** 保存地图到所使用的的工作空间下
-            地图名称设置规则：1、多个模板为：模板名+数据集名；2、1个模板或0个模板（即使用默认模板）为：数据集名**/
+             地图名称设置规则：1、多个模板为：模板名+数据集名；2、1个模板或0个模板（即使用默认模板）为：数据集名**/
             // 1个模板或0个模板
             String mapName = datasetName;
             if (isMultiInstance) {
