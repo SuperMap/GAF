@@ -13,7 +13,7 @@
         :wrapper-col="{ span: 13 }"
         layout="horizontal"
       >
-        <a-form-item label="标识">
+        <a-form-item label="编号">
           <a-input
             :disabled="operation === 1"
             v-decorator="[
@@ -84,7 +84,7 @@
           </a-select>
         </a-form-item>
         <a-form-item label="规则/受限字段">
-          <a-input
+          <a-textarea
             :disabled="operation === 1"
             v-decorator="[
               'value',

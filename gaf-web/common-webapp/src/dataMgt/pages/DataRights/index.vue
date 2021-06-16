@@ -24,7 +24,7 @@
         <div class="search-position">
           <a-input-search
             @search="onSearch"
-            placeholder="请输入标识查询"
+            placeholder="请输入编号查询"
             size="large"
           >
             <button slot="enterButton" class="btn-search">
@@ -182,7 +182,7 @@ export default {
     columns: function() {
       const columns = [
         {
-          title: '标识',
+          title: '编号',
           dataIndex: 'code',
           key: 'code'
         },
