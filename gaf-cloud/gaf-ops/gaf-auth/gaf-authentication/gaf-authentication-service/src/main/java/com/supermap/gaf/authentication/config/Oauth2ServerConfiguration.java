@@ -9,6 +9,7 @@ import com.supermap.gaf.authentication.config.authc.CustomUserDetailsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -85,7 +86,8 @@ public class Oauth2ServerConfiguration extends AuthorizationServerConfigurerAdap
                 .tokenEnhancer(enhancerChain)
                 .reuseRefreshTokens(false)
                 .authenticationManager(authenticationManager)
-                .userDetailsService(customUserDetailsServiceImpl);
+                .userDetailsService(customUserDetailsServiceImpl)
+                .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST);
     }
 
 

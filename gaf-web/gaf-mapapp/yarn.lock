@@ -4697,10 +4697,10 @@ functional-red-black-tree@^1.0.1:
   resolved "https://nexus.gaf.net.cn/repository/npm-group/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
 
-gaf-map-ui@^0.2.35:
-  version "0.2.35"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-map-ui/-/gaf-map-ui-0.2.35.tgz#dfba909b8f8cd3dad67e08be3f674307f2ba259b"
-  integrity sha512-Hglbq7SsEG/btDv6Zx3OLmYPhqh0j+y496wiIJmt6AIf+AFViRDdjq2uRgzrxkmrkGwSvMqSWPcfSYHuFZxRcg==
+gaf-map-ui@^0.2.41:
+  version "0.2.41"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-map-ui/-/gaf-map-ui-0.2.41.tgz#4a513060a8d3519708096a80af37f5942cb45a7f"
+  integrity sha512-x2cCkR87blF4Agalw3PKsCKqYCMRtcC2uSpNFL6ZZsAbb2cZ8+/ihKS8lZue41azry6QaA8SFIuzPKpKDeg6VQ==
   dependencies:
     "@supermap/vue-iclient3d-webgl" "1.0.5"
     ant-design-vue "^1.3.10"
@@ -4709,10 +4709,10 @@ gaf-map-ui@^0.2.35:
     lodash "^4.17.20"
     vue "2.6.11"
 
-gaf-ui@^2.0.13:
-  version "2.0.13"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.13.tgz#357ac62dd0ce50c7ba6320a63f934f3816c41fd0"
-  integrity sha512-iELbm+BaN1PB+d9+p1kfnyHcgM3BNILHDcPojl8pgamQ8X8F7z+SddpbLA8cMMvyets4apgH/x/avpSnxTPKtg==
+gaf-ui@^2.0.16:
+  version "2.0.16"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.16.tgz#a1258ecf3a45881474c60504c5de94ebe9875463"
+  integrity sha512-+/gkl+rjNBrPOBaZL2yacapHpoerht/4P6Gz+0wRTp9vXj4Y3jI3jk7OjYSS87u7xecBbKjIpJjU/YSw3ihWoA==
   dependencies:
     ant-design-vue "^1.7.2"
     core-js "^2.6.5"

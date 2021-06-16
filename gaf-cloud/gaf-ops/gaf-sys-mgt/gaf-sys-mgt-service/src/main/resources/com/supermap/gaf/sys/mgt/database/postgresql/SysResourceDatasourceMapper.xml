@@ -54,13 +54,19 @@
         FROM "sys_resource_datasource"
         WHERE datasource_id = #{datasourceId} AND status = true
     </select>
+    <select id="getByName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM "sys_resource_datasource"
+        WHERE ds_name = #{dsName} AND status = true and is_sdx = #{isSdx}
+    </select>
     <select id="selectList" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM "sys_resource_datasource"
         WHERE status = true
-        <if test='null != startTime'>AND time_attribute >= #{startTime}</if>
-        <if test='null != endTime'>AND #{endTime} >= time_attribute</if>
+        <if test='null != startTime'>AND date(time_attribute) >=  date(#{startTime}) </if>
+        <if test='null != endTime'>AND date(#{endTime}) >= date(time_attribute)</if>
         <if test='null != isSdx'>AND is_sdx = #{isSdx}</if>
         <if test='null != catalogCode'>AND catalog_code = #{catalogCode}</if>
         <if test='null != typeCodes and typeCodes.size() > 0'>

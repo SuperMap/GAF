@@ -242,6 +242,9 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         return TreeUtil.getChildren(root, allNodes, Comparator.comparingInt(DefaultTreeNode::getSortSn));
     }
 
-
+    @Override
+    public List<SysResourceDatasource> getByName(String dsName, Boolean isSdx) {
+        return sysResourceDatasourceMapper.getByName(dsName,isSdx);
+    }
 
 }

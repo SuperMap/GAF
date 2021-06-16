@@ -185,7 +185,19 @@ public class SysResourceDatasourceResource{
     }
 
 
-
+    @ApiOperation(value = "校验数据源别名是否重复")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "dsName", value = "数据源别名",paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "isSdx", value = "是否卫空间是菊科",  paramType = "query", dataType = "Boolean")
+    })
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/getDsName")
+    public MessageResult<List<SysResourceDatasource>> pageList(
+            @QueryParam("dsName")String dsName,
+            @QueryParam("isSdx")Boolean isSdx){
+        return MessageResult.data(sysResourceDatasourceService.getByName(dsName, isSdx)).message("查询成功").build();
+    }
 
 
 }

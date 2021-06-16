@@ -2869,10 +2869,10 @@ common-gaf@^2.0.5:
     monaco-editor-webpack-plugin "^3.0.0"
     vue "^2.6.12"
 
-common-webbase@^2.0.33:
-  version "2.0.33"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-webbase/-/common-webbase-2.0.33.tgz#b544c289363df6cded3d5a10bf6629865af3ad20"
-  integrity sha512-GzIyMQ1glxKTm9W33fLWkGxSFQl/zQ8+Y92CgT+2F9/Ltjf54PbJUJJyKyqRu6tWt1cS8VjC1aepJKy/M6Yd0Q==
+common-webbase@^2.0.37:
+  version "2.0.38"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/common-webbase/-/common-webbase-2.0.38.tgz#051f4c5bf126835ca1d36db38c8b6c7b8853dc3c"
+  integrity sha512-UvgIcj5CcYAE88LDPGXWRO3O9Wy/9izsVdKxWVKlQ+Mzos0cKt6O48euYHiLcAVdK4KZxiXAtSSbLF9cKAPl8Q==
   dependencies:
     "@ant-design/colors" "^3.2.2"
     "@ant-design/icons" "^2.1.1"
@@ -4668,10 +4668,10 @@ functional-red-black-tree@^1.0.1:
   resolved "https://nexus.gaf.net.cn/repository/npm-group/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
 
-gaf-ui@^2.0.15:
-  version "2.0.15"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.15.tgz#24dac7be3ea659d963cc8fc5c2fa93dbef17b59a"
-  integrity sha512-IJr9bfKyx+1IlJOoH1rPQeK05XTSzOWfOu4PoNzZ04JzCuAMuZA7lZgtZfhmZfRLU635l/1Bnc/GTsAZj/kuOw==
+gaf-ui@2.0.16:
+  version "2.0.16"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.16.tgz#a1258ecf3a45881474c60504c5de94ebe9875463"
+  integrity sha512-+/gkl+rjNBrPOBaZL2yacapHpoerht/4P6Gz+0wRTp9vXj4Y3jI3jk7OjYSS87u7xecBbKjIpJjU/YSw3ihWoA==
   dependencies:
     ant-design-vue "^1.7.2"
     core-js "^2.6.5"

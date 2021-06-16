@@ -47,7 +47,8 @@ public class UsernamePasswordUserAuthenticationProvider implements Authenticatio
             throw new BadCredentialsException("password is incorrect");
         }
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-        return new UsernamePasswordAuthenticationToken(userDetails,password,authorities);
+        UsernamePasswordAuthenticationToken result =  new UsernamePasswordAuthenticationToken(userDetails,password,authorities);
+        return result;
     }
 
     @Override
