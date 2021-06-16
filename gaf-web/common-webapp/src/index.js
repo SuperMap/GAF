@@ -42,6 +42,7 @@ import hosts from './monitor/pages/hosts'
 //
 import DataWorkspace from './dataMgt/pages/DataWorkspace'
 import SpaceDatasource from './dataMgt/pages/SpaceDatasource'
+import DataRights from './dataMgt/pages/DataRights'
 
 import AttachmentManagement from './storage/pages/AttachmentManagement'
 const components = [
@@ -60,7 +61,7 @@ const components = [
     //容器监控
     containers,hosts,
     //
-    DataWorkspace,SpaceDatasource,
+    DataWorkspace,SpaceDatasource,DataRights,
     //
     AttachmentManagement
 ];
@@ -114,7 +115,7 @@ export {
     containers,
     hosts,
     //
-    DataWorkspace,SpaceDatasource,
+    DataWorkspace,SpaceDatasource,DataRights,
     //
     AttachmentManagement,
 };
