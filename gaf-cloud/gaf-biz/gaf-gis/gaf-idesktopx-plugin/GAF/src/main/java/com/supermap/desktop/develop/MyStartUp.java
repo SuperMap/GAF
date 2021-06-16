@@ -6,6 +6,12 @@
 package com.supermap.desktop.develop;
 
 import com.supermap.desktop.core.Application;
+import com.supermap.desktop.core._XMLTag;
+import com.supermap.desktop.core.utilties.FileUtilities;
+import com.supermap.desktop.core.utilties.PathUtilities;
+import com.supermap.desktop.core.utilties.XmlUtilities;
+import com.supermap.desktop.develop.entity.GafGlobalEnvironments;
+import com.supermap.desktop.frame.ctrlAction.settings.JDialogSettings;
 
 /**
  * @date:2021/3/25
@@ -13,8 +19,14 @@ import com.supermap.desktop.core.Application;
  */
 public class MyStartUp {
 	public static void main(String[] args) {
+
 		if (!Application.getActiveApplication().initialize()) {
+//			JDialogSettings
+//			FileUtilities.getAppDataPath() + _XMLTag.SYSTEM_STARTUP_XML;
+//			PathUtilities.getFullPathName("../" + _XMLTag.SYSTEM_STARTUP_XML, false);
+//			XmlUtilities.getDocument(filePath);
 			System.exit(0);
 		}
+		GafGlobalEnvironments.initResource();
 	}
 }
