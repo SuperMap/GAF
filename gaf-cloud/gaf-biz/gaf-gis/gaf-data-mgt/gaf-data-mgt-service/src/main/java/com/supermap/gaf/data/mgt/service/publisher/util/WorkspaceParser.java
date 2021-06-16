@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.service.publisher.util;
 
 import com.supermap.data.*;
@@ -14,10 +14,9 @@ import static com.supermap.data.EngineType.MYSQL;
 import static com.supermap.data.EngineType.SQLPLUS;
 
 /**
-* @author:yw
-* @Date 2021-3-12
- * @date:2021/3/25
- * 工作空间解析器工具类
+ * @author:yw
+ * @Date 2021-3-12
+ * @date:2021/3/25 工作空间解析器工具类
  */
 @Component
 public class WorkspaceParser {
@@ -88,10 +87,13 @@ public class WorkspaceParser {
      * 根据数据源连接信息获取工作空间
      */
     public Workspace createWorkspace(DatasourceConnectionInfo connInfo, String wsName) {
+        WorkspaceConnectionInfo workspaceConnectionInfo = getWorkspaceConnectionInfo(connInfo, wsName);
         Workspace workspace = new Workspace();
-        Datasource datasource = workspace.getDatasources().open(connInfo);
-        return datasource.getWorkspace();
-//        WorkspaceConnectionInfo workspaceConnectionInfo = getWorkspaceConnectionInfo(connInfo, wsName);
+        workspace.create(workspaceConnectionInfo);
+        return workspace;
+//        Datasource datasource = workspace.getDatasources().open(connInfo);
+//        return datasource.getWorkspace();
+
 //        if (workspace.create(workspaceConnectionInfo)) {
 //             workspace;
 //        }

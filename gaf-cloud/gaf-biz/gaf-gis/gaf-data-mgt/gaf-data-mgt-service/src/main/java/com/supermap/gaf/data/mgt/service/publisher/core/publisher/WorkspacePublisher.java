@@ -38,10 +38,9 @@ import java.util.*;
 import static com.supermap.services.rest.management.ServiceType.*;
 
 /**
-* @author:yw
-* @Date 2021-3-12
- * @date:2021/3/25
- * 工作空间服务发布者
+ * @author:yw
+ * @Date 2021-3-12
+ * @date:2021/3/25 工作空间服务发布者
  */
 @Service
 public class WorkspacePublisher extends AbstractPublisher {
@@ -49,9 +48,9 @@ public class WorkspacePublisher extends AbstractPublisher {
     private static Logger logger = LogUtil.getLocLogger(WorkspacePublisher.class);
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final String POINT ="POINT";
-    private static final String LINE ="LINE";
-    private static final String REGION ="REGION";
+    private static final String POINT = "POINT";
+    private static final String LINE = "LINE";
+    private static final String REGION = "REGION";
     /**
      * 地图比例尺常量
      */
@@ -145,12 +144,12 @@ public class WorkspacePublisher extends AbstractPublisher {
                 if (null == dbWorkspace) {
                     return MessageResult.<String>failed(String.class).message(PublishStatusCode.PUBLISH_EXCEPTION_WORKSPACE_UNAVAILABLE.getDescribe()).build();
                 }
-                Datasource datasource = dbWorkspace.getDatasources().get(datasourceConnectionInfo.getAlias());
-                if (null == datasource){
+                Datasource datasource = workspaceParser.addDataSourceToWorkSpace(dbWorkspace, datasourceConnectionInfo);
+                if (null == datasource) {
                     return MessageResult.<String>failed(String.class).message(PublishStatusCode.PUBLISH_EXCEPTION_DATASOURCE_UNAVAILABLE.getDescribe()).build();
                 }
                 boolean isOpened = datasource.isOpened();
-                if (!isOpened){
+                if (!isOpened) {
                     dbWorkspace.getDatasources().open(datasourceConnectionInfo);
                 }
                 // 【注意】如果发布的服务类型中存在地图服务，需要加载地图模板和资源，被允许发布的数据集才能生成在工作空间下生成地图
@@ -167,8 +166,7 @@ public class WorkspacePublisher extends AbstractPublisher {
                         return loadResourceResult;
                     }
                 }
-                WorkspaceConnectionInfo workspaceConnectionInfoWithDatasource = workspaceParser.getWorkspaceConnectionInfo(datasourceConnectionInfo, null);
-                workspaceConnectionInfo = CommontypesConversion.getWorkspaceConnectionInfo(workspaceConnectionInfoWithDatasource).toStandardString();
+                workspaceConnectionInfo = CommontypesConversion.getWorkspaceConnectionInfo(dbWorkspace.getConnectionInfo()).toStandardString();
                 // 修改工作空间后，保存变更
                 dbWorkspace.save();
             } else if (WorkspaceParameter.WORKSPACETYPE.FILE.name().equalsIgnoreCase(workspaceParameter.getWorkspaceType())) {
