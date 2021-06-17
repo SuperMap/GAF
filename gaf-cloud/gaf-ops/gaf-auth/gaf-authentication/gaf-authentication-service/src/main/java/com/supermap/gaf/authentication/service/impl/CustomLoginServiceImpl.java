@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static com.supermap.gaf.authentication.entity.constant.LoginConstant.CUSTOM_CLIENT;
 import static com.supermap.gaf.authentication.entity.constant.LoginConstant.REDIS_LOGIN_SESSION_PREFIX;
 import static com.supermap.gaf.authentication.entity.constant.LoginConstant.TOKEN_REFRESH_EXPIRE;
 
@@ -56,8 +57,7 @@ public class CustomLoginServiceImpl implements CustomLoginService {
 
 
     @Override
-    public OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username) {
-        String clientId = "custom_client";
+    public OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username,String clientId) {
         String scope = "all";
 
         HashMap<String, String> authorizationParameters = new HashMap<String, String>(16);
@@ -93,6 +93,11 @@ public class CustomLoginServiceImpl implements CustomLoginService {
 
         AuthorizationServerTokenServices tokenServices = configuration.getEndpointsConfigurer().getTokenServices();
         return tokenServices.createAccessToken(authenticationRequest);
+    }
+
+    @Override
+    public OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username) {
+        return createOauth2AccessTokenWithoutPassword(username,CUSTOM_CLIENT);
     }
 
     @Override

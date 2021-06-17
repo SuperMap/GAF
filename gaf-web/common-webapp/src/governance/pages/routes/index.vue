@@ -241,7 +241,7 @@ export default {
     editRoute(v) {
       const idx = v.uri.indexOf('://')
       this.$set(v, 'uriBefore', v.uri.slice(0, idx + 3))
-      this.$set(v, 'uriAfter', v.uri.slice(5))
+      this.$set(v, 'uriAfter', v.uri.slice(idx + 3))
       this.showDetail = true
       this.showRouteInfo = v
       for (let i = 0; i < this.showRouteInfo.filters.length; i++) {

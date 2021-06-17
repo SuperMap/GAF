@@ -287,6 +287,7 @@
 				<if test ='null != address'>address = #{address},</if>
                 post_id = #{postId},
 				<if test ='null != expirationTime'>expiration_time = #{expirationTime},</if>
+                <if test ='null != isThirdParty'>is_third_party = #{isThirdParty},</if>
 				<if test ='null != status'>status = #{status},</if>				
 				<if test ='null != description'>description = #{description},</if>				
 				<if test ='null != lastLoginTime'>last_login_time = #{lastLoginTime},</if>

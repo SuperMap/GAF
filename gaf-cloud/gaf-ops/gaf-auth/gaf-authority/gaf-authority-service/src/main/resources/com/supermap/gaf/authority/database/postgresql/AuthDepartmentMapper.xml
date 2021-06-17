@@ -219,6 +219,7 @@
                 <if test ='null != status'>status = #{status},</if>
                 <if test ='null != description'>description = #{description},</if>
                 <if test ='null != adminId'>admin_id = #{adminId},</if>
+                <if test ='null != isThirdParty'>is_third_party = #{isThirdParty},</if>
                 updated_time = now(),
                 <if test ='null != updatedBy'>updated_by = #{updatedBy},</if>
         </set>
