@@ -5,6 +5,7 @@ import com.supermap.desktop.core.implement.GlobalParameterFieldExportInterpreter
 import com.supermap.desktop.core.implement.GlobalParameterFieldImportInterpreter;
 import com.supermap.desktop.core.utilties.FileUtilities;
 import com.supermap.desktop.core.utilties.PathUtilities;
+import com.supermap.desktop.develop.GAFProperties;
 
 public class GafGlobalEnvironments {
     @GlobalParameterField(
@@ -14,6 +15,13 @@ public class GafGlobalEnvironments {
     )
     private static String server = "http://gaf.xxx";
 
+    @GlobalParameterField(
+            id = "alias",
+            nodePath = "environments_alias",
+            attribute = "name"
+    )
+    private static String alias;
+
     public  static  String GAF_GLOBAL_ENVIRONMENTS_XML;
     private static String userConfigPath;
     private static String globalConfigPath;
@@ -22,12 +30,21 @@ public class GafGlobalEnvironments {
         GAF_GLOBAL_ENVIRONMENTS_XML = "configuration" + PathUtilities.SYSTEM_SEPARATOR + "SuperMap.Desktop.GAFEnvironments.xml";
         userConfigPath = FileUtilities.getAppDataPath() + GAF_GLOBAL_ENVIRONMENTS_XML;
         globalConfigPath = PathUtilities.getFullPathName("../" + GAF_GLOBAL_ENVIRONMENTS_XML, false);
+        alias = GAFProperties.getString("String_Alias");
     }
     public static String getUserConfigPath() {
         return userConfigPath;
     }
     public static String getGlobalConfigPath() {
         return globalConfigPath;
+    }
+
+    public static String getAlias() {
+        return alias;
+    }
+
+    public static void setAlias(String alias) {
+        GafGlobalEnvironments.alias = alias;
     }
 
     public static void setUserConfigPath(String userConfigPath) {

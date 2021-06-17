@@ -29,7 +29,10 @@ public class GAFProperties {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle(baseName, Locale.getDefault());
 		if (resourceBundle != null) {
 			try {
-				result = resourceBundle.getString(key);
+				result = resourceBundle.getString("String_Alias");
+				if(!key.equals("String_Alias")){
+					result = resourceBundle.getString(key).replace("${alias}",result);
+				}
 			} catch (Exception e) {
 				Application.getActiveApplication().getOutput().output(e);
 			}
