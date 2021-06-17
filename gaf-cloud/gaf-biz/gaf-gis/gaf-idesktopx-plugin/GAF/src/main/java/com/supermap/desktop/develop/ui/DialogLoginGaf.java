@@ -15,6 +15,7 @@ import com.supermap.desktop.core.utilties.ColorUtilities;
 import com.supermap.desktop.core.utilties.DefaultValues;
 import com.supermap.desktop.develop.GAFProperties;
 import com.supermap.desktop.develop.client.GafClient;
+import com.supermap.desktop.develop.entity.GafGlobalEnvironments;
 import com.supermap.desktop.develop.utils.ApplicationContextUtils;
 import com.supermap.desktop.develop.utils.CommonUtils;
 import com.supermap.desktop.netservices.iserver.action.CtrlActionReleaseWorkspace;
@@ -33,10 +34,7 @@ public class DialogLoginGaf extends SmDialog {
 
 	// 面板
 	private JPanel panel;
-	private JLabel labelGafServer;
 
-	private JTextField gafServer;
-	//
 	private JLabel labelUserName;
 
 	private JTextField username;
@@ -70,11 +68,6 @@ public class DialogLoginGaf extends SmDialog {
 	private void initComponents() {
 		//  FlowLayout布局管理器创建新面板
 		this.panel = new JPanel();
-
-		// 标签组件，可以包含文本和图片甚至HTML 文本
-		this.labelGafServer = new JLabel();
-		// 数据源下拉框
-		this.gafServer = new JTextField(16);
 
 		// 标签组件，可以包含文本和图片甚至HTML 文本
 		this.labelUserName = new JLabel();
@@ -111,23 +104,18 @@ public class DialogLoginGaf extends SmDialog {
 	private void initLayoutPanelSourceData() {
 		// 设置面板布局为网格
 		this.panel.setLayout(new GridBagLayout());
-		// 设置数据源标签、数据集标签的大小
-		this.labelGafServer.setPreferredSize(DefaultValues.getLabelDefaultSize());
 		this.labelUserName.setPreferredSize(DefaultValues.getLabelDefaultSize());
 		this.labelPassword.setPreferredSize(DefaultValues.getLabelDefaultSize());
 
-		// 面板插入数据源标签、与数据源下拉框
-		this.panel.add(this.labelGafServer, new GridBagConstraintsHelper(0, 0, 1, 1).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, 0));
-		this.panel.add(this.gafServer, new GridBagConstraintsHelper(1, 0, 1, 1).setWeight(1, 0).setAnchor(GridBagConstraints.CENTER).setFill(GridBagConstraints.HORIZONTAL).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, GridBagConstraintsHelper.CONTROLS_GAP).setWeight(1, 0).setFill(GridBagConstraints.HORIZONTAL));
 
 
 		// 面板插入数据源标签、与数据源下拉框
-		this.panel.add(this.labelUserName, new GridBagConstraintsHelper(0, 1, 1, 1).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, 0));
-		this.panel.add(this.username, new GridBagConstraintsHelper(1, 1, 1, 1).setWeight(1, 0).setAnchor(GridBagConstraints.CENTER).setFill(GridBagConstraints.HORIZONTAL).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, GridBagConstraintsHelper.CONTROLS_GAP).setWeight(1, 0).setFill(GridBagConstraints.HORIZONTAL));
+		this.panel.add(this.labelUserName, new GridBagConstraintsHelper(0, 0, 1, 1).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, 0));
+		this.panel.add(this.username, new GridBagConstraintsHelper(1, 0, 1, 1).setWeight(1, 0).setAnchor(GridBagConstraints.CENTER).setFill(GridBagConstraints.HORIZONTAL).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, GridBagConstraintsHelper.CONTROLS_GAP).setWeight(1, 0).setFill(GridBagConstraints.HORIZONTAL));
 
 		// 面板插入数据集标签、与数据集下拉框
-		this.panel.add(this.labelPassword, new GridBagConstraintsHelper(0, 2, 1, 1).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, 0));
-		this.panel.add(this.password, new GridBagConstraintsHelper(1, 2, 1, 1).setWeight(1, 0).setAnchor(GridBagConstraints.CENTER).setFill(GridBagConstraints.HORIZONTAL).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, GridBagConstraintsHelper.CONTROLS_GAP).setWeight(1, 0).setFill(GridBagConstraints.HORIZONTAL));
+		this.panel.add(this.labelPassword, new GridBagConstraintsHelper(0, 1, 1, 1).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, 0));
+		this.panel.add(this.password, new GridBagConstraintsHelper(1, 1, 1, 1).setWeight(1, 0).setAnchor(GridBagConstraints.CENTER).setFill(GridBagConstraints.HORIZONTAL).setInsets(GridBagConstraintsHelper.CONTROLS_GAP, GridBagConstraintsHelper.CONTROLS_GAP, 0, GridBagConstraintsHelper.CONTROLS_GAP).setWeight(1, 0).setFill(GridBagConstraints.HORIZONTAL));
 
 
     }
@@ -137,7 +125,6 @@ public class DialogLoginGaf extends SmDialog {
 		// 设置对话框标题
 		this.setTitle(GAFProperties.getString("String_GafLogin"));
 		// 设置数据源、数据集标签内容
-		this.labelGafServer.setText(GAFProperties.getString("String_Label_GafServer"));
 		this.labelUserName.setText(GAFProperties.getString("String_Label_Username"));
 		this.labelPassword.setText(GAFProperties.getString("String_Label_Password"));
 
@@ -146,7 +133,6 @@ public class DialogLoginGaf extends SmDialog {
 	private void registerEvents() {
 		// 按钮添加事件
 		this.buttonOK.addActionListener(this.actionListenerOK);
-		this.gafServer.addActionListener(this.actionListenerOK);
 		this.username.addActionListener(this.actionListenerOK);
 		this.password.addActionListener(this.actionListenerOK);
 		this.buttonCancel.addActionListener(this.actionListenerCancel);
@@ -155,13 +141,13 @@ public class DialogLoginGaf extends SmDialog {
 
 	@Override
 	public void windowOpened(WindowEvent e) {
-		this.gafServer.requestFocus();
+		this.username.requestFocus();
 		super.windowOpened(e);
 	}
 	private final ActionListener actionListenerOK = e -> {
 		String usernameText = username.getText();//获取输入内容
 		String passwordText = password.getText();//获取输入内容
-		String gafServerText = gafServer.getText();//获取输入内容
+		String gafServerText = GafGlobalEnvironments.getServer();
 		if("".equals(usernameText)||"".equals(passwordText)){
             this.labelError.setForeground(ColorUtilities.getErrorColor());
             this.labelError.setText("用户名密码不能为空");
@@ -190,7 +176,7 @@ public class DialogLoginGaf extends SmDialog {
         this.labelError.setText("");
 		String usernameText = username.getText();//获取输入内容
 		String passwordText = new String(password.getPassword());//获取输入内容
-		String host = gafServer.getText();
+		String host = GafGlobalEnvironments.getServer();
 
 		new GafClient(usernameText,passwordText,host);
 		//todo:
