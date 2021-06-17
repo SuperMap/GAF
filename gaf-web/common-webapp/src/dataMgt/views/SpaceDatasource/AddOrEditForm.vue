@@ -763,51 +763,51 @@ export default {
         return true
       }
     },
-    //表单提交
-    submitForm() {
+   submitForm() {
+      const _this = this
       this.addOrEditForm.validateFields(async (err) => {
         if (err) {
           event.preventDefault()
           return false
         }
-        const data = this.addOrEditForm.getFieldsValue()
-        const isRepeat = await this.getDatasourceInfo(data.dsName)
-        if(isRepeat) {
-          this.$message.error('数据源别名重复')
-          return false
+        const data = _this.addOrEditForm.getFieldsValue()
+        if(!_this.editData.dsName || _this.editData.dsName !== data.dsName) {
+          const isRepeat = await _this.getDatasourceInfo(data.dsName)
+          if(isRepeat) {
+            _this.$message.error('数据源别名重复')
+            return false
+          }
         }
         let url = `/sys-mgt/sys-resource-datasources/`
-        this.loading2 = true
+        _this.loading2 = true
         if (data.regionCode) {
           data.regionCode = data.regionCode.join('/')
         }
         // data.catalogCode = data.catalogCode.join('/')
         // data.typeCode = data.typeCode.join('/')
-        if (this.isSpatialdb) {
+        if (_this.isSpatialdb) {
           data.catalogCode = data.catalogCode.slice(-1).join()
           data.typeCode = data.typeCode.slice(-1).join()
         }
-
-
-        if (this.dataId) {
-          url = url + this.dataId
-          const rst = await this.$axios.put(url, data)
+        if (_this.dataId) {
+          url = url + _this.dataId
+          const rst = await _this.$axios.put(url, data)
           if (rst.data.isSuccessed) {
-            this.$message.success('更新成功')
+            _this.$message.success('更新成功')
           } else {
-            this.$message.error(`更新失败,原因:${rst.data.message}`)
+            _this.$message.error(`更新失败,原因:${rst.data.message}`)
           }
         } else {
-          const rst = await this.$axios.post(url, data)
+          const rst = await _this.$axios.post(url, data)
           if (rst.data.isSuccessed) {
-            this.$message.success('添加成功')
+            _this.$message.success('添加成功')
           } else {
-            this.$message.error(`添加失败,原因:${rst.data.message}`)
+            _this.$message.error(`添加失败,原因:${rst.data.message}`)
           }
         }
-        this.loading2 = false
-        this.addOrEditForm.resetFields()
-        this.$emit('submit')
+        _this.loading2 = false
+        _this.addOrEditForm.resetFields()
+        _this.$emit('submit')
       })
     },
     // 从新增修改模态框返回列表
