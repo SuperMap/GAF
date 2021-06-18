@@ -109,12 +109,13 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <a-modal
-      v-model="modalVisible"
-      :width="800"
+    <a-drawer
+      :visible="modalVisible"
+      :width="500"
       :footer="null"
       :centered="true"
-      @cancel="handleBack"
+      @close="handleBack"
+      :closable="false"
       destroy-on-close
     >
       <add-edit-form
@@ -130,7 +131,7 @@
         :dataOfTree="dataOfTree"
       >
       </add-edit-form>
-    </a-modal>
+    </a-drawer>
   </div>
 </template>
 

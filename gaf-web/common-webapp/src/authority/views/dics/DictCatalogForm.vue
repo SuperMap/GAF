@@ -1,16 +1,19 @@
 <template>
   <div class="page-container">
+    <div class="grid-container">
+    <div class="drawer-header">
     <template>
-      <a-breadcrumb separator=">">
+      <a-breadcrumb separator=">" class="modal-line">
         <span class="vertical-line">| </span>
         <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>
-    <div>
+    </div>
+    <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
         :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 10}"
+        :wrapper-col="{ span: 15}"
         layout="horizontal"
       >
         <a-form-item v-show="false" label="目录分类">
@@ -105,7 +108,7 @@
         </a-form-item>
       </a-form>
     </div>
-    <div class="form-foot">
+    <div class="drawer-footer">
       <!-- <button
         @click="deleteData"
         v-if="operation === 'edit'"
@@ -117,9 +120,10 @@
         {{ submitButtonText }}
       </a-button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <button v-if="operation === 'add'" @click="handleBack" class="submit-gray">
+      <button v-if="operation === 'add'" @click="handleBack" class="cancel-modal">
         取消
       </button>
+    </div>
     </div>
   </div>
 </template>
@@ -341,11 +345,6 @@ export default {
 </script>
 
 <style  lang="less" scoped>
-button {
-  width: 80px;
-  font-size: 12px;
-  cursor: pointer;
-}
 .form-foot {
   position: relative;
   left: 30%;

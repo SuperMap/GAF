@@ -26,29 +26,6 @@
             <span>批量删除</span>
           </button>
         </a-popconfirm>
-        <!-- <a-button
-          :disabled="!hasSelected"
-          :loading="loading"
-          @click="showDeletePropertyModel"
-          type="danger"
-        >
-          <a-icon type="delete" />
-          删除微服务配置
-        </a-button>
-        <a-modal
-          :visible="deletePropertyVisible"
-          :confirm-loading="deletePropertyConfirmLoading"
-          @ok="deleteConfigServerInfo"
-          @cancel="cancelDeleteConfigServerInfo"
-          title="确认删除所选服务的所有配置吗？"
-        >
-          <p>{{ deletePropertyModelText }}</p>
-        </a-modal> -->
-        <!-- <span style="margin-left: 8px">
-          <template v-if="hasSelected">
-            {{ `已选中 ${selectedRowKeys.length} 个` }}
-          </template>
-        </span> -->
       </template>
       <template #filter>
         <template v-if="showTenantList">

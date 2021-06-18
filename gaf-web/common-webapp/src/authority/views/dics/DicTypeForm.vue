@@ -1,18 +1,20 @@
 <template>
   <div class="page-container">
+    <div class="grid-container">
+    <div class="drawer-header">
     <template>
-      <a-breadcrumb separator=">">
+      <a-breadcrumb separator=">" class="modal-line">
         <span class="vertical-line">| </span>
         <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>
-    <!-- class="page-modal-box" -->
-    <div>
+    </div>
+    <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
         layout="horizontal"
         :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 10 }"
+        :wrapper-col="{ span: 15 }"
       >
         <a-form-item label="所属分组">
           <a-tree-select
@@ -112,25 +114,15 @@
         </a-form-item>
       </a-form>
     </div>
-    <div class="form-foot">
-
-      <!-- <a-popconfirm
-        v-if="operation === 3"
-        @confirm="deleteData"
-        class="cancel-modal"
-        title="删除后无法恢复，确认是否继续?"
-        ok-text="确认"
-        cancel-text="取消"
-      >
-        <a-button>删除</a-button>
-      </a-popconfirm>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+    <div class="drawer-footer">
       <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
         {{submitButtonText}}
       </a-button>
-      <button v-if="operation === 2" @click="handleBack" class="submit-gray">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button v-if="operation === 2" @click="handleBack" class="cancel-modal">
         取消
       </button>
+    </div>
     </div>
   </div>
 </template>
@@ -305,12 +297,6 @@
 </script>
 
 <style lang="less" scoped>
-button {
-  width: 80px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
 .page-container {
   width: 100%;
   height: 100%;

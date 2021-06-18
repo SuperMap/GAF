@@ -1,16 +1,18 @@
 <template>
   <div class="page-container">
-    <div class="title">
+    <div class="grid-container">
+    <div class="drawer-header">
       <template>
-        <a-breadcrumb separator=">">
+        <a-breadcrumb separator=">" class="modal-line">
         <a-breadcrumb-item class="text-bolder"><span class="vertical-line">| </span>{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
       </template>
     </div>
+    <div class="drawer-content">
     <a-form
       :form="addOrEditForm"
       :label-col="{ span: 5 }"
-      :wrapper-col="{ span: 13 }"
+      :wrapper-col="{ span: 15 }"
       layout="horizontal"
     >
       <a-form-item v-show="false" label="上级部门id">
@@ -172,21 +174,27 @@
           auto-size
         />
       </a-form-item>
-      <div class="btn-div">
+      
+    </a-form>
+    </div>
+    <div class="drawer-footer">
         <button v-if="false" @click="cancelDelete" class="cancel-modal">
           删除
         </button>
+        &nbsp;&nbsp;&nbsp;
         <button @click="setTenantSynchronization" class="submit-gray">
           同步
         </button>
+        &nbsp;&nbsp;&nbsp;
         <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
           {{ operation === 2 ? '新增' : '保存' }}
         </a-button>
+        &nbsp;&nbsp;&nbsp;
         <button v-if="operation === 2" @click="cancelDelete" class="cancel-modal">
           取消
         </button>
       </div>
-    </a-form>
+    </div>
     <div>
       <gaf-modal
         v-model="mapList"
@@ -334,12 +342,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-button {
-  width: 80px;
-  font-size: 12px;
-  cursor: pointer;
-  margin-right: 10px;
-}
+// button {
+//   width: 80px;
+//   font-size: 12px;
+//   cursor: pointer;
+//   margin-right: 10px;
+// }
 
 .page-container {
   width: 100%;

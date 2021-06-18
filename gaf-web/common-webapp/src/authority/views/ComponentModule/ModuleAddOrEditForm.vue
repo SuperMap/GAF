@@ -1,16 +1,19 @@
 <template>
   <div class="page-container">
+    <div class="grid-container">
+      <div class="drawer-header">
     <template>
       <a-breadcrumb separator=">" class="modal-line">
         <span class="vertical-line">| </span>
         <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>
-    <div class="page-container-box">
+    </div>
+    <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
         :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 13 }"
+        :wrapper-col="{ span: 15 }"
         layout="horizontal"
       >
         <a-form-item v-show="false" label="所属组件id">
@@ -114,7 +117,7 @@
             placeholder="请输入图标地址"
             auto-size
           /> -->
-          <gaf-icon-picker v-decorator="['iconUrl']" placeholder="请选择图标"></gaf-icon-picker>
+          <gaf-icon-picker v-decorator="['iconUrl']" :disabled="operation === 1" placeholder="请选择图标"></gaf-icon-picker>
         </a-form-item>
         <a-form-item label="排序序号">
           <a-input-number
@@ -244,14 +247,16 @@
             />
           </a-form-item>
         </div>
-        <div class="btn-div">
+        
+      </a-form>
+    </div>
+    <div class="drawer-footer">
           <a-button @click="submitForm" type="primary" :loading="loading" v-show="operation !== 1" class="submit-gray">
             确定
           </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
         </div>
-      </a-form>
     </div>
   </div>
 </template>
@@ -404,14 +409,5 @@ button {
 .page-container {
   width: 100%;
   height: 100%;
-}
-
-.page-container-box {
-  height: 100%;
-}
-
-.btn-div {
-  text-align: center;
-  margin: 15px 0;
 }
 </style>

@@ -109,12 +109,13 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <a-modal
-      v-model="modalVisible"
-      :width="800"
+    <a-drawer
+      :visible="modalVisible"
+      :width="500"
       :footer="null"
       :centered="true"
-      @cancel="handleBack"
+      :closable="false"
+      @close="handleBack"
       destroy-on-close
     >
       <add-edit-department
@@ -127,7 +128,7 @@
         @addDepartmentSuccess="afterFormAddSuccess"
         @cancleWhenAddDepartment="cancleWhenAdd"
       ></add-edit-department>
-    </a-modal>
+    </a-drawer>
   </div>
 </template>
 

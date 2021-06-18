@@ -45,7 +45,7 @@
               {{ addButtonName }}
             </button>
           </div> -->
-          <div class="margin-15">
+          <div class="special-container">
           <add-edit-form
             ref="addEditForm"
             :edit-data="editData"

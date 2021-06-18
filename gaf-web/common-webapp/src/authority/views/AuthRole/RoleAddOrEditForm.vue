@@ -1,12 +1,15 @@
 <template>
   <div class="page-container">
+    <div class="grid-container">
+      <div class="drawer-header">
     <template>
       <a-breadcrumb separator=">" class="modal-line">
         <span class="vertical-line">| </span>
         <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>
-    <div class="page-container-box">
+    </div>
+    <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
         :label-col="{ span: 5 }"
@@ -157,14 +160,16 @@
         <a-form-item v-show="operation === 1" label="修改人">
           <a-input v-decorator="['updatedBy']" allow-clear disabled />
         </a-form-item>
-        <div class="btn-div">
-          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
-            确定
-          </a-button>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
-        </div>
+        
       </a-form>
+    </div>
+    <div class="drawer-footer">
+      <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
+        确定
+      </a-button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
+    </div>
     </div>
   </div>
 </template>

@@ -130,13 +130,14 @@
           </template>
         </gaf-table-layout>
       </div>
-      <a-modal
-        v-model="open"
-        :width="800"
+      <a-drawer
+        :visible="open"
+        :width="500"
         :footer="null"
         :centered="true"
         destroy-on-close
-        @cancel="handleBack"
+        @close="handleBack"
+        :closable="false"
       >
         <add-edit-form
           :title="title"
@@ -147,7 +148,7 @@
           @back="handleBack"
         >
         </add-edit-form>
-      </a-modal>
+      </a-drawer>
       <a-modal
         v-model="openconfigField"
         title="配置字段"
