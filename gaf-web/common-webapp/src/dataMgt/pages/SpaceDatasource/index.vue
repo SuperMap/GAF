@@ -14,9 +14,9 @@
         :selectedKeys.sync="selectedNodeKeys2"
         @select="onSelect2"
       >
-        <template v-slot:icon="{ iconNodeType }">
+        <!-- <template v-slot:icon="{ iconNodeType }">
           <a-icon :type="iconNodeType.type === 2 ? tag : tags"></a-icon>
-        </template>
+        </template> -->
       </gaf-tree-transparent>
     </div>
     <div class="page-right">
@@ -148,12 +148,13 @@
             </gaf-table-with-page>
           </template>
         </gaf-table-layout>
-        <a-modal
-          v-model="open"
-          :width="800"
+        <a-drawer
+          :visible="open"
+          :width="500"
           :footer="null"
           :centered="true"
-          @cancel="handleBack"
+          @close="handleBack"
+          :closable="false"
           destroy-on-close
         >
           <add-edit-form
@@ -166,7 +167,7 @@
             :catalogCode="catalogCode"
           >
           </add-edit-form>
-        </a-modal>
+        </a-drawer>
   </div>
   </div>
 </template>
@@ -572,6 +573,7 @@
         this.dataOfTree1 = [...this.dataOfTree1,...this.changePropertyName(res.data)]
         this.getMap(res.data)
         this.dataOfTree = res.data
+        console.log(this.dataOfTree1, 'this.dataOfTree1')
         this.getList()
       } else {
         this.$message.error('加载API分组树失败,原因：' + res.message)
@@ -610,6 +612,7 @@
         let newData = {};
         newData.key= list.value;
         newData.title = list.label;
+        newData.scopedSlots = {title: "title"}
         newData.children = list.children  ? this.changePropertyName(list.children) : [];    //如果还有子集，就再次调用自己
         item.push(newData);
       });

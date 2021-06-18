@@ -99,12 +99,13 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-	<a-modal
-      v-model="open"
-      :width="1000"
+	<a-drawer
+      :visible="open"
+      :width="500"
       :footer="null"
       :centered="true"
-      @cancel="handleBack"
+      @close="handleBack"
+      :closable="false"
       destroy-on-close
     >
      <add-edit-form
@@ -116,19 +117,7 @@
        :option="option"
      >
      </add-edit-form>
-    </a-modal>
-    <!-- <a-modal
-      title="发布服务"
-      v-model="openPublish"
-      :width="600"
-      :centered="true"
-      @cancel="handlePublishBack"
-      @ok="handleOk"
-      destroy-on-close
-    >
-     <a-select mode="tags" style="width: 100%" placeholder="请选择一个或多个类型" v-model="serviceTypes" :options="dataOption" @change="handleChange">
-     </a-select>
-    </a-modal> -->
+    </a-drawer>
   </div>
   </div>
 </template>

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div style="margin: 0 0 10px 35%">
+    <gaf-table-layout>
+    <template #actions>
+    </template>
+    <template #filter>
       <a-input-search
         v-model="searchValue"
         allow-clear
@@ -11,8 +14,8 @@
       >
         <button slot="enterButton" class="btn-search"> 搜索 </button>
       </a-input-search>
-    </div>
-    <div>
+    </template>
+    <template #default>
       <gaf-table-with-page
         :show-x-h="false"
         :pagination="pagination"
@@ -48,7 +51,8 @@
           </a-input>
         </template>
       </gaf-table-with-page>
-    </div>
+    </template>
+    </gaf-table-layout>
     <div style="display: flex; justify-content: flex-end">
       <button
         style="color: white; margin-right: 10px"

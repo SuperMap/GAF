@@ -106,12 +106,13 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-	<a-modal
-    v-model="open"
-    :width="1000"
+	<a-drawer
+    :visible="open"
+    :width="500"
     :footer="null"
     :centered="true"
-    @cancel="handleBack"
+    @close="handleBack"
+    :closable="false"
     destroy-on-close
   >
     <add-edit-form
@@ -122,7 +123,7 @@
       :operation="operation"
     >
     </add-edit-form>
-  </a-modal>
+  </a-drawer>
   </div>
 </template>
 

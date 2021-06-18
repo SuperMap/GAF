@@ -1,16 +1,19 @@
 <template>
   <div>
+    <div class="grid-container">
+    <div class="drawer-header">
     <template>
       <a-breadcrumb separator=">" class="modal-line">
         <span class="vertical-line">| </span>
         <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>
-    <div class="page-modal-box">
+    </div>
+    <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
         :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 13 }"
+        :wrapper-col="{ span: 15 }"
         layout="horizontal"
       >
         <a-form-item v-show="false" label="所属组件id">
@@ -180,24 +183,28 @@
         <a-form-item v-show="operation === 1" label="修改人">
           <a-input v-decorator="['updatedBy']" allow-clear disabled />
         </a-form-item>
-        <div v-show="operation !== 1">
-          <a-button
-            @click="submitForm"
-            type="primary"
-            :loading="loading"
-            class="submit-gray"
-            style="margin: 0 10px 0 300px;"
-          >
-            确定
-          </a-button>
-          <button @click="backToList" class="cancel-modal">取消</button>
-        </div>
-        <div v-show="operation === 1">
-          <button @click="backToList" class="cancel-modal margin410"
-            >{{this.operation === 1 ? "返回" : "取消"}}</button
-          >
-        </div>
+        
       </a-form>
+    </div>
+    <div class="drawer-footer">
+      <div style="text-align:center;" v-show="operation !== 1">
+        <a-button
+          @click="submitForm"
+          type="primary"
+          :loading="loading"
+          class="submit-gray"
+        >
+          确定
+        </a-button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button @click="backToList" class="cancel-modal">取消</button>
+      </div>
+      <div v-show="operation === 1">
+        <button @click="backToList" class="cancel-modal margin410"
+          >{{this.operation === 1 ? "返回" : "取消"}}</button
+        >
+      </div>
+    </div>
     </div>
   </div>
 </template>

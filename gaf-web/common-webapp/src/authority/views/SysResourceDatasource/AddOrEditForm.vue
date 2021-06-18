@@ -1,16 +1,19 @@
 <template>
   <div class="page-container">
+    <div class="grid-container">
+    <div class="drawer-header">
     <template>
       <a-breadcrumb separator=">" class="modal-line">
         <span class="vertical-line">| </span>
         <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>
-    <div class="page-container-box">
+    </div>
+    <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
         :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 13 }"
+        :wrapper-col="{ span: 15 }"
         layout="horizontal"
       >
         <a-form-item v-show="false" label="是否为空间数据库">
@@ -221,23 +224,25 @@
             />
           </a-form-item>
         </div>
-        <div class="btn-div">
-          <a-button
-            @click="testConnect"
-            type="primary"
-            :loading="loading1"
-            class="submit-gray"
-          >
-            测试连接
-          </a-button>
-          &nbsp;&nbsp;
-          <a-button @click="submitForm" type="primary" :loading="loading2" class="submit-gray">
-            确定
-          </a-button>
-          &nbsp;&nbsp;
-          <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
-        </div>
+        
       </a-form>
+    </div>
+    <div class="drawer-footer">
+      <a-button
+        @click="testConnect"
+        type="primary"
+        :loading="loading1"
+        class="submit-gray"
+      >
+        测试连接
+      </a-button>
+      &nbsp;&nbsp;
+      <a-button @click="submitForm" type="primary" :loading="loading2" class="submit-gray">
+        确定
+      </a-button>
+      &nbsp;&nbsp;
+      <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
+    </div>
     </div>
   </div>
 </template>

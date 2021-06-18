@@ -1,6 +1,6 @@
 <template>
   <div class="page-single">
-    <gaf-table-layout v-show="!open">
+    <gaf-table-layout>
       <template #actions>
         <button
           @click="handleAdd"
@@ -78,15 +78,24 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <add-edit-form
-      :title="title"
-      :editData="editData"
-      @submit="handleSubmit"
-      @back="handleBack"
-      v-if="open"
-      :operation="operation"
+    <a-drawer
+      :visible="open"
+      :width="500"
+      :footer="null"
+      :centered="true"
+      destroy-on-close
+      @close="handleBack"
+      :closable="false"
     >
+      <add-edit-form
+        :title="title"
+        :editData="editData"
+        @submit="handleSubmit"
+        @back="handleBack"
+        :operation="operation"
+      >
     </add-edit-form>
+    </a-drawer>
   </div>
 </template>
 

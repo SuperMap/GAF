@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="page-single">
-    <gaf-table-layout v-show="!open">
+    <gaf-table-layout>
       <template #actions>
         <button @click="handleAdd" class="btn-fun blue">
           <span><a-icon type="plus" />
@@ -87,15 +87,24 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <add-edit-form
-      :title="title"
-      :editData="editData"
-      @submit="handleSubmit"
-      @back="handleBack"
-      v-if="open"
-      :operation="operation"
+    <a-drawer
+      :visible="open"
+      :width="500"
+      :footer="null"
+      :centered="true"
+      destroy-on-close
+      @close="handleBack"
+      :closable="false"
     >
-    </add-edit-form>
+      <add-edit-form
+        :title="title"
+        :editData="editData"
+        @submit="handleSubmit"
+        @back="handleBack"
+        :operation="operation"
+      >
+      </add-edit-form>
+    </a-drawer>
   </div>
   </div>
 </template>

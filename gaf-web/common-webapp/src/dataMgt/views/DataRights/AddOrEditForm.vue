@@ -1,23 +1,26 @@
 <template>
   <div class="page-container">
-    <template>
-      <a-breadcrumb separator=">" class="modal-line">
-        <span class="vertical-line">| </span>
-        <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
-      </a-breadcrumb>
-    </template>
-    <div class="page-container-box">
+    <div class="grid-container">
+    <div class="drawer-header">
+      <template>
+        <a-breadcrumb separator=">" class="modal-line">
+          <span class="vertical-line">| </span>
+          <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
+        </a-breadcrumb>
+      </template>
+    </div>
+    <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
-        :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 13 }"
+        :label-col="{ span: 7 }"
+        :wrapper-col="{ span: 15 }"
         layout="horizontal"
       >
         <a-form-item label="编号">
           <a-input
             :disabled="operation === 1"
             v-decorator="[
-              'dataPermissionId',
+              'code',
               {
                 rules: [
                   {
@@ -105,7 +108,7 @@
             allow-clear
           />
         </a-form-item>
-        <a-form-item v-if="openTable" label="表作用域">
+        <a-form-item v-if="!(editData.type === 1)" label="表作用域">
           <a-input
             :disabled="operation === 1"
             v-decorator="[
@@ -147,6 +150,17 @@
             ]"
             placeholder="请输入mapperid作用域"
             allow-clear
+          />
+        </a-form-item>
+        <a-form-item label="状态">
+          <a-switch
+            v-decorator="[
+              'enable',
+              { valuePropName: 'checked', initialValue: true }
+            ]"
+            :disabled="operation === 1"
+            checked-children="启用"
+            un-checked-children="禁用"
           />
         </a-form-item>
         <a-form-item label="描述">
@@ -201,14 +215,16 @@
             />
           </a-form-item>
         </div>
-        <div class="btn-div">
-          <a-button @click="submitForm" type="primary" :loading="loading" v-show="operation !== 1" class="submit-gray">
-            确定
-          </a-button>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
-        </div>
+        
       </a-form>
+    </div>
+    <div class="drawer-footer">
+      <a-button @click="submitForm" type="primary" :loading="loading" v-show="operation !== 1" class="submit-gray">
+        确定
+      </a-button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
+    </div>
     </div>
   </div>
 </template>
@@ -270,7 +286,7 @@ export default {
   },
   mounted() {
     const copyData = { ...this.editData }
-    this.dataId = copyData.resourceModuleId
+    this.dataId = copyData.code
     delete copyData.resourceModuleId
     delete copyData.status
     if (copyData.createdTime)

@@ -46,7 +46,7 @@
         default-active-key="1"
       >
         <a-tab-pane key="1" v-if="groupShow && openCatalogForm" tab="字典分组">
-          <div class="margin-15">
+          <div class="special-container">
             <dic-catalog-form
               ref="dicCatalogForm"
               :editData="catalogEditData"
@@ -88,7 +88,7 @@
           </div>
         </a-tab-pane>
         <a-tab-pane key="2" v-if="!groupShow" tab="字典类别">
-          <div class="margin-15">
+          <div class="special-container">
             <dic-type-form
               ref="dicTypeForm"
               :editData="dicTypeEditData"
