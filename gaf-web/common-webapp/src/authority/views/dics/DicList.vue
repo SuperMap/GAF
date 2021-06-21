@@ -72,7 +72,7 @@
           </a-popconfirm>
         </div>
         <gaf-table-with-page
-          :scroll="{ y: 508 }"
+          :scroll="{ y: 508 , x: 1440}"
           :showXH="false"
           :pagination="pagination"
           :data-source="sysDictList"

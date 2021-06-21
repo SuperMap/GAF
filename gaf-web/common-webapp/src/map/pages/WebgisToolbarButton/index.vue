@@ -60,7 +60,7 @@
             :pagination="pagination"
             :data-source="webgisToolbarButtonList"
             :loading="loading"
-            :scroll="{ y: 508 }"
+            :scroll="{ y: 508, x: 1440 }"
             :row-selection="{
               selectedRowKeys: selectedRowKeys,
               onChange: onSelectChange,
@@ -196,6 +196,7 @@ export default {
         },
         {
           title: "操作",
+          fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ];

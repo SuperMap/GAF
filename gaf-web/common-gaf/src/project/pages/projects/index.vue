@@ -33,7 +33,7 @@
           </div>
         </template>
         <gaf-table-with-page
-          :scroll="{ y: 508 }"
+          :scroll="{ y: 508, X: 1440 }"
           :loading="loading"
           :columns="columns.filter((item) => item.dataIndex !== 'projId')"
           :data-source="projectList"

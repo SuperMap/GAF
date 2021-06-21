@@ -61,7 +61,7 @@
               </a-popconfirm>
             </div>
             <gaf-table-with-page
-              :scroll="{ y: 508 }"
+              :scroll="{ y: 508, x: 1440 }"
               :showXH="false"
               :pagination="pagination"
               :data-source="webgisServiceList"
@@ -290,6 +290,7 @@ export default {
         },
         {
           title: "操作",
+          fixed: 'right',
           width: "400px",
           scopedSlots: { customRender: "operation" },
         },

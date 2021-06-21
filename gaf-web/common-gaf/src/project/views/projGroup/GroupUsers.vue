@@ -27,7 +27,7 @@
         </template>
         <template #default>
           <gaf-table-with-page
-            :scroll="{ y: 508 }"
+            :scroll="{ y: 508, X: 1440 }"
             :pagination="pagination"
             :data-source="projGroupList"
             :loading="loading"
@@ -138,6 +138,7 @@ export default {
         },
         {
           title: "操作",
+          fixed: "right",
           scopedSlots: { customRender: "operation" },
         },
       ];
