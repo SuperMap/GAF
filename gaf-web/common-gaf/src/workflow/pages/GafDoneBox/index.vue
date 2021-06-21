@@ -29,20 +29,18 @@
           <a
             href="javascript:void(0);"
             rel="external nofollow"
-            class="btn-view"
+            class="btn-margin"
             @click.stop="toMallInfo(ot.record)"
-            ><a-icon type="edit" /> 查看</a
+            >查看</a
           >
-          <a-divider type="vertical" />
+          <!-- <a-divider type="vertical" /> -->
           <a-popconfirm
             title="删除后无法恢复，确认是否继续?"
             ok-text="确认"
             cancel-text="取消"
             @confirm="() => withdraw(ot.record)"
           >
-            <a href="javascript:;" class="btn-del"
-              ><a-icon type="delete" /> 撤回</a
-            >
+            <a href="javascript:;">撤回</a>
           </a-popconfirm>
         </template>
       </gaf-business-box>
@@ -50,11 +48,11 @@
   </div>
 </template>
 <script>
-import '~/assets/css/common.css'
-import GafBusinessBox from '../../views/GafWorkflowCommon/GafBusinessBox'
-import GafTimeSwitch from '../../views/GafWorkflowCommon/GafTimeSwitch'
+import "~/assets/css/common.css";
+import GafBusinessBox from "../../views/GafWorkflowCommon/GafBusinessBox";
+import GafTimeSwitch from "../../views/GafWorkflowCommon/GafTimeSwitch";
 export default {
-  name: 'GafDoneBox',
+  name: "GafDoneBox",
   components: {
     GafBusinessBox,
     GafTimeSwitch,
@@ -62,55 +60,55 @@ export default {
   data() {
     return {
       dataSource: [],
-    }
+    };
   },
   methods: {
     /* 查询 接口 */
     async searchValue(keyword) {
-      const url = `/workflow/query/done-process`
-      const rst = await this.$axios.post(url, { keyword })
+      const url = `/workflow/query/done-process`;
+      const rst = await this.$axios.post(url, { keyword });
       if (rst.data.isSuccessed) {
-        this.dataSource = rst.data.data.content
+        this.dataSource = rst.data.data.content;
       }
     },
     /* 撤回 */
     async withdraw(record) {
-      const url = `/workflow/execute/process/retract`
+      const url = `/workflow/execute/process/retract`;
       const withdrawData = await this.$axios.post(url, {
         actInstId: record.ActInst_ID,
-      })
+      });
       if (withdrawData.data.isSuccessed) {
-        this.$message.success('撤回成功')
+        this.$message.success("撤回成功");
       } else {
-        this.$message.warn(withdrawData.data.message)
+        this.$message.warn(withdrawData.data.message);
       }
     },
     toMallInfo(record) {
-      const proInstID = record.ProInst_ID
-      const ActInstID = record.ActInst_ID
-      const nowActInstId = record.NowActInst_ID
+      const proInstID = record.ProInst_ID;
+      const ActInstID = record.ActInst_ID;
+      const nowActInstId = record.NowActInst_ID;
       this.$router.push({
-        path: '../../../views/workflow/GafDoneBox/GafDoneSon.vue',
+        path: "../../../views/workflow/GafDoneBox/GafDoneSon.vue",
         query: {
           proInstId: proInstID,
           actInstId: ActInstID,
           nowActInstId,
         },
-      })
+      });
     },
     /* 获取后台的数据 接口 */
     async getTable() {
-      const url = `/workflow/query/done-process`
-      const rst = await this.$axios.post(url, {})
+      const url = `/workflow/query/done-process`;
+      const rst = await this.$axios.post(url, {});
       if (rst.data.isSuccessed) {
         // this.$message.success('成功')
       } else {
-        this.$message.error('更新失败')
+        this.$message.error("更新失败");
       }
-      this.dataSource = rst.data.data.content
+      this.dataSource = rst.data.data.content;
     },
   },
-}
+};
 </script>
 <style scoped>
 .ab-pic {

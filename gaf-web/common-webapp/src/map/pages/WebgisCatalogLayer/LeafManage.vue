@@ -4,20 +4,19 @@
       <template #actions>
         <button
           @click="handleAdd"
-          class="btn-fun blue"
+          class="btn-fun blue btn-16"
         >
-          <span><a-icon type="plus" />
+          <span><a-icon type="plus-circle" />
           {{addButtonName}}</span>
         </button>
         <a-popconfirm
-          class="btn-fun red"
+          class="btn-fun blue"
           title="删除后无法恢复，确认是否继续?"
           ok-text="确认"
           cancel-text="取消"
           @confirm="() => batchDel()"
         >
-          <button class="btn-fun red">
-            <a-icon type="delete" />
+          <button class="btn-fun blue">
             <span>批量删除</span>
           </button>
         </a-popconfirm>
@@ -29,16 +28,28 @@
             placeholder="请输入名称查询"
             size="large"
           >
-            <button slot="enterButton" class="btn-search">
-              搜索
-            </button>
           </a-input-search>
         </div>
       </template>
       <template #default>
+        <div class="choose-box">
+          <a-icon type="exclamation-circle" class="exclamation" /><span
+            >已选择</span
+          >
+          <b>{{ selectRowLength }}</b>
+          <span>项</span>
+          <a-popconfirm
+            @confirm="() => clearOptions(record)"
+            title="清空后无法恢复，确认是否继续?"
+            ok-text="确认"
+            cancel-text="取消"
+          >
+            <a href="javascript:;">清空</a>
+          </a-popconfirm>
+        </div>
         <gaf-table-with-page
+          :scroll="{ y: 508 }"
           :showXH="false"
-          :scroll="{ y: 570 }"
           :row-selection="{
             selectedRowKeys: selectedRowKeys,
             onChange: rowChange,
@@ -51,10 +62,8 @@
           @change="tableChange"
           :row-key="r => r.key"
           :columns="columns.filter(item => item.dataIndex !== 'resourceApiId')"
-          style="width: 100%;height:570px"
-          bordered
-          size="small"
-          align="center"
+          class="table-style"
+          size="middle"
         >
           <template slot="method" slot-scope="text, record">
             {{ getMethod(record.method) }}
@@ -94,12 +103,11 @@
             <a-divider type="vertical" /> -->
             <a-popconfirm
               @confirm="() => handleDelete(record)"
-              class="btn-del"
               title="删除后无法恢复，确认是否继续?"
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;"><a-icon type="delete" /> 删除</a>
+              <a href="javascript:;">删除</a>
             </a-popconfirm>
           </template>
 
@@ -186,6 +194,7 @@
       // 总条数
       total: 0,
       selectedRowKeys: [],
+      selectRowLength: 0,
       // ${functionName}表格数据
       authResourceApiList: [],
       // 是否显示添加修改弹出层
@@ -287,9 +296,15 @@
       })
   },
   methods: {
+    // 清空
+    clearOptions() {
+      this.selectedRowKeys = []
+      this.selectRowLength = 0
+    },
     // 复选框
     rowChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
+      this.selectRowLength = selectedRowKeys.length
     },
     rowSelect(record, selected, selectedRows) {
       console.log(record, selected, selectedRows)

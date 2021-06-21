@@ -34,29 +34,27 @@
           :columns="
             columns.filter((item) => item.dataIndex !== 'catalogLayerId')
           "
-          style="width: 100%"
-          bordered
-          size="small"
-          align="center"
+          class="table-style"
+          size="middle"
           @change="tableChange"
         >
           <template slot="initLoad" slot-scope="text, record">
             <span>{{ record.initLoad ? '是' : '否' }}</span>
           </template>
           <template slot="operation" slot-scope="text, record">
-            <a-divider type="vertical" />
-            <a href="javascript:;" @click.stop="() => handleUpdate(record)" class="btn-edit">
-              <a-icon type="edit" /> 编辑
+            <a
+              @click.stop="() => handleUpdate(record)"
+              href="javascript:;"
+              class="btn-margin"
+              >编辑
             </a>
-            <a-divider type="vertical" />
             <a-popconfirm
+              @confirm="() => handleDelete(record)"
               title="删除后无法恢复，确认是否继续?"
               ok-text="确认"
               cancel-text="取消"
-              @confirm="() => handleDelete(record)"
-              class="btn-del"
             >
-              <a href="javascript:;"><a-icon type="delete" /> 删除</a>
+              <a href="javascript:;">删除</a>
             </a-popconfirm>
           </template>
         </gaf-table-with-page>
