@@ -611,7 +611,6 @@ export default {
         this.dataOfTree1 = [...this.dataOfTree1,...this.changePropertyName(res.data)]
         this.getMap(res.data)
         this.dataOfTree = res.data
-        console.log(this.dataOfTree1, 'this.dataOfTree1')
         this.getList()
       } else {
         this.$message.error("加载API分组树失败,原因：" + res.message);
