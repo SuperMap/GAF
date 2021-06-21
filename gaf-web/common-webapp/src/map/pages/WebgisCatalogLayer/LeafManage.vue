@@ -48,7 +48,7 @@
           </a-popconfirm>
         </div>
         <gaf-table-with-page
-          :scroll="{ y: 508 }"
+          :scroll="{ y: 508, x: 1440 }"
           :showXH="false"
           :row-selection="{
             selectedRowKeys: selectedRowKeys,
@@ -247,7 +247,7 @@
         },
         {
           title: '操作',
-          // fixed: 'right',
+          fixed: 'right',
           // width: 260,
           scopedSlots: { customRender: 'operation' }
         }

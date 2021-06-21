@@ -693,14 +693,13 @@ button.ant-modal-close:hover {
 
 /* tabs 标签页样式 tab-bar-style */
 
-.ant-tabs-tab {
+
+/* .ant-tabs-tab {
     background-color: rgb(249, 249, 249);
-    /* font-size: 17px; */
-    /* color: rgb(47, 117, 249); */
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     font-weight: 500;
-}
+} */
 
 
 /* ----------------------- */
@@ -754,14 +753,15 @@ button.ant-modal-close:hover {
 /* tabs 下划线 去掉 */
 
 .ant-tabs-ink-bar {
-    background-color: #fff;
+    background-color: rgb(24, 144, 255);
 }
 
-.ant-tabs-tab-active {
+
+/* .ant-tabs-tab-active {
     background-color: #fff;
     border: 1px solid rgb(232, 232, 232);
     color: rgb(47, 117, 249) !important;
-}
+} */
 
 
 /* .ant-table-body-inner {

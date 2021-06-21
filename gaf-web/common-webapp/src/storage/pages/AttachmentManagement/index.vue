@@ -43,7 +43,7 @@
           </div> -->
           <gaf-table-with-page
             :showXH="false"
-            :scroll="{ y: 508 }"
+            :scroll="{ y: 508, x: 1440 }"
             :data-source="dataList"
             :loading="loading"
             @change="tableChange"

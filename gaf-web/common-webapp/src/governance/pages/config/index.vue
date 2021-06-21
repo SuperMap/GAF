@@ -81,7 +81,7 @@
             </a-popconfirm>
           </div>
           <gaf-table-with-page
-            :scroll="{ y: 508 }"
+            :scroll="{ y: 508 ,x: 1440}"
             :pagination="pagination"
             @change="tableChange"
             :row-selection="{
@@ -159,24 +159,25 @@ const columns = [
   {
     title: "微服务名称",
     dataIndex: "application",
-    align: "center",
+    // align: "center",
     key: "application",
   },
   {
     title: "所属租户ID",
     dataIndex: "tenantId",
-    align: "center",
+    // align: "center",
     key: "tenantId",
   },
   {
     title: "配置数",
     dataIndex: "propertiesCount",
-    align: "center",
+    // align: "center",
     key: "propertiesCount",
   },
   {
     title: "操作",
-    align: "center",
+    // align: "center",
+    fixed: 'right',
     key: "action",
     scopedSlots: { customRender: "action" },
   },

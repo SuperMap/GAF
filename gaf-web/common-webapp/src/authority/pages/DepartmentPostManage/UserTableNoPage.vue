@@ -2,7 +2,7 @@
   <div>
     <gaf-table-layout>
       <template v-if="isUser" #actions>
-        <button @click="handleAdd" class="btn-fun blue btn-16">
+        <button @click="handleAdd" class="btn-fun blue btn-l1">
           <span><a-icon type="plus-circle" /> 新增</span>
         </button>
         <!-- <button @click="batchDel" class="btn-fun red">
@@ -27,7 +27,7 @@
           </a-popconfirm>
         </div> -->
         <gaf-table-no-page
-          :scroll="{ y: 508 }"
+          :scroll="{ y: 508, x: 1440 }"
           :data-source="authUserList"
           :loading="loading"
           :columns="
@@ -200,6 +200,7 @@ export default {
         },
         {
           title: "操作",
+          // fixed: "right",
           scopedSlots: { customRender: "operation" },
         },
       ];
@@ -363,3 +364,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+.btn-l1 {
+  margin-left: 2%;
+  /* border: 1px solid red;   */
+}
+</style>

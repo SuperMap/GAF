@@ -45,7 +45,7 @@
         </div>
         <gaf-table-with-page
           :showXH="false"
-          :scroll="{ y: 508 }"
+          :scroll="{ y: 508, x: 1440 }"
           :row-selection="{
             selectedRowKeys: selectedRowKeys,
             onChange: rowChange,
@@ -236,6 +236,7 @@ export default {
         },
         {
           title: "操作",
+          fixed: "right",
           // fixed: 'right',
           // width: 260,
           scopedSlots: { customRender: "operation" },

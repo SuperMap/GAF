@@ -44,7 +44,7 @@
           </a-popconfirm>
         </div>
         <gaf-table-with-page
-          :scroll="{ y: 508 }"
+          :scroll="{ y: 508, x: 1440 }"
           :pagination="pagination"
           :row-selection="{
             selectedRowKeys: selectedRowKeys,
@@ -192,6 +192,7 @@ export default {
         },
         {
           title: "操作",
+          fixed: "right",
           scopedSlots: { customRender: "operation" },
         },
       ];

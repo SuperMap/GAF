@@ -18,7 +18,7 @@
           :columns="columns"
           :data-source="data"
           :loading="loading"
-          :scroll="{ y: 508 }"
+          :scroll="{ y: 508, x: 1440 }"
           row-key="id"
           size="middle"
           class="table-style"
@@ -97,6 +97,7 @@ const columns = [
     key: "action",
     width: 120,
     align: "center",
+    fixed: "right",
     scopedSlots: { customRender: "action" },
   },
 ];

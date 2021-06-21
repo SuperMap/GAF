@@ -49,7 +49,7 @@
         </div>
         <a-table
           :loading="loading"
-          :scroll="{ y: 508 }"
+          :scroll="{ y: 508 ,x: 1440}"
           :columns="columns"
           :data-source="dataSource"
           :row-selection="{
@@ -135,6 +135,7 @@ const columns = [
   },
   {
     title: "操作",
+    fixed: 'right',
     width: 100,
     dataIndex: "operation",
     key: "operation",

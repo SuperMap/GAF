@@ -44,7 +44,7 @@
           </a-popconfirm>
         </div>
         <gaf-table-with-page
-          :scroll="{ y: 508 }"
+          :scroll="{ y: 508, x: 1400 }"
           :pagination="pagination"
           :row-selection="{
             selectedRowKeys: selectedRowKeys,
@@ -224,6 +224,7 @@ export default {
         {
           title: "名称",
           dataIndex: "roleName",
+          width: 180,
           key: "role_name",
         },
         // {
@@ -234,16 +235,19 @@ export default {
         {
           title: "类型",
           dataIndex: "type",
+          width: 180,
           key: "type",
           scopedSlots: { customRender: "type" },
         },
         {
           title: "排序序号",
+          width: 180,
           dataIndex: "sortSn",
           key: "sort_sn",
         },
         {
           title: "操作",
+          fixed: "right",
           scopedSlots: { customRender: "operation" },
         },
       ];
