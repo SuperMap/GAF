@@ -155,7 +155,8 @@
       } else if (this.catalogTypeActiveKey === '3') {
         return '添加角色分组'
       } else if (this.catalogTypeActiveKey === '4') {
-        return '添加菜单分组'
+        // return '添加菜单分组'
+        return '新增'
       } else {
         return '添加子目录'
       }

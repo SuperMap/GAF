@@ -17,8 +17,8 @@
       <gaf-table-layout>
         <template #actions>
           <a-button
-            class="btn-fun blue"
-            icon="plus"
+            class="btn-fun blue btn-16"
+            icon="plus-circle"
             visible="true"
             @click="handleAddMember"
           >
@@ -27,30 +27,27 @@
         </template>
         <template #default>
           <gaf-table-with-page
+            :scroll="{ y: 508 }"
             :pagination="pagination"
             :data-source="projGroupList"
             :loading="loading"
             :row-key="(r, i) => i.toString()"
             :columns="columns"
-            bordered
-            size="small"
+            class="table-style"
+            size="middle"
             @change="tableChange"
           >
             <template slot="operation" slot-scope="text, record">
               <a
                 href="javascript:;"
-                class="btn-edit"
+                class="btn-margin"
                 @click.stop="() => handleUpdate(record)"
               >
-                <a-icon type="edit" /> 编辑
+                编辑
               </a>
-              <span class="divider">|</span>
-              <a
-                href="javascript:;"
-                class="btn-del"
-                @click.stop="() => handleDelete(record)"
-              >
-                <a-icon type="delete" /> 删除
+              <!-- <span class="divider">|</span> -->
+              <a href="javascript:;" @click.stop="() => handleDelete(record)">
+                删除
               </a>
             </template>
           </gaf-table-with-page>
@@ -78,7 +75,7 @@
 </template>
 
 <script>
-import AddOrEditMembersForm from './AddOrEditMembersForm'
+import AddOrEditMembersForm from "./AddOrEditMembersForm";
 
 export default {
   components: {
@@ -97,7 +94,7 @@ export default {
   data() {
     return {
       // 标题
-      userTitle: '',
+      userTitle: "",
       // 编辑记录
       editUserData: {},
       // ${functionName}表格数据
@@ -114,99 +111,99 @@ export default {
       generalVisible: false,
       showGroupUsers: false,
       addMemberVisible: false,
-    }
+    };
   },
   computed: {
     columns: () => {
       const arr = [
         {
-          title: '用户名称',
-          dataIndex: 'userName',
-          key: 'user_name',
+          title: "用户名称",
+          dataIndex: "userName",
+          key: "user_name",
         },
         {
-          title: '用户权限',
-          dataIndex: 'projRole',
-          key: 'proj_role',
+          title: "用户权限",
+          dataIndex: "projRole",
+          key: "proj_role",
           customRender(projRole) {
             const accessLevelEnum = {
-              10: '访客',
-              20: '报告者',
-              30: '开发者',
-              40: '维护者',
-              50: '所有者',
-            }
-            return accessLevelEnum[projRole]
+              10: "访客",
+              20: "报告者",
+              30: "开发者",
+              40: "维护者",
+              50: "所有者",
+            };
+            return accessLevelEnum[projRole];
           },
         },
         {
-          title: '操作',
-          scopedSlots: { customRender: 'operation' },
+          title: "操作",
+          scopedSlots: { customRender: "operation" },
         },
-      ]
-      return arr
+      ];
+      return arr;
     },
   },
   watch: {
     recordItem(val) {
-      this.getMemberList(val)
+      this.getMemberList(val);
     },
   },
   methods: {
     handleCancel() {
-      this.addMemberVisible = false
+      this.addMemberVisible = false;
     },
     // 页码，排序项发生改变时，重新获取列表数据
     tableChange(pageInfo) {
       if (pageInfo) {
-        this.pagination.current = pageInfo.current
-        this.pagination.pageSize = pageInfo.pageSize
+        this.pagination.current = pageInfo.current;
+        this.pagination.pageSize = pageInfo.pageSize;
       }
-      this.getMemberList(this.recordItem)
+      this.getMemberList(this.recordItem);
     },
     handleAddMember() {
-      this.userTitle = `添加工程组成员`
-      this.addMemberVisible = true
+      this.userTitle = `添加工程组成员`;
+      this.addMemberVisible = true;
     },
     // 添加修改提交后
     handleSubmit() {
-      this.editUserData = {}
-      this.getMemberList(this.recordItem)
-      this.addMemberVisible = false
+      this.editUserData = {};
+      this.getMemberList(this.recordItem);
+      this.addMemberVisible = false;
     },
     // 修改数据
     handleUpdate(row) {
-      this.userTitle = '编辑工程组成员'
-      this.editUserData = row
-      this.addMemberVisible = true
+      this.userTitle = "编辑工程组成员";
+      this.editUserData = row;
+      this.addMemberVisible = true;
     },
     // 删除数据
     async handleDelete(row) {
-      const url = `/proj/groups/${this.recordItem.projGroupId}/members/${row.projGroupMemberId}`
-      const rst = await this.$axios.delete(url)
+      const url = `/proj/groups/${this.recordItem.projGroupId}/members/${row.projGroupMemberId}`;
+      const rst = await this.$axios.delete(url);
       if (rst.data.isSuccessed) {
-        this.$message.success('删除成功')
+        this.$message.success("删除成功");
       } else {
-        this.$message.error(`删除失败,原因:${rst.data.message}`)
+        this.$message.error(`删除失败,原因:${rst.data.message}`);
       }
       this.$nextTick(() => {
-        this.getMemberList(this.recordItem)
-      })
+        this.getMemberList(this.recordItem);
+      });
     },
     async getMemberList(item) {
-      if (!this.isRequesting) return false
-      this.loading = true
-      const url = `/proj/groups/${item.projGroupId}/members`
-      const res = await this.$axios.$get(url)
-      this.loading = false
+      if (!this.isRequesting) return false;
+      this.loading = true;
+      const url = `/proj/groups/${item.projGroupId}/members`;
+      const res = await this.$axios.$get(url);
+      this.loading = false;
       if (res.isSuccessed) {
-        this.projGroupList = res.data
+        this.projGroupList = res.data;
       } else {
-        this.$message.error(`成员查询失败,原因:${res.message}`)
+        this.$message.error(`成员查询失败,原因:${res.message}`);
       }
     },
   },
-}
+};
 </script>
 
 <style lang="less" scoped>

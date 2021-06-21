@@ -2,10 +2,10 @@
   <div class="app-container">
     <div>
       <div class="page-left">
-      <div class="tree-catalog">
-        <span class="vertical-line">| </span>
-        服务类型
-      </div>
+        <div class="tree-catalog">
+          <span class="vertical-line">| </span>
+          服务类型
+        </div>
         <gaf-tree-transparent
           ref="myGafTreeTransparent"
           :data-of-tree="dataOfTree"
@@ -19,42 +19,49 @@
       <div class="page-right">
         <gaf-table-layout>
           <template #actions>
-            <button
-              class="btn-fun blue"
-              @click="handleAdd"
-            >
-             <span><a-icon type="plus" />服务注册</span>
+            <button class="btn-fun blue btn-16" @click="handleAdd">
+              <span><a-icon type="plus-circle" />服务注册</span>
             </button>
             <a-popconfirm
-              class="btn-fun red"
+              class="btn-fun blue"
               title="删除后无法恢复，确认是否继续?"
               ok-text="确认"
               cancel-text="取消"
               @confirm="() => batchDel()"
             >
-              <button class="btn-fun red">
-                <a-icon type="delete" />
+              <button class="btn-fun blue">
                 <span>批量删除</span>
               </button>
             </a-popconfirm>
           </template>
           <template #filter>
-            <div style="margin-top: 5px">
+            <div class="search-position">
               <a-input-search
+                @search="onSearch"
                 placeholder="请输入服务名按回车查询"
                 size="large"
-                style="width: 320px"
-                @search="onSearch"
               >
-                <button slot="enterButton" class="btn-search">
-                  搜索
-                </button>
               </a-input-search>
             </div>
           </template>
           <template #default>
+            <div class="choose-box">
+              <a-icon type="exclamation-circle" class="exclamation" /><span
+                >已选择</span
+              >
+              <b>{{ selectRowLength }}</b>
+              <span>项</span>
+              <a-popconfirm
+                @confirm="() => clearOptions(record)"
+                title="清空后无法恢复，确认是否继续?"
+                ok-text="确认"
+                cancel-text="取消"
+              >
+                <a href="javascript:;">清空</a>
+              </a-popconfirm>
+            </div>
             <gaf-table-with-page
-              :scroll="{ y: 570 }"
+              :scroll="{ y: 508 }"
               :showXH="false"
               :pagination="pagination"
               :data-source="webgisServiceList"
@@ -67,13 +74,14 @@
               :columns="
                 columns.filter((item) => item.dataIndex !== 'gisServiceId')
               "
-              bordered
-              size="small"
-              align="center"
+              class="table-style"
+              size="middle"
               @change="tableChange"
             >
               <template slot="serviceType" slot-scope="text, record">
-                {{ map.get(record.typeCode)[0] ? map.get(record.typeCode)[0] : '' }}
+                {{
+                  map.get(record.typeCode)[0] ? map.get(record.typeCode)[0] : ""
+                }}
               </template>
               <template
                 v-if="hasPKField"
@@ -81,36 +89,41 @@
                 slot-scope="text, record"
               >
                 <a
-                  class="btn-edit"
+                  class="btn-margin"
                   href="javascript:;"
                   @click.stop="() => handleUpdate(record)"
                 >
-                  <a-icon type="edit" /> 编辑
+                  编辑
                 </a>
-                <a-divider type="vertical" />
                 <a
-                  v-if="JSON.parse(map.get(record.typeCode)[1]) ? JSON.parse(map.get(record.typeCode)[1]).isDataService : false"
-                  class="btn-configure"
+                  v-if="
+                    JSON.parse(map.get(record.typeCode)[1])
+                      ? JSON.parse(map.get(record.typeCode)[1]).isDataService
+                      : false
+                  "
+                  class="btn-margin"
                   @click.stop="configField(record)"
                 >
-                  <a-icon type="control" /> 配置
+                  配置
                 </a>
                 <a
-                  v-if="JSON.parse(map.get(record.typeCode)[1]) ? !JSON.parse(map.get(record.typeCode)[1]).isDataService : true"
-                  class="btn-code"
+                  v-if="
+                    JSON.parse(map.get(record.typeCode)[1])
+                      ? !JSON.parse(map.get(record.typeCode)[1]).isDataService
+                      : true
+                  "
+                  class="btn-margin"
                   @click.stop="linkService(record)"
                 >
-                  <a-icon type="link" /> 关联
+                  关联
                 </a>
-                <a-divider type="vertical" />
                 <a-popconfirm
                   title="删除后无法恢复，确认是否继续?"
                   ok-text="确认"
                   cancel-text="取消"
-                  class="btn-del"
                   @confirm="() => handleDelete(record)"
                 >
-                  <a href="javascript:;"><a-icon type="delete" /> 删除</a>
+                  <a href="javascript:;"> 删除</a>
                 </a-popconfirm>
               </template>
               <template v-if="timeFormat" slot="timeRender" slot-scope="text">
@@ -172,13 +185,13 @@
 </template>
 
 <script>
-    // @ts-nocheck
-    import '~/assets/css/common.css'
-    import AddEditForm from '../../views/WebgisService/AddOrEditForm.vue'
-    import ConfigFieldList from './ConfigFieldList.vue'
-    import LinkService from './LinkService.vue'
+// @ts-nocheck
+import "~/assets/css/common.css";
+import AddEditForm from "../../views/WebgisService/AddOrEditForm.vue";
+import ConfigFieldList from "./ConfigFieldList.vue";
+import LinkService from "./LinkService.vue";
 
-    export default {
+export default {
   components: {
     AddEditForm,
     LinkService,
@@ -187,8 +200,9 @@
   data() {
     return {
       open2: false,
-      registrationResults: '',
-      selectedServiceId: '',
+      registrationResults: "",
+      selectRowLength: 0,
+      selectedServiceId: "",
       webgisService: null,
       // 关联模态框是否可见
       linkedVisible: false,
@@ -197,12 +211,12 @@
       dataOfTree: [],
       expandedNodeKeys: [],
       // 搜索项
-      searchKey: '',
+      searchKey: "",
       clearFilters: null,
       // 非多个禁用
       multiple: true,
       // 标题
-      title: '',
+      title: "",
       // 编辑记录
       editData: {},
       // 总条数
@@ -221,186 +235,186 @@
       },
       // 列表是否加载中
       loading: true,
-      searchText: '',
+      searchText: "",
       searchInput: null,
-      searchedColumn: 'name',
+      searchedColumn: "name",
       sorter: {
-        order: '',
-        field: '',
+        order: "",
+        field: "",
       },
       // 新增：1，编辑：2
       operation: 0,
       // 有无主键
       hasPKField: true,
-    }
+    };
   },
   computed: {
     columns() {
       const columns = [
         {
-          title: 'GIS服务id',
-          dataIndex: 'gisServiceId',
-          key: 'gis_service_id',
+          title: "GIS服务id",
+          dataIndex: "gisServiceId",
+          key: "gis_service_id",
         },
         {
-          title: '服务名称',
+          title: "服务名称",
           scopedSlots: {
-            filterDropdown: 'filterDropdown',
-            filterIcon: 'filterIcon',
-            customRender: 'customRender',
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
           },
-          width: '135px',
-          dataIndex: 'name',
-          key: 'name',
+          width: "135px",
+          dataIndex: "name",
+          key: "name",
         },
         {
-          title: '服务类型',
-          dataIndex: 'typeCode',
-          key: 'type_code',
-          width: '135px',
-          scopedSlots: { customRender: 'serviceType' },
+          title: "服务类型",
+          dataIndex: "typeCode",
+          key: "type_code",
+          width: "135px",
+          scopedSlots: { customRender: "serviceType" },
         },
         {
-          title: '服务地址',
-          dataIndex: 'address',
-          key: 'address',
-          scopedSlots: { customRender: 'address' },
-          width: '400px',
+          title: "服务地址",
+          dataIndex: "address",
+          key: "address",
+          scopedSlots: { customRender: "address" },
+          width: "400px",
         },
         {
-          title: '时态',
-          dataIndex: 'timeAttribute',
-          key: 'time_attribute',
-          width: '135px',
-          scopedSlots: { customRender: 'timeRender' },
+          title: "时态",
+          dataIndex: "timeAttribute",
+          key: "time_attribute",
+          width: "135px",
+          scopedSlots: { customRender: "timeRender" },
         },
         {
-          title: '操作',
-          width: '400px',
-          scopedSlots: { customRender: 'operation' },
+          title: "操作",
+          width: "400px",
+          scopedSlots: { customRender: "operation" },
         },
-      ]
-      return this.hasPKField ? columns : columns.slice(0, columns.length - 2)
+      ];
+      return this.hasPKField ? columns : columns.slice(0, columns.length - 2);
     },
     timeFormat() {
       if (
         this.columns.filter(
           (item) =>
-            item.scopedSlots && item.scopedSlots.customRender === 'timeRender'
+            item.scopedSlots && item.scopedSlots.customRender === "timeRender"
         ).length > 0
       ) {
         return function (str) {
-          if (!str || str === '') {
-            return ''
+          if (!str || str === "") {
+            return "";
           }
-          const dt = new Date(str)
-          const year = dt.getFullYear()
-          let month = dt.getMonth() + 1
-          let date = dt.getDate()
-          let hour = dt.getHours()
-          let minute = dt.getMinutes()
-          let second = dt.getSeconds()
-          month = month < 10 ? '0' + month : month
-          date = date < 10 ? '0' + date : date
-          hour = hour < 10 ? '0' + hour : hour
-          minute = minute < 10 ? '0' + minute : minute
-          second = second < 10 ? '0' + second : second
+          const dt = new Date(str);
+          const year = dt.getFullYear();
+          let month = dt.getMonth() + 1;
+          let date = dt.getDate();
+          let hour = dt.getHours();
+          let minute = dt.getMinutes();
+          let second = dt.getSeconds();
+          month = month < 10 ? "0" + month : month;
+          date = date < 10 ? "0" + date : date;
+          hour = hour < 10 ? "0" + hour : hour;
+          minute = minute < 10 ? "0" + minute : minute;
+          second = second < 10 ? "0" + second : second;
 
-          return `${year}-${month}-${date} ${hour}:${minute}:${second}`
-        }
+          return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+        };
       }
-      return null
+      return null;
     },
   },
   watch: {},
   mounted() {},
   async created() {
-    await this.getNodesAndSetByType()
-    this.getList()
+    await this.getNodesAndSetByType();
+    this.getList();
   },
   methods: {
     onOk(openconfigField) {
-      this.openconfigField = openconfigField
+      this.openconfigField = openconfigField;
     },
     onCancel(openconfigField) {
-      this.openconfigField = openconfigField
+      this.openconfigField = openconfigField;
     },
     // 点击配置时
     configField(row) {
       // sd
-      this.openconfigField = true
-      this.selectedServiceId = row.gisServiceId
+      this.openconfigField = true;
+      this.selectedServiceId = row.gisServiceId;
     },
     // 关联服务
     linkService(record) {
-      this.webgisService = record
-      this.linkedVisible = true
+      this.webgisService = record;
+      this.linkedVisible = true;
     },
     // 根据搜索文本拆分单元格文本内容
     splitCellWithSearchText(text) {
-      const str = text === null ? '' : text
+      const str = text === null ? "" : text;
       return str
         .toString()
         .split(
-          new RegExp(`(?<=${this.searchText})|(?=${this.searchText})`, 'i')
-        )
+          new RegExp(`(?<=${this.searchText})|(?=${this.searchText})`, "i")
+        );
     },
     handleSearchFieldChange(value) {
-      this.searchedColumn = value
+      this.searchedColumn = value;
     },
     async onSearch(value) {
-      this.searchText = value
-      this.pagination.current = 1
-      await this.getList()
+      this.searchText = value;
+      this.pagination.current = 1;
+      await this.getList();
     },
     // 搜索查询
     handleSearch(selectedKeys, confirm, key, clearFilters) {
-      if (this.searchedColumn !== key && this.clearFilters) this.clearFilters()
-      confirm()
-      this.searchText = selectedKeys[0]
-      this.searchedColumn = key
-      this.clearFilters = clearFilters
+      if (this.searchedColumn !== key && this.clearFilters) this.clearFilters();
+      confirm();
+      this.searchText = selectedKeys[0];
+      this.searchedColumn = key;
+      this.clearFilters = clearFilters;
     },
     // 重置查询
     handleReset(clearFilters, key) {
-      clearFilters()
+      clearFilters();
       if (this.searchedColumn === key) {
-        this.searchText = ''
-        this.searchedColumn = ''
-        this.clearFilters = null
+        this.searchText = "";
+        this.searchedColumn = "";
+        this.clearFilters = null;
       }
     },
     // 页码，排序项发生改变时，重新获取列表数据
     tableChange(pageInfo) {
       if (pageInfo) {
-        this.pagination.current = pageInfo.current
-        this.pagination.pageSize = pageInfo.pageSize
+        this.pagination.current = pageInfo.current;
+        this.pagination.pageSize = pageInfo.pageSize;
       }
-      this.getList()
+      this.getList();
     },
     // 添加数据
     handleAdd() {
-      this.operation = 2
-      this.open = true
-      this.title = '注册GIS服务'
+      this.operation = 2;
+      this.open = true;
+      this.title = "注册GIS服务";
     },
     // 添加修改提交后
     handleSubmit() {
-      this.open = false
-      this.editData = {}
-      this.getList()
+      this.open = false;
+      this.editData = {};
+      this.getList();
     },
     // 添加修改返回后
     handleBack() {
-      this.editData = {}
-      this.open = false
+      this.editData = {};
+      this.open = false;
     },
     // 修改数据
     handleUpdate(row) {
-      this.operation = 3
-      this.open = true
-      this.title = '修改GIS服务'
-      this.editData = row
+      this.operation = 3;
+      this.open = true;
+      this.title = "修改GIS服务";
+      this.editData = row;
     },
     /*   handleDetail(row) {
       this.operation = 1
@@ -410,79 +424,90 @@
     }, */
     // 删除数据
     async handleDelete(row) {
-      const url = `/map/webgis-services/` + row.gisServiceId
-      const rst = await this.$axios.delete(url)
+      const url = `/map/webgis-services/` + row.gisServiceId;
+      const rst = await this.$axios.delete(url);
       if (rst.data.isSuccessed) {
-        this.$message.success('删除成功')
+        this.$message.success("删除成功");
       } else {
-        this.$message.error(`删除失败,原因:${rst.data.message}`)
+        this.$message.error(`删除失败,原因:${rst.data.message}`);
       }
       this.$nextTick(() => {
-        if (this.pagination.current !== 1 && this.webgisServiceList.length === 1){
-          this.pagination.current--
+        if (
+          this.pagination.current !== 1 &&
+          this.webgisServiceList.length === 1
+        ) {
+          this.pagination.current--;
         }
-        this.getList()
-      })
+        this.getList();
+      });
     },
     // 批量删除
     async batchDel() {
-      const url = '/map/webgis-services/'
-      const selectedRowKeys = this.selectedRowKeys
+      const url = "/map/webgis-services/";
+      const selectedRowKeys = this.selectedRowKeys;
       if (selectedRowKeys.length !== 0) {
-        const rst = await this.$axios.delete(url, { data: selectedRowKeys })
+        const rst = await this.$axios.delete(url, { data: selectedRowKeys });
         if (rst.data.isSuccessed) {
-          this.$message.success('删除成功')
+          this.$message.success("删除成功");
         } else {
-          this.$message.error(`删除失败,原因:${rst.data.message}`)
+          this.$message.error(`删除失败,原因:${rst.data.message}`);
         }
         this.$nextTick(() => {
-          if (this.pagination.current !== 1 && selectedRowKeys.length === this.webgisServiceList.length){
-            this.pagination.current--
+          if (
+            this.pagination.current !== 1 &&
+            selectedRowKeys.length === this.webgisServiceList.length
+          ) {
+            this.pagination.current--;
           }
-          this.getList()
-          this.selectedRowKeys = []
-        })
+          this.getList();
+          this.selectedRowKeys = [];
+        });
       } else {
-        this.$message.warn('请选择您要删除的内容')
+        this.$message.warn("请选择您要删除的内容");
       }
     },
+    // 清空
+    clearOptions() {
+      this.selectedRowKeys = [];
+      this.selectRowLength = 0;
+    },
     onSelectChange(selectedRowKeys) {
-      this.selectedRowKeys = selectedRowKeys
+      this.selectedRowKeys = selectedRowKeys;
+      this.selectRowLength = selectedRowKeys.length;
       if (this.selectedRowKeys.length > 0) {
-        this.multiple = false
+        this.multiple = false;
       } else {
-        this.multiple = true
+        this.multiple = true;
       }
     },
     // 获取地图应用 树结构数据
     async getNodesAndSetByType() {
-      const url = `/sys-mgt/sys-dicts/ServiceType/tree`
-      const res = await this.$axios.$get(url)
-
+      const url = `/sys-mgt/sys-dicts/ServiceType/tree`;
+      const res = await this.$axios.$get(url);
 
       if (res.isSuccessed) {
-      res.data.forEach((element) => {
-        this.map.set(element.value, [element.label, element.extProperties])
-        element.key = element.value
-        element.title = element.label
-        delete element.value
-        delete element.label
-      })
-      res.data.splice(0, 0, {
-        key: '-1',
-        title: '所有类型',
-        children: null,
-        type: 0,
-        sortSn: 0,
-        parentId: '0',
-        scopedSlots: {
-          title: 'title',
-        },
-        style: 'font-size: 18px;font-weight: bold',
-      })
-        this.dataOfTree = res.data
+        res.data.forEach((element) => {
+          this.map.set(element.value, [element.label, element.extProperties]);
+          element.key = element.value;
+          element.title = element.label;
+          delete element.value;
+          delete element.label;
+        });
+        res.data.splice(0, 0, {
+          key: "-1",
+          title: "所有类型",
+          children: null,
+          type: 0,
+          sortSn: 0,
+          parentId: "0",
+          scopedSlots: {
+            title: "title",
+          },
+          style: "font-size: 18px;font-weight: bold",
+        });
+        this.dataOfTree = res.data;
       } else {
-        this.$message.error('加载角色树失败,原因：' + res.message)
+        this.$message.error("加载角色树失败,原因：" + res.message);
       }
     },
     //  树结构数据  搜索
@@ -498,51 +523,51 @@
       } */
     },
     onSelect(selectedKeys, e) {
-      if (e.node.dataRef.key === '-1' || !e.selected) {
-        this.type = null
+      if (e.node.dataRef.key === "-1" || !e.selected) {
+        this.type = null;
       } else {
-        this.type = e.node.dataRef.key
+        this.type = e.node.dataRef.key;
       }
-      this.getList()
+      this.getList();
     },
     // 树结构加载
     async getList() {
-      this.loading = true
+      this.loading = true;
 
-      let url = `/map/webgis-services?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`
+      let url = `/map/webgis-services?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`;
       if (this.type) {
-        url = url + '&typeCode=' + this.type
+        url = url + "&typeCode=" + this.type;
       }
       if (this.searchText.trim() && this.searchedColumn) {
         url =
           url +
-          '&searchFieldName=' +
+          "&searchFieldName=" +
           this.searchedColumn +
-          '&searchFieldValue=' +
-          this.searchText.trim()
+          "&searchFieldValue=" +
+          this.searchText.trim();
       }
       if (this.sorter.order && this.sorter.field) {
         url =
           url +
-          '&orderFieldName=' +
+          "&orderFieldName=" +
           this.sorter.field +
-          '&orderMethod=' +
-          this.sorter.order
+          "&orderMethod=" +
+          this.sorter.order;
       }
-      const res = await this.$axios.$get(url)
+      const res = await this.$axios.$get(url);
 
-      this.loading = false
+      this.loading = false;
       if (res.isSuccessed) {
-        this.pagination.current = res.data.pageNum
-        this.pagination.pageSize = res.data.pageSize
-        this.pagination.total = res.data.totalCount
-        this.webgisServiceList = res.data.pageList
+        this.pagination.current = res.data.pageNum;
+        this.pagination.pageSize = res.data.pageSize;
+        this.pagination.total = res.data.totalCount;
+        this.webgisServiceList = res.data.pageList;
       } else {
-        this.$message.error(`查询失败,原因:${res.message}`)
+        this.$message.error(`查询失败,原因:${res.message}`);
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
