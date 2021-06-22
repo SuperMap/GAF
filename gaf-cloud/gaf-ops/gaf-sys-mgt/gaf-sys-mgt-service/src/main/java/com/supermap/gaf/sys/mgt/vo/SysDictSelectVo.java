@@ -5,6 +5,8 @@
 */
 package com.supermap.gaf.sys.mgt.vo;
 
+import com.supermap.gaf.sys.mgt.commontype.SysDict;
+import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -28,15 +30,18 @@ import java.util.Date;
 public class SysDictSelectVo  {
 	@QueryParam("searchFieldName")
 	@ApiModelProperty("查询字段名")
+    @StringRange(entityClass = SysDict.class,message = "不在指定的字段名范围内")
     private String searchFieldName;
 	@QueryParam("searchFieldValue")
 	@ApiModelProperty("查询字段值")
     private String searchFieldValue;
 	@QueryParam("orderFieldName")
 	@ApiModelProperty("排序字段名")
+    @StringRange(entityClass = SysDict.class,message = "不在指定的字段名范围内")
     private String orderFieldName;
 	@QueryParam("orderMethod")
 	@ApiModelProperty("排序方法")
+    @StringRange(value = {"asc","desc"},message = "不在指定的范围[asc,desc]内")
     private String orderMethod;
 
 	@QueryParam("dataDictId")

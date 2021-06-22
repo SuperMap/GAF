@@ -4,19 +4,24 @@
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
 */
 package com.supermap.gaf.webgis.resource;
-import com.supermap.gaf.commontypes.MessageResult;
-import io.swagger.annotations.*;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.supermap.gaf.webgis.service.WebgisButtonService;
-import com.supermap.gaf.webgis.entity.WebgisButton;
-import com.supermap.gaf.webgis.vo.WebgisButtonSelectVo;
-import java.util.*;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
 
+import com.supermap.gaf.commontypes.MessageResult;
+import com.supermap.gaf.webgis.entity.WebgisButton;
+import com.supermap.gaf.webgis.service.WebgisButtonService;
 import com.supermap.gaf.webgis.util.Page;
+import com.supermap.gaf.webgis.vo.WebgisButtonSelectVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.validation.Valid;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * 地图按钮接口
@@ -58,7 +63,7 @@ public class WebgisButtonResource{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[0,infinity]",paramType = "query", dataType = "integer"),
             @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range[0,infinity]", paramType = "query", dataType = "integer")})
-    public MessageResult<Page> pageList(@BeanParam WebgisButtonSelectVo webgisButtonSelectVo,
+    public MessageResult<Page> pageList(@Valid @BeanParam WebgisButtonSelectVo webgisButtonSelectVo,
 										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
                                         @DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
         if(StringUtils.isEmpty(webgisButtonSelectVo.getOrderFieldName())){

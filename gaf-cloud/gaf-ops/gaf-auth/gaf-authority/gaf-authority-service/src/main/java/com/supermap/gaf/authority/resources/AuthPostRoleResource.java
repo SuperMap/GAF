@@ -11,6 +11,7 @@ import com.supermap.gaf.authority.vo.AuthPostRoleSelectVo;
 import com.supermap.gaf.authority.vo.PostRoleVo;
 import com.supermap.gaf.authority.vo.TreeVo;
 import com.supermap.gaf.commontypes.MessageResult;
+import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -57,10 +58,10 @@ public class AuthPostRoleResource {
     })
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult<Map<String, Object>> pageList(@QueryParam("searchFieldName") String searchFieldName,
+    public MessageResult<Map<String, Object>> pageList(@StringRange(entityClass = AuthPostRole.class) @QueryParam("searchFieldName") String searchFieldName,
                                        @QueryParam("searchFieldValue") String searchFieldValue,
-                                       @QueryParam("orderFieldName") String orderFieldName,
-                                       @QueryParam("orderMethod") String orderMethod,
+                                       @StringRange(entityClass = AuthPostRole.class) @QueryParam("orderFieldName") String orderFieldName,
+                                       @StringRange({"asc","desc"}) @QueryParam("orderMethod") String orderMethod,
                                        @QueryParam("pageNum") Integer pageNum,
                                        @DefaultValue("50") @QueryParam("pageSize") Integer pageSize) {
         if (pageNum == null || pageNum < 1) {

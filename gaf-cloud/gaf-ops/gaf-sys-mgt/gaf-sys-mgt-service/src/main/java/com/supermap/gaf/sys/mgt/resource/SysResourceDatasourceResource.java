@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -96,7 +97,7 @@ public class SysResourceDatasourceResource{
     })
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult<Page<SysResourceDatasource>> pageList(@BeanParam SysResourceDatasourceSelectVo sysResourceDatasourceSelectVo,
+    public MessageResult<Page<SysResourceDatasource>> pageList(@Valid @BeanParam SysResourceDatasourceSelectVo sysResourceDatasourceSelectVo,
 										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
 		return MessageResult.data(sysResourceDatasourceService.listByPageCondition(sysResourceDatasourceSelectVo, pageNum, pageSize)).message("查询成功").build();
