@@ -311,7 +311,7 @@ export default {
           title: "服务器地址",
           dataIndex: "addr",
           key: "addr",
-          width: "400px",
+          width: "370px",
         },
         {
           title: "数据库名称",
