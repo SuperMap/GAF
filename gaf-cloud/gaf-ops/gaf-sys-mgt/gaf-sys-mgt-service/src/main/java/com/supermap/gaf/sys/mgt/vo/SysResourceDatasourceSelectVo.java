@@ -5,6 +5,8 @@
 */
 package com.supermap.gaf.sys.mgt.vo;
 
+import com.supermap.gaf.sys.mgt.commontype.SysResourceDatasource;
+import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
@@ -49,16 +51,19 @@ public class SysResourceDatasourceSelectVo {
 	private List<String> typeCodes;
 	@QueryParam("searchFieldName")
 	@ApiModelProperty("查询字段名")
-	private String searchFieldName;
+	@StringRange(entityClass = SysResourceDatasource.class,message = "不在指定的字段名范围内")
+    private String searchFieldName;
 	@QueryParam("searchFieldValue")
 	@ApiModelProperty("查询字段值")
 	private String searchFieldValue;
 	@QueryParam("orderFieldName")
 	@ApiModelProperty("排序字段名")
-	private String orderFieldName;
+	@StringRange(entityClass = SysResourceDatasource.class,message = "不在指定的字段名范围内")
+    private String orderFieldName;
 	@QueryParam("orderMethod")
 	@ApiModelProperty("排序方法")
-	private String orderMethod;
+	@StringRange(value = {"asc","desc"},message = "不在指定的范围[asc,desc]内")
+    private String orderMethod;
 
 	public List<String> getTypeCodes() {
 		return typeCodes;

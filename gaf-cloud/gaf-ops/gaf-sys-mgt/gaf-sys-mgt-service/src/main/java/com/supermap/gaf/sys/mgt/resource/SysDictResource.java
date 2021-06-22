@@ -18,6 +18,7 @@ import com.supermap.gaf.sys.mgt.vo.SysDictSelectVo;
 import io.swagger.annotations.*;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -178,7 +179,7 @@ public class SysDictResource implements SysDictClient {
     })
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult<Page<DictDataNode>> pageList(@ApiParam @BeanParam SysDictSelectVo sysDictSelectVo,
+    public MessageResult<Page<DictDataNode>> pageList(@ApiParam @Valid @BeanParam SysDictSelectVo sysDictSelectVo,
                                         @DefaultValue("1") @QueryParam("pageNum") Integer pageNum,
                                         @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
         return MessageResult.data(sysDictService.listByPageCondition(sysDictSelectVo, pageNum, pageSize)).message("查询成功").build();

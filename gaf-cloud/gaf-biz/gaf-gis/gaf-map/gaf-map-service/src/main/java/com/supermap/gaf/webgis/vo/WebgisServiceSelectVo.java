@@ -4,17 +4,19 @@
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
 */
 package com.supermap.gaf.webgis.vo;
+
+import com.alibaba.fastjson.annotation.JSONField;
+import com.supermap.gaf.validator.StringRange;
+import com.supermap.gaf.webgis.entity.WebgisService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.*;
-import javax.validation.constraints.*;
-import com.alibaba.fastjson.annotation.JSONField;
 
 import javax.ws.rs.QueryParam;
+import java.util.Date;
 
 /**
 * GIS服务 条件查询实体
@@ -89,14 +91,17 @@ public class WebgisServiceSelectVo {
 	private String equalFieldValue;
 	@QueryParam("searchFieldName")
 	@ApiModelProperty("查询字段名")
-	private String searchFieldName;
+	@StringRange(entityClass = WebgisService.class,message = "不在指定的字段名范围内")
+    private String searchFieldName;
 	@QueryParam("searchFieldValue")
 	@ApiModelProperty("查询字段值")
 	private String searchFieldValue;
 	@QueryParam("orderFieldName")
 	@ApiModelProperty("排序字段名")
-	private String orderFieldName;
+	@StringRange(entityClass = WebgisService.class,message = "不在指定的字段名范围内")
+    private String orderFieldName;
 	@QueryParam("orderMethod")
 	@ApiModelProperty("排序方法")
-	private String orderMethod;
+	@StringRange(value = {"asc","desc"},message = "不在指定的范围[asc,desc]内")
+    private String orderMethod;
 }

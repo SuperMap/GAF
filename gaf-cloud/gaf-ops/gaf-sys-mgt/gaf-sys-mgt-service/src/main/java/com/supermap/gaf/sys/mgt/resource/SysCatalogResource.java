@@ -13,6 +13,7 @@ import com.supermap.gaf.sys.mgt.client.SysCatalogClient;
 import com.supermap.gaf.sys.mgt.commontype.SysCatalog;
 import com.supermap.gaf.sys.mgt.enums.CatalogTypeEnum;
 import com.supermap.gaf.sys.mgt.service.SysCatalogService;
+import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -121,10 +122,10 @@ public class SysCatalogResource implements SysCatalogClient {
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/resource-root-catalogs")
-    public MessageResult<Page<SysCatalog>> pageListResourceRootCatalog(@QueryParam("searchFieldName")String searchFieldName,
+    public MessageResult<Page<SysCatalog>> pageListResourceRootCatalog(@NotNull @StringRange(entityClass = SysCatalog.class) @QueryParam("searchFieldName")String searchFieldName,
 										@QueryParam("searchFieldValue")String searchFieldValue,
-										@QueryParam("orderFieldName")String orderFieldName,
-										@QueryParam("orderMethod")String orderMethod,
+										@StringRange(entityClass = SysCatalog.class) @QueryParam("orderFieldName")String orderFieldName,
+										@StringRange({"asc","desc"}) @QueryParam("orderMethod")String orderMethod,
                                         @DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
         Page<SysCatalog> page = sysCatalogService.listByPageCondition(searchFieldName,searchFieldValue,orderFieldName,orderMethod,pageNum,pageSize, CatalogTypeEnum.RESOURCE_GROUP_TYPE);
