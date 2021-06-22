@@ -2,22 +2,17 @@
   <div>
     <gaf-table-layout>
       <template #actions>
-        <button
-          @click="handleAdd"
-          class="btn-fun blue"
-        >
-          <span><a-icon type="plus" />
-          {{addButtonName}}</span>
+        <button @click="handleAdd" class="btn-fun blue btn-16">
+          <span><a-icon type="plus-circle" /> {{ addButtonName }}</span>
         </button>
         <a-popconfirm
-          class="btn-fun red"
+          class="btn-fun blue"
           title="删除后无法恢复，确认是否继续?"
           ok-text="确认"
           cancel-text="取消"
           @confirm="() => batchDel()"
         >
-          <button class="btn-fun red">
-            <a-icon type="delete" />
+          <button class="btn-fun blue">
             <span>批量删除</span>
           </button>
         </a-popconfirm>
@@ -29,32 +24,44 @@
             placeholder="请输入名称查询"
             size="large"
           >
-            <button slot="enterButton" class="btn-search">
-              搜索
-            </button>
           </a-input-search>
         </div>
       </template>
       <template #default>
+        <div class="choose-box">
+          <a-icon type="exclamation-circle" class="exclamation" /><span
+            >已选择</span
+          >
+          <b>{{ selectRowLength }}</b>
+          <span>项</span>
+          <a-popconfirm
+            @confirm="() => clearOptions(record)"
+            title="清空后无法恢复，确认是否继续?"
+            ok-text="确认"
+            cancel-text="取消"
+          >
+            <a href="javascript:;">清空</a>
+          </a-popconfirm>
+        </div>
         <gaf-table-with-page
+          :scroll="{ y: 508, x: 1440 }"
           :showXH="false"
-          :scroll="{ y: 570 }"
           :row-selection="{
             selectedRowKeys: selectedRowKeys,
             onChange: rowChange,
             onSelect: rowSelect,
-            onSelectAll: rowSelectAll
+            onSelectAll: rowSelectAll,
           }"
           :pagination="pagination"
           :data-source="typeList2"
           :loading="loading"
           @change="tableChange"
-          :row-key="r => r.key"
-          :columns="columns.filter(item => item.dataIndex !== 'resourceApiId')"
-          style="width: 100%;height:570px"
-          bordered
-          size="small"
-          align="center"
+          :row-key="(r) => r.key"
+          :columns="
+            columns.filter((item) => item.dataIndex !== 'resourceApiId')
+          "
+          class="table-style"
+          size="middle"
         >
           <template
             slot="operation"
@@ -79,27 +86,26 @@
             <a-divider type="vertical" /> -->
             <a-popconfirm
               @confirm="() => handleDelete(record)"
-              class="btn-del"
               title="删除后无法恢复，确认是否继续?"
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;"><a-icon type="delete" /> 删除</a>
+              <a href="javascript:;">删除</a>
             </a-popconfirm>
           </template>
-
           <template slot="timeRender" v-if="timeFormat" slot-scope="text">
             {{ timeFormat(text) }}
           </template>
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <a-modal
-      v-model="modalVisible"
-      :width="800"
+    <a-drawer
+      :visible="modalVisible"
+      :width="500"
       :footer="null"
       :centered="true"
-      @cancel="handleBack"
+      @close="handleBack"
+      :closable="false"
       destroy-on-close
     >
       <dic-type-form
@@ -111,54 +117,55 @@
         @delete-success="afterDeleteDicTypeSuccess"
         @back="handleBack"
       ></dic-type-form>
-    </a-modal>
+    </a-drawer>
   </div>
 </template>
 
 <script>
-import DicTypeForm from '../../views/dics/DicTypeForm'
+import DicTypeForm from "../../views/dics/DicTypeForm";
 export default {
   components: {
-    DicTypeForm
+    DicTypeForm,
   },
   props: {
     component: {
       type: String,
-      default: ''
+      default: "",
     },
     dataOfTree: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     typeList: {
       type: Array,
-      dafault: () => []
+      dafault: () => [],
     },
     editData: {
       type: Object,
-      default: null
+      default: null,
     },
     operation: {
       type: Number,
-      default: 0
+      default: 0,
     },
     addButtonName: {
       type: String,
-      dafault: ''
-    }
+      dafault: "",
+    },
   },
   data() {
     return {
       // 搜索项
-      searchKey: '',
+      searchKey: "",
       clearFilters: null,
       // 非多个禁用
       multiple: true,
       // 标题
-      title: '',
+      title: "",
       // 总条数
       total: 0,
       selectedRowKeys: [],
+      selectRowLength: 0,
       // ${functionName}表格数据
       authResourceApiList: [],
       // 是否显示添加修改弹出层
@@ -167,16 +174,16 @@ export default {
       pagination: {
         pageSize: 10,
         current: 1,
-        total: 0
+        total: 0,
       },
       // 列表是否加载中
       loading: false,
-      searchText: '',
+      searchText: "",
       searchInput: null,
-      searchedColumn: 'name',
+      searchedColumn: "name",
       sorter: {
-        order: '',
-        field: ''
+        order: "",
+        field: "",
       },
       // 详情：1，新增：2，编辑：3
       // operation: 0,
@@ -184,106 +191,117 @@ export default {
       // 有无主键
       hasPKField: true,
       typeList2: [],
-      searchTextApiList: []
-
-    }
+      searchTextApiList: [],
+    };
   },
-  watch:{
-    typeList(newdata){
-      console.log(newdata,'new')
-      this.typeList2 = JSON.parse(JSON.stringify(newdata)).map(item => {
-        delete item.children
-        return item
-      })
-      this.searchTextApiList = JSON.parse(JSON.stringify(newdata)).map(item => {
-        delete item.children
-        return item
-      })
-    }
+  watch: {
+    typeList(newdata) {
+      console.log(newdata, "new");
+      this.typeList2 = JSON.parse(JSON.stringify(newdata)).map((item) => {
+        delete item.children;
+        return item;
+      });
+      this.searchTextApiList = JSON.parse(JSON.stringify(newdata)).map(
+        (item) => {
+          delete item.children;
+          return item;
+        }
+      );
+    },
   },
   computed: {
-    columns: function() {
+    columns: function () {
       const columns = [
         {
-          title: '类别名称',
-          dataIndex: 'title',
-          key: 'title',
+          title: "类别名称",
+          dataIndex: "title",
+          key: "title",
           // fixed: 'left',
         },
         {
-          title: '操作',
-          // fixed: 'right',
+          title: "操作",
+          fixed: 'right',
           // width: 260,
-          scopedSlots: { customRender: 'operation' }
-        }
-      ]
-      return this.hasPKField ? columns : columns.slice(0, columns.length - 2)
+          scopedSlots: { customRender: "operation" },
+        },
+      ];
+      return this.hasPKField ? columns : columns.slice(0, columns.length - 2);
     },
-    timeFormat: function() {
+    timeFormat: function () {
       if (
         this.columns.filter(
-          item =>
-            item.scopedSlots && item.scopedSlots.customRender === 'timeRender'
+          (item) =>
+            item.scopedSlots && item.scopedSlots.customRender === "timeRender"
         ).length > 0
       ) {
-        return function(str) {
-          if (!str || str === '') {
-            return ''
+        return function (str) {
+          if (!str || str === "") {
+            return "";
           }
-          const dt = new Date(str)
-          const year = dt.getFullYear()
-          let month = dt.getMonth() + 1
-          let date = dt.getDate()
-          let hour = dt.getHours()
-          let minute = dt.getMinutes()
-          let second = dt.getSeconds()
+          const dt = new Date(str);
+          const year = dt.getFullYear();
+          let month = dt.getMonth() + 1;
+          let date = dt.getDate();
+          let hour = dt.getHours();
+          let minute = dt.getMinutes();
+          let second = dt.getSeconds();
 
-          month = month < 10 ? '0' + month : month
-          date = date < 10 ? '0' + date : date
-          hour = hour < 10 ? '0' + hour : hour
-          minute = minute < 10 ? '0' + minute : minute
-          second = second < 10 ? '0' + second : second
+          month = month < 10 ? "0" + month : month;
+          date = date < 10 ? "0" + date : date;
+          hour = hour < 10 ? "0" + hour : hour;
+          minute = minute < 10 ? "0" + minute : minute;
+          second = second < 10 ? "0" + second : second;
 
-          return `${year}/${month}/${date} ${hour}:${minute}:${second}`
-        }
+          return `${year}/${month}/${date} ${hour}:${minute}:${second}`;
+        };
       }
-      return null
+      return null;
     },
   },
   mounted() {
-    this.typeList2 = JSON.parse(JSON.stringify(this.typeList)).map(item => {
-        delete item.children
-        return item
-      })
-    this.searchTextApiList = JSON.parse(JSON.stringify(this.typeList)).map(item => {
-        delete item.children
-        return item
-      })
-    console.log(this.editData,'ssss')
+    this.typeList2 = JSON.parse(JSON.stringify(this.typeList)).map((item) => {
+      delete item.children;
+      return item;
+    });
+    this.searchTextApiList = JSON.parse(JSON.stringify(this.typeList)).map(
+      (item) => {
+        delete item.children;
+        return item;
+      }
+    );
+    console.log(this.editData, "ssss");
   },
   methods: {
+    // 清空
+    clearOptions() {
+      this.selectedRowKeys = [];
+      this.selectRowLength = 0;
+    },
     // 复选框
     rowChange(selectedRowKeys) {
-      this.selectedRowKeys = selectedRowKeys
+      this.selectedRowKeys = selectedRowKeys;
+      this.selectRowLength = selectedRowKeys.length;
     },
     rowSelect(record, selected, selectedRows) {
-      console.log(record, selected, selectedRows)
+      console.log(record, selected, selectedRows);
     },
     rowSelectAll(selected, selectedRows, changeRows) {
-      console.log(selected, selectedRows, changeRows)
+      console.log(selected, selectedRows, changeRows);
     },
     handleSearchFieldChange(value) {
-      this.searchedColumn = value
+      this.searchedColumn = value;
     },
     // 功能未实现
     // 搜索查询
     onSearch(val) {
-      this.searchText = val
-      this.pagination.current = 1
+      this.searchText = val;
+      this.pagination.current = 1;
       if (val === "") {
-        this.typeList2 = this.searchTextApiList
+        this.typeList2 = this.searchTextApiList;
       } else {
-        this.typeList2 = this.searchTextApiList.filter(ltem => ltem.title.includes(val) === true)
+        this.typeList2 = this.searchTextApiList.filter(
+          (ltem) => ltem.title.includes(val) === true
+        );
       }
     },
     // 重置查询
@@ -298,22 +316,22 @@ export default {
     // 页码，排序项发生改变时，重新获取列表数据
     tableChange(pageInfo, filters, sorter) {
       if (pageInfo) {
-        this.pagination.current = pageInfo.current
-        this.pagination.pageSize = pageInfo.pageSize
+        this.pagination.current = pageInfo.current;
+        this.pagination.pageSize = pageInfo.pageSize;
       }
       if (sorter) {
-        this.sorter.order = sorter.order === 'descend' ? 'DESC' : 'ASC'
-        this.sorter.field = sorter.columnKey
+        this.sorter.order = sorter.order === "descend" ? "DESC" : "ASC";
+        this.sorter.field = sorter.columnKey;
       }
       // this.getList()
     },
     // 添加数据
     handleAdd() {
-      this.$emit('onAddDicType')
+      this.$emit("onAddDicType");
       // this.operation = 2
       // this.operation1 = 'add'
-      this.open = true
-      this.modalVisible = true
+      this.open = true;
+      this.modalVisible = true;
       // this.title = '添加api资源'
       // this.$nextTick(()=> {
       //   this.$refs.dicTypeForm.clear()
@@ -329,144 +347,156 @@ export default {
     // 添加修改返回后
     handleBack() {
       // this.editData = {}
-      this.open = false
-      this.modalVisible = false
+      this.open = false;
+      this.modalVisible = false;
     },
     // 修改数据
     handleUpdate(row) {
-      this.operation = 3
-      this.open = true
-      this.modalVisible = true
-      this.title = '修改api资源'
-      this.editData = row
+      this.operation = 3;
+      this.open = true;
+      this.modalVisible = true;
+      this.title = "修改api资源";
+      this.editData = row;
     },
     handleDetail(row) {
-      this.operation = 1
-      this.open = true
-      this.modalVisible = true
-      this.title = '详情展示'
-      this.editData = row
+      this.operation = 1;
+      this.open = true;
+      this.modalVisible = true;
+      this.title = "详情展示";
+      this.editData = row;
     },
     // 删除数据
     async handleDelete(row) {
       // this.$refs.addEditForm.cancelDelete()
-      console.log(row)
-      const url = `/sys-mgt/sys-dicts/`+ row.key
-      const rst = await this.$axios.delete(url)
+      console.log(row);
+      const url = `/sys-mgt/sys-dicts/` + row.key;
+      const rst = await this.$axios.delete(url);
       if (rst.data.isSuccessed) {
-        this.typeList.forEach((item,index) => {
-          if (item.key === row.key){
-            this.typeList.splice(index,1)
+        this.typeList.forEach((item, index) => {
+          if (item.key === row.key) {
+            this.typeList.splice(index, 1);
           }
-        })
-        this.$message.success('删除成功')
-        if(this.typeList && this.typeList.length === 0) {
-          this.$emit('delete-success', rst.data.data, true)
-        }else{
-          this.$emit('delete-success', rst.data.data)
+        });
+        this.$message.success("删除成功");
+        if (this.typeList && this.typeList.length === 0) {
+          this.$emit("delete-success", rst.data.data, true);
+        } else {
+          this.$emit("delete-success", rst.data.data);
         }
 
         // this.$emit('delete-success', rst.data.data)
-
       } else {
-        this.$message.error('删除失败，原因: ' + rst.data.message)
+        this.$message.error("删除失败，原因: " + rst.data.message);
       }
       this.$nextTick(() => {
-        if (this.pagination.current !== 1 && this.authResourceApiList.length === 1){
-            this.pagination.current--
-          }
+        if (
+          this.pagination.current !== 1 &&
+          this.authResourceApiList.length === 1
+        ) {
+          this.pagination.current--;
+        }
         // this.getList()
-      })
+      });
     },
     // 批量删除
     async batchDel() {
-      console.log(this.editData)
-      const url = `/sys-mgt/sys-dicts/`
-      const selectedRowKeys = this.selectedRowKeys
-      console.log(selectedRowKeys)
+      console.log(this.editData);
+      const url = `/sys-mgt/sys-dicts/`;
+      const selectedRowKeys = this.selectedRowKeys;
+      console.log(selectedRowKeys);
       if (selectedRowKeys.length !== 0) {
-        const rst = await this.$axios.delete(url, { data: selectedRowKeys })
+        const rst = await this.$axios.delete(url, { data: selectedRowKeys });
         if (rst.data.isSuccessed) {
-          this.$message.success('删除成功')
-          if(this.typeList2 && this.typeList2.length === 0) {
-            this.$emit('delete-success', {catalogId:this.typeList[0].parentId,key:selectedRowKeys}, true)
+          this.$message.success("删除成功");
+          if (this.typeList2 && this.typeList2.length === 0) {
+            this.$emit(
+              "delete-success",
+              { catalogId: this.typeList[0].parentId, key: selectedRowKeys },
+              true
+            );
           }
-          this.$emit('delete-success',{catalogId:this.typeList[0].parentId,key:selectedRowKeys})
-          this.selectedRowKeys.forEach(item => {
-            this.typeList.forEach((x,index) => {
-              if (item === x.key){
-                this.typeList.splice(index,1)
+          this.$emit("delete-success", {
+            catalogId: this.typeList[0].parentId,
+            key: selectedRowKeys,
+          });
+          this.selectedRowKeys.forEach((item) => {
+            this.typeList.forEach((x, index) => {
+              if (item === x.key) {
+                this.typeList.splice(index, 1);
               }
-            })
-          })
-          this.selectedRowKeys = []
+            });
+          });
+          this.selectedRowKeys = [];
         } else {
-          this.$message.error(`删除失败,原因:${rst.data.message}`)
+          this.$message.error(`删除失败,原因:${rst.data.message}`);
         }
         this.$nextTick(() => {
-          if (this.pagination.current !== 1 && selectedRowKeys.length === this.authResourceApiList.length){
-            this.pagination.current--
+          if (
+            this.pagination.current !== 1 &&
+            selectedRowKeys.length === this.authResourceApiList.length
+          ) {
+            this.pagination.current--;
           }
           // this.getList()
-        })
+        });
       } else {
-        this.$message.warn('请选择您要删除的内容')
+        this.$message.warn("请选择您要删除的内容");
       }
     },
     onSelectChange(selectedRowKeys) {
-      this.selectedRowKeys = selectedRowKeys
+      this.selectedRowKeys = selectedRowKeys;
       if (this.selectedRowKeys.length > 0) {
-        this.multiple = false
+        this.multiple = false;
       } else {
-        this.multiple = true
+        this.multiple = true;
       }
     },
     async getList() {
-      this.loading = true
-      let url = `/authority/auth-resource-apis?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`
+      this.loading = true;
+      let url = `/authority/auth-resource-apis?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`;
       if (this.searchText.trim() && this.searchedColumn) {
         url =
           url +
-          '&searchFieldName=' +
+          "&searchFieldName=" +
           this.searchedColumn +
-          '&searchFieldValue=' +
-          this.searchText.trim()
+          "&searchFieldValue=" +
+          this.searchText.trim();
       }
       if (this.sorter.order && this.sorter.field) {
         url =
           url +
-          '&orderFieldName=' +
+          "&orderFieldName=" +
           this.sorter.field +
-          '&orderMethod=' +
-          this.sorter.order
+          "&orderMethod=" +
+          this.sorter.order;
       }
-      const res = await this.$axios.$get(url)
-      this.loading = false
+      const res = await this.$axios.$get(url);
+      this.loading = false;
       if (res.isSuccessed) {
-        this.searchTextApiList = res.data.pageList
-        this.authResourceApiList = res.data.pageList
-        this.pagination.total = res.data.totalCount
+        this.searchTextApiList = res.data.pageList;
+        this.authResourceApiList = res.data.pageList;
+        this.pagination.total = res.data.totalCount;
       } else {
-        this.$message.error(`查询失败,原因:${res.message}`)
+        this.$message.error(`查询失败,原因:${res.message}`);
       }
     },
     afterAddDicTypeSuccess(data) {
-      this.modalVisible = false
-      this.$emit('add-success', data)
+      this.modalVisible = false;
+      this.$emit("add-success", data);
     },
     afterUpdateDicTypeSuccess(data) {
-      this.$emit('update-success', data)
+      this.$emit("update-success", data);
     },
     afterDeleteDicTypeSuccess(data) {
-      if(this.typeList2 && this.typeList2.length === 0) {
-        this.$emit('delete-success', data, true)
+      if (this.typeList2 && this.typeList2.length === 0) {
+        this.$emit("delete-success", data, true);
       }
-      this.$emit('delete-success', data)
+      this.$emit("delete-success", data);
     },
     cancleWhenAdd(data) {
-      this.modalVisible = false
-      this.$emit('cancleWhenAdd', data)
+      this.modalVisible = false;
+      this.$emit("cancleWhenAdd", data);
     },
-  }
-}
+  },
+};
 </script>

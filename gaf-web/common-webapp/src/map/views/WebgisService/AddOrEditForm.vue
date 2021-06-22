@@ -1,17 +1,20 @@
 <template>
   <div>
+    <div class="grid-container">
+    <div class="drawer-header">
     <template>
       <a-breadcrumb separator=">" class="modal-line">
-        <a-breadcrumb-item class="tree-catalog" style="line-height: 15px"
+        <a-breadcrumb-item class="text-bolder"
           ><span class="vertical-line">| </span>{{ title }}</a-breadcrumb-item
         >
       </a-breadcrumb>
     </template>
-    <div class="page-modal-box">
+    </div>
+    <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
         layout="horizontal"
-        :label-col="{ span: 5 }"
+        :label-col="{ span: 7 }"
         :wrapper-col="{ span: 15 }"
         hide-required-mark
       >
@@ -215,19 +218,20 @@
             auto-size
           />
         </a-form-item>
-        <div class="btn-div">
-          <a-button
-            class="submit-gray"
-            style="margin-left: 53%"
-            type="primary"
-            :loading="loading"
-            @click="submitForm"
-          >
-            确定
-          </a-button>
-          <button class="cancel-modal" @click="backToList">取消</button>
-        </div>
+        
       </a-form>
+    </div>
+    <div class="drawer-footer">
+      <a-button
+        class="submit-gray"
+        :loading="loading"
+        @click="submitForm"
+      >
+        确定
+      </a-button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button class="cancel-modal" @click="backToList">取消</button>
+    </div>
     </div>
     <a-modal
       :title="titleModal"

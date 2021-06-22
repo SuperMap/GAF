@@ -105,15 +105,14 @@
                 <a-button
                   @click="saveConfigServerInfo(configSeverInfoForm)"
                   type="primary"
-                  icon="a-icon-position"
                   class="submit-gray"
                 >
                   保存
                 </a-button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a-button
                   @click="$emit('back') && $emit('refresh')"
                   type="primary"
-                  icon="a-icon-position"
                   class="cancel-modal"
                 >
                   取消

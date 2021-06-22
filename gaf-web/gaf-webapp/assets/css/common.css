@@ -1,169 +1,212 @@
 * {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 }
+
 
 /* ----布局---- */
+
+
 /* 页面 背景 */
+
 .app-container {
-  height: 100%;
-  border: none;
-  background-color: rgb(234, 239, 245);
+    height: 100%;
+    border: none;
+    background-color: rgb(234, 239, 245);
 }
+
 
 /* 页面 左侧栏 树组件 */
+
 .page-left {
-  height: 88vh;
-  width: 16%;
-  float: left;
-  margin: 12px 8px 10px 15px;
-  padding: 12px 8px 8px 8px;
-  background-color: #fff;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  overflow: auto;
+    height: 88vh;
+    width: 16%;
+    float: left;
+    margin: 12px 8px 10px 15px;
+    padding: 12px 8px 8px 8px;
+    background-color: #fff;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow: auto;
 }
+
 
 /* 同一页面 内容隐藏 达到跳转效果 */
+
 .resource-left {
-  height: 97vh;
-  width: 16%;
-  float: left;
-  margin: 0 8px 0 0;
-  padding: 12px 8px 8px 8px;
-  background-color: #fff;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  overflow: auto;
+    height: 97vh;
+    width: 16%;
+    float: left;
+    margin: 0 8px 0 0;
+    padding: 12px 8px 8px 8px;
+    background-color: #fff;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    overflow: auto;
 }
+
 
 /* 页面 右侧 主体内容 */
+
 .page-right {
-  margin: 12px 0 0 0;
-  padding: 15px;
-  height: 88vh;
-  width: 82%;
-  float: left;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  background-color: #fff;
+    margin: 12px 0 0 0;
+    padding: 15px;
+    height: 88vh;
+    width: 82%;
+    float: left;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: #fff;
 }
 
+
 /* 单页面 无左右栏 */
+
 .page-single {
-  float: left;
-  background-color: #fff;
-  margin: 10px 0 1% 1%;
-  border-radius: 5px;
-  height: 86vh;
-  width: 98%;
+    float: left;
+    background-color: #fff;
+    margin: 10px 0 1% 1%;
+    border-radius: 5px;
+    height: 86vh;
+    width: 98%;
 }
 
 .ant-layout {
-  height: 100vh;
+    height: 100vh;
 }
 
+
 /* 右侧 主体 置顶功能键 */
+
 .btn-fun {
-  border: none;
-  box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.3);
-  color: white;
-  margin: 5px 5px 10px 0;
-  height: 32px;
-  width: 140px;
-  line-height: 32px;
-  background-color: transparent;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s linear;
+    border: 1px solid rgb(24, 144, 255);
+    border-radius: 3px;
+    background-color: white;
+    margin-top: 16px;
+    height: 36px;
+    width: 116px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-8 {
+    margin-right: 8px;
+}
+
+.btn-16 {
+    margin-right: 16px;
+    margin-left: 3%;
 }
 
 .blue {
-  background-color: rgb(47, 117, 249);
-  border: none;
+    background-color: rgb(24, 144, 255);
+    color: white;
 }
 
 .seaBlue {
-  background-color: rgb(38, 188, 213);
+    background-color: rgb(38, 188, 213);
 }
 
 .lightYellow {
-  background-color: rgb(214, 200, 75);
+    background-color: rgb(214, 200, 75);
 }
 
 .lightYellow:hover {
-  background-color: rgb(192, 180, 69);
+    background-color: rgb(192, 180, 69);
 }
 
 .seaBlue:hover {
-  background-color: rgb(36, 161, 184);
+    background-color: rgb(36, 161, 184);
 }
 
 .red {
-  border: none;
-  background-color: rgb(196, 47, 85);
+    border: none;
+    background-color: rgb(196, 47, 85);
 }
 
 .gray {
-  background-color: rgba(84, 92, 100, .8);
+    background-color: rgba(84, 92, 100, .8);
 }
 
 .gray:hover {
-  background-color: rgb(84, 92, 100);
+    background-color: rgb(84, 92, 100);
 }
 
-.red:hover {
-  border: none;
-  background-color: rgb(191, 46, 74) !important;
+
+/* .red:hover {
+border: none;
+background-color: rgb(191, 46, 74) !important;
 }
 
 .blue:hover {
-  border: none;
-  background-color: rgb(30, 108, 253) !important;
+border: none;
+background-color: rgb(30, 108, 253) !important;
 }
 
 .btn-fun:hover {
-  border: none;
-  transform: translateY(2px);
-  color: white;
-  box-shadow: 0 0 0 rgba(128, 128, 128, 0.3);
-}
+border: none;
+transform: translateY(2px);
+color: white;
+box-shadow: 0 0 0 rgba(128, 128, 128, 0.3);
+} */
+
 
 /*for IE*/
+
 :focus {
-  outline: none;
+    outline: none;
 }
+
 
 /*for mozilla*/
+
 ::-moz-focus-inner {
-  border-color: transparent;
+    border-color: transparent;
 }
 
-
-
 .margin-15 {
-  margin: 15px 0 15px 15px;
+    margin: 15px 0 15px 15px;
 }
 
 .btn-margin {
-  text-align: center;
-  margin: 15px 0;
+    text-align: center;
+    margin: 15px 0;
 }
+
 
 /* 模态框 主体内容 位置调整 */
+
 .page-modal-box {
-  margin-top: 10px;
-  padding-left: 70px;
+    margin-top: 10px;
+    padding-left: 70px;
 }
+
 
 /* 搜索框 */
+
 .search-position {
-  margin-top: 5px;
-  width: 350px;
-  float: right;
+    margin-top: 16px;
+    margin-right: 3%;
+    width: 210px;
+    height: 40px;
+    float: right;
 }
 
-.btn-search {
+.ant-input-affix-wrapper .ant-input:not(:last-child) {
+    padding-right: 80px;
+}
+
+
+/* .ant-input {
+  margin-top: 16px;
+  margin-right: 3%;
+  width: 210px;
+  height: 40px;
+  float: right;
+} */
+
+
+/* .btn-search {
   cursor: pointer;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -181,497 +224,673 @@
   background-color: rgb(30, 108, 253);
   border: none;
   box-shadow: 0 0 0 transparent;
-}
+} */
+
+
 /* 模态框中的搜索 size=small */
+
 .model-search {
-  cursor: pointer;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  width: 60px;
-  height: 32px;
-  background-color: rgb(47, 117, 249);
-  color: white;
-  border: none;
-  box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.2);
+    cursor: pointer;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: 60px;
+    height: 32px;
+    background-color: rgb(47, 117, 249);
+    color: white;
+    border: none;
+    box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.2);
 }
 
 .model-search:hover {
-  color: white;
-  transform: translateY(2px);
-  background-color: rgb(30, 108, 253);
-  border: none;
-  box-shadow: 0 0 0 transparent;
+    color: white;
+    transform: translateY(2px);
+    background-color: rgb(30, 108, 253);
+    border: none;
+    box-shadow: 0 0 0 transparent;
 }
 
+
 /* 搜索框 */
+
 .ant-input-group .ant-input {
-  text-align: center;
-  /* margin-left: 410px; */
-  /* width: 250px; */
-  border: 1px solid rgb(217, 217, 217);
-  border-radius: 5px;
-  box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.1);
+    text-align: center;
+    /* margin-left: 410px; */
+    /* width: 250px; */
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 5px;
+    box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.1);
 }
 
 .main-top {
-  margin-left: 16px;
+    margin-left: 16px;
 }
 
+
 /* 表格样式 */
-.table tr:nth-child(n) {
-  background: rgb(249, 249, 249);
+
+
+/* .table tr:nth-child(n) {
+background: rgb(249, 249, 249);
 }
 
 .table tr td {
-  word-wrap: break-word;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+word-wrap: break-word;
 }
 
 .table tr:nth-child(2n+1) {
-  background: white;
+background: white;
 }
 
 .ant-table-thead tr {
-  background-color: rgb(240, 240, 240) !important;
+background-color: rgb(240, 240, 240) !important;
 }
 
 .ant-table-thead tr th {
-  text-align: center;
-  font-weight: bolder;
-  font-size: 16px;
-  color: rgb(85, 85, 85);
+text-align: center;
+font-weight: bolder;
+font-size: 16px;
+color: rgb(85, 85, 85);
 }
 
 .ant-table-body {
-  margin: 0 !important;
-  overflow: auto;
+margin: 0 !important;
+overflow: auto;
 }
 table {
-  white-space: nowrap;
-}
+white-space: nowrap;
+} */
+
+
 /* 详情按钮 */
+
 .btn-view {
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
-  background-color: rgb(94, 192, 94);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
+    background-color: rgb(94, 192, 94);
 }
 
 .btn-view:hover {
-  background-color: rgb(160, 191, 124);
-  color: rgb(254, 254, 254);
+    background-color: rgb(160, 191, 124);
+    color: rgb(254, 254, 254);
 }
 
+
 /* 编辑按钮 */
+
 .btn-edit {
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
-  background-color: rgb(74, 175, 205);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
+    background-color: rgb(74, 175, 205);
 }
 
 .btn-edit:hover {
-  background-color: rgb(95, 192, 221);
-  color: white;
+    background-color: rgb(95, 192, 221);
+    color: white;
 }
 
+
 /* 删除按钮 */
+
 .btn-del {
-  background-color: rgb(216, 77, 72);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(216, 77, 72);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-del:hover {
-  background-color: rgb(250, 101, 95);
-  color: white;
+    background-color: rgb(250, 101, 95);
+    color: white;
 }
 
+
 /* 配置按钮 */
+
 .btn-configure {
-  background-color: rgb(146, 146, 146);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(146, 146, 146);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-configure:hover {
-  background-color: rgba(146, 146, 146, 0.7);
-  color: white;
+    background-color: rgba(146, 146, 146, 0.7);
+    color: white;
 }
 
+
 /* 编码按钮 */
+
 .btn-code {
-  background-color: rgb(221, 171, 92);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(221, 171, 92);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-code:hover {
-  background-color: rgba(221, 171, 92, 0.7);
-  color: white;
+    background-color: rgba(221, 171, 92, 0.7);
+    color: white;
 }
 
+
 /* 预览按钮 */
+
 .btn-preview {
-  background-color: rgb(152, 184, 63);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(152, 184, 63);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-preview:hover {
-  background-color: rgba(174, 209, 77, 0.7);
-  color: white;
+    background-color: rgba(174, 209, 77, 0.7);
+    color: white;
 }
 
+
 /* 发布按钮 */
+
 .btn-release {
-  background-color: rgb(254, 242, 166);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(254, 242, 166);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-release:hover {
-  background-color: rgba(254, 242, 166, 0.5);
-  color: white;
+    background-color: rgba(254, 242, 166, 0.5);
+    color: white;
 }
 
+
 /* 成员按钮 */
+
 .btn-human {
-  background-color: rgb(0, 188, 213);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(0, 188, 213);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-human:hover {
-  background-color: rgba(0, 188, 213, 0.7);
-  color: white;
+    background-color: rgba(0, 188, 213, 0.7);
+    color: white;
 }
 
+
 /* 项目按钮 */
+
 .btn-project {
-  background-color: rgb(255, 171, 65);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(255, 171, 65);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-project:hover {
-  background-color: rgba(255, 171, 65, 0.7);
-  color: white;
+    background-color: rgba(255, 171, 65, 0.7);
+    color: white;
 }
 
+
 /* 启用按钮 */
+
 .btn-restart {
-  background-color: rgb(160, 212, 123);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(160, 212, 123);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-restart:hover {
-  background-color: rgb(110, 159, 91);
-  color: white;
+    background-color: rgb(110, 159, 91);
+    color: white;
 }
 
+
 /* 同步按钮 */
+
 .btn-sync {
-  background-color: rgb(245, 166, 77);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(245, 166, 77);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-sync:hover {
-  background-color: rgb(196, 137, 70);
-  color: white;
+    background-color: rgb(196, 137, 70);
+    color: white;
 }
 
+
 /* 全部管理员按钮 */
+
 .btn-admin {
-  background-color: rgb(66, 210, 134);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
+    background-color: rgb(66, 210, 134);
+    border: 1px solid transparent;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: #fff;
 }
 
 .btn-admin:hover {
-  background-color: rgb(57, 173, 112);
-  color: white;
+    background-color: rgb(57, 173, 112);
+    color: white;
 }
+
 
 /* 单页面 表单 */
+
 .web-form {
-  padding: 5% 0 0 15%;
+    padding: 5% 0 0 15%;
 }
 
+
 /* |样式 */
+
 .vertical-line {
-  color: rgb(47, 117, 249);
-  font-weight: bolder;
-  font-size: 17px;
+    color: rgb(47, 117, 249);
+    font-weight: bolder;
+    font-size: 17px;
 }
 
 .text-bolder {
-  font-weight: 1000;
-  font-size: 16px;
+    font-weight: 1000;
+    font-size: 16px;
 }
 
 .btn-style {
-  margin: 0 auto;
-  width: 200px;
-  padding: 15px;
+    margin: 0 auto;
+    width: 200px;
+    padding: 15px;
 }
 
+
 /* 保存 */
+
 .btn-ok {
-  cursor: pointer;
-  width: 100px;
-  height: 32px;
-  border-radius: 5px;
-  box-shadow: 3px 3px 0 rgba(47, 117, 249, 0.3);
-  border: none;
-  color: white;
-  background-color: rgb(47, 117, 249);
+    cursor: pointer;
+    width: 100px;
+    height: 32px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 0 rgba(47, 117, 249, 0.3);
+    border: none;
+    color: white;
+    background-color: rgb(47, 117, 249);
 }
 
 .btn-ok:hover {
-  background-color: rgb(38, 107, 236);
-  color: white;
-  box-shadow: 0 0 0 transparent;
-  transform: translateY(2px);
+    background-color: rgb(38, 107, 236);
+    color: white;
+    box-shadow: 0 0 0 transparent;
+    transform: translateY(2px);
 }
 
+
 /* 抽屉 确认 */
+
 .draws-ok {
-  cursor: pointer;
-  width: 66px;
-  height: 32px;
-  border-radius: 5px;
-  box-shadow: 3px 3px 0 rgba(217, 217, 217, 0.3);
-  border: none;
-  color: white;
-  background-color: rgb(84, 92, 100);
+    cursor: pointer;
+    width: 66px;
+    height: 32px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 0 rgba(217, 217, 217, 0.3);
+    border: none;
+    color: white;
+    background-color: rgb(84, 92, 100);
 }
 
 .draws-ok:hover {
-  background-color: rgba(84, 92, 100, 0.8);
-  color: white;
-  box-shadow: 0 0 0 transparent;
-  transform: translateY(2px);
+    background-color: rgba(84, 92, 100, 0.8);
+    color: white;
+    box-shadow: 0 0 0 transparent;
+    transform: translateY(2px);
 }
 
+
 /* 抽屉 取消 */
+
 .draws-cancel {
-  cursor: pointer;
-  width: 66px;
-  height: 32px;
-  border-radius: 5px;
-  box-shadow: 3px 3px 0 rgba(217, 217, 217, 0.3);
-  border: none;
-  color: white;
-  background-color: rgb(132, 133, 135);
+    cursor: pointer;
+    width: 66px;
+    height: 32px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 0 rgba(217, 217, 217, 0.3);
+    border: none;
+    color: white;
+    background-color: rgb(132, 133, 135);
 }
 
 .draws-cancel:hover {
-  background-color: rgba(132, 133, 135, 0.8);
-  color: white;
-  box-shadow: 0 0 0 transparent;
-  transform: translateY(2px);
+    background-color: rgba(132, 133, 135, 0.8);
+    color: white;
+    box-shadow: 0 0 0 transparent;
+    transform: translateY(2px);
 }
 
+
 /* 删除 */
+
 .btn-cancel {
-  cursor: pointer;
-  width: 100px;
-  height: 32px;
-  border-radius: 5px;
-  box-shadow: 3px 3px 0 rgba(47, 117, 249, 0.3);
-  color: rgb(47, 117, 249);
-  border: 1px solid rgb(47, 117, 249);
+    cursor: pointer;
+    width: 100px;
+    height: 32px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 0 rgba(47, 117, 249, 0.3);
+    color: rgb(47, 117, 249);
+    border: 1px solid rgb(47, 117, 249);
 }
 
 .btn-cancel:hover {
-  border: 1px solid rgb(38, 107, 236);
-  color: rgb(38, 107, 236);
-  box-shadow: 0 0 0 transparent;
-  transform: translateY(2px);
+    border: 1px solid rgb(38, 107, 236);
+    color: rgb(38, 107, 236);
+    box-shadow: 0 0 0 transparent;
+    transform: translateY(2px);
 }
 
 .float-left {
-  float: left;
+    float: left;
 }
 
 .float-right {
-  float: right;
+    float: right;
 }
 
+
 /* 确认 模态框*/
+
 .submit-gray {
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
-  width: 100px;
-  height: 32px;
-  border: none;
-  box-shadow: 3px 3px 0 rgba(84, 92, 100, 0.2);
-  background-color: rgba(84, 92, 100, .8);
+    cursor: pointer;
+    color: white;
+    border: none;
+    width: 80px;
+    height: 32px;
+    background: #329DFF;
+    border-radius: 5px;
 }
 
 .submit-gray:hover {
-  background-color: rgba(84, 92, 100, 0.9);
-  color: white;
-  box-shadow: 0 0 0 transparent;
-  transform: translateY(2px);
+    background-color: rgba(10, 126, 241, 0.9);
+    color: white;
+    box-shadow: 0 0 0 transparent;
+    transform: translateY(2px);
 }
 
+
 /* 取消 模态框*/
+
 .cancel-modal {
-  border-radius: 5px;
-  cursor: pointer;
-  box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.3);
-  background-color: rgb(180, 180, 180);
-  color: white;
-  width: 100px;
-  height: 32px;
-  border: none;
+    cursor: pointer;
+    color: #000;
+    width: 80px;
+    height: 32px;
+    background: #FFFFFF;
+    border: 1px solid #A0A0A0;
+    border-radius: 5px;
 }
 
 .cancel-modal:hover {
-  background-color: rgb(170, 170, 170);
-  color: white;
-  box-shadow: 0 0 0 transparent;
-  transform: translateY(2px);
+    background-color: rgb(133, 131, 131);
+    color: white;
+    box-shadow: 0 0 0 transparent;
+    transform: translateY(2px);
 }
 
 .margin410 {
-  margin: 15px 0 0 410px;
+    margin: 15px 0 0 410px;
 }
+
 
 /* 模态框 title下线 */
+
 .modal-line {
-  border-bottom: 1px dashed #ccc;
-  margin: 15px 0;
+    border-bottom: 1px solid #E5E5E5;
+    padding: 15px 10px;
 }
 
+
 /* 模态框 关闭按钮 */
+
 button.ant-modal-close {
-  margin-top: 16px;
-  color: black;
-  font-weight: bolder;
+    margin-top: 16px;
+    color: black;
+    font-weight: bolder;
 }
 
 button.ant-modal-close:hover {
-  color: red;
+    color: red;
 }
+
 
 /* 目录树 标题 */
+
 .tree-catalog {
-  border-bottom: 1px solid rgb(232, 232, 232);
-  margin-bottom: 10px;
-  height: 50px;
-  line-height: 50px;
-  font-size: 16px;
-  font-weight: bolder;
-  background-color: rgb(249, 249, 249);
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+    border-bottom: 1px solid rgb(232, 232, 232);
+    margin-bottom: 10px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    font-weight: bolder;
+    background-color: rgb(249, 249, 249);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
+
 
 /* tabs 标签页样式 tab-bar-style */
-.ant-tabs-tab {
-  background-color: rgb(249, 249, 249);
-  /* font-size: 17px; */
-  /* color: rgb(47, 117, 249); */
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  font-weight: 500;
-}
+
+
+/* .ant-tabs-tab {
+    background-color: rgb(249, 249, 249);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-weight: 500;
+} */
+
 
 /* ----------------------- */
+
+
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 2px;
-  background-color: #F5F5F5;
+    width: 4px;
+    height: 2px;
+    background-color: #F5F5F5;
 }
+
 
 /*定义滚动条轨道 内阴影+圆角*/
+
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background-color: #F5F5F5;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #F5F5F5;
 }
+
 
 /*定义滑块 内阴影+圆角*/
+
 ::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
-  background-color: rgba(232, 232, 232, 0.2);
+    border-radius: 8px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    background-color: rgba(232, 232, 232, 0.2);
 }
 
+
 /* 模态框 组件 背景样式 */
+
 .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-  background-color: rgb(118, 125, 131);
-  color: white;
-  border: 1px solid #ccc;
+    background-color: rgb(118, 125, 131);
+    color: white;
+    border: 1px solid #ccc;
 }
 
 .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
-  background-color: rgb(180, 180, 180);
-  border: 1px solid #ccc;
+    background-color: rgb(180, 180, 180);
+    border: 1px solid #ccc;
 }
 
 .ant-radio-button-wrapper {
-  height: 31px;
+    height: 31px;
 }
+
 
 /* tabs 下划线 去掉 */
+
 .ant-tabs-ink-bar {
-  background-color: #fff;
+    background-color: rgb(24, 144, 255);
 }
 
-.ant-tabs-tab-active {
-  background-color: #fff;
-  border: 1px solid rgb(232, 232, 232);
-  color: rgb(47, 117, 249) !important;
-}
 
-.ant-table-body-inner {
-  margin-right: 0 !important;
+/* .ant-tabs-tab-active {
+    background-color: #fff;
+    border: 1px solid rgb(232, 232, 232);
+    color: rgb(47, 117, 249) !important;
+} */
+
+
+/* .ant-table-body-inner {
+margin-right: 0 !important;
 }
 
 .ant-table-tbody tr td {
-  text-align: center;
+text-align: center;
+} */
+
+.ant-pagination-total-text {
+    position: absolute;
+    left: 0;
 }
+
+
+/* 操作键 */
+
+.btn-margin {
+    padding-right: 28px;
+}
+
+
+/* 表格大小 */
+
+.table-style {
+    width: 97%;
+    height: 76%;
+    margin: 0 auto;
+}
+
 
 /* 选中的背景色 */
+
 .ant-tree li .ant-tree-node-content-wrapper.ant-tree-node-selected {
-  background-color: rgb(240, 240, 240);
+    background-color: rgb(240, 240, 240);
 }
 
+
+/* 选择框 */
+
+.choose-box {
+    border: 1px dashed #5CB1FF;
+    width: 97%;
+    height: 36px;
+    background-color: #EEF5FB;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 36px;
+}
+
+.choose-box b {
+    color: #329DFF;
+}
+
+.choose-box a {
+    margin-left: 49px;
+}
+
+.exclamation {
+    color: #329DFF;
+    width: 20px;
+    height: 21px;
+    margin: 0 20px 0 16px;
+}
+
+
 /*  拖动条样式  */
-::-webkit-scrollbar:horizontal   {
-  width: 16px;
-  height: 5px;
-  background-color: #f5f5f5;
+
+::-webkit-scrollbar:horizontal {
+    width: 16px;
+    height: 5px;
+    background-color: #f5f5f5;
+}
+
+
+/* grid三明治布局 */
+
+.grid-container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+
+/* 抽屉头部样式 */
+
+.drawer-header {
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #fff;
+    z-index: 100;
+}
+
+
+/* 抽屉内容样式 */
+
+.drawer-content {
+    height: 100%;
+    padding: 70px 10px;
+}
+
+
+/* 抽屉底部样式 */
+
+.drawer-footer {
+    text-align: center;
+    padding: 15px 0;
+    width: 100%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid #E5E5E5;
+    background: #fff;
+    z-index: 100;
+}
+
+.special-container {
+    height: 72vh;
+    position: relative;
+}
+
+.ant-drawer-body {
+    padding: 10px;
+}
+
+.select-box {
+    margin: 15px 0 0 65%;
+    position: absolute;
 }

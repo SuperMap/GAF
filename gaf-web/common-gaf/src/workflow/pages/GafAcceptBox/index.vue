@@ -30,19 +30,15 @@
           <a
             href="javascript:void(0);"
             rel="external nofollow"
-            class="btn-view"
+            class="btn-margin"
             @click.stop="toMallInfo(ot.record)"
-            ><a-icon type="edit" /> 办理</a
+            >办理</a
           >
           <a-divider type="vertical" />
           <!-- </div>
       <div> -->
-          <a
-            class="btn-del"
-            href="javascript:;"
-            @click.stop="() => showModal(ot.record)"
-          >
-            <a-icon type="delete" />删除
+          <a href="javascript:;" @click.stop="() => showModal(ot.record)">
+            删除
           </a>
           <a-modal
             id="model-style"
@@ -57,7 +53,12 @@
               style="margin-bottom: 10px"
               placeholder=""
             />
-            <a-button class="submit-gray" type="primary" :loading="loading" @click="handleOk(ot.record)">
+            <a-button
+              class="submit-gray"
+              type="primary"
+              :loading="loading"
+              @click="handleOk(ot.record)"
+            >
               确认
             </a-button>
             <button class="cancel-modal" @click="handleCancel">取消</button>
@@ -69,12 +70,12 @@
   </div>
 </template>
 <script>
-import '~/assets/css/common.css'
-import '../../views/css/workFlow.css'
-import GafTimeSwitch from '../../views/GafWorkflowCommon/GafTimeSwitch'
-import GafBusinessBox from '../../views/GafWorkflowCommon/GafBusinessBox'
+import "~/assets/css/common.css";
+import "../../views/css/workFlow.css";
+import GafTimeSwitch from "../../views/GafWorkflowCommon/GafTimeSwitch";
+import GafBusinessBox from "../../views/GafWorkflowCommon/GafBusinessBox";
 export default {
-  name: 'GafAcceptBox',
+  name: "GafAcceptBox",
   components: {
     GafBusinessBox,
     GafTimeSwitch,
@@ -82,80 +83,80 @@ export default {
   data() {
     return {
       dataSource: [],
-      countDownTime: '',
-      value: '',
+      countDownTime: "",
+      value: "",
       visible: false,
-      id: '',
+      id: "",
       loading: false,
-    }
+    };
   },
   created() {
-    this.getTable()
+    this.getTable();
   },
   methods: {
     /* 查询 接口 */
     async searchValue(keyword) {
-      const url = `/workflow/query/accept-process`
-      const rst = await this.$axios.post(url, { keyword })
+      const url = `/workflow/query/accept-process`;
+      const rst = await this.$axios.post(url, { keyword });
       if (rst.data.isSuccessed) {
-        this.dataSource = rst.data.data.content
+        this.dataSource = rst.data.data.content;
       }
     },
     /* 删除 接口 */
     showModal(record) {
-      this.id = record.NowActInst_ID
-      this.visible = true
+      this.id = record.NowActInst_ID;
+      this.visible = true;
     },
     handleCancel() {
-      this.visible = false
-      this.value = ''
+      this.visible = false;
+      this.value = "";
     },
     async handleOk() {
-      this.visible = false
-      this.loading = true
-      const url = `/workflow/execute/process/remove`
+      this.visible = false;
+      this.loading = true;
+      const url = `/workflow/execute/process/remove`;
       const delRecord = await this.$axios.post(url, {
         nowActInstId: this.id,
         proInstDesc: this.value,
-      })
-      if (delRecord.data.isSuccessed && this.value !== '') {
-        this.$message.success('删除成功')
-        this.value = ''
+      });
+      if (delRecord.data.isSuccessed && this.value !== "") {
+        this.$message.success("删除成功");
+        this.value = "";
       } else {
-        this.$message.warn(delRecord.data.message)
-        this.value = ''
+        this.$message.warn(delRecord.data.message);
+        this.value = "";
       }
-      this.loading = false
-      this.getTable()
+      this.loading = false;
+      this.getTable();
     },
     /* 办理 功能 接口 */
     toMallInfo(record) {
-      const proInstID = record.ProInst_ID
-      const ActInstID = record.ActInst_ID
-      const nowActInstId = record.NowActInst_ID
+      const proInstID = record.ProInst_ID;
+      const ActInstID = record.ActInst_ID;
+      const nowActInstId = record.NowActInst_ID;
       this.$router.push({
-        path: './GafAcceptSon',
+        path: "./GafAcceptSon",
         query: {
           proInstId: proInstID,
           actInstId: ActInstID,
           nowActInstId,
         },
-      })
+      });
     },
     /* 获取后台的数据 接口 */
     async getTable() {
-      const url = `/workflow/query/accept-process`
-      const rst = await this.$axios.post(url, {})
+      const url = `/workflow/query/accept-process`;
+      const rst = await this.$axios.post(url, {});
       if (rst.data.isSuccessed) {
         // this.$message.success('成功')
       } else {
-        this.$message.error('更新失败')
+        this.$message.error("更新失败");
       }
       // console.log(rst.data.data.content)
-      this.dataSource = rst.data.data.content
+      this.dataSource = rst.data.data.content;
     },
   },
-}
+};
 </script>
 <style scoped>
 .ab-pic {

@@ -2,19 +2,17 @@
   <div>
     <gaf-table-layout>
       <template #actions>
-        <button @click="handleAdd" class="btn-fun blue">
-          <span><a-icon type="plus" />
-          添加角色</span>
+        <button @click="handleAdd" class="btn-fun blue btn-16">
+          <span><a-icon type="plus-circle" /> 添加角色</span>
         </button>
         <a-popconfirm
-          class="btn-fun red"
+          class="btn-fun blue"
           title="删除后无法恢复，确认是否继续?"
           ok-text="确认"
           cancel-text="取消"
           @confirm="() => batchDel()"
         >
-          <button class="btn-fun red">
-            <a-icon type="delete" />
+          <button class="btn-fun blue">
             <span>批量删除</span>
           </button>
         </a-popconfirm>
@@ -26,30 +24,43 @@
             placeholder="请输入名称查询"
             size="large"
           >
-            <button slot="enterButton" class="btn-search">
-              搜索
-            </button>
           </a-input-search>
         </div>
       </template>
       <template #default>
+        <div class="choose-box">
+          <a-icon type="exclamation-circle" class="exclamation" /><span
+            >已选择</span
+          >
+          <b>{{ selectRowLength }}</b>
+          <span>项</span>
+          <a-popconfirm
+            @confirm="() => clearOptions(record)"
+            title="清空后无法恢复，确认是否继续?"
+            ok-text="确认"
+            cancel-text="取消"
+          >
+            <a href="javascript:;">清空</a>
+          </a-popconfirm>
+        </div>
         <gaf-table-with-page
+          :scroll="{ y: 508, x: 1400 }"
           :pagination="pagination"
           :row-selection="{
             selectedRowKeys: selectedRowKeys,
             onChange: onSelectChange,
             onSelect: rowSelect,
-            onSelectAll: rowSelectAll
+            onSelectAll: rowSelectAll,
           }"
           :data-source="authResourceApiList"
           :loading="loading"
           @change="tableChange"
           :row-key="(r, i) => r.roleId"
-          :columns="columns.filter(item => item.dataIndex !== 'resourceApiId')"
-          style="width: 100%;"
-          bordered
-          size="small"
-          align="center"
+          :columns="
+            columns.filter((item) => item.dataIndex !== 'resourceApiId')
+          "
+          class="table-style"
+          size="middle"
         >
           <template slot="type" slot-scope="text, record">
             {{ getType(record.type) }}
@@ -59,44 +70,55 @@
             slot-scope="text, record"
             v-if="hasPKField"
           >
-            <a @click.stop="() => handleDetail(record)" href="javascript:;" class="btn-view">
-              <a-icon type="profile" /> 详情
+            <a
+              @click.stop="() => handleDetail(record)"
+              href="javascript:;"
+              class="btn-margin"
+            >
+              详情
             </a>
-            <a-divider type="vertical" />
-            <a @click.stop="() => handleUpdate(record)" href="javascript:;" class="btn-edit">
-              <a-icon type="edit" /> 编辑
+
+            <a
+              @click.stop="() => handleUpdate(record)"
+              href="javascript:;"
+              class="btn-margin"
+            >
+              编辑
             </a>
-            <a-divider type="vertical" />
+
             <a-popconfirm
               @confirm="() => handleDelete(record)"
               title="删除后无法恢复，确认是否继续?"
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;" class="btn-del"><a-icon type="delete" /> 删除</a>
+              <a href="javascript:;" class="btn-margin"> 删除</a>
             </a-popconfirm>
-            <a-divider type="vertical" />
-            <a @click.stop="() => handleAssignMenu(record)" href="javascript:;" class="btn-code">
-              <a-icon type="edit" /> 分配菜单
+
+            <a
+              @click.stop="() => handleAssignMenu(record)"
+              href="javascript:;"
+              class="btn-margin"
+            >
+              分配菜单
             </a>
-            <a-divider type="vertical" />
-            <a @click.stop="() => handleAssignAPI(record)" href="javascript:;" class="btn-preview">
-              <a-icon type="edit" /> 分配API
+            <a @click.stop="() => handleAssignAPI(record)" href="javascript:;">
+              分配API
             </a>
           </template>
-
           <template slot="timeRender" v-if="timeFormat" slot-scope="text">
             {{ timeFormat(text) }}
           </template>
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <a-modal
-      v-model="modalVisible"
-      :width="800"
+    <a-drawer
+      :visible="modalVisible"
+      :width="500"
       :footer="null"
       :centered="true"
-      @cancel="handleBack"
+      @close="handleBack"
+      :closable="false"
       destroy-on-close
     >
       <add-edit-form
@@ -112,7 +134,7 @@
         :dataOfTree="dataOfTree"
       >
       </add-edit-form>
-    </a-modal>
+    </a-drawer>
     <a-drawer
       placement="right"
       :closable="false"
@@ -121,55 +143,54 @@
       width="400"
       @close="drawerClose"
     >
-      <role-menu
-        :role="role"
-      ></role-menu>
+      <role-menu :role="role"></role-menu>
     </a-drawer>
   </div>
 </template>
 
 <script>
-import AddEditForm from './RoleAddOrEditForm'
-import roleMenu from './RoleMenu'
+import AddEditForm from "./RoleAddOrEditForm";
+import roleMenu from "./RoleMenu";
 export default {
   components: {
     AddEditForm,
-    roleMenu
+    roleMenu,
   },
   props: {
     tenant: {
       type: String,
-      default: ''
+      default: "",
     },
     roleGroup: {
       type: String,
-      default: ''
+      default: "",
     },
     roleGroupPath: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     dataOfTree: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
       drawerVisible2: false,
-      roleId: '',
+      roleId: "",
       // 搜索项
-      searchKey: '',
+      searchKey: "",
       clearFilters: null,
       // 非多个禁用
       multiple: true,
       // 标题
-      title: '',
+      title: "",
       // 编辑记录
       editData: {},
       // 总条数
       total: 0,
       selectedRowKeys: [],
+      selectRowLength: 0,
       // ${functionName}表格数据
       authResourceApiList: [],
       searchTextApiList: [],
@@ -180,30 +201,31 @@ export default {
       pagination: {
         pageSize: 10,
         current: 1,
-        total: 0
+        total: 0,
       },
       // 列表是否加载中
       loading: true,
-      searchText: '',
+      searchText: "",
       searchInput: null,
-      searchedColumn: 'roleName',
+      searchedColumn: "roleName",
       sorter: {
-        order: '',
-        field: ''
+        order: "",
+        field: "",
       },
       // 详情：1，新增：2，编辑：3
       operation: 0,
       // 有无主键
-      hasPKField: true
-    }
+      hasPKField: true,
+    };
   },
   computed: {
-    columns: function() {
+    columns: function () {
       const columns = [
         {
-          title: '名称',
-          dataIndex: 'roleName',
-          key: 'role_name'
+          title: "名称",
+          dataIndex: "roleName",
+          width: 180,
+          key: "role_name",
         },
         // {
         //   title: '编码',
@@ -211,265 +233,282 @@ export default {
         //   key: 'code'
         // },
         {
-          title: '类型',
-          dataIndex: 'type',
-          key: 'type',
-          scopedSlots: { customRender: 'type' }
+          title: "类型",
+          dataIndex: "type",
+          width: 180,
+          key: "type",
+          scopedSlots: { customRender: "type" },
         },
         {
-          title: '排序序号',
-          dataIndex: 'sortSn',
-          key: 'sort_sn'
+          title: "排序序号",
+          width: 180,
+          dataIndex: "sortSn",
+          key: "sort_sn",
         },
         {
-          title: '操作',
-          scopedSlots: { customRender: 'operation' }
-        }
-      ]
-      return this.hasPKField ? columns : columns.slice(0, columns.length - 2)
+          title: "操作",
+          fixed: "right",
+          scopedSlots: { customRender: "operation" },
+        },
+      ];
+      return this.hasPKField ? columns : columns.slice(0, columns.length - 2);
     },
-    timeFormat: function() {
+    timeFormat: function () {
       if (
         this.columns.filter(
-          item =>
-            item.scopedSlots && item.scopedSlots.customRender === 'timeRender'
+          (item) =>
+            item.scopedSlots && item.scopedSlots.customRender === "timeRender"
         ).length > 0
       ) {
-        return function(str) {
-          if (!str || str === '') {
-            return ''
+        return function (str) {
+          if (!str || str === "") {
+            return "";
           }
-          const dt = new Date(str)
-          const year = dt.getFullYear()
-          let month = dt.getMonth() + 1
-          let date = dt.getDate()
-          let hour = dt.getHours()
-          let minute = dt.getMinutes()
-          let second = dt.getSeconds()
+          const dt = new Date(str);
+          const year = dt.getFullYear();
+          let month = dt.getMonth() + 1;
+          let date = dt.getDate();
+          let hour = dt.getHours();
+          let minute = dt.getMinutes();
+          let second = dt.getSeconds();
 
-          month = month < 10 ? '0' + month : month
-          date = date < 10 ? '0' + date : date
-          hour = hour < 10 ? '0' + hour : hour
-          minute = minute < 10 ? '0' + minute : minute
-          second = second < 10 ? '0' + second : second
+          month = month < 10 ? "0" + month : month;
+          date = date < 10 ? "0" + date : date;
+          hour = hour < 10 ? "0" + hour : hour;
+          minute = minute < 10 ? "0" + minute : minute;
+          second = second < 10 ? "0" + second : second;
 
-          return `${year}/${month}/${date} ${hour}:${minute}:${second}`
-        }
+          return `${year}/${month}/${date} ${hour}:${minute}:${second}`;
+        };
       }
-      return null
-    }
+      return null;
+    },
   },
   watch: {
     roleGroup(val) {
-      this.pagination.current = 1
-      this.searchText = this.roleGroup
-      this.getList(val)
+      this.pagination.current = 1;
+      this.searchText = this.roleGroup;
+      this.getList(val);
     },
     modalVisible(newValue) {
-      this.open = newValue
+      this.open = newValue;
     },
     open(newValue) {
-      this.modalVisible = newValue
-    }
+      this.modalVisible = newValue;
+    },
   },
   created() {
     // this.getList()
-    this.searchedColumn = 'role_catalog_id'
-    this.searchText = this.roleGroup
+    this.searchedColumn = "role_catalog_id";
+    this.searchText = this.roleGroup;
   },
   methods: {
     async onSearch(val) {
-      this.searchText = val
-      this.pagination.current = 1
+      this.searchText = val;
+      this.pagination.current = 1;
       // await this.getList()
       if (val === "") {
-        this.searchedColumn = 'role_catalog_id'
-        this.searchText = this.roleGroup
-        await this.getList()
+        this.searchedColumn = "role_catalog_id";
+        this.searchText = this.roleGroup;
+        await this.getList();
       } else {
-        this.authResourceApiList = this.searchTextApiList.filter(ltem => ltem.roleName.includes(val) === true)
+        this.authResourceApiList = this.searchTextApiList.filter(
+          (ltem) => ltem.roleName.includes(val) === true
+        );
       }
     },
     async batchDel() {
-      const url = `/authority/auth-roles/${this.roleGroup}/`
-      const selectedRowKeys = this.selectedRowKeys
+      const url = `/authority/auth-roles/${this.roleGroup}/`;
+      const selectedRowKeys = this.selectedRowKeys;
       if (selectedRowKeys.length !== 0) {
-        const rst = await this.$axios.delete(url, { data: selectedRowKeys })
+        const rst = await this.$axios.delete(url, { data: selectedRowKeys });
         if (rst.data.isSuccessed) {
-          this.$message.success('删除成功')
+          this.$message.success("删除成功");
         } else {
-          this.$message.error(`删除失败,原因:${rst.data.message}`)
+          this.$message.error(`删除失败,原因:${rst.data.message}`);
         }
         this.$nextTick(() => {
-          if (this.pagination.current !== 1 && selectedRowKeys.length === this.authResourceApiList.length){
-            this.pagination.current--
+          if (
+            this.pagination.current !== 1 &&
+            selectedRowKeys.length === this.authResourceApiList.length
+          ) {
+            this.pagination.current--;
           }
-          this.getList()
-          this.selectedRowKeys = []
-        })
+          this.getList();
+          this.selectedRowKeys = [];
+        });
       } else {
-        this.$message.warn('请选择您要删除的内容')
+        this.$message.warn("请选择您要删除的内容");
       }
     },
     rowSelect(record, selected, selectedRows) {
-      console.log(record, selected, selectedRows)
+      console.log(record, selected, selectedRows);
     },
     rowSelectAll(selected, selectedRows, changeRows) {
-      console.log(selected, selectedRows, changeRows)
+      console.log(selected, selectedRows, changeRows);
     },
     getType(val) {
       switch (val) {
-        case '1':
-          return '组件内置'
-        case '2':
-          return '平台级'
-        case '3':
-          return '租户级'
+        case "1":
+          return "组件内置";
+        case "2":
+          return "平台级";
+        case "3":
+          return "租户级";
       }
     },
     handleSearchFieldChange(value) {
-      this.searchedColumn = value
+      this.searchedColumn = value;
     },
     async handleFilterChange(value) {
-      this.searchText = value
-      this.pagination.current = 1
-      await this.getList()
+      this.searchText = value;
+      this.pagination.current = 1;
+      await this.getList();
     },
     // 搜索查询
     handleSearch(selectedKeys, confirm, key, clearFilters) {
-      if (this.searchedColumn !== key && this.clearFilters) this.clearFilters()
-      confirm()
-      this.searchText = selectedKeys[0]
-      this.searchedColumn = key
-      this.clearFilters = clearFilters
+      if (this.searchedColumn !== key && this.clearFilters) this.clearFilters();
+      confirm();
+      this.searchText = selectedKeys[0];
+      this.searchedColumn = key;
+      this.clearFilters = clearFilters;
     },
     // 重置查询
     handleReset(clearFilters, key) {
-      clearFilters()
+      clearFilters();
       if (this.searchedColumn === key) {
-        this.searchText = ''
-        this.searchedColumn = ''
-        this.clearFilters = null
+        this.searchText = "";
+        this.searchedColumn = "";
+        this.clearFilters = null;
       }
     },
     // 页码，排序项发生改变时，重新获取列表数据
     tableChange(pageInfo, filters, sorter) {
       if (pageInfo) {
-        this.pagination.current = pageInfo.current
-        this.pagination.pageSize = pageInfo.pageSize
+        this.pagination.current = pageInfo.current;
+        this.pagination.pageSize = pageInfo.pageSize;
       }
       if (sorter) {
-        this.sorter.order = sorter.order === 'descend' ? 'DESC' : 'ASC'
-        this.sorter.field = sorter.columnKey
+        this.sorter.order = sorter.order === "descend" ? "DESC" : "ASC";
+        this.sorter.field = sorter.columnKey;
       }
-      this.getList()
+      this.getList();
     },
     // 添加数据
     handleAdd() {
-      this.operation = 2
-      this.open = true
-      this.title = '添加角色'
+      this.operation = 2;
+      this.open = true;
+      this.title = "添加角色";
     },
     // 添加修改提交后
     handleSubmit() {
-      this.open = false
-      this.editData = {}
-      this.getList()
+      this.open = false;
+      this.editData = {};
+      this.getList();
     },
     // 添加修改返回后
     handleBack() {
-      this.editData = {}
-      this.open = false
+      this.editData = {};
+      this.open = false;
     },
     // 修改数据
     handleUpdate(row) {
-      this.operation = 3
-      this.open = true
-      this.title = '修改角色'
-      this.editData = row
+      this.operation = 3;
+      this.open = true;
+      this.title = "修改角色";
+      this.editData = row;
     },
     handleDetail(row) {
-      this.operation = 1
-      this.open = true
-      this.title = '详情展示'
-      this.editData = row
+      this.operation = 1;
+      this.open = true;
+      this.title = "详情展示";
+      this.editData = row;
     },
     // 删除数据
     async handleDelete(row) {
-      const url = `/authority/auth-roles/${this.roleGroup}/` + row.roleId
-      const rst = await this.$axios.delete(url)
+      const url = `/authority/auth-roles/${this.roleGroup}/` + row.roleId;
+      const rst = await this.$axios.delete(url);
       if (rst.data.isSuccessed) {
-        this.$message.success('删除成功')
+        this.$message.success("删除成功");
       } else {
-        this.$message.error(`删除失败,原因:${rst.data.message}`)
+        this.$message.error(`删除失败,原因:${rst.data.message}`);
       }
       this.$nextTick(() => {
-        if (this.pagination.current !== 1 && this.authResourceApiList.length === 1){
-          this.pagination.current--
+        if (
+          this.pagination.current !== 1 &&
+          this.authResourceApiList.length === 1
+        ) {
+          this.pagination.current--;
         }
-        this.getList()
-      })
+        this.getList();
+      });
+    },
+    // 清空
+    clearOptions() {
+      this.selectedRowKeys = [];
+      this.selectRowLength = 0;
     },
     onSelectChange(selectedRowKeys) {
-      this.selectedRowKeys = selectedRowKeys
+      this.selectedRowKeys = selectedRowKeys;
+      this.selectRowLength = selectedRowKeys.length;
       if (this.selectedRowKeys.length > 0) {
-        this.multiple = false
+        this.multiple = false;
       } else {
-        this.multiple = true
+        this.multiple = true;
       }
     },
     async getList() {
-      this.loading = true
-      let url = `/authority/auth-roles?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`
+      this.loading = true;
+      let url = `/authority/auth-roles?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`;
       if (this.searchText.trim() && this.searchedColumn) {
         url =
           url +
-          '&searchFieldName=' +
+          "&searchFieldName=" +
           this.searchedColumn +
-          '&searchFieldValue=' +
-          this.searchText.trim()
+          "&searchFieldValue=" +
+          this.searchText.trim();
       }
       if (this.sorter.order && this.sorter.field) {
         url =
           url +
-          '&orderFieldName=' +
+          "&orderFieldName=" +
           this.sorter.field +
-          '&orderMethod=' +
-          this.sorter.order
+          "&orderMethod=" +
+          this.sorter.order;
       }
-      const res = await this.$axios.$get(url)
-      this.loading = false
+      const res = await this.$axios.$get(url);
+      this.loading = false;
       if (res.isSuccessed) {
         if (!res.data || !res.data.pageList) {
-          this.authResourceApiList = []
-          this.pagination.total = 0
+          this.authResourceApiList = [];
+          this.pagination.total = 0;
         } else {
-          this.searchTextApiList = res.data.pageList
+          this.searchTextApiList = res.data.pageList;
           if (this.searchTextApiList && this.searchTextApiList.length === 0) {
-            this.$emit('changeOpenLeaf', true)
+            this.$emit("changeOpenLeaf", true);
           } else {
-            this.$emit('changeOpenLeaf', false)
+            this.$emit("changeOpenLeaf", false);
           }
-          this.authResourceApiList = res.data.pageList
-          this.pagination.total = res.data.totalCount
+          this.authResourceApiList = res.data.pageList;
+          this.pagination.total = res.data.totalCount;
         }
       } else {
-        this.$message.error(`更新失败,原因:${res.message}`)
+        this.$message.error(`更新失败,原因:${res.message}`);
       }
     },
     handleAssignMenu(row) {
-      this.drawerVisible2 = true
-      this.role = row
+      this.drawerVisible2 = true;
+      this.role = row;
     },
     handleAssignAPI(row) {
-      this.$emit("openRoleApi", row)
-      console.log(row,'sss')
+      this.$emit("openRoleApi", row);
+      console.log(row, "sss");
     },
-    drawerClose(){
-      this.drawerVisible2 = false
-    }
-  }
-}
+    drawerClose() {
+      this.drawerVisible2 = false;
+    },
+  },
+};
 </script>
 
 <style scoped></style>
