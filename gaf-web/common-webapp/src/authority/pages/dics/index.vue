@@ -16,10 +16,10 @@
         </button>
       </div> -->
       <div class="let-btm">
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           字典目录
-        </div>
+        </div> -->
         <gaf-tree-transparent
           ref="myGafTree"
           :dataOfTree="dataOfTree"
@@ -29,6 +29,7 @@
           :selectedKeys.sync="selectedNodeKeys"
           :searchPlaceholder="searchPlaceholder"
           @select="onSelect"
+          :show-line="true"
         >
           <template v-slot:icon="{ iconNodeType }">
             <a-icon
