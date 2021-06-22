@@ -76,6 +76,7 @@
               onChange: onSelectChange,
             }"
             :row-key="(r) => r.buttonId"
+            @change="tableChange"
             :columns="columns.filter((item) => item.dataIndex !== 'buttonId')"
             class="table-style"
             size="middle"
