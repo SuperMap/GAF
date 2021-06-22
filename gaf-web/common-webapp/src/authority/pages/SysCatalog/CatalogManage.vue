@@ -22,13 +22,13 @@
     </div>
     <div>
       <div class="page-left">
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           <span v-if="catalogTypeActiveKey === '1'">模块分组</span>
           <span v-if="catalogTypeActiveKey === '2'">API分组</span>
           <span v-if="catalogTypeActiveKey === '3'">角色分组</span>
           <span v-if="catalogTypeActiveKey === '4'">菜单分组</span>
-        </div>
+        </div> -->
         <gaf-tree-transparent
           ref="myGafTreeTransparent"
           :searchPlaceholder="searchPlaceholder"
@@ -38,6 +38,7 @@
           :autoExpandParent="true"
           :selectedKeys.sync="selectedNodeKeys"
           @select="onSelect"
+          :show-line="true"
         >
           <template v-slot:icon="{ iconNodeType }">
             <slot

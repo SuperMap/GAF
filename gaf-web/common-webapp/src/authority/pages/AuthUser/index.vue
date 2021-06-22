@@ -10,10 +10,10 @@
         >
       </div> -->
       <div class="tree-div">
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           部门用户
-        </div>
+        </div> -->
         <gaf-tree-transparent
           ref="myGafTree"
           :searchPlaceholder="searchPlaceholder"
@@ -22,6 +22,7 @@
           :expandedNodeKeys.sync="expandedNodeKeys"
           :selectedKeys.sync="selectedNodeKeys"
           @select="onSelect"
+          :show-line="true"
         >
           <template v-slot:icon="{ iconNodeType }">
             <a-icon :type="iconNodeType.type === 2 ? 'team' : 'user'"></a-icon>

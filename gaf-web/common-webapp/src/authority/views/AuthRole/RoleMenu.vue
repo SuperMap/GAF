@@ -6,10 +6,10 @@
       </button>
     </div>
     <div >
-      <div class="tree-catalog">
+      <!-- <div class="tree-catalog">
       <span class="vertical-line">| </span>
       菜单分组目录
-      </div>
+      </div> -->
       <gaf-tree-transparent
         ref="myGafTreeTransparent2"
         :searchPlaceholder="searchPlaceholder2"
@@ -19,6 +19,7 @@
         :checkable="true"
         :checkNodeStrictly="false"
         v-model="checkedNodeKeys"
+        :show-line="true"
       >
         <template v-slot:icon="{ iconNodeType }">
           <a-icon

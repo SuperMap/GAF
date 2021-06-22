@@ -17,10 +17,10 @@
         </a-button>
       </div> -->
       <div class="let-btm">
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           部门岗位
-        </div>
+        </div> -->
         <gaf-tree-transparent
           ref="myGafTree"
           :dataOfTree="dataOfTree"
@@ -29,6 +29,7 @@
           :selectedKeys.sync="selectedNodeKeys"
           :searchPlaceholder="searchPlaceholder"
           @select="onSelect"
+          :show-line="true"
         >
           <template v-slot:icon="{ iconNodeType }">
             <a-icon
@@ -46,7 +47,7 @@
         default-active-key="6"
       >
         <a-tab-pane key="1" v-if="departmentShow" tab="部门信息">
-          <div v-show="showPaneContent">
+          <div v-show="showPaneContent" class="special-container">
             <add-edit-department
               ref="departmentAddEditForm"
               :editData="departmentEditData"
@@ -70,6 +71,7 @@
         </a-tab-pane>
         
         <a-tab-pane key="3" v-if="!departmentShow" tab="岗位信息">
+          <div class="special-container">
           <add-edit-post
             ref="postAddEditForm"
             v-show="showPaneContent"
@@ -81,6 +83,7 @@
             @cancleWhenAddPost="cancleWhenAddPost"
           >
           </add-edit-post>
+          </div>
         </a-tab-pane>
         <a-tab-pane key="4" v-if="!departmentShow" tab="绑定角色">
           <div class="main-top">

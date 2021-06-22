@@ -2,19 +2,33 @@
   <div class="app-container">
     <div>
       <div class="page-left">
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           服务类型
-        </div>
-        <gaf-tree-transparent
+        </div> -->
+        <!-- <gaf-tree-transparent
           ref="myGafTreeTransparent"
           :data-of-tree="dataOfTree"
           :search-type="[0]"
           :expanded-node-keys.sync="expandedNodeKeys"
           :show-search="false"
           @select="onSelect"
+          :show-line="true"
         >
-        </gaf-tree-transparent>
+        </gaf-tree-transparent> -->
+        <a-menu
+          :default-selected-keys="['-1']"
+          mode="inline"
+          theme="light"
+          @select="onSelect"
+        >
+          <template v-for="item in dataOfTree">
+            <a-menu-item v-if="!item.children" :key="item.key">
+              <span>{{ item.title }}</span>
+            </a-menu-item>
+            <sub-menu v-else :key="item.key" :menu-info="item" />
+          </template>
+        </a-menu>
       </div>
       <div class="page-right">
         <gaf-table-layout>
@@ -523,11 +537,11 @@ export default {
         }
       } */
     },
-    onSelect(selectedKeys, e) {
-      if (e.node.dataRef.key === "-1" || !e.selected) {
+    onSelect(item) {
+      if (item.key === "-1") {
         this.type = null;
       } else {
-        this.type = e.node.dataRef.key;
+        this.type = item.key;
       }
       this.getList();
     },
@@ -598,5 +612,18 @@ export default {
 
 .url a:active {
   color: rgb(153, 153, 153);
+}
+
+.ant-menu-item:hover {
+  color: #077EEB;
+}
+
+.ant-menu .ant-menu-item-selected {
+  background-color: #DEEFFF;
+  color: #077EEB;
+}
+
+.ant-menu-item:after {
+  border-right: 3px solid #1890ff;
 }
 </style>
