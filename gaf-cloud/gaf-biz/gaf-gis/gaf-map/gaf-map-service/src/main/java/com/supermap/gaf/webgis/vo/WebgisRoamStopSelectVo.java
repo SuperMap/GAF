@@ -32,6 +32,7 @@ public class WebgisRoamStopSelectVo {
     private String searchFieldValue;
     @QueryParam("equalFieldName")
     @ApiModelProperty("等值查询字段名")
+    @StringRange(entityClass = WebgisRoamStop.class, message = "不在指定的字段名范围内")
     private String equalFieldName;
     @QueryParam("equalFieldValue")
     @ApiModelProperty("等值查询字段值")

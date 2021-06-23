@@ -108,7 +108,7 @@ public class WebgisServiceResource{
             @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[0,infinity]",paramType = "query", dataType = "integer"),
             @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range[0,infinity]", paramType = "query", dataType = "integer"),
             @ApiImplicitParam(name = "layerCatalogId",value = "资源目录id",paramType = "query",dataType = "string",required = true )})
-    public MessageResult<Page> pageList(@BeanParam WebgisServiceConditonVo webgisServiceConditonVo,
+    public MessageResult<Page> pageList(@Valid @BeanParam WebgisServiceConditonVo webgisServiceConditonVo,
                                         @DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
                                         @DefaultValue("10")@QueryParam("pageSize")Integer pageSize,
                                         @QueryParam("layerCatalogId") String layerCatalogId){
