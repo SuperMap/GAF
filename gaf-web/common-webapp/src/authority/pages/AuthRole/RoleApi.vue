@@ -36,10 +36,10 @@
           </button>
         </div> -->
         <div class="selectroleApi">分配API到: {{roleId.roleName}}</div>
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           API分组目录
-        </div>
+        </div> -->
           <gaf-tree-transparent
             ref="myGafTreeTransparent"
             :searchPlaceholder="searchPlaceholder2"
@@ -48,6 +48,7 @@
             :expandedNodeKeys.sync="expandedNodeKeys2"
             :selectedKeys.sync="selectedNodeKeys2"
             @select="onSelect2"
+            :show-line="true"
           >
             <template v-slot:icon="{ iconNodeType }">
               <a-icon :type="iconNodeType.type === 5 ? tag : tags"></a-icon>
@@ -230,5 +231,6 @@
   padding: 5px 10px;
   border-radius: 5px;
   font-weight: bold;
+  margin-bottom: 10px
 }
 </style>

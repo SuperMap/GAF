@@ -25,10 +25,10 @@
     </div>
     <div class="bottom">
       <div class="page-left">
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           分组目录
-        </div>
+        </div> -->
         <gaf-tree-transparent
           ref="myGafTreeTransparent"
           :searchPlaceholder="searchPlaceholder"
@@ -38,6 +38,7 @@
           :autoExpandParent="true"
           :selectedKeys.sync="selectedNodeKeys"
           @select="onSelect"
+          :show-line="true"
         ></gaf-tree-transparent>
       </div>
       <div class="page-right">

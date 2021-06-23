@@ -22,10 +22,10 @@
           </template>
         </gaf-tree-transparent> -->
         <div class="selectModule">API关联所属模块: {{selectModule.name}}</div>
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           API分组目录
-        </div>
+        </div> -->
         <gaf-tree-transparent
           ref="myGafTreeTransparent"
           :searchPlaceholder="searchPlaceholder2"
@@ -34,6 +34,7 @@
           :expandedNodeKeys.sync="expandedNodeKeys2"
           :selectedKeys.sync="selectedNodeKeys2"
           @select="onSelect2"
+          :show-line="true"
         >
           <template v-slot:icon="{ iconNodeType }">
             <a-icon :type="iconNodeType.type === 2 ? tag : tags"></a-icon>

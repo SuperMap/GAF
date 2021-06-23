@@ -72,7 +72,7 @@ public class DataWorkspaceResource{
 
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult<Page> pageList(@BeanParam DataWorkspaceSelectVo dataWorkspaceSelectVo,
+    public MessageResult<Page> pageList(@Valid @BeanParam DataWorkspaceSelectVo dataWorkspaceSelectVo,
 										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
         if(StringUtils.isEmpty(dataWorkspaceSelectVo.getOrderFieldName())){

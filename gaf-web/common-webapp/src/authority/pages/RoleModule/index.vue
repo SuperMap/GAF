@@ -9,10 +9,10 @@
     </div>
     <div class="bottom">
       <div class="page-left">
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           菜单分组目录
-        </div>
+        </div> -->
         <gaf-tree-transparent
           ref="myGafTreeTransparent"
           :searchPlaceholder="searchPlaceholder"
@@ -21,6 +21,7 @@
           :expandedNodeKeys.sync="expandedNodeKeys"
           :selectedKeys.sync="selectedNodeKeys"
           @select="onSelect"
+          :show-line="true"
         >
           <template v-slot:icon="{ iconNodeType }">
             <a-icon
@@ -32,10 +33,10 @@
       <div class="page-right">
         <div class="main-top"></div>
         <div class="main-top-left">
-          <div class="tree-catalog">
+          <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           菜单分组目录
-        </div>
+        </div> -->
           <gaf-tree-transparent
             ref="myGafTreeTransparent"
             :searchPlaceholder="searchPlaceholder2"
@@ -47,6 +48,7 @@
             :checkNodeStrictly="false"
             v-model="checkedNodeKeys"
             @select="onSelect2"
+            :show-line="true"
           >
             <template v-slot:icon="{ iconNodeType }">
               <a-icon

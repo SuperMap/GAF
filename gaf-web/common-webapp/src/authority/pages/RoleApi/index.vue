@@ -8,10 +8,10 @@
       </a-tabs>
     </div>
     <div class="page-left">
-        <div class="tree-catalog">
+        <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           角色分配API
-        </div>
+        </div> -->
         <gaf-tree-transparent
           ref="myGafTreeTransparent"
           :searchPlaceholder="searchPlaceholder"
@@ -20,6 +20,7 @@
           :expandedNodeKeys.sync="expandedNodeKeys"
           :selectedKeys.sync="selectedNodeKeys"
           @select="onSelect"
+          :show-line="true"
         >
           <template v-slot:icon="{ iconNodeType }">
             <a-icon :type="iconNodeType.type === 5 ? tag : tags"></a-icon>
@@ -36,10 +37,10 @@
           </button>
         </div>
         <div class="main-top-left">
-          <div class="tree-catalog">
+          <!-- <div class="tree-catalog">
           <span class="vertical-line">| </span>
           API分组目录
-        </div>
+        </div> -->
           <gaf-tree-transparent
             ref="myGafTreeTransparent"
             :searchPlaceholder="searchPlaceholder2"
@@ -48,6 +49,7 @@
             :expandedNodeKeys.sync="expandedNodeKeys2"
             :selectedKeys.sync="selectedNodeKeys2"
             @select="onSelect2"
+            :show-line="true"
           >
             <template v-slot:icon="{ iconNodeType }">
               <a-icon :type="iconNodeType.type === 5 ? tag : tags"></a-icon>

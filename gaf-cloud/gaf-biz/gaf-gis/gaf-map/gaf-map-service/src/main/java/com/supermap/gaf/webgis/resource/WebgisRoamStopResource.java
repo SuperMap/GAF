@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -49,7 +50,7 @@ public class WebgisRoamStopResource{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[0,infinity]",paramType = "query", dataType = "integer"),
             @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range[0,infinity]", paramType = "query", dataType = "integer")})
-    public MessageResult<Page<WebgisRoamStop>> pageList(@BeanParam WebgisRoamStopSelectVo webgisRoamStopSelectVo,
+    public MessageResult<Page<WebgisRoamStop>> pageList(@Valid @BeanParam WebgisRoamStopSelectVo webgisRoamStopSelectVo,
 										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
         Page<WebgisRoamStop> page = webgisRoamStopService.listByPageCondition(webgisRoamStopSelectVo, pageNum, pageSize);

@@ -10,6 +10,7 @@ import com.supermap.gaf.authority.service.AuthResourceMenuService;
 import com.supermap.gaf.authority.vo.AuthResourceMenuSelectVo;
 import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.commontypes.MessageResult;
+import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -66,10 +67,10 @@ public class AuthResourceMenuResource{
     })
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult<Map<String,Object>> pageList(@QueryParam("searchFieldName")String searchFieldName,
+    public MessageResult<Map<String,Object>> pageList(@StringRange(entityClass = AuthResourceMenu.class) @QueryParam("searchFieldName")String searchFieldName,
 										@QueryParam("searchFieldValue")String searchFieldValue,
-										@QueryParam("orderFieldName")String orderFieldName,
-										@QueryParam("orderMethod")String orderMethod,
+										@StringRange(entityClass = AuthResourceMenu.class) @QueryParam("orderFieldName")String orderFieldName,
+										@StringRange({"asc","desc"}) @QueryParam("orderMethod")String orderMethod,
 										@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("50")@QueryParam("pageSize")Integer pageSize){
         if(pageNum==null || pageNum<1) {

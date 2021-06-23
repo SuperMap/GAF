@@ -1,5 +1,5 @@
 <template>
-  <div class="page-single">
+  <div class="page-container">
     <div class="grid-container">
     <div class="drawer-header">
       <template>

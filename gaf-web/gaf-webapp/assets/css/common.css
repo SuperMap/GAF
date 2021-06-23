@@ -658,8 +658,10 @@ white-space: nowrap;
 /* 模态框 title下线 */
 
 .modal-line {
-    border-bottom: 1px solid #E5E5E5;
-    padding: 15px 10px;
+    /* border-bottom: 1px solid #E5E5E5;
+    padding: 15px 10px; */
+    display: table-cell;
+    vertical-align: middle;
 }
 
 
@@ -842,8 +844,9 @@ text-align: center;
 /* grid三明治布局 */
 
 .grid-container {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
+    /* display: grid;
+    grid-template-rows: auto 1fr auto; */
+    height: 100%;
 }
 
 
@@ -851,19 +854,24 @@ text-align: center;
 
 .drawer-header {
     width: 100%;
-    position: absolute;
+    /* position: absolute;
     right: 0;
-    top: 0;
+    top: 0; */
+    display: table;
     background: #fff;
     z-index: 100;
+    height: 8%;
+    padding: 0 15px;
+    border-bottom: 1px solid #E5E5E5;
 }
 
 
 /* 抽屉内容样式 */
 
 .drawer-content {
-    height: 100%;
-    padding: 70px 10px;
+    height: 82%;
+    padding: 15px 10px;
+    overflow: auto;
 }
 
 
@@ -873,12 +881,13 @@ text-align: center;
     text-align: center;
     padding: 15px 0;
     width: 100%;
-    position: absolute;
+    /* position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: 0; */
     border-top: 1px solid #E5E5E5;
     background: #fff;
     z-index: 100;
+    height: 10%;
 }
 
 .special-container {
@@ -887,9 +896,14 @@ text-align: center;
 }
 
 .ant-drawer-body {
-    padding: 10px;
+    padding: 0px;
+    height: 100%;
 }
 
+.page-container {
+  height: 100%;
+  width: 100%
+}
 .select-box {
     margin: 15px 0 0 65%;
     position: absolute;

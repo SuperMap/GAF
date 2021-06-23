@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -83,7 +84,7 @@ public class WebgisServiceAssociationResource{
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[0,infinity]",paramType = "query", dataType = "integer"),
             @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range[0,infinity]", paramType = "query", dataType = "integer")})
-    public MessageResult<Page> pageList(@BeanParam WebgisServiceAssociationSelectVo webgisServiceAssociationSelectVo,
+    public MessageResult<Page> pageList(@Valid @BeanParam WebgisServiceAssociationSelectVo webgisServiceAssociationSelectVo,
 										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
         Page<WebgisServiceAssociation> page = webgisServiceAssociationService.listByPageCondition(webgisServiceAssociationSelectVo, pageNum, pageSize);

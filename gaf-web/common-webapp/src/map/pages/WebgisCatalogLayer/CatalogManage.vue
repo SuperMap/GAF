@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="resource-left">
-      <div class="tree-catalog">
+      <!-- <div class="tree-catalog">
         <span class="vertical-line">| </span>
         资源目录
-      </div>
+      </div> -->
       <div>
         <button
           style="height: 40px; border-top-right-radius: 20px"
@@ -23,6 +23,7 @@
         :auto-expand-parent="true"
         :selected-keys.sync="selectedNodeKeys"
         @select="onSelect"
+        :show-line="true"
       >
         <template v-slot:icon="{ iconNodeType }">
           <slot

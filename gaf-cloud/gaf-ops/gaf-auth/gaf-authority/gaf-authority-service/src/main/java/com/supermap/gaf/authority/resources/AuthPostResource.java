@@ -13,6 +13,7 @@ import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
+import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -63,10 +64,10 @@ public class AuthPostResource {
     })
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult<Map<String, Object>> pageList(@QueryParam("searchFieldName") String searchFieldName,
+    public MessageResult<Map<String, Object>> pageList(@StringRange(entityClass = AuthPost.class) @QueryParam("searchFieldName") String searchFieldName,
                                        @QueryParam("searchFieldValue") String searchFieldValue,
-                                       @QueryParam("orderFieldName") String orderFieldName,
-                                       @QueryParam("orderMethod") String orderMethod,
+                                       @StringRange(entityClass = AuthPost.class) @QueryParam("orderFieldName") String orderFieldName,
+                                       @StringRange({"asc","desc"}) @QueryParam("orderMethod") String orderMethod,
                                        @DefaultValue("1")@QueryParam("pageNum") Integer pageNum,
                                        @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
         if (pageNum == null || pageNum < 1) {
