@@ -78,6 +78,7 @@ public class DataWorkspaceSelectVo {
     private Boolean published;
     @QueryParam("equalFieldName")
     @ApiModelProperty("等值查询字段名 可查null")
+    @StringRange(entityClass = DataWorkspace.class, message = "不在指定的字段名范围内")
     private String equalFieldName;
     @QueryParam("equalFieldValue")
     @ApiModelProperty("等值查询值 可查null")
