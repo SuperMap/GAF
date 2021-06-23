@@ -10,7 +10,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * 改注解用于校验字段名是否在指定范围内
+ * 该注解用于校验字段名是否在指定范围内
  * range和entityClass至少一个不为空
  * 都不为空则范围求并集
  * @author wxl
