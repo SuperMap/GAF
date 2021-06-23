@@ -1,13 +1,11 @@
 package com.supermap.gaf.validator;
 
-import org.apache.commons.collections4.CollectionUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -17,15 +15,16 @@ import java.util.stream.Collectors;
  */
 public class StringRangeValidator implements ConstraintValidator<StringRange, String> {
 
-    private List<String> range;
+    private Set<String> range;
 
     @Override
     public void initialize(StringRange constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
         Field[] declaredFields = constraintAnnotation.entityClass().getDeclaredFields();
-        List<String> fieldNames= Arrays.stream(declaredFields).map(field -> field.getName().replaceAll("([A-Z])", "_$1").toLowerCase()).collect(Collectors.toList());
-        List<String> specifiedRange = Arrays.stream(constraintAnnotation.value()).map(String::toLowerCase).collect(Collectors.toList());
-        range = new ArrayList<>(CollectionUtils.union(fieldNames, specifiedRange));
+        Set<String> fieldNames = Arrays.stream(declaredFields).map(field -> field.getName().replaceAll("([A-Z])", "_$1").toLowerCase()).collect(Collectors.toSet());
+        Set<String> specifiedRange = Arrays.stream(constraintAnnotation.value()).map(String::toLowerCase).collect(Collectors.toSet());
+        fieldNames.addAll(specifiedRange);
+        range= fieldNames;
     }
 
     @Override
