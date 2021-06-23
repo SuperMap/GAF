@@ -15,6 +15,8 @@ public class StringRangeValidatorTest {
     private static String orderReplaceTemplate = "@StringRange(entityClass = %s.class,message = \"不在指定的字段名范围内\")\n    private String orderFieldName;";
     private static Pattern searchFieldNamePattern = Pattern.compile("private String searchFieldName;");
     private static String searchReplaceTemplate = "@StringRange(entityClass = %s.class,message = \"不在指定的字段名范围内\")\n    private String searchFieldName;";
+    private static Pattern equalFieldNamePattern = Pattern.compile("private String equalFieldName;");
+    private static String equalReplaceTemplate = "@StringRange(entityClass = %s.class,message = \"不在指定的字段名范围内\")\n    private String equalFieldName;";
     private static Pattern orderMethodPattern = Pattern.compile("private String orderMethod;");
     private static String orderMethodReplace = "@StringRange(value = {\"asc\",\"desc\"},message = \"不在指定的范围[asc,desc]内\")\n    private String orderMethod;";
 
@@ -37,8 +39,12 @@ public class StringRangeValidatorTest {
     }
 
     public static void main(String[] args) throws IOException {
+        final Path start = Paths.get("C:\\work\\development\\workspace\\GAF\\gaf-cloud");
+        replace(start);
+    }
 
-        Files.walkFileTree(Paths.get("C:\\work\\development\\workspace\\GAF\\gaf-cloud"), new FileVisitor<Path>() {
+    private static void replace(Path start) throws IOException {
+        Files.walkFileTree(start, new FileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                 return FileVisitResult.CONTINUE;
@@ -56,8 +62,9 @@ public class StringRangeValidatorTest {
                     String entityClassName = name.substring(0, name.indexOf("SelectVo.java"));;
                     String s = orderFileNamePattern.matcher(srcSelectVo).replaceFirst(String.format(orderReplaceTemplate, entityClassName));
                     String s1 = searchFieldNamePattern.matcher(s).replaceFirst(String.format(searchReplaceTemplate, entityClassName));
-                    String s2 = orderMethodPattern.matcher(s1).replaceFirst(orderMethodReplace);
-                    stringToFile(s2,file1);
+                    String s2 = equalFieldNamePattern.matcher(s1).replaceFirst(String.format(equalReplaceTemplate, entityClassName));
+                    String s3 = orderMethodPattern.matcher(s2).replaceFirst(orderMethodReplace);
+                    stringToFile(s3,file1);
                 } else if (name.endsWith("Resource.java")) {
                     String srcResource = asString(file1);
                     String entityClassName = name.substring(0, name.indexOf("Resource.java"));;
@@ -80,6 +87,5 @@ public class StringRangeValidatorTest {
                 return FileVisitResult.CONTINUE;
             }
         });
-
     }
 }
