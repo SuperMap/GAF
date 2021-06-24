@@ -122,7 +122,7 @@ public class SysCatalogResource implements SysCatalogClient {
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/resource-root-catalogs")
-    public MessageResult<Page<SysCatalog>> pageListResourceRootCatalog(@NotNull @StringRange(entityClass = SysCatalog.class) @QueryParam("searchFieldName")String searchFieldName,
+    public MessageResult<Page<SysCatalog>> pageListResourceRootCatalog(@StringRange(entityClass = SysCatalog.class) @QueryParam("searchFieldName")String searchFieldName,
 										@QueryParam("searchFieldValue")String searchFieldValue,
 										@StringRange(entityClass = SysCatalog.class) @QueryParam("orderFieldName")String orderFieldName,
 										@StringRange({"asc","desc"}) @QueryParam("orderMethod")String orderMethod,
