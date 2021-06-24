@@ -114,7 +114,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <a-drawer
+    <gaf-drawer
       :visible="modalVisible"
       :width="500"
       :footer="null"
@@ -134,7 +134,7 @@
         @addPostSuccess="afterFormAddSuccess"
         @cancleWhenAddPost="cancleWhenAdd"
       ></add-edit-post>
-    </a-drawer>
+    </gaf-drawer>
   </div>
 </template>
 
