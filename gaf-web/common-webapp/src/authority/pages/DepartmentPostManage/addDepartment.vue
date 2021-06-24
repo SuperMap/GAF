@@ -115,7 +115,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <a-drawer
+    <gaf-drawer
       :visible="modalVisible"
       :width="500"
       :footer="null"
@@ -134,7 +134,7 @@
         @addDepartmentSuccess="afterFormAddSuccess"
         @cancleWhenAddDepartment="cancleWhenAdd"
       ></add-edit-department>
-    </a-drawer>
+    </gaf-drawer>
   </div>
 </template>
 

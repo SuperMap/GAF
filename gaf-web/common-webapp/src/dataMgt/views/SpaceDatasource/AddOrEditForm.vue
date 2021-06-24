@@ -403,7 +403,7 @@
             allow-clear
             style="width:69%"
           />
-          <gaf-upload @fileRemove="fileRemove" accept=".ubd,.udbx,.udd"  text="选择" dir="datas/" minioServiceUrl="/storage/file-storage/" @uploadComplate="uploadChange"></gaf-upload>
+          <gaf-upload @fileRemove="fileRemove" accept=".udb,.udbx,.udd"  text="选择" dir="datas/" minioServiceUrl="/storage/file-storage/" @uploadComplate="uploadChange"></gaf-upload>
         </a-form-item>
 
 

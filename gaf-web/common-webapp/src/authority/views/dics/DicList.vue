@@ -129,7 +129,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-	<a-drawer
+	<gaf-drawer
     :visible="open"
     :width="500"
     :footer="null"
@@ -146,7 +146,7 @@
       :operation="operation"
     >
     </add-edit-form>
-  </a-drawer>
+  </gaf-drawer>
   </div>
 </template>
 

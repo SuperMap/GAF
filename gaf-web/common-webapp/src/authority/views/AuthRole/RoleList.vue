@@ -112,7 +112,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <a-drawer
+    <gaf-drawer
       :visible="modalVisible"
       :width="500"
       :footer="null"
@@ -134,8 +134,8 @@
         :dataOfTree="dataOfTree"
       >
       </add-edit-form>
-    </a-drawer>
-    <a-drawer
+    </gaf-drawer>
+    <gaf-drawer
       placement="right"
       :closable="false"
       :visible="drawerVisible2"
@@ -144,7 +144,7 @@
       @close="drawerClose"
     >
       <role-menu :role="role"></role-menu>
-    </a-drawer>
+    </gaf-drawer>
   </div>
 </template>
 
