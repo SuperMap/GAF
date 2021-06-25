@@ -13,6 +13,8 @@ import com.supermap.gaf.authority.enums.NodeTypeEnum;
 import com.supermap.gaf.authority.util.TreeConvertUtil;
 import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.commontypes.Page;
+import com.supermap.gaf.data.access.commontypes.RevisionSortSnParam;
+import com.supermap.gaf.data.access.dao.BatchSortAndCodeMapper;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
@@ -25,8 +27,6 @@ import com.supermap.gaf.sys.mgt.model.DictType;
 import com.supermap.gaf.sys.mgt.service.SysCatalogService;
 import com.supermap.gaf.sys.mgt.service.SysDictService;
 import com.supermap.gaf.sys.mgt.vo.SysDictSelectVo;
-import com.supermap.gaf.data.access.commontypes.RevisionSortSnParam;
-import com.supermap.gaf.data.access.dao.BatchSortAndCodeMapper;
 import com.supermap.gaf.utils.TreeUtil;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
@@ -89,6 +89,23 @@ public class SysDictServiceImpl implements SysDictService {
             dictData.setExtProperties(sysDict.getExtProperties());
             return dictData;
         }).sorted(Comparator.comparingInt(DictData::getSeq)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DictDataNode> getAllDictDataTreeNode(String dictTypeCode) {
+        List<DictDataNode> all = ((SysDictService)AopContext.currentProxy()).getDictDataTree(dictTypeCode);
+        if(all == null || all.size() == 0) {
+            return null;
+        }
+        List<DictDataNode> result = new LinkedList<>();
+        TreeUtil.deepFirstTraverseTree(all,(dictDataNode, dictDataNodeIterator) -> {
+            result.add(dictDataNode);
+            return TreeUtil.VisitResult.CONTINUE;
+        });
+        result.forEach(dictDataNode -> {
+            dictDataNode.setChildren(null);
+        });
+        return result;
     }
 
     @Override
