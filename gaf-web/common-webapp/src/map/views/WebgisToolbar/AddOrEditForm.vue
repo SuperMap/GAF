@@ -115,7 +115,7 @@
       </a-form>
     </div>
     <div>
-      <a-drawer
+      <gaf-drawer
         title="编辑按钮"
         :width="450"
         :visible="visible"
@@ -210,7 +210,7 @@
           <button @click="onClose" class="draws-cancel">取消</button>
           <button @click="saveClose" class="draws-ok">确定</button>
         </div>
-      </a-drawer>
+      </gaf-drawer>
     </div>
   </div>
 </template>

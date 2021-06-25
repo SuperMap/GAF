@@ -99,7 +99,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <a-drawer
+    <gaf-drawer
       :visible="modalVisible"
       :width="500"
       :footer="null"
@@ -121,7 +121,7 @@
         :module-group-path="moduleGroupPath"
       >
       </add-edit-form>
-    </a-drawer>
+    </gaf-drawer>
   </div>
 </template>
 
