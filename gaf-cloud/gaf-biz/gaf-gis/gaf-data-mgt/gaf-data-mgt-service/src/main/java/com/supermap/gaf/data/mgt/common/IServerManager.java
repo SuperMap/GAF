@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.data.mgt.entity.HostServerConfig;
 import com.supermap.gaf.data.mgt.entity.HostServerSetting;
+import com.supermap.gaf.data.mgt.entity.IServerInstance;
 import com.supermap.gaf.data.mgt.entity.IServerWorkspace;
 import com.supermap.gaf.data.mgt.service.publisher.config.UrlConfig;
 import com.supermap.gaf.exception.GafException;
@@ -357,11 +358,108 @@ public class IServerManager implements InitializingBean {
                     workspaceList.add(iServerWorkspace);
                 }
             } else {
-                throw new GafException("获取isever工作空间异常,状态码：" + state);
+                throw new GafException(String.format("获取isever工作空间异常,状态码：%d", state));
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            throw new GafException(String.format("获取isever工作空间异常,%s", e.getMessage()));
         }
         return workspaceList;
+    }
+
+    /**
+     * 根据服务类型查询服务实例列表
+     */
+    public List<IServerInstance> queryInstanceByType(String serviceType) {
+        List<IServerInstance> iServerInstances = new ArrayList<>(16);
+        MessageResult<String> applyTokenResult = applyToken();
+        if (!applyTokenResult.isSuccessed()) {
+            throw new GafException(String.format("申请iserver token失败，%s", applyTokenResult.getMessage()));
+        }
+        String token = applyTokenResult.getData();
+        HostServerSetting hostServerSetting = getAvailableIServerSetting();
+        String iServerDomainUrl = hostServerSetting.getDomainUrl();
+        try (CloseableHttpClient httpCilent = HttpClients.createDefault()) {
+            String nameFlag = buildNameFlag(serviceType);
+            HashMap<String, String> headers = new HashMap<String, String>(16);
+            headers.put("content-type", " application/x-www-form-urlencoded;charset=UTF-8");
+            headers.put("access_token", "access_token");
+            headers.put("content", "utf-8");
+            String instanceNameUrl = UrlConfig.getInstanceNameUrl(hostServerSetting.getHostServerUrl(), token);
+            HttpResponse httpResponse = httpCilent.execute(HttpClientUtil.getInstance().getHttpGet(instanceNameUrl, headers));
+            int state = httpResponse.getStatusLine().getStatusCode();
+            String respStr = EntityUtils.toString(httpResponse.getEntity());
+            if (state == HttpStatus.SC_OK) {
+                JSONArray responseArray = JsonUtils.JSONStrToJSONArray(respStr);
+                for (int i = 0; i < responseArray.size(); i++) {
+                    IServerInstance iServerInstance = new IServerInstance();
+                    String responseOne = responseArray.get(i).toString();
+                    //项目类型为空，返回全部
+                    String componentName = JsonUtils.getValueFromJSONStr(responseOne, "componentName").toString();
+                    if (!StringUtils.isEmpty(nameFlag) && !componentName.contains(nameFlag)) {
+                        continue;
+                    }
+
+                    String name = JsonUtils.getValueFromJSONStr(responseOne, "name").toString();
+                    Object enabled = JsonUtils.getValueFromJSONStr(responseOne, "enabled");
+                    String status = JsonUtils.getValueFromJSONStr(responseOne, "status").toString();
+                    iServerInstance.setName(name);
+                    iServerInstance.setType(getTypeByComponentName(componentName));
+                    iServerInstance.setUrl(String.format("%s/services/%s", iServerDomainUrl, name));
+                    iServerInstance.setEnabled((Boolean) enabled);
+                    iServerInstance.setStatus(status);
+                    iServerInstances.add(iServerInstance);
+                }
+            } else {
+                throw new GafException(String.format("获取服务实例列表异常,状态码：%d", state));
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new GafException(String.format("获取服务实例列表异常,%s", e.getMessage()));
+        }
+        return iServerInstances;
+    }
+
+    /**
+     * 根据名称获取类型
+     */
+    private String getTypeByComponentName(String componentName) {
+        if (StringUtils.isEmpty(componentName)) {
+            return null;
+        }
+        if (componentName.contains("data-")) {
+            return "DataService";
+        } else if (componentName.contains("spatialAnalysis-")) {
+            return "SpatialAnalystService";
+        } else if (componentName.contains("3D-")) {
+            return "RealspaceService";
+        } else if (componentName.contains("map-")) {
+            return "MapService";
+        }
+        return null;
+    }
+
+    /**
+     * 根据服务类型构建名称标志
+     */
+    private String buildNameFlag(String serviceType) {
+        String nameFlag = "";
+        //类型为空则返回全部
+        if (StringUtils.isEmpty(serviceType)) {
+            return nameFlag;
+        }
+        if ("DataService".equalsIgnoreCase(serviceType)) {
+            nameFlag = "data-";
+        } else if ("SpatialAnalystService".equalsIgnoreCase(serviceType)) {
+            nameFlag = "spatialAnalysis-";
+        } else if ("RealspaceService".equalsIgnoreCase(serviceType)) {
+            nameFlag = "3D-";
+        } else if ("MapService".equalsIgnoreCase(serviceType)) {
+            nameFlag = "map-";
+        }
+        if (StringUtils.isEmpty(nameFlag)) {
+            throw new GafException("无效的服务类型，现只支持：MapService\\DataService\\RealspaceService\\SpatialAnalystService");
+        }
+        return nameFlag;
     }
 }

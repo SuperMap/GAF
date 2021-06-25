@@ -8,7 +8,9 @@ package com.supermap.gaf.data.mgt.resource;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.data.mgt.common.IServerManager;
 import com.supermap.gaf.data.mgt.entity.HostServerSetting;
+import com.supermap.gaf.data.mgt.entity.IServerInstance;
 import com.supermap.gaf.data.mgt.entity.IServerWorkspace;
+import com.supermap.gaf.data.mgt.service.IServerInstanceService;
 import com.supermap.gaf.data.mgt.service.IServerWorkspaceService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class IServerResource {
 
     @Autowired
     private IServerWorkspaceService iServerWorkspaceService;
+    @Autowired
+    private IServerInstanceService iServerInstanceService;
 
     @Autowired
     private IServerManager iServerManager;
@@ -53,6 +57,14 @@ public class IServerResource {
     @Path("/workspaces/remove-by-name")
     public MessageResult<Boolean> deleteWorkspaces(@QueryParam("workspaceName") String workspaceName) {
         return iServerWorkspaceService.deleteWorkspacesByName(workspaceName);
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/instances/list-by-type")
+    public MessageResult<List> queryInstances(@QueryParam("serviceType") String serviceType) {
+        List<IServerInstance> instances = iServerInstanceService.queryInstanceByType(serviceType);
+        return MessageResult.successe(List.class).data(instances).status(200).message("查询成功").build();
     }
 
 }
