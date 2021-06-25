@@ -44,6 +44,24 @@ public class SysDictResource implements SysDictClient {
     }
 
     /**
+     * 根据字典类别编码获取字典树的所有节点
+     * 未组装为树形结构
+     * @param dictTypeCode 字典类别编码
+     * @return 若未查询到则返回null
+     */
+    @ApiOperation(value = "查询字典数据所有树节点", notes = "根据字典类别编码查询字典数据树节点,若查询到则返回未组装为树形结构的节点,若未查到则返回的字典数据为null")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "dictTypeCode", value = "字典类别编码", example = "ServiceType", paramType = "path", dataType = "string", required = true),
+    })
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{dictTypeCode}/all-treenodes")
+    public MessageResult<List<DictDataNode>> getAllDictDataTreeNode(@PathParam("dictTypeCode") String dictTypeCode) {
+        List<DictDataNode> dictDataNodeList = sysDictService.getAllDictDataTreeNode(dictTypeCode);
+        return MessageResult.data(dictDataNodeList).build();
+    }
+
+    /**
      * 根据字典类别编码获取字典树
      *
      * @param dictTypeCode 字典类别编码
