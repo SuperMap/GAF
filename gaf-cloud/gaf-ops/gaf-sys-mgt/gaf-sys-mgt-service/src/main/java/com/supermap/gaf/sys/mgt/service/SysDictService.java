@@ -30,6 +30,13 @@ public interface SysDictService {
     List<DictData> getDictData(String dictTypeCode);
 
     /**
+     * 根据字典类别编码查询字典数据树节点,若查询到则返回未组装为树形结构的节点,若未查到则返回的字典数据为null
+     * @param dictTypeCode 字典类别编码
+     * @return 若查询到返回未组装为树形结构的节点,若未查到则返回的字典数据为null
+     */
+    List<DictDataNode> getAllDictDataTreeNode(String dictTypeCode);
+
+    /**
      * 查询树形结构的字典数据
      * 根据字典类别编码查询树形结构的字典数据,若未查到则返回的字典数据为null
      * @param dictTypeCode 字典类别编码
@@ -124,4 +131,6 @@ public interface SysDictService {
      * @return 若为查询到则返回null
      */
     DictType getDictType(String dictTypeCode);
+
+
 }
