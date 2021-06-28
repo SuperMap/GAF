@@ -105,6 +105,7 @@
         :centered="true"
         destroy-on-close
         @cancel="handleBack"
+        :title="title"
       >
         <add-edit-form
           :title="title"

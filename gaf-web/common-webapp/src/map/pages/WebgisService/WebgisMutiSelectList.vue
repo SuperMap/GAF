@@ -30,7 +30,7 @@
         allow-clear
         @search="onSearch"
       >
-        <button slot="enterButton" class="btn-search" style="height: 32px"> 搜索 </button>
+        <!-- <button slot="enterButton" class="btn-search" style="height: 32px"> 搜索 </button> -->
       </a-input-search>
     </div>
     <div>

@@ -12,7 +12,7 @@
         style="width: 320px"
         @search="onSearch"
       >
-        <button slot="enterButton" class="btn-search"> 搜索 </button>
+        <!-- <button slot="enterButton" class="btn-search"> 搜索 </button> -->
       </a-input-search>
     </template>
     <template #default>
