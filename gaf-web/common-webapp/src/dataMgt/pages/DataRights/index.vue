@@ -3,18 +3,18 @@
     <div class="page-single">
     <gaf-table-layout>
       <template #actions>
-        <button @click="handleAdd" class="btn-fun blue">
+        <button @click="handleAdd" class="btn-fun blue btn-16">
           <span><a-icon type="plus" />
-         新增数据权限</span>
+         新增</span>
         </button>
         <a-popconfirm
-          class="btn-fun red"
+          class="btn-fun blue"
           title="删除后无法恢复，确认是否继续?"
           ok-text="确认"
           cancel-text="取消"
           @confirm="() => batchDel()"
         >
-          <button class="btn-fun red">
+          <button class="btn-fun blue">
             <a-icon type="delete" />
             <span>批量删除</span>
           </button>
@@ -27,9 +27,9 @@
             placeholder="请输入编号查询"
             size="large"
           >
-            <button slot="enterButton" class="btn-search">
+            <!-- <button slot="enterButton" class="btn-search">
               搜索
-            </button>
+            </button> -->
           </a-input-search>
         </div>
       </template>

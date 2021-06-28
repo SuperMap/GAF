@@ -1,12 +1,12 @@
 <template>
   <div class="page-container">
-    <template>
+    <!-- <template>
       <a-breadcrumb separator=">" class="modal-line">
         <a-breadcrumb-item class="tree-catalog" style="line-height: 15px"
           ><span class="vertical-line">| </span>{{ title }}</a-breadcrumb-item
         >
       </a-breadcrumb>
-    </template>
+    </template> -->
     <div class="page-modal-box">
       <a-form
         :form="addOrEditForm"
@@ -119,10 +119,16 @@
         title="编辑按钮"
         :width="450"
         :visible="visible"
-        :body-style="{ paddingBottom: '100px' }"
         @close="onClose"
+        :closable="false"
       >
-        <a-form :form="form" layout="vertical" hide-required-mark>
+        <a-form
+          :form="form"
+          layout="horizontal"
+          hide-required-mark
+          :label-col="{ span: 7 }"
+          :wrapper-col="{ span: 15 }"
+        >
           <a-row :gutter="24">
             <a-col :span="20">
               <a-form-item label="图标">
@@ -203,12 +209,13 @@
             borderTop: '1px solid #e9e9e9',
             padding: '10px 16px',
             background: '#fff',
-            textAlign: 'right',
+            textAlign: 'center',
             zIndex: 1,
           }"
         >
-          <button @click="onClose" class="draws-cancel">取消</button>
-          <button @click="saveClose" class="draws-ok">确定</button>
+          <button @click="onClose" class="cancel-modal">取消</button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button @click="saveClose" class="submit-gray">确定</button>
         </div>
       </gaf-drawer>
     </div>

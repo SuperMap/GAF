@@ -668,15 +668,23 @@ white-space: nowrap;
 /* 模态框 关闭按钮 */
 
 button.ant-modal-close {
-    margin-top: 16px;
-    color: black;
+    /* margin-top: 16px; */
+    color: #fff;
     font-weight: bolder;
 }
 
 button.ant-modal-close:hover {
-    color: red;
+    color: #ccc;
 }
 
+/* 模态框头部样式*/
+.ant-modal-header {
+  background: #20252E;
+}
+
+.ant-modal-title {
+  color: #fff;
+}
 
 /* 目录树 标题 */
 
@@ -908,3 +916,4 @@ text-align: center;
     margin: 15px 0 0 65%;
     position: absolute;
 }
+
