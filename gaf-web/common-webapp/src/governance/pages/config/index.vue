@@ -179,6 +179,7 @@ const columns = [
     // align: "center",
     fixed: 'right',
     key: "action",
+    width: 300,
     scopedSlots: { customRender: "action" },
   },
 ];
