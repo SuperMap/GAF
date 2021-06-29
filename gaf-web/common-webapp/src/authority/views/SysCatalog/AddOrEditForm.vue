@@ -4,7 +4,6 @@
     <div class="drawer-header">
     <template>
       <a-breadcrumb separator=">" class="modal-line">
-        <span class="vertical-line">| </span>
         <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>
@@ -12,8 +11,8 @@
     <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
-        :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 15 }"
+        :label-col="{ span: 4 }"
+        :wrapper-col="{ span: 19 }"
         layout="horizontal"
       >
         <a-form-item v-show="false" label="目录分类">
@@ -189,15 +188,15 @@
           >
           </span>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-          <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
-            {{ submitButtonText }}
-          </a-button>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           <button
+          <button
             @click="deleteDataOrCancle"
             v-if="operation === 'add'"
             class="cancel-modal"
             >{{ deleteOrCacel }}</button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
+            {{ submitButtonText }}
+          </a-button>
         </div>
         </div>
   </div>

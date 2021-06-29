@@ -611,7 +611,13 @@ export default {
 .url a:active {
   color: rgb(153, 153, 153);
 }
-
+.ant-menu-item {
+  height: 54px;
+  line-height: 54px;
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .ant-menu-item:hover {
   color: #077EEB;
 }
@@ -623,5 +629,8 @@ export default {
 
 .ant-menu-item:after {
   border-right: 3px solid #1890ff;
+}
+.page-left {
+  padding: 0;
 }
 </style>
