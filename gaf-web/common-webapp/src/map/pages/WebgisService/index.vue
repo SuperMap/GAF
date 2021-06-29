@@ -107,7 +107,7 @@
                   href="javascript:;"
                   @click.stop="() => handleUpdate(record)"
                 >
-                  编辑
+                  <u>编辑</u>
                 </a>
                 <a
                   v-if="
@@ -118,7 +118,7 @@
                   class="btn-margin"
                   @click.stop="configField(record)"
                 >
-                  配置
+                  <u>配置</u>
                 </a>
                 <a
                   v-if="
@@ -129,7 +129,7 @@
                   class="btn-margin"
                   @click.stop="linkService(record)"
                 >
-                  关联
+                  <u>关联</u>
                 </a>
                 <a-popconfirm
                   title="删除后无法恢复，确认是否继续?"
@@ -137,7 +137,7 @@
                   cancel-text="取消"
                   @confirm="() => handleDelete(record)"
                 >
-                  <a href="javascript:;"> 删除</a>
+                  <a href="javascript:;"> <u>删除</u></a>
                 </a-popconfirm>
               </template>
               <template v-if="timeFormat" slot="timeRender" slot-scope="text">
@@ -277,7 +277,7 @@ export default {
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
-          width: "135px",
+          width: "12%",
           dataIndex: "name",
           key: "name",
         },
@@ -285,7 +285,7 @@ export default {
           title: "服务类型",
           dataIndex: "typeCode",
           key: "type_code",
-          width: "135px",
+          width: "12%",
           scopedSlots: { customRender: "serviceType" },
         },
         {
@@ -293,19 +293,17 @@ export default {
           dataIndex: "address",
           key: "address",
           scopedSlots: { customRender: "address" },
-          width: "400px",
+          width: "35%",
         },
         {
           title: "时态",
           dataIndex: "timeAttribute",
           key: "time_attribute",
-          width: "135px",
+          width: "12%",
           scopedSlots: { customRender: "timeRender" },
         },
         {
           title: "操作",
-          fixed: 'right',
-          width: "400px",
           scopedSlots: { customRender: "operation" },
         },
       ];

@@ -80,13 +80,13 @@
                 href="javascript:;"
                 class="btn-margin"
               >
-                详情
+                <u>详情</u>
               </a>
               <a
                 @click.stop="() => handleUpdate(record)"
                 href="javascript:;"
                 class="btn-margin"
-                >编辑
+                ><u>编辑</u>
               </a>
               <a-popconfirm
                 @confirm="() => handleDelete(record)"
@@ -94,7 +94,7 @@
                 ok-text="确认"
                 cancel-text="取消"
               >
-                <a href="javascript:;">删除</a>
+                <a href="javascript:;"><u>删除</u></a>
               </a-popconfirm>
             </template>
 
@@ -216,7 +216,7 @@ export default {
         },
         {
           title: "操作",
-          fixed: "right",
+          // fixed: "right",
           scopedSlots: { customRender: "operation" },
         },
       ];

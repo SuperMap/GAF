@@ -42,18 +42,18 @@
           <div class="search-position" style="width: 850px">
             <a-row type="flex" justify="end">
               <a-col :span="12">
-                <label style="font-size: 18px">时态：</label>
+                <label style="font-size: 16px">时态：</label>
                 <a-range-picker
                   :show-time="{ format: 'HH:mm:ss' }"
                   :value="timeRange"
                   @change="onPickerChange"
                   @ok="onPickerOk"
                   size="large"
-                  style="width: 220px"
+                  style="width: 240px;margin-right:10px"
                   format="YYYY-MM-DD"
                 />
               </a-col>
-              <a-col :span="8">
+              <a-col :span="6">
                 <a-input-search
                   @search="onSearch"
                   placeholder="请输入数据源别名查询"
@@ -143,7 +143,7 @@
                 href="javascript:;"
                 class="btn-margin"
               >
-                详情
+                <u>详情</u>
               </a>
               <!-- <a-divider type="vertical" />
                 <a @click.stop="() => handleUpdate(record)" href="javascript:;" class="btn-edit">
@@ -155,7 +155,7 @@
                 ok-text="确认"
                 cancel-text="取消"
               >
-                <a href="javascript:;">删除</a>
+                <a href="javascript:;"><u>删除</u></a>
               </a-popconfirm>
             </template>
             <template slot="timeRender" v-if="timeFormat" slot-scope="text">
@@ -271,13 +271,14 @@ export default {
   computed: {
     columns: function () {
       const columns = [
-        {
-          title: "数据源id",
-          dataIndex: "datasourceId",
-          key: "datasource_id",
-        },
+        // {
+        //   title: "数据源id",
+        //   dataIndex: "datasourceId",
+        //   key: "datasource_id",
+        // },
         {
           title: "数据源别名",
+          width: '18%',
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
@@ -285,14 +286,13 @@ export default {
           },
           dataIndex: "dsName",
           key: "ds_name",
-          width: "135px",
         },
         {
           title: "数据源分类",
           dataIndex: "catalogCode",
           key: "catalog_code",
           scopedSlots: { customRender: "catalogType" },
-          width: "160px",
+          width: '10%',
         },
         // {
         //   title: '类型',
@@ -306,19 +306,19 @@ export default {
           title: "数据源类型",
           dataIndex: "typeCode",
           key: "type_code",
-          width: "160px",
+          width: '10%',
         },
         {
           title: "服务器地址",
           dataIndex: "addr",
           key: "addr",
-          width: "370px",
+          width: '20%',
         },
         {
           title: "数据库名称",
           dataIndex: "dbName",
           key: "db_name",
-          width: "135px",
+          width: '12%',
         },
         // {
         //   title: '端口',
@@ -345,13 +345,12 @@ export default {
           dataIndex: "timeAttribute",
           key: "time_attribute",
           scopedSlots: { customRender: "timeRender" },
-          width: "135px",
+          width: '10%',
         },
         {
           title: "操作",
-          fixed: 'right',
+          // width: '15%',
           scopedSlots: { customRender: "operation" },
-          width: "250px",
         },
       ];
       return this.hasPKField ? columns : columns.slice(0, columns.length - 2);
@@ -671,5 +670,8 @@ export default {
   box-shadow: 0 0 2px 2px rgba(84, 92, 100, 0.55);
   transition: linear 0.2s;
   box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.3);
+}
+.ant-calendar-range-picker-input {
+  text-align: left;
 }
 </style>

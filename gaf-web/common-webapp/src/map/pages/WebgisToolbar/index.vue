@@ -80,7 +80,7 @@
                 @click.stop="() => handleUpdate(record)"
                 href="javascript:;"
                 class="btn-margin"
-                >编辑
+                ><u>编辑</u>
               </a>
               <a-popconfirm
                 @confirm="() => handleDelete(record)"
@@ -88,7 +88,7 @@
                 ok-text="确认"
                 cancel-text="取消"
               >
-                <a href="javascript:;">删除</a>
+                <a href="javascript:;"><u>删除</u></a>
               </a-popconfirm>
             </template>
             <template v-if="timeFormat" slot="timeRender" slot-scope="text">
@@ -183,9 +183,11 @@ export default {
           title: "工具条名称",
           dataIndex: "name",
           key: "name",
+          width: '16%',
         },
         {
           title: "工具条类型",
+          width: '16%',
           scopedSlots: {
             customRender: "type",
           },
@@ -193,19 +195,21 @@ export default {
           key: "type",
         },
         {
+          width: '21%',
           title: "修改时间",
           dataIndex: "createdTime",
           key: "created_time",
           scopedSlots: { customRender: "timeRender" },
         },
         {
+          width: '28%',
           title: "工具条ID",
           dataIndex: "toolbarId",
           key: "toolbar_id",
         },
         {
           title: "操作",
-          fixed: 'right',
+          // fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ];

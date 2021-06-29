@@ -67,7 +67,7 @@
                   @click.stop="() => handleUpdate(record)"
                   href="javascript:;"
                   class="btn-margin"
-                  >编辑
+                  ><u>编辑</u>
                 </a>
                 <a-popconfirm
                   @confirm="() => handleDelete(record)"
@@ -75,7 +75,7 @@
                   ok-text="确认"
                   cancel-text="取消"
                 >
-                  <a href="javascript:;">删除</a>
+                  <a href="javascript:;"><u>删除</u></a>
                 </a-popconfirm>
               </template>
             </gaf-table-with-page>
@@ -139,19 +139,23 @@ export default {
           title: "资源目录名称",
           dataIndex: "name",
           key: "name",
+          width: '22%',
         },
         {
           title: "目录类型",
+          width: '18%',
           dataIndex: "bizTypeCode",
           key: "biz_type_code",
           scopedSlots: { customRender: "bizType" },
         },
         {
+          width: '18%',
           title: "目录描述",
           dataIndex: "description",
           key: "description",
         },
         {
+          width: '24%',
           title: "资源目录ID",
           dataIndex: "catalogId",
           key: "catalogId",
@@ -159,7 +163,7 @@ export default {
         {
           key: "operation",
           title: "操作",
-          fixed: 'right',
+          // fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ],
