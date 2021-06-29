@@ -4,7 +4,6 @@
     <div class="drawer-header">
       <template>
         <a-breadcrumb separator=">" class="modal-line">
-          <span class="vertical-line">| </span>
           <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
         </a-breadcrumb>
       </template>
@@ -16,7 +15,7 @@
       <a-form
         :form="addOrEditForm"
         :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 15 }"
+        :wrapper-col="{ span: 18 }"
         layout="horizontal"
       >
          <a-form-item v-show="false" label="是否为空间数据库">
@@ -333,7 +332,7 @@
       <a-form
         :form="addOrEditForm"
         :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 15 }"
+        :wrapper-col="{ span: 18 }"
         layout="horizontal"
       >
          <a-form-item v-show="false" label="是否为空间数据库">
@@ -606,18 +605,18 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
+      &nbsp;&nbsp;
+      <button @click="submitForm" class="submit-gray">
+        确定
+      </button>
+      &nbsp;&nbsp;
       <button
         @click="testConnect"
         class="submit-gray"
       >
         测试连接
       </button>
-      &nbsp;&nbsp;
-      <button @click="submitForm" class="submit-gray">
-        确定
-      </button>
-      &nbsp;&nbsp;
-      <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
     </div>
     </div>
   </div>
