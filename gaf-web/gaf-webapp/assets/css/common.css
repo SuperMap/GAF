@@ -201,6 +201,11 @@ box-shadow: 0 0 0 rgba(128, 128, 128, 0.3);
     text-align: left;
 }
 
+.ant-pagination-item-active:focus a,
+.ant-pagination-item-active:hover a {
+    color: #329DFF;
+}
+
 
 /* .ant-input {
   margin-top: 16px;
