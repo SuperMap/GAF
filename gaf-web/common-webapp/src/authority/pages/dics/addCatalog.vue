@@ -90,7 +90,7 @@
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;">删除</a>
+              <a href="javascript:;"><u>删除</u></a>
             </a-popconfirm>
           </template>
 
@@ -229,8 +229,6 @@ export default {
         },
         {
           title: "操作",
-          fixed: "right",
-          // fixed: 'right',
           // width: 260,
           scopedSlots: { customRender: "operation" },
         },

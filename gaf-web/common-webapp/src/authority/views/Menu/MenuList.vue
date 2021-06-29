@@ -198,11 +198,13 @@ export default {
           title: "显示名称",
           dataIndex: "name",
           key: "name",
+          width: 180,
         },
         {
           title: "图标",
           dataIndex: "icon",
           key: "icon",
+          width: 180,
         },
         // {
         //   title: '是否可见',
@@ -213,15 +215,17 @@ export default {
           title: "排序序号",
           dataIndex: "sortSn",
           key: "sort_sn",
+          width: 150,
         },
         {
           title: "描述",
           dataIndex: "description",
           key: "description",
+
         },
         {
           title: "操作",
-          fixed: 'right',
+          // fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ];

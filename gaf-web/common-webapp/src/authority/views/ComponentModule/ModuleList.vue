@@ -75,13 +75,13 @@
               href="javascript:;"
               class="btn-margin"
             >
-              详情
+              <u>详情</u>
             </a>
             <a
               @click.stop="() => handleUpdate(record)"
               href="javascript:;"
               class="btn-margin"
-              >编辑
+              ><u>编辑</u>
             </a>
 
             <a-popconfirm
@@ -90,7 +90,7 @@
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;">删除</a>
+              <a href="javascript:;"><u>删除</u></a>
             </a-popconfirm>
           </template>
           <template slot="timeRender" v-if="timeFormat" slot-scope="text">
@@ -199,11 +199,13 @@ export default {
           title: "名称",
           dataIndex: "name",
           key: "name",
+          width: 150,
         },
         {
           title: "类型",
           dataIndex: "type",
           key: "type",
+          width: 120,
           scopedSlots: { customRender: "type" },
         },
         {
@@ -216,14 +218,9 @@ export default {
           dataIndex: "moduleUrl",
           key: "module_url",
         },
-        // {
-        //   title: '图标',
-        //   dataIndex: 'iconUrl',
-        //   key: 'icon_url'
-        // },
         {
           title: "操作",
-          fixed: 'right',
+          // fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ];

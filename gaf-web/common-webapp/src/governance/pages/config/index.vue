@@ -108,7 +108,7 @@
                 href="javascript:;"
                 class="btn-margin"
               >
-                编辑
+                <u>编辑</u>
               </a>
               <!--<a-divider type="vertical" />
             <a
@@ -119,7 +119,7 @@
             </a>-->
 
               <a @click.stop="() => deployConfig(record)" href="javascript:;">
-                发布
+                <u>发布</u>
               </a>
             </span>
           </gaf-table-with-page>
@@ -177,9 +177,9 @@ const columns = [
   {
     title: "操作",
     // align: "center",
-    fixed: 'right',
+    // fixed: 'right',
     key: "action",
-    width: 300,
+    // width: 300,
     scopedSlots: { customRender: "action" },
   },
 ];
