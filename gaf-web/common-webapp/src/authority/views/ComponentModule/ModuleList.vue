@@ -3,7 +3,7 @@
     <gaf-table-layout>
       <template #actions>
         <button @click="handleAdd" class="btn-fun blue btn-16">
-          <span><a-icon type="plus-circle" /> 新增模块</span>
+          <a-icon type="plus-circle" /><span>新增模块</span>
         </button>
         <a-popconfirm
           class="btn-fun blue"

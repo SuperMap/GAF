@@ -16,7 +16,7 @@
             class="btn-fun blue btn-16"
           >
             <a-icon type="plus-circle" />
-            新增
+            <span>新增</span>
           </button>
           <a-popconfirm
             class="btn-fun blue"

@@ -4,7 +4,7 @@
       <gaf-table-layout>
         <template #actions>
           <button class="btn-fun blue btn-16" @click="createdTpl">
-            <span><a-icon type="plus-circle" />创建工程</span>
+            <a-icon type="plus-circle" /><span>创建工程</span>
           </button>
         </template>
         <template #filter>

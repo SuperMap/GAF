@@ -6,11 +6,11 @@
           <a-button
             @click="addGatewayRoute"
             type="primary"
-            icon="plus-circle"
             visible="true"
             class="btn-fun blue btn-16"
           >
-            新增
+            <a-icon type="plus-circle" />
+            <span>新增</span>
           </a-button>
           <!-- <a-button
           @click="deleteGatewayRoute"

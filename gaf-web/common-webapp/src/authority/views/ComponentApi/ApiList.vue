@@ -3,7 +3,7 @@
     <gaf-table-layout>
       <template #actions>
         <button @click="handleAdd" class="btn-fun blue btn-16">
-          <span><a-icon type="plus-circle" /> 添加API资源</span>
+          <a-icon type="plus-circle" /><span>添加API资源</span>
         </button>
         <a-popconfirm
           class="btn-fun blue"

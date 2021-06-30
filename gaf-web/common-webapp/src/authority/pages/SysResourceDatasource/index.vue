@@ -5,11 +5,10 @@
         <button
           @click="handleAdd"
           type="primary"
-          icon="plus-circle"
           visible="true"
           class="btn-fun blue btn-16"
         >
-          新增
+         <a-icon type="plus-circle" /><span>新增</span>
         </button>
         <a-popconfirm
           class="btn-fun blue"

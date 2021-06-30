@@ -7,11 +7,11 @@
       cancel-text="取消"
       @confirm="() => batchDel()"
     >
-      <button class="btn-fun blue">
+      <button class="btn-fun blue" style="margin-left: 5px;margin-top: -8px;">
         <span>批量删除</span>
       </button>
     </a-popconfirm>
-    <div class="choose-box">
+    <div class="choose-box" style="margin-top: 10px">
       <a-icon type="exclamation-circle" class="exclamation" /><span
         >已选择</span
       >
@@ -27,7 +27,7 @@
       </a-popconfirm>
     </div>
     <gaf-table-with-page
-      :scroll="{ y: 508, x: 1440 }"
+      :scroll="{ y: 508, x: 800 }"
       :show-x-h="false"
       :row-selection="{
         selectedRowKeys: selectedRowKeys,
@@ -109,17 +109,19 @@ export default {
           title: "服务名称",
           dataIndex: "name",
           key: "name",
+          width: '10%'
         },
         {
           title: "服务地址",
           dataIndex: "address",
           key: "address",
           scopedSlots: { customRender: "address" },
-          width: "550px",
+          width: "80%",
         },
         {
           title: "操作",
-          fixed: 'right',
+          width: '10%',
+          // fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ],

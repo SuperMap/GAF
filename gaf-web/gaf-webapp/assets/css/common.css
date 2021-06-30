@@ -870,9 +870,11 @@ text-align: center;
     height: 100%;
 }
 
-.ant-drawer-body .Drawer .footer .buttonGroup{
-  padding: 0;
+.ant-drawer-body .Drawer .footer .buttonGroup {
+    padding: 0;
 }
+
+
 /* 抽屉头部样式 */
 
 .drawer-header {
@@ -934,14 +936,53 @@ text-align: center;
 }
 
 .ant-tree.ant-tree-show-line li:not(:last-child)::before {
-  border-left: 1px #d9d9d9 dashed;
+    border-left: 1px #d9d9d9 dashed;
 }
 
 .ant-tree li .ant-tree-node-content-wrapper:hover {
-  background-color: #e6f7ff;
+    background-color: #e6f7ff;
 }
 
 .ant-tree.ant-tree-show-line li span.ant-tree-switcher_open {
-  background: #329DFF;
+    background: #329DFF;
 }
 
+
+/* 勾选样式 */
+
+.ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #329DFF;
+    border: 1px solid #329DFF;
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #329DFF;
+}
+
+.ant-pagination.mini .ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination.mini .ant-pagination-next .ant-pagination-item-link {
+    background: #329DFF;
+    border-color: #329DFF;
+    color: white;
+    margin: 0 8px;
+    padding: 0px 5px;
+}
+
+.ant-pagination-item-active {
+    border-color: #329DFF;
+    color: #329DFF;
+}
+
+.ant-pagination-item-active:focus,
+.ant-pagination-item-active:hover {
+    border-color: #329DFF;
+}
+
+.ant-pagination-item-active:focus a,
+.ant-pagination-item-active:hover a {
+    color: #329DFF;
+}
+
+.btn-16 span {
+    margin-left: 8px;
+}

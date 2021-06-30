@@ -4,7 +4,7 @@
       <gaf-table-layout>
         <template #actions>
           <button class="btn-fun blue btn-16" @click="handleAdd">
-            <a-icon type="plus-circle" />新增按钮
+            <a-icon type="plus-circle" /><span>新增按钮</span>
           </button>
           <a-popconfirm
             class="btn-fun blue"

@@ -3,7 +3,7 @@
     <gaf-table-layout>
       <template #actions>
         <button @click="handleAdd" class="btn-fun blue btn-16">
-          <span><a-icon type="plus-circle" /> 新增挂职</span>
+          <a-icon type="plus-circle" /><span>新增挂职</span>
         </button>
         <!-- <button @click="batchDel" class="btn-fun red">
           <span><a-icon type="delete" />
