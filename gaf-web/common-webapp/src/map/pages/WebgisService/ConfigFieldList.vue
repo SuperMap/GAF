@@ -9,7 +9,7 @@
         allow-clear
         placeholder="请输入字段名称"
         size="large"
-        style="width: 320px"
+        style="width: 320px;margin-bottom: 10px;"
         @search="onSearch"
       >
         <!-- <button slot="enterButton" class="btn-search"> 搜索 </button> -->
@@ -53,7 +53,7 @@
       </gaf-table-with-page>
     </template>
     </gaf-table-layout>
-    <div style="display: flex; justify-content: flex-end">
+    <!-- <div style="display: flex; justify-content: flex-end">
       <button
         style="color: white; margin-right: 10px"
         class="btn-ok"
@@ -62,7 +62,7 @@
         保存
       </button>
       <button class="btn-cancel" @click="onCancel">取消</button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

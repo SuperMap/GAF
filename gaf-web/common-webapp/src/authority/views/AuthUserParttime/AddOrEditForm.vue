@@ -150,6 +150,7 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <button @click="backToList" class="cancel-modal">取消</button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a-button
@@ -161,6 +162,7 @@
       >
         确定
       </a-button>
+      </div>
     </div>
     </div>
   </div>

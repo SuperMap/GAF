@@ -182,9 +182,11 @@
         width="40%"
         :centered="true"
         destroy-on-close
-        :footer="null"
+        @ok="handleOk"
+        @cancel="handleCancel"
       >
         <config-field-list
+          ref="configFieldList"
           :selected-service-id="selectedServiceId"
           @onOk="onOk"
           @onCancel="onCancel"
@@ -346,6 +348,12 @@ export default {
     this.getList();
   },
   methods: {
+    handleOk() {
+      this.$refs.configFieldList.onOk()
+    },
+    handleCancel() {
+      this.$refs.configFieldList.onCancel()
+    },
     onOk(openconfigField) {
       this.openconfigField = openconfigField;
     },

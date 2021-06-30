@@ -101,13 +101,14 @@
         v-model="open"
         :mask="false"
         :width="800"
-        :footer="null"
         :centered="true"
         destroy-on-close
         @cancel="handleBack"
         :title="title"
+        @ok="handleOk"
       >
         <add-edit-form
+          ref="addEditForm"
           :title="title"
           :btn-list="btnList"
           :edit-data="editData"
@@ -248,6 +249,9 @@ export default {
     this.getList();
   },
   methods: {
+    handleOk() {
+      this.$refs.addEditForm.submitForm()
+    },
     handleSearchFieldChange(value) {
       this.searchedColumn = value;
     },

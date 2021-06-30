@@ -95,6 +95,7 @@
     </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
         <button @click="cancelDelete" class="cancel-modal">
           {{ operation === 2 ? '取消' : '删除' }}
         </button>
@@ -102,6 +103,7 @@
         <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
           {{ operation === 2 ? '新增' : '保存' }}
         </a-button>
+      </div>
       </div>
       </div>
   </div>
