@@ -134,13 +134,13 @@
             />
           </a-form-item> -->
         <!-- </div> -->
-        <div class="btn-div">
+        <!-- <div class="btn-div">
           <button @click="submitForm" class="submit-gray">
             确定
           </button>
           &nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">取消</button>
-        </div>
+        </div> -->
       </a-form>
     </div>
   </div>

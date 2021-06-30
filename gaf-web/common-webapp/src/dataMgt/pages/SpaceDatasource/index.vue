@@ -49,7 +49,7 @@
                   @change="onPickerChange"
                   @ok="onPickerOk"
                   size="large"
-                  style="width: 240px;margin-right:10px"
+                  style="width: 240px;margin-right:10px;text-align: center;"
                   format="YYYY-MM-DD"
                 />
               </a-col>

@@ -178,6 +178,7 @@
     </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
         <button v-if="false" @click="cancelDelete" class="cancel-modal">
           删除
         </button>
@@ -193,6 +194,7 @@
         <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
           {{ operation === 2 ? '新增' : '保存' }}
         </a-button>
+      </div>
       </div>
     </div>
     <div>

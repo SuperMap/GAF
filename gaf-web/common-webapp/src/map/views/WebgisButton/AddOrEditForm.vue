@@ -146,6 +146,7 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <button class="cancel-modal" @click="backToList">
         {{ this.operation === 1 ? "返回" : "取消" }}
       </button>
@@ -158,6 +159,7 @@
       >
         确定
       </a-button>
+      </div>
     </div>
     </div>
   </div>

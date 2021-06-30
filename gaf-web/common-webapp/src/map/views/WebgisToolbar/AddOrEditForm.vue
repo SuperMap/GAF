@@ -102,7 +102,7 @@
             </template>
           </a-transfer>
         </div>
-        <div v-if="operation === 2 || operation === 3">
+        <!-- <div v-if="operation === 2 || operation === 3">
           <button
             style="margin: 0 5px 0 69%"
             class="btn-ok"
@@ -111,7 +111,7 @@
             保存
           </button>
           <button class="btn-cancel" @click="backToList">取消</button>
-        </div>
+        </div> -->
       </a-form>
     </div>
     <div>

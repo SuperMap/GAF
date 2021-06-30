@@ -108,6 +108,7 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <!-- <button
         @click="deleteData"
         v-if="operation === 'edit'"
@@ -122,6 +123,7 @@
       <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
         {{ submitButtonText }}
       </a-button>
+      </div>
     </div>
     </div>
   </div>

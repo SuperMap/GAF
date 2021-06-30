@@ -488,6 +488,7 @@ export default {
 .main-top-button {
   margin-top: 10px;
   margin-left: 10px;
+  width: 170px;
 }
 
 .add-user-btn:hover {

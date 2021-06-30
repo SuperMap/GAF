@@ -11,7 +11,7 @@
     <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
-        :label-col="{ span: 4 }"
+        :label-col="{ span: 5 }"
         :wrapper-col="{ span: 19 }"
         layout="horizontal"
       >
@@ -186,12 +186,12 @@
       </a-form>
     </div>
     <div class="drawer-footer">
-      <div v-show="operation === 1">
+      <div v-show="operation === 1" class="drawer-footer-div">
         <button @click="backToList" class="cancel-modal margin410"
           >{{this.operation === 1 ? "返回" : "取消"}}</button
         >
       </div>
-      <div style="text-align:center;" v-show="operation !== 1">
+      <div style="text-align:center;" class="drawer-footer-div" v-show="operation !== 1">
         <button @click="backToList" class="cancel-modal">取消</button>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a-button

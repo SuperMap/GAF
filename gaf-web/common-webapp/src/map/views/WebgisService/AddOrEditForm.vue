@@ -222,6 +222,7 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <button class="cancel-modal" @click="backToList">取消</button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a-button
@@ -231,12 +232,13 @@
       >
         确定
       </a-button>
+      </div>
     </div>
     </div>
     <a-modal
       :title="titleModal"
       v-model="visible"
-      :footer="null"
+      @ok="handleCancel"
     >
       <div style="background: #ECECEC">
         <a-row>
@@ -258,13 +260,13 @@
         </a-row>
       </div>
       <!-- <p>{{ registrationResults ? `已经成功注册${registrationResults.data.succeeded}个服务！已存在${registrationResults.data.existed}个,失败${registrationResults.data.failed}个` : '' }}</p> -->
-      <button
+      <!-- <button
             class="submit-gray"
             style="margin-left: 40%"
             @click="handleCancel"
           >
             确定
-          </button>
+          </button> -->
     </a-modal>
   </div>
 </template>

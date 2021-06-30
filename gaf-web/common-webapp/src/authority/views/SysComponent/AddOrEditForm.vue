@@ -150,11 +150,13 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a-button v-show="operation !== 1" @click="submitForm" type="primary" :loading="loading" class="submit-gray">
         确定
       </a-button>
+      </div>
     </div>
     </div>
   </div>
