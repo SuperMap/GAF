@@ -18,11 +18,10 @@
         <template #actions>
           <a-button
             class="btn-fun blue btn-16"
-            icon="plus-circle"
             visible="true"
             @click="handleAddMember"
           >
-            新增
+            <a-icon type="plus-circle" /><span>新增</span>
           </a-button>
         </template>
         <template #default>

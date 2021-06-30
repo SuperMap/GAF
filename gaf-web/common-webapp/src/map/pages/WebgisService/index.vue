@@ -34,7 +34,7 @@
         <gaf-table-layout>
           <template #actions>
             <button class="btn-fun blue btn-16" @click="handleAdd">
-              <span><a-icon type="plus-circle" />服务注册</span>
+              <a-icon type="plus-circle" /><span>服务注册</span>
             </button>
             <a-popconfirm
               class="btn-fun blue"
@@ -71,7 +71,7 @@
                 ok-text="确认"
                 cancel-text="取消"
               >
-                <a href="javascript:;">清空</a>
+                <a href="javascript:;"><u>清空</u></a>
               </a-popconfirm>
             </div>
             <gaf-table-with-page
@@ -277,7 +277,7 @@ export default {
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
-          width: "12%",
+          width: "18%",
           dataIndex: "name",
           key: "name",
         },
@@ -285,7 +285,7 @@ export default {
           title: "服务类型",
           dataIndex: "typeCode",
           key: "type_code",
-          width: "12%",
+          width: "10%",
           scopedSlots: { customRender: "serviceType" },
         },
         {
@@ -293,7 +293,7 @@ export default {
           dataIndex: "address",
           key: "address",
           scopedSlots: { customRender: "address" },
-          width: "35%",
+          width: "33%",
         },
         {
           title: "时态",
