@@ -71,7 +71,7 @@
             <div class="add-botton">
               <button
                 @click="handleAdd"
-                class="main-top-button btn-fun blue"
+                class="main-top-button"
                 ><span><a-icon type="arrow-left" />添加至当前用户</span></button
               >
             </div>
@@ -488,6 +488,16 @@ export default {
 .main-top-button {
   margin-top: 10px;
   margin-left: 10px;
+  border: 1px solid rgb(24, 144, 255);
+    /* border-radius: 3px; */
+    background-color: white;
+    margin-top: 8px;
+    height: 36px;
+    width: 136px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: rgb(24, 144, 255);
+    color: white;
 }
 
 .add-user-btn:hover {
