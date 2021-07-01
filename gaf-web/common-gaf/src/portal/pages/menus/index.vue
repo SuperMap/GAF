@@ -6,9 +6,8 @@
           class="btn-fun blue btn-16"
           type="primary"
           size="default"
-          icon="plus-circle"
           @click="handleItemAction(1, null)"
-          >创建分组</a-button
+          ><a-icon type="plus-circle" /><span>创建分组</span></a-button
         >
       </div>
     </template>

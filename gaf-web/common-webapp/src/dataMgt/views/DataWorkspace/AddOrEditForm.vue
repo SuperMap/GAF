@@ -4,7 +4,6 @@
     <div class="drawer-header">
       <template>
         <a-breadcrumb separator=">" class="modal-line">
-          <span class="vertical-line">| </span>
           <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
         </a-breadcrumb>
       </template>
@@ -14,7 +13,7 @@
         :form="addOrEditForm"
         layout="horizontal"
         :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 15 }"
+        :wrapper-col="{ span: 18 }"
         hide-required-mark
       >
         <a-form-item label="工作空间类型">
@@ -270,11 +269,13 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
+      <a-button @click="backToList" class="cancel-modal">取消</a-button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
         确定
       </a-button>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <a-button @click="backToList" class="cancel-modal">取消</a-button>
+      </div>
     </div>
     </div>
   </div>

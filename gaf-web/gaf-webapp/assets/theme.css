@@ -1,17 +1,21 @@
 :root {
-  --theme-color: #545c64;
-  --active-color: #ffd04b;
+    --theme-color: #545c64;
+    --active-color: #1890FF;
 }
+
 .ant-layout-sider,
 .ant-layout-header,
-.ant-menu-dark, .ant-menu-dark .ant-menu-sub,
+.ant-menu-dark,
+.ant-menu-dark .ant-menu-sub,
 .ant-menu.ant-menu-dark .ant-menu-item-selected,
 .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
-  background-color: var(--theme-color);
+    background-color: var(--theme-color);
 }
-.sub-navs-container .ant-menu-item > a {
-  color: #ffffff;
+
+.sub-navs-container .ant-menu-item>a {
+    color: #ffffff;
 }
-.sub-navs-container .ant-menu-item > a.nuxt-link-active {
-  color: var(--active-color);
+
+.sub-navs-container .ant-menu-item>a.nuxt-link-active {
+    color: var(--active-color);
 }

@@ -6,11 +6,11 @@
           <a-button
             @click="addGatewayRoute"
             type="primary"
-            icon="plus-circle"
             visible="true"
             class="btn-fun blue btn-16"
           >
-            新增
+            <a-icon type="plus-circle" />
+            <span>新增</span>
           </a-button>
           <!-- <a-button
           @click="deleteGatewayRoute"
@@ -44,7 +44,7 @@
             ok-text="确认"
             cancel-text="取消"
           >
-            <a href="javascript:;">清空</a>
+            <a href="javascript:;"><u>清空</u></a>
           </a-popconfirm>
         </div>
         <a-table
@@ -73,7 +73,7 @@
               href="javascript:;"
               class="btn-margin"
             >
-              编辑
+              <u>编辑</u>
             </a>
             <a-popconfirm
               @confirm="() => deleteRoute(record.id)"
@@ -81,7 +81,7 @@
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;"> 删除</a>
+              <a href="javascript:;"> <u>删除</u></a>
             </a-popconfirm>
           </span>
         </a-table>
@@ -111,32 +111,30 @@ import AddRouteForm from "../../views/route/AddRoute";
 import RouteDatialForm from "../../views/route/RouteDetail";
 
 const columns = [
-  { title: "路由ID", width: 100, dataIndex: "routeId", key: "routeId" },
-  { title: "地址", dataIndex: "uri", key: "uri", width: 150 },
+  { title: "路由ID", width: '25%', dataIndex: "routeId", key: "routeId" },
+  { title: "地址", dataIndex: "uri", key: "uri", width: '25%' },
   {
     title: "顺序",
-    width: 100,
+    width: '7%',
     dataIndex: "order",
     key: "order",
   },
   {
     title: "是否启用",
-    width: 100,
+    width: '8%',
     dataIndex: "enable",
     key: "enable",
     scopedSlots: { customRender: "enable" },
   },
   {
     title: "创建时间",
-    width: 100,
+    width: '10%',
     dataIndex: "createTime",
     key: "createTime",
     scopedSlots: { customRender: "createTime" },
   },
   {
     title: "操作",
-    fixed: 'right',
-    width: 100,
     dataIndex: "operation",
     key: "operation",
     scopedSlots: { customRender: "operation" },

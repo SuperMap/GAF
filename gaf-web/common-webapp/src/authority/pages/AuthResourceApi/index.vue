@@ -3,7 +3,7 @@
     <gaf-table-layout v-show="!open">
       <template #actions>
         <button @click="handleAdd" class="btn-fun blue btn-16">
-          <span><a-icon type="plus-circle" /> 增加</span>
+          <a-icon type="plus-circle" /><span>增加</span>
         </button>
         <a-popconfirm
           class="btn-fun blue"
@@ -46,7 +46,7 @@
             ok-text="确认"
             cancel-text="取消"
           >
-            <a href="javascript:;">清空</a>
+            <a href="javascript:;"><u>清空</u></a>
           </a-popconfirm>
         </div>
         <gaf-table-with-page

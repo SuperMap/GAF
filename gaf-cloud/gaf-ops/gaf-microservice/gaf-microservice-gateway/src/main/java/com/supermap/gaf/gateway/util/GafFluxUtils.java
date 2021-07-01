@@ -37,8 +37,8 @@ public class GafFluxUtils {
      * @param exchange
      * @return
      */
-    public static Mono<Void> unAuth(ServerWebExchange exchange){
-        MessageResult<String> result = MessageResult.failed(String.class).status(HttpStatus.UNAUTHORIZED.value()).message("API资源访问权限不足").build();
+    public static Mono<Void> unAuth(ServerWebExchange exchange,String message){
+        MessageResult<String> result = MessageResult.failed(String.class).status(HttpStatus.UNAUTHORIZED.value()).message(message).build();
         ServerHttpResponse response = exchange.getResponse();
         byte[] bits = JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bits);
@@ -60,6 +60,7 @@ public class GafFluxUtils {
         response.getHeaders().setLocation(URI.create(url));
         return response.writeAndFlushWith(Mono.empty());
     }
+
 
 
 

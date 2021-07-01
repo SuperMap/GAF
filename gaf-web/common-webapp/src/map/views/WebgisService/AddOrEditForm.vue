@@ -5,7 +5,7 @@
     <template>
       <a-breadcrumb separator=">" class="modal-line">
         <a-breadcrumb-item class="text-bolder"
-          ><span class="vertical-line">| </span>{{ title }}</a-breadcrumb-item
+          >{{ title }}</a-breadcrumb-item
         >
       </a-breadcrumb>
     </template>
@@ -14,8 +14,8 @@
       <a-form
         :form="addOrEditForm"
         layout="horizontal"
-        :label-col="{ span: 7 }"
-        :wrapper-col="{ span: 15 }"
+        :label-col="{ span: 6 }"
+        :wrapper-col="{ span: 17 }"
         hide-required-mark
       >
       <a-form-item label="选择服务地址类型" v-if="operation === 2">
@@ -222,6 +222,9 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
+      <button class="cancel-modal" @click="backToList">取消</button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a-button
         class="submit-gray"
         :loading="loading"
@@ -229,14 +232,13 @@
       >
         确定
       </a-button>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <button class="cancel-modal" @click="backToList">取消</button>
+      </div>
     </div>
     </div>
     <a-modal
       :title="titleModal"
       v-model="visible"
-      :footer="null"
+      @ok="handleCancel"
     >
       <div style="background: #ECECEC">
         <a-row>
@@ -258,13 +260,13 @@
         </a-row>
       </div>
       <!-- <p>{{ registrationResults ? `已经成功注册${registrationResults.data.succeeded}个服务！已存在${registrationResults.data.existed}个,失败${registrationResults.data.failed}个` : '' }}</p> -->
-      <button
+      <!-- <button
             class="submit-gray"
             style="margin-left: 40%"
             @click="handleCancel"
           >
             确定
-          </button>
+          </button> -->
     </a-modal>
   </div>
 </template>

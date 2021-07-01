@@ -3,7 +3,7 @@
     <gaf-table-layout>
       <template #actions>
         <button @click="handleAdd" class="btn-fun blue btn-16">
-          <span><a-icon type="plus-circle" /> 新增</span>
+          <a-icon type="plus-circle" /><span>新增</span>
         </button>
         <a-popconfirm
           class="btn-fun blue"
@@ -68,7 +68,7 @@
             ok-text="确认"
             cancel-text="取消"
           >
-            <a href="javascript:;">清空</a>
+            <a href="javascript:;"><u>清空</u></a>
           </a-popconfirm>
         </div>
         <gaf-table-with-page
@@ -95,21 +95,21 @@
               class="btn-margin"
               href="javascript:;"
             >
-              添加子项
+              <u>添加子项</u>
             </a>
             <a
               @click.stop="() => handleDetail(record)"
               class="btn-margin"
               href="javascript:;"
             >
-              详情
+              <u>详情</u>
             </a>
             <a
               @click.stop="() => handleUpdate(record)"
               class="btn-margin"
               href="javascript:;"
             >
-              编辑
+              <u>编辑</u>
             </a>
             <a-popconfirm
               @confirm="() => handleDelete(record)"
@@ -117,7 +117,7 @@
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;"> 删除</a>
+              <a href="javascript:;"> <u>删除</u></a>
             </a-popconfirm>
           </template>
           <template v-if="timeFormat" slot="timeRender" slot-scope="text">
@@ -201,7 +201,7 @@ export default {
           title: "名称",
           dataIndex: "label",
           key: "dict_name",
-          width: 500,
+          width: 280,
           align: "left",
         },
         {
@@ -239,8 +239,8 @@ export default {
           title: "操作",
           key: "operation",
           scopedSlots: { customRender: "operation" },
-          fixed: "right",
-          width: 400,
+          // fixed: "right",
+          // width: 400,
         },
       ],
     };

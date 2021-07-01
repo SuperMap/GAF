@@ -13,10 +13,10 @@
         <div>
           <button
             class="btn-fun blue"
-            style="float: left"
+            style="float: left;margin-top: -8px"
             @click="onClick"
             >
-            <span><a-icon type="link" />关联</span>
+            <span><a-icon type="link" />&nbsp;&nbsp;关联</span>
             </button
           >
         </div>

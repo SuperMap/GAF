@@ -4,7 +4,6 @@
     <div class="drawer-header">
     <template>
       <a-breadcrumb separator=">" class="modal-line">
-        <span class="vertical-line">| </span>
         <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
       </a-breadcrumb>
     </template>
@@ -13,7 +12,7 @@
       <a-form
         :form="addOrEditForm"
         :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 15 }"
+        :wrapper-col="{ span: 19 }"
         layout="horizontal"
       >
         <a-form-item v-show="false" label="所属组件id">
@@ -187,7 +186,14 @@
       </a-form>
     </div>
     <div class="drawer-footer">
-      <div style="text-align:center;" v-show="operation !== 1">
+      <div v-show="operation === 1" class="drawer-footer-div">
+        <button @click="backToList" class="cancel-modal margin410"
+          >{{this.operation === 1 ? "返回" : "取消"}}</button
+        >
+      </div>
+      <div style="text-align:center;" class="drawer-footer-div" v-show="operation !== 1">
+        <button @click="backToList" class="cancel-modal">取消</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a-button
           @click="submitForm"
           type="primary"
@@ -196,13 +202,6 @@
         >
           确定
         </a-button>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button @click="backToList" class="cancel-modal">取消</button>
-      </div>
-      <div v-show="operation === 1">
-        <button @click="backToList" class="cancel-modal margin410"
-          >{{this.operation === 1 ? "返回" : "取消"}}</button
-        >
       </div>
     </div>
     </div>

@@ -4,7 +4,7 @@
       <gaf-table-layout v-show="!open">
         <template #actions>
           <button class="btn-fun blue btn-16" @click="handleAdd">
-            <span><a-icon type="plus-circle" /> 新增</span>
+            <a-icon type="plus-circle" /><span>新增</span>
           </button>
           <a-popconfirm
             class="btn-fun blue"
@@ -41,7 +41,7 @@
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;">清空</a>
+              <a href="javascript:;"><u>清空</u></a>
             </a-popconfirm>
           </div>
           <gaf-table-with-page
@@ -86,13 +86,13 @@
                 href="javascript:;"
                 class="btn-margin"
               >
-                详情
+                <u>详情</u>
               </a>
               <a
                 @click.stop="() => handleUpdate(record)"
                 href="javascript:;"
                 class="btn-margin"
-                >编辑
+                ><u>编辑</u>
               </a>
 
               <a-popconfirm
@@ -101,7 +101,7 @@
                 ok-text="确认"
                 cancel-text="取消"
               >
-                <a href="javascript:;">删除</a>
+                <a href="javascript:;"><u>删除</u></a>
               </a-popconfirm>
             </template>
 
@@ -179,15 +179,18 @@ export default {
       const columns = [
         {
           title: "规则名称",
+          width: '16%',
           dataIndex: "mappingRuleName",
           key: "mapping_rule_name",
         },
         {
           title: "第三方组件",
+          width: '8%',
           dataIndex: "p3ComponentName",
           key: "p3_component_name",
         },
         {
+          width: '8%',
           title: "映射类型",
           dataIndex: "mappingType",
           key: "mapping_type",
@@ -195,22 +198,26 @@ export default {
         },
         {
           title: "同步方式",
+          width: '8%',
           dataIndex: "mappingMethod",
           key: "mapping_method",
           scopedSlots: { customRender: "mapMethod" },
         },
         {
           title: "状态",
+          width: '7%',
           dataIndex: "status",
           key: "status",
         },
         {
           title: "描述",
+          width: '7%',
           dataIndex: "description",
           key: "description",
         },
         {
           title: "创建时间",
+          width: '12%',
           scopedSlots: {
             customRender: "timeRender",
           },
@@ -219,12 +226,13 @@ export default {
         },
         {
           title: "创建人",
+          width: '7%',
           dataIndex: "createdBy",
           key: "created_by",
         },
         {
           title: "操作",
-          fixed: "right",
+          // fixed: "right",
           scopedSlots: { customRender: "operation" },
         },
       ];

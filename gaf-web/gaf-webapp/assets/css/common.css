@@ -15,6 +15,10 @@
     background-color: rgb(234, 239, 245);
 }
 
+.ant-tabs-nav .ant-tabs-tab-active {
+    color: #329DFF;
+}
+
 
 /* 页面 左侧栏 树组件 */
 
@@ -25,8 +29,8 @@
     margin: 12px 8px 10px 15px;
     padding: 12px 8px 8px 8px;
     background-color: #fff;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    /* border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px; */
     overflow: auto;
 }
 
@@ -40,8 +44,8 @@
     margin: 0 8px 0 0;
     padding: 12px 8px 8px 8px;
     background-color: #fff;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    /* border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px; */
     overflow: auto;
 }
 
@@ -54,8 +58,8 @@
     height: 88vh;
     width: 82%;
     float: left;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    /* border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px; */
     background-color: #fff;
 }
 
@@ -66,7 +70,7 @@
     float: left;
     background-color: #fff;
     margin: 10px 0 1% 1%;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     height: 86vh;
     width: 98%;
 }
@@ -80,7 +84,7 @@
 
 .btn-fun {
     border: 1px solid rgb(24, 144, 255);
-    border-radius: 3px;
+    /* border-radius: 3px; */
     background-color: white;
     margin-top: 16px;
     height: 36px;
@@ -95,7 +99,7 @@
 
 .btn-16 {
     margin-right: 16px;
-    margin-left: 3%;
+    /* margin-left: 3%; */
 }
 
 .blue {
@@ -186,14 +190,20 @@ box-shadow: 0 0 0 rgba(128, 128, 128, 0.3);
 
 .search-position {
     margin-top: 16px;
-    margin-right: 3%;
+    /* margin-right: 3%; */
     width: 210px;
     height: 40px;
     float: right;
 }
 
 .ant-input-affix-wrapper .ant-input:not(:last-child) {
-    padding-right: 80px;
+    /* padding-right: 65px; */
+    text-align: left;
+}
+
+.ant-pagination-item-active:focus a,
+.ant-pagination-item-active:hover a {
+    color: #329DFF;
 }
 
 
@@ -257,7 +267,7 @@ box-shadow: 0 0 0 rgba(128, 128, 128, 0.3);
     /* margin-left: 410px; */
     /* width: 250px; */
     border: 1px solid rgb(217, 217, 217);
-    border-radius: 5px;
+    /* border-radius: 5px; */
     box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.1);
 }
 
@@ -306,7 +316,7 @@ white-space: nowrap;
 .btn-view {
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
     background-color: rgb(94, 192, 94);
 }
@@ -322,7 +332,7 @@ white-space: nowrap;
 .btn-edit {
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
     background-color: rgb(74, 175, 205);
 }
@@ -339,7 +349,7 @@ white-space: nowrap;
     background-color: rgb(216, 77, 72);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -355,7 +365,7 @@ white-space: nowrap;
     background-color: rgb(146, 146, 146);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -371,7 +381,7 @@ white-space: nowrap;
     background-color: rgb(221, 171, 92);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -387,7 +397,7 @@ white-space: nowrap;
     background-color: rgb(152, 184, 63);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -403,7 +413,7 @@ white-space: nowrap;
     background-color: rgb(254, 242, 166);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -419,7 +429,7 @@ white-space: nowrap;
     background-color: rgb(0, 188, 213);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -435,7 +445,7 @@ white-space: nowrap;
     background-color: rgb(255, 171, 65);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -451,7 +461,7 @@ white-space: nowrap;
     background-color: rgb(160, 212, 123);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -467,7 +477,7 @@ white-space: nowrap;
     background-color: rgb(245, 166, 77);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -483,7 +493,7 @@ white-space: nowrap;
     background-color: rgb(66, 210, 134);
     border: 1px solid transparent;
     padding: 2px 5px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     color: #fff;
 }
 
@@ -526,7 +536,7 @@ white-space: nowrap;
     cursor: pointer;
     width: 100px;
     height: 32px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     box-shadow: 3px 3px 0 rgba(47, 117, 249, 0.3);
     border: none;
     color: white;
@@ -547,7 +557,7 @@ white-space: nowrap;
     cursor: pointer;
     width: 66px;
     height: 32px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     box-shadow: 3px 3px 0 rgba(217, 217, 217, 0.3);
     border: none;
     color: white;
@@ -568,7 +578,7 @@ white-space: nowrap;
     cursor: pointer;
     width: 66px;
     height: 32px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     box-shadow: 3px 3px 0 rgba(217, 217, 217, 0.3);
     border: none;
     color: white;
@@ -589,7 +599,7 @@ white-space: nowrap;
     cursor: pointer;
     width: 100px;
     height: 32px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     box-shadow: 3px 3px 0 rgba(47, 117, 249, 0.3);
     color: rgb(47, 117, 249);
     border: 1px solid rgb(47, 117, 249);
@@ -620,7 +630,7 @@ white-space: nowrap;
     width: 80px;
     height: 32px;
     background: #329DFF;
-    border-radius: 5px;
+    /* border-radius: 5px; */
 }
 
 .submit-gray:hover {
@@ -640,7 +650,7 @@ white-space: nowrap;
     height: 32px;
     background: #FFFFFF;
     border: 1px solid #A0A0A0;
-    border-radius: 5px;
+    /* border-radius: 5px; */
 }
 
 .cancel-modal:hover {
@@ -677,14 +687,17 @@ button.ant-modal-close:hover {
     color: #ccc;
 }
 
+
 /* 模态框头部样式*/
+
 .ant-modal-header {
-  background: #20252E;
+    background: #20252E;
 }
 
 .ant-modal-title {
-  color: #fff;
+    color: #fff;
 }
+
 
 /* 目录树 标题 */
 
@@ -798,8 +811,8 @@ text-align: center;
 /* 表格大小 */
 
 .table-style {
-    width: 97%;
-    height: 76%;
+    width: 100%;
+    height: 80%;
     margin: 0 auto;
 }
 
@@ -815,7 +828,7 @@ text-align: center;
 
 .choose-box {
     border: 1px dashed #5CB1FF;
-    width: 97%;
+    width: 100%;
     height: 36px;
     background-color: #EEF5FB;
     margin: 0 auto;
@@ -857,6 +870,10 @@ text-align: center;
     height: 100%;
 }
 
+.ant-drawer-body .Drawer .footer .buttonGroup {
+    padding: 0;
+}
+
 
 /* 抽屉头部样式 */
 
@@ -896,6 +913,12 @@ text-align: center;
     background: #fff;
     z-index: 100;
     height: 10%;
+    display: table;
+}
+
+.drawer-footer-div {
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .special-container {
@@ -909,11 +932,63 @@ text-align: center;
 }
 
 .page-container {
-  height: 100%;
-  width: 100%
+    height: 100%;
+    width: 100%
 }
+
 .select-box {
     margin: 15px 0 0 65%;
     position: absolute;
 }
 
+.ant-tree.ant-tree-show-line li:not(:last-child)::before {
+    border-left: 1px #d9d9d9 dashed;
+}
+
+.ant-tree li .ant-tree-node-content-wrapper:hover {
+    background-color: #e6f7ff;
+}
+
+.ant-modal-footer .ant-btn-primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+/* 勾选样式 */
+
+.ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #329DFF;
+    border: 1px solid #329DFF;
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #329DFF;
+}
+
+.ant-pagination.mini .ant-pagination-prev .ant-pagination-item-link,
+.ant-pagination.mini .ant-pagination-next .ant-pagination-item-link {
+    background: #329DFF;
+    border-color: #329DFF;
+    color: white;
+    margin: 0 8px;
+    padding: 0px 5px;
+}
+
+.ant-pagination-item-active {
+    border-color: #329DFF;
+    color: #329DFF;
+}
+
+.ant-pagination-item-active:focus,
+.ant-pagination-item-active:hover {
+    border-color: #329DFF;
+}
+
+.ant-pagination-item-active:focus a,
+.ant-pagination-item-active:hover a {
+    color: #329DFF;
+}
+
+.btn-16 span {
+    margin-left: 8px;
+}

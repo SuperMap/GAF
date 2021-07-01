@@ -4,7 +4,7 @@
       <gaf-table-layout v-show="!open">
         <template #actions>
           <button @click="handleAdd" class="btn-fun blue btn-16">
-            <span><a-icon type="plus-circle" /> 新增</span>
+            <a-icon type="plus-circle" /><span>新增</span>
           </button>
           <a-popconfirm
             class="btn-fun blue"
@@ -63,7 +63,7 @@
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;">清空</a>
+              <a href="javascript:;"><u>清空</u></a>
             </a-popconfirm>
           </div>
           <gaf-table-with-page
@@ -105,7 +105,7 @@
                 href="javascript:;"
                 class="btn-margin"
               >
-                详情
+                <u>详情</u>
               </a>
               <a-divider type="vertical" />
               <a
@@ -113,7 +113,7 @@
                 href="javascript:;"
                 class="btn-margin"
               >
-                编辑
+                <u>编辑</u>
               </a>
               <a-divider type="vertical" />
               <a-popconfirm
@@ -123,7 +123,7 @@
                 ok-text="确认"
                 cancel-text="取消"
               >
-                <a href="javascript:;" class="btn-margin">禁用</a>
+                <a href="javascript:;" class="btn-margin"><u>禁用</u></a>
               </a-popconfirm>
               <a-popconfirm
                 v-if="!record.status"
@@ -132,7 +132,7 @@
                 ok-text="确认"
                 cancel-text="取消"
               >
-                <a href="javascript:;" class="btn-margin">启用</a>
+                <a href="javascript:;" class="btn-margin"><u>启用</u></a>
               </a-popconfirm>
               <a-divider type="vertical" />
               <a
@@ -140,14 +140,14 @@
                 href="javascript:;"
                 class="btn-margin"
               >
-                同步
+                <u>同步</u>
               </a>
               <a-divider type="vertical" />
               <a
                 @click.stop="() => getAdministrators(record)"
                 href="javascript:;"
               >
-                全部管理员
+                <u>全部管理员</u>
               </a>
             </template>
             <template slot="timeRender" v-if="timeFormat" slot-scope="text">
@@ -258,12 +258,14 @@ export default {
       columns: [
         {
           title: "租户名称",
+          width: 240,
           dataIndex: "tenantName",
           key: "tenant_name",
         },
         {
           title: "租户类别",
           dataIndex: "type",
+          width: 200,
           key: "type",
           scopedSlots: {
             customRender: "type",
@@ -276,6 +278,7 @@ export default {
         // },
         {
           title: "状态",
+          width: 100,
           dataIndex: "status",
           key: "status",
           sorter: true,
@@ -289,10 +292,11 @@ export default {
           title: "初始管理员",
           dataIndex: "adminName",
           key: "adminName",
+          width: 200,
         },
         {
           title: "操作",
-          fixed: 'right',
+          // fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ],

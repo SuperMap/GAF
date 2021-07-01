@@ -40,22 +40,20 @@ public class XgatewayAuthenticationValidateFilter implements GlobalFilter, Order
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
-        if (attribute.getIsPublicUrl()){
+        if (attribute.getIsPublicUrl() && !attribute.getIsIndexUrl()){
             return chain.filter(exchange);
-        }
-        if (attribute.getIsIndexUrl()){
-            removeCookie(exchange);
-            return chain.filter(exchange);
-        }
-        if (authenticationResult == null
+        }else if (authenticationResult == null
                 || StringUtils.isEmpty(authenticationResult.getUsername())
                 || StringUtils.isEmpty(authenticationResult.getJwtToken())){
-            //没有认证信息，直接跳转到登陆界面(index除外)
             removeCookie(exchange);
-            return GafFluxUtils.redirectTo(exchange,attribute.getGatewaySecurityProperties().getCenterLoginUrl());
+            if (attribute.getIsIndexUrl()){
+                return chain.filter(exchange);
+            }else {
+                return GafFluxUtils.unAuth(exchange,"未获取到资源访问的认证身份");
+            }
+        }else {
+            return chain.filter(exchange);
         }
-        return chain.filter(exchange);
-
     }
 
     /**

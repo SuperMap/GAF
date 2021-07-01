@@ -5,7 +5,7 @@
     <template>
       <a-breadcrumb separator=">" class="modal-line">
         <a-breadcrumb-item class="text-bolder"
-          ><span class="vertical-line">| </span>{{ title }}</a-breadcrumb-item
+          >{{ title }}</a-breadcrumb-item
         >
       </a-breadcrumb>
     </template>
@@ -14,8 +14,8 @@
       <a-form
         :form="addOrEditForm"
         layout="horizontal"
-        :label-col="{ span: 5 }"
-        :wrapper-col="{ span: 15 }"
+        :label-col="{ span: 4 }"
+        :wrapper-col="{ span: 19 }"
         hide-required-mark
       >
         <a-form-item label="按钮名称">
@@ -146,6 +146,11 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
+      <button class="cancel-modal" @click="backToList">
+        {{ this.operation === 1 ? "返回" : "取消" }}
+      </button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a-button
         class="submit-gray"
         type="primary"
@@ -154,10 +159,7 @@
       >
         确定
       </a-button>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <button class="cancel-modal" @click="backToList">
-        {{ this.operation === 1 ? "返回" : "取消" }}
-      </button>
+      </div>
     </div>
     </div>
   </div>

@@ -3,7 +3,7 @@
     <gaf-table-layout v-show="!open">
       <template #actions>
         <button @click="handleAdd" class="btn-fun blue btn-16">
-          <span><a-icon type="plus-circle" /> 新增</span>
+          <a-icon type="plus-circle" /><span>新增</span>
         </button>
         <a-popconfirm
           class="btn-fun blue"
@@ -40,7 +40,7 @@
             ok-text="确认"
             cancel-text="取消"
           >
-            <a href="javascript:;">清空</a>
+            <a href="javascript:;"><u>清空</u></a>
           </a-popconfirm>
         </div>
         <gaf-table-with-page
@@ -198,11 +198,13 @@ export default {
           title: "显示名称",
           dataIndex: "name",
           key: "name",
+          width: 180,
         },
         {
           title: "图标",
           dataIndex: "icon",
           key: "icon",
+          width: 180,
         },
         // {
         //   title: '是否可见',
@@ -213,15 +215,17 @@ export default {
           title: "排序序号",
           dataIndex: "sortSn",
           key: "sort_sn",
+          width: 150,
         },
         {
           title: "描述",
           dataIndex: "description",
           key: "description",
+
         },
         {
           title: "操作",
-          fixed: 'right',
+          // fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ];

@@ -4,7 +4,7 @@
       <gaf-table-layout>
         <template #actions>
           <button @click="handleAdd" class="btn-fun blue btn-16" visible="true">
-            <a-icon type="plus-circle" />新增
+            <a-icon type="plus-circle" /><span>新增</span>
           </button>
           <a-popconfirm
             class="btn-fun blue"
@@ -27,8 +27,8 @@
             :display-render="displayRender"
             style="
               width: 150px;
-              box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.1);
               text-align: left;
+              margin: 16px 2% 0 0;
             "
           >
           </a-cascader>
@@ -54,7 +54,7 @@
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;">清空</a>
+              <a href="javascript:;"><u>清空</u></a>
             </a-popconfirm>
           </div>
           <gaf-table-with-page
@@ -92,7 +92,7 @@
                 class="btn-margin"
                 href="javascript:;"
               >
-                编辑
+                <u>编辑</u>
               </a>
               <a-popconfirm
                 @confirm="() => handleDelete(record)"
@@ -101,10 +101,10 @@
                 ok-text="确认"
                 cancel-text="取消"
               >
-                <a href="javascript:;" class="btn-margin">删除</a>
+                <a href="javascript:;" class="btn-margin"><u>删除</u></a>
               </a-popconfirm>
               <a @click.stop="() => handleDownload(record)" href="javascript:;">
-                下载
+                <u>下载</u>
               </a>
               <!-- <a-divider type="vertical" />
             <a @click.stop="() => handlePublish(record)" class="btn-release" href="javascript:;" style="color: rgb(45, 140, 240);">
@@ -267,7 +267,7 @@ export default {
         // },
         {
           title: "操作",
-          fixed: 'right',
+          // fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ];
