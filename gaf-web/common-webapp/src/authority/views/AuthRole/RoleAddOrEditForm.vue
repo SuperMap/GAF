@@ -11,8 +11,8 @@
     <div class="drawer-content">
       <a-form
         :form="addOrEditForm"
-        :label-col="{ span: 4 }"
-        :wrapper-col="{ span: 19 }"
+        :label-col="{ span: 5 }"
+        :wrapper-col="{ span: 18 }"
         layout="horizontal"
       >
         <a-form-item v-show="false" label="所属租户id">
@@ -163,11 +163,13 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
         确定
       </a-button>
+      </div>
     </div>
     </div>
   </div>

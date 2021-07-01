@@ -605,6 +605,7 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
       &nbsp;&nbsp;
       <button @click="submitForm" class="submit-gray">
@@ -617,6 +618,7 @@
       >
         测试连接
       </button>
+      </div>
     </div>
     </div>
   </div>

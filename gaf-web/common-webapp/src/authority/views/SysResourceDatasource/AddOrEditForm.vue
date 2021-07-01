@@ -227,6 +227,7 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
       &nbsp;&nbsp;
       <a-button @click="submitForm" type="primary" :loading="loading2" class="submit-gray">
@@ -241,6 +242,7 @@
       >
         测试连接
       </a-button>
+      </div>
     </div>
     </div>
   </div>

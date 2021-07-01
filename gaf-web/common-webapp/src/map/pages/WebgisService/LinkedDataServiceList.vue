@@ -6,6 +6,7 @@
       ok-text="确认"
       cancel-text="取消"
       @confirm="() => batchDel()"
+      style="margin-bottom:10px;margin-left:10px"
     >
       <button class="btn-fun blue" style="margin-left: 5px;margin-top: -8px;">
         <span>批量删除</span>

@@ -49,7 +49,7 @@ public class XgatewayAuthenticationValidateFilter implements GlobalFilter, Order
             if (attribute.getIsIndexUrl()){
                 return chain.filter(exchange);
             }else {
-                return GafFluxUtils.redirectTo(exchange,attribute.getGatewaySecurityProperties().getCenterLoginUrl());
+                return GafFluxUtils.unAuth(exchange,"未获取到资源访问的认证身份");
             }
         }else {
             return chain.filter(exchange);

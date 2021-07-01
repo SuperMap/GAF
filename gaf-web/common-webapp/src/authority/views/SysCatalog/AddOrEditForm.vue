@@ -167,6 +167,7 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
           
           
           <!-- <span v-if="!(isFirstLevel && operation === 'edit') ">
@@ -197,6 +198,7 @@
            <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             {{ submitButtonText }}
           </a-button>
+          </div>
         </div>
         </div>
   </div>

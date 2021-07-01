@@ -117,13 +117,14 @@
       <a-modal
         v-model="open"
         :width="800"
-        :footer="null"
         :centered="true"
         @cancel="handleBack"
         destroy-on-close
         :title="title"
+        @ok="handleOk"
       >
         <add-edit-form
+          ref="addEditForm"
           :title="title"
           :editData="editData"
           @submit="handleSubmit"
@@ -261,6 +262,9 @@ export default {
     this.getList();
   },
   methods: {
+    handleOk() {
+      this.$refs.addEditForm.submitForm()
+    },
     handleSearchFieldChange(value) {
       this.searchedColumn = value;
     },

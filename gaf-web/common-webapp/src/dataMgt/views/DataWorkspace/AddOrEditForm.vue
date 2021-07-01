@@ -12,8 +12,8 @@
       <a-form
         :form="addOrEditForm"
         layout="horizontal"
-        :label-col="{ span: 4 }"
-        :wrapper-col="{ span: 19 }"
+        :label-col="{ span: 5 }"
+        :wrapper-col="{ span: 18 }"
         hide-required-mark
       >
         <a-form-item label="工作空间类型">
@@ -269,11 +269,13 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <a-button @click="backToList" class="cancel-modal">取消</a-button>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
         确定
       </a-button>
+      </div>
     </div>
     </div>
   </div>

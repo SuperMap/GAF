@@ -175,6 +175,7 @@
       </a-form>
     </div>
     <div class="drawer-footer">
+      <div class="drawer-footer-div">
       <button class="cancel-modal" v-if="!isFirstLevel && this.operation === 'add'" @click="deleteDataOrCancle">{{
         deleteOrCacel
       }}</button>
@@ -182,6 +183,7 @@
       <a-button class="submit-gray" type="primary" :loading="loading" style="color: white" @click="submitForm">
         {{ submitButtonText }}
       </a-button>
+      </div>
     </div>
     </div>
   </div>

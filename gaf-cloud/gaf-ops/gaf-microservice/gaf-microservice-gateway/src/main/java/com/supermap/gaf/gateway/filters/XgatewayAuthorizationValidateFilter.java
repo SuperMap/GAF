@@ -55,7 +55,7 @@ public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordere
 
         Boolean result = validateClient.authorization(authorizationParam);
         if (!BooleanUtils.isTrue(result)){
-            return GafFluxUtils.unAuth(exchange);
+            return GafFluxUtils.unAuth(exchange,"API资源访问权限不足");
         }
         return chain.filter(exchange);
 

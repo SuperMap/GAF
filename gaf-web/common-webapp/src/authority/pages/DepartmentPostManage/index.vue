@@ -703,6 +703,7 @@ export default {
 }
 .main-top-button {
   margin: 10px 0;
+  width: 170px;
 }
 .action-div {
   text-align: center;
