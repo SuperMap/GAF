@@ -39,6 +39,7 @@
           :selectedKeys.sync="selectedNodeKeys"
           @select="onSelect"
           :show-line="true"
+          :showIcon="false"
         >
           <template v-slot:icon="{ iconNodeType }">
             <slot

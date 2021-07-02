@@ -56,7 +56,7 @@
     margin: 12px 0 0 0;
     padding: 15px;
     height: 88vh;
-    width: 82%;
+    width: 81%;
     float: left;
     /* border-top-left-radius: 10px;
     border-bottom-left-radius: 10px; */
@@ -870,7 +870,7 @@ text-align: center;
     height: 100%;
 }
 
-.ant-drawer-body .Drawer .footer .buttonGroup {
+.ant-drawer-body .Drawer .footer, .ant-drawer-body .Drawer .content {
     padding: 0;
 }
 
