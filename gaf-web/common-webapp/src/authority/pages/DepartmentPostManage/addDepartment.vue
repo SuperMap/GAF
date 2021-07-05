@@ -122,6 +122,7 @@
       :centered="true"
       :closable="false"
       @close="handleBack"
+      placement="right"
       destroy-on-close
     >
       <add-edit-department

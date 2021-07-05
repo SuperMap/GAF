@@ -126,6 +126,7 @@
         :centered="true"
         destroy-on-close
         @close="handleBack"
+        placement="right"
         :closable="false"
       >
         <add-edit-form

@@ -174,11 +174,12 @@
         </div>
       </a-form>
     </div>
-    <gaf-modal
+    <a-modal
       v-model="createAdmin"
       :width="800"
-      :footer="null"
       title="创建租户管理员"
+      @ok="handleOk"
+      @cancel="handleCancel"
     >
       <add-adm-from
         ref="myModal"
@@ -187,7 +188,7 @@
         @submit="handleAdminInfo"
         @back="handlerBack"
       />
-    </gaf-modal>
+    </a-modal>
   </div>
 </template>
 
@@ -291,6 +292,12 @@ export default {
     backToList() {
       this.addOrEditForm.resetFields()
       this.$emit('back')
+    },
+    handleOk() {
+      this.$refs.myModal.submitForm()
+    },
+    handleCancel() {
+      this.$refs.myModal.backToList()
     }
   }
 }
