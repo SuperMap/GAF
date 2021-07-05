@@ -992,3 +992,40 @@ text-align: center;
 .btn-16 span {
     margin-left: 8px;
 }
+.sider li.ant-menu-item.ant-menu-item-selected {
+  background-color: #21262F;
+  color: #1890FF;
+  border-left: 5px solid;
+}
+
+li.ant-menu-item::before {
+  border-right: 3px solid #1890ff;
+}
+li.ant-menu-item.ant-menu-item-selected.clicked .nuxt-link-active {
+  color: #1890FF;
+  background: none;
+}
+.nav-title {
+  color: #fff;
+  font-size: 18px;
+  border: none;
+}
+.nav-title::before {
+  content: '';
+  margin-right: 10px;
+  border-right: 5px solid #1890ff;
+  height: 19px;
+  display: inline-block;
+  vertical-align: sub;
+}
+.header {
+  background-color: #20252E !important;
+}
+
+.ant-menu-dark:nth-child(1) {
+  background-color: #20252E;
+}
+
+.ant-menu.ant-menu-dark:nth-child(1) .ant-menu-item-selected {
+  background-color: #20252E;
+}
