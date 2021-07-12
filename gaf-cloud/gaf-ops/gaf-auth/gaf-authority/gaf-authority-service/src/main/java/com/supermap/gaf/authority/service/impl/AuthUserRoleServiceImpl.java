@@ -19,8 +19,6 @@ import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.authority.vo.TreeVo;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.exception.GafException;
-import com.supermap.gaf.project.client.ProjCodeBaseUsersClient;
-import com.supermap.gaf.project.commontype.ProjCodeBaseUser;
 import com.supermap.gaf.sys.mgt.enums.CatalogTypeEnum;
 import com.supermap.gaf.sys.mgt.service.SysCatalogService;
 import org.slf4j.Logger;
@@ -59,8 +57,6 @@ public class AuthUserRoleServiceImpl implements AuthUserRoleService {
     private AuthPostRoleService authPostRoleService;
     @Autowired
     private SysCatalogService sysCatalogService;
-    @Autowired(required = false)
-    private ProjCodeBaseUsersClient projCodeBaseUsersClient;
 
 //    public AuthUserRoleServiceImpl(AuthUserRoleMapper authUserRoleMapper, AuthUserService authUserService, AuthRoleService authRoleService, AuthUserParttimeService authUserParttimeService, AuthPostRoleService authPostRoleService, SysCatalogService sysCatalogService, ProjCodeBaseUsersFeignService projCodeBaseUsersFeignService) {
 //        this.authUserRoleMapper = authUserRoleMapper;
@@ -234,82 +230,8 @@ public class AuthUserRoleServiceImpl implements AuthUserRoleService {
                 return;
             }
         }
-
-        List<String> intersection = oldRoleIds.stream().filter(newRoleIds::contains).collect(Collectors.toList());
-        boolean hasAppRole = intersection.stream().anyMatch(appRoleIds::contains);
-        if (!hasAppRole) {
-            if (toAdd.size() > 0 && toRemove.size() == 0) {
-                boolean hasAppRoleInAdd = toAdd.stream().anyMatch(appRoleIds::contains);
-                if (hasAppRoleInAdd) {
-                    // 新增
-                    try {
-                        addDevUser(user);
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                    }
-                }
-            } else if (toAdd.size() == 0 && toRemove.size() > 0) {
-                boolean hasAppRoleInRemove = toRemove.stream().anyMatch(appRoleIds::contains);
-                if (hasAppRoleInRemove) {
-                    // 删除
-                    try {
-                        blockDevUser(user);
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                    }
-                }
-            }
-            if (toAdd.size() > 0 && toRemove.size() > 0) {
-                boolean hasAppRoleInAdd = toAdd.stream().anyMatch(appRoleIds::contains);
-                boolean hasAppRoleInRemove = toRemove.stream().anyMatch(appRoleIds::contains);
-                if (hasAppRoleInAdd && !hasAppRoleInRemove) {
-                    // 新增
-                    try {
-                        addDevUser(user);
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                    }
-                } else if (!hasAppRoleInAdd && hasAppRoleInRemove) {
-                    // 删除
-                    try {
-                        blockDevUser(user);
-                    } catch (Exception e) {
-                        logger.info(e.getMessage());
-                    }
-                }
-            }
-        }
     }
 
-    /**
-     * todo: 需要使用分布式事务 或者由于只有一个数据库直接把代码考过来或打包
-     */
-    private void addDevUser(AuthUser user) {
-        try{
-            MessageResult<ProjCodeBaseUser> result = projCodeBaseUsersClient.addDevUser(user.getRealName(), user.getName(), user.getEmail());
-            if (!result.isSuccessed()) {
-                throw new GafException("新增代码库用户失败");
-            }
-        } catch (Exception e) {
-            throw new GafException("新增代码库用户失败");
-        }
-    }
-
-    //todo: 需要使用分布式事务 或者由于只有一个数据库直接把代码考过来或打包
-    /**
-     * 新增用户对应的代码库用户
-     * @param user 用户
-     */
-    private void blockDevUser(AuthUser user) {
-        try{
-            MessageResult<String> result = projCodeBaseUsersClient.blockDevUser(user.getName());
-            if (!result.isSuccessed()) {
-                throw new GafException("删除代码库用户失败");
-            }
-        } catch (Exception e) {
-            throw new GafException("删除代码库用户失败");
-        }
-    }
 
     @Override
     public void deleteAuthUserRole(String userRoleId) {

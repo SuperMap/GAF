@@ -1,13 +1,12 @@
 package com.supermap.gaf.boot.filter;
 
 import com.supermap.gaf.authentication.entity.entity.AuthenticationResult;
+import com.supermap.gaf.boot.util.ResponseUtils;
 import com.supermap.gaf.gateway.commontypes.ExchangeAuthenticationAttribute;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -35,28 +34,34 @@ public class XgatewayAuthenticationValidateFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        ExchangeAuthenticationAttribute attribute = ((ExchangeAuthenticationAttribute) httpServletRequest.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME));
+        ExchangeAuthenticationAttribute attribute = ((ExchangeAuthenticationAttribute) request.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME));
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
         if (attribute.getIsPublicUrl() && !attribute.getIsIndexUrl()){
-            chain.doFilter(httpServletRequest,httpServletResponse);
+            chain.doFilter(request,response);
         }else if (authenticationResult == null
                 || StringUtils.isEmpty(authenticationResult.getUsername())
                 || StringUtils.isEmpty(authenticationResult.getJwtToken())){
-            Cookie cookie = new Cookie(CUSTOM_LOGIN_SESSION_NAME, null);
-            cookie.setPath("/");
-            cookie.setMaxAge(0);
-            httpServletResponse.addCookie(cookie);
+            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+            removeCookie(httpServletResponse);
             if (attribute.getIsIndexUrl()){
-                chain.doFilter(httpServletRequest,httpServletResponse);
+                chain.doFilter(request,httpServletResponse);
             }else {
-                httpServletResponse.setStatus(HttpStatus.FOUND.value());
-                httpServletResponse.sendRedirect(attribute.getGatewaySecurityProperties().getCenterLoginUrl());
+                ResponseUtils.unAuth((HttpServletResponse) response,"未获取到资源访问的认证身份");
             }
         }else {
-            chain.doFilter(httpServletRequest,httpServletResponse);
+            chain.doFilter(request,response);
         }
+    }
+
+    /**
+     * 清楚cookie
+     * @param httpServletResponse
+     */
+    private void removeCookie(HttpServletResponse httpServletResponse){
+        Cookie cookie = new Cookie(CUSTOM_LOGIN_SESSION_NAME,null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        httpServletResponse.addCookie(cookie);
     }
 
     @Override

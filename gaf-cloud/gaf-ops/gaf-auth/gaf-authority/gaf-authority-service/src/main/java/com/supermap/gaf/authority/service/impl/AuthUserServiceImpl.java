@@ -22,7 +22,6 @@ import com.supermap.gaf.authority.vo.EmailChangeVo;
 import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.exception.GafException;
-import com.supermap.gaf.project.client.ProjCodeBaseUsersClient;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
 import com.supermap.gaf.utils.LogUtil;
@@ -78,8 +77,6 @@ public class AuthUserServiceImpl implements AuthUserService {
     @Autowired
     public RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired(required = false)
-    private ProjCodeBaseUsersClient projCodeBaseUsersClient;
     @Autowired
     private  BatchSortAndCodeService batchSortAndCodeService;
 
@@ -303,31 +300,6 @@ public class AuthUserServiceImpl implements AuthUserService {
         if(mailEnable){
             emailService.sendPassword(authUser.getEmail(), password);
         }
-        //判断岗位是否有app相关的+角色，若有则需要在gitlab中创建用户
-        try {
-            String postId = authUser.getPostId();
-            if (!StringUtils.isEmpty(postId)) {
-                List<AuthPostRole> authPostRoles = authPostRoleService.getByPostId(postId, true);
-                if (authPostRoles.size() > 0) {
-                    // 应该使用id常量而不应该使用name查询
-                    List<String> nameEns = CodeBaseRoleEnum.getAllNames();
-                    List<AuthRole> appRoles = authRoleService.listByNameEn(nameEns);
-                    Set<String> appRoleIds = appRoles.stream().map(AuthRole::getRoleId).collect(Collectors.toSet());
-                    List<AuthPostRole> authPostRolesInAppRole = authPostRoles.stream().filter(authPostRole -> appRoleIds.contains(authPostRole.getRoleId())).collect(Collectors.toList());
-                    if (authPostRolesInAppRole.size() > 0) {
-                        try {
-                            projCodeBaseUsersClient.addDevUser(authUser.getRealName(), authUser.getName(), authUser.getEmail());
-                        } catch (Exception e) {
-                            logger.info("创建代码库用户失败", e);
-                        }
-                    }
-
-                }
-            }
-        } catch (Exception e) {
-            logger.info("创建代码库用户失败", e);
-            // 不管真假失败都不影响创建用户
-        }
         return insertedAuthUser;
     }
 
@@ -371,12 +343,6 @@ public class AuthUserServiceImpl implements AuthUserService {
         // 清空挂职和角色
         authUserParttimeService.deleteByUserId(userId);
         authUserRoleService.deleteByUserId(userId);
-        try {
-            // 到代码库用户表和gitlab中禁用用户
-            projCodeBaseUsersClient.blockDevUser(oldAuthUser.getName());
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-        }
         return oldAuthUser;
     }
 
@@ -444,56 +410,6 @@ public class AuthUserServiceImpl implements AuthUserService {
         if (!newDepartmentId.equals(oldDepartmentId)) {
             // todo：更新老部门用户的排序
             // todo：更新新部门下用户的排序
-        }
-        // 是否更新岗位
-        String newPostId = authUser.getPostId();
-        String oldPostId = authUserExist.getPostId();
-        if (!StringUtils.isEmpty(newPostId) && !newPostId.equals( oldPostId )) {
-            // 应该使用id去查询而不应该使用name
-            List<String> nameEns = CodeBaseRoleEnum.getAllNames();
-            List<AuthRole> appRoles = authRoleService.listByNameEn(nameEns);
-            Set<String> appRoleIds = appRoles.stream().map(AuthRole::getRoleId).collect(Collectors.toSet());
-            // 在查看用户挂职 和角色有没有app角色
-            boolean hasAppRoleBefore = hasAppRoleOnParttimeOrRole(authUser, appRoleIds);
-            if (!hasAppRoleBefore) {
-                if (StringUtils.isEmpty(newPostId)) {
-                    // 查看原来的岗位是否有app角色
-                    List<AuthPostRole> authPostRoles = authPostRoleService.getByPostId(oldPostId, true);
-                    boolean oldPostHasAppRole = authPostRoles.stream().anyMatch(authPostRole -> appRoleIds.contains(authPostRole.getRoleId()));
-                    if (oldPostHasAppRole) {
-                        try {
-                            projCodeBaseUsersClient.blockDevUser(authUserExist.getName());
-                        } catch (Exception e) {
-                            logger.info("删除代码库用户失败", e);
-                        }
-                    }
-                } else {
-                    // 查看新的岗位是否有app角色
-                    List<AuthPostRole> authNewPostRoles = authPostRoleService.getByPostId(newPostId, true);
-                    boolean newPostHasAppRole = authNewPostRoles.stream().anyMatch(authPostRole -> appRoleIds.contains(authPostRole.getRoleId()));
-                    // 查看原来的岗位是否有app角色
-                    boolean oldPostHasAppRole = false;
-                    if (!StringUtils.isEmpty(oldPostId)) {
-                        List<AuthPostRole> authPostRoles = authPostRoleService.getByPostId(oldPostId, true);
-                        oldPostHasAppRole = authPostRoles.stream().anyMatch(authPostRole -> appRoleIds.contains(authPostRole.getRoleId()));
-                    }
-                    if (newPostHasAppRole && !oldPostHasAppRole) {
-                        try {
-                            projCodeBaseUsersClient.addDevUser(authUser.getRealName(), authUser.getName(), authUser.getEmail());
-                        } catch (Exception e) {
-                            logger.info("添加代码库用户失败", e);
-                        }
-                    } else if (!newPostHasAppRole && oldPostHasAppRole) {
-                        try {
-                            projCodeBaseUsersClient.blockDevUser(authUserExist.getName());
-                        } catch (Exception e) {
-                            logger.info("删除代码库用户失败", e);
-                        }
-                    }
-
-                }
-
-            }
         }
 
         return authUser;

@@ -44,6 +44,9 @@ public class FilterConfig {
         return bean;
     }
 
+
+
+
     @Bean
     public FilterRegistrationBean<XgatewayAuthenticationValidateFilter> xGatewayAuthenticationValidateFilterRegistrationBean(){
         FilterRegistrationBean<XgatewayAuthenticationValidateFilter> bean = new FilterRegistrationBean<>();
@@ -51,6 +54,16 @@ public class FilterConfig {
         bean.addUrlPatterns("/*");
         bean.setOrder(150);
         bean.setName("xGatewayAuthenticationValidateFilter");
+        return bean;
+    }
+
+    @Bean
+    public FilterRegistrationBean<XgatewayAuthorizationValidateFilter> xGatewayAuthorizationValidateFilterRegistrationBean(@Autowired ValidateClient validateClient){
+        FilterRegistrationBean<XgatewayAuthorizationValidateFilter> bean = new FilterRegistrationBean<>();
+        bean.setFilter(new XgatewayAuthorizationValidateFilter(validateClient));
+        bean.addUrlPatterns("/*");
+        bean.setOrder(175);
+        bean.setName("xGatewayAuthorizationValidateFilter");
         return bean;
     }
 

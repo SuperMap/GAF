@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.supermap.gaf"})
-@MapperScan(basePackages = {"com.supermap.gaf.**.dao","com.supermap.gaf.data.access", "com.supermap.gaf.data.mgt.mapper"})
+@MapperScan(basePackages = {"com.supermap.gaf.**.dao", "com.supermap.gaf.data.mgt.mapper"})
 @EnableAsync
 @EnableCaching
 @EnableTransactionManagement
