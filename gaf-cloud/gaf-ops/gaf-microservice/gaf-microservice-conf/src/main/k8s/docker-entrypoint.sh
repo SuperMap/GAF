@@ -1,3 +1,3 @@
-#!/bin/sh
+#!/bin/bash
 
-exec java ${JAVA_OPTS} -jar app.jar "$@"
+exec java ${JAVA_OPTS:1:-1} -jar app.jar "$@"
