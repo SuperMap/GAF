@@ -1,5 +1,7 @@
 FROM harbor.gaf.net.cn/library/ugo-base:1.0
 MAINTAINER user "gaf@supermap.com"
+# Java启动参数
+ENV JAVA_OPTS ''
 # 需要配置数据库
 ENV GAF_ENV_DATASOURCE_URL 'jdbc:postgresql://localhost:5432/postgres'
 ENV GAF_ENV_DATASOURCE_DRIVER 'org.postgresql.Driver'

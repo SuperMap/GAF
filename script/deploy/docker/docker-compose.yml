@@ -9,6 +9,8 @@ services:
     image: ${GAF_REGISTRY}gaf-microservice-rigister:${GAF_REGISTRY_TAG}
     networks:
     - gaf-net
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
     ports:
     - 8761:8080
     container_name: gaf-microservice-rigister
