@@ -19,3 +19,12 @@ DELETE FROM auth_role_menu WHERE resource_menu_id IN ('ef8d8f10-16e7-4cd5-b274-5
 
 
 
+
+-- changeset SYS:20210712-0
+DELETE FROM sys_catalog WHERE catalog_id = '2760fc79-838e-4463-bfef-e6b593de7113';
+DELETE FROM sys_catalog WHERE catalog_id = '67aeecdb-91b3-4228-b0ec-6d2da717c840';
+DELETE FROM sys_catalog WHERE catalog_id = 'f9772eb7-40fd-4373-b6f5-7d2ace6bf156';
+DELETE FROM sys_catalog WHERE catalog_id = '2d224859-5aba-44c1-9ab9-740f850294e2';
+DELETE FROM sys_catalog WHERE catalog_id = '83926137-1c8a-45eb-95f9-b1d020a138e4';
+DELETE FROM sys_catalog WHERE catalog_id = '64646f21-1239-41dd-89c9-e5368265408c';
+DELETE FROM sys_catalog WHERE catalog_id = 'c953872d-b4a7-4cbe-9943-7275a3bef81f';
