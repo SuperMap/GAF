@@ -1,0 +1,130 @@
+spring:
+  application:
+    name: gaf-boot
+  datasource:
+    driver-class-name: ${GAF_ENV_DATASOURCE_DRIVER:org.postgresql.Driver}
+    username: ${GAF_ENV_DATASOURCE_USERNAME:postgres}
+    password: ${GAF_ENV_DATASOURCE_PASSWORD:}
+    url: ${GAF_ENV_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}
+  redis:
+    database: 5
+    host: ${GAF_ENV_REDIS_HOST:localhost}
+    port: ${GAF_ENV_REDIS_PORT:6379}
+  jersey:
+    application-path: /
+  mail:
+    default-encoding: utf-8
+    host: mail.supermap.com
+    password: SuperMap@123456
+    port: '25'
+    username: gaf@supermap.com
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:com/supermap/gaf/**/database/postgresql/*.xml
+
+pagehelper:
+  reasonable: true
+
+shiro:
+  loginUrl: /login
+  serviceUrl: /
+  successUrl: /portal/view/index.html
+  urlFilters:
+    - /login, keycloakSecurityFilter
+    - /callback, callbackFilter
+    - /portal/manager/**, authc
+    - /portal/manager**, authc
+    - /portal/view/**, anon
+    - /portal/view**, anon
+    - /portal/**, anon
+    - /portal**, anon
+  publicUrls:
+    - /favicon.ico
+    - /index.html**
+    - /map/view/**
+    - /map/view**
+    - /map/authdefines/**
+  apiauthz:
+    enable: false
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+# 此处是Fluentd的连接信息，用于收集日志
+fluentd:
+  enable: true
+  host: ${GAF_ENV_FLUENTD_HOST:localhost}
+  port: ${GAF_ENV_FLUENTD_PORT:24224}
+  tagPrefix: ${GAF_ENV_FLUENTD_TAG:gaf}
+
+gaf:
+  # gaf-map
+  map:
+    fly-manager:
+      file-path: /public/map/fpf
+  # gaf-authority
+  # 加密秘钥，必须为16位
+  database:
+    secretKey: 1q2w3e4r5t6y7u8i
+
+#################################################for security authentication , like gateway configuration##############################
+gateway:
+  security:
+    centerLoginUrl: /authentication/login/center
+    centerLogoutUrl: /authentication/logout
+    gatewayLoginUrl: /login
+    gatewayLogoutUrl: /logout
+    indexUrl: /viewer/#/
+    publicUrls: /viewer/**,/monitor/**,/grafana/**,/**/actuator/**,/authentication/**,/authority/tenant/**,/base/fileservice/file/upload/swagger/*,/cloud-portal/**,/logout,/oauth/**,/oauth2/**,/login/**,/api/**,/**/view/**, /**/*.js,/*.*, /lang/**,/img/**,/**/static/**,/**/_static/**, /docs/**,/security/token/**,/config/**,/_static/**,/samples/**,/portal/customization**,/portal/user/profile**,/es/**,/log/env/logFluentdEsUrl,/map/webgis-view/**,/map/webgis-apps/*/config
+
+#################################################gaf-authentication##############################
+login:
+  loginSuccessRedirect: /viewer/#/
+  loginUrl: /viewer/#/authentication/login
+
+#################################################gaf-map##############################
+require:
+  security: 'false'
+
+webgis:
+  host: http://192.168.11.118:31111
+
+#################################################gaf-portal##############################
+# grafana，用于主机监控
+GRAFANA_URL: http://grafana.gaf.net.cn
+workflow:
+  api:
+    url: http://workflow.gaf.net.cn/cloud-portal/open/api
+#################################################gaf-data-mgt##############################
+# iserver 实例地址
+hostservers:
+  defaultserverid: gaftest
+  hostserversetting:
+    - domainurl: http://127.0.0.1:8090/iserver
+      enable: true
+      hostid: gaftest
+      hostserverurl: http://127.0.0.1:8090/iserver
+      password: admin123.
+      type: GENERALSERVICE
+      username: admin
+supermap:
+  gaf:
+    s3m-threads-num: 4
+#################################################gaf-analysis##############################
+spiOverlayPath: /data-s3fs/47210038-489e-4a7a-b643-2e6e2aff52d3/gaf-analysis/overlay
