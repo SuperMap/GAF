@@ -171,13 +171,13 @@
             }
           ]" auto-size />
         </a-form-item>
-        <div style="text-align: center; margin-top: 15px;">
+        <!-- <div style="text-align: center; margin-top: 15px;">
           <a-button @click="submitForm" type="primary" :loading="loading" class="submit-gray">
             确定
           </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="backToList" class="cancel-modal">{{this.operation === 1 ? "返回" : "取消"}}</button>
-        </div>
+        </div> -->
       </a-form>
     </div>
   </div>

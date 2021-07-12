@@ -120,6 +120,7 @@
         :width="450"
         :visible="visible"
         @close="onClose"
+        placement="right"
         :closable="false"
       >
         <a-form

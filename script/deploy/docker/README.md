@@ -28,11 +28,11 @@
 
 #### 3.3.构建GAF应用镜像
 
-`./build.sh`
+`chmod +x build.sh && ./build.sh`
 
 #### 3.4.部署GAF基础应用
 
-`./deploy.sh base`
+`chmod +x deploy.sh && ./deploy.sh base`
 
 - GAF监控相关应用部署（可选）[[帮助]](#GAF-MONITOR) 
 

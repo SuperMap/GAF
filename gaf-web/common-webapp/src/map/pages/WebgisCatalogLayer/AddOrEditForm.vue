@@ -269,13 +269,17 @@ export default {
       } else if (this.operation === 'add') {
         if (!this.isFirstLevel) {
           if (this.catalogType === '1') {
-            return '添加模块分组'
+            return '模块分组'
+            // return '添加模块分组'
           } else if (this.catalogType === '2') {
-            return '添加API分组'
+            return 'API分组'
+            // return '添加API分组'
           } else if (this.catalogType === '3') {
-            return '添加角色分组'
+            return '角色分组'
+            // return '添加角色分组'
           } else if (this.catalogType === '4') {
-            return '添加菜单分组'
+            return '菜单分组'
+            // return '添加菜单分组'
           } else if (this.catalogType === '6') {
             return '添加目录'
           } else {
