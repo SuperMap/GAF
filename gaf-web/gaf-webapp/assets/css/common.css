@@ -1030,3 +1030,21 @@ li.ant-menu-item.ant-menu-item-selected.clicked .nuxt-link-active {
 .ant-menu.ant-menu-dark:nth-child(1) .ant-menu-item-selected {
   background-color: #20252E;
 }
+
+.AttachmentManagement .btn-upload .ant-upload button {
+  background-color: #2196f3;
+  margin-top: 16px;
+  height: 39px;
+  width: 116px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 0;
+  color: #fff;
+}
+.AttachmentManagement .btn-upload .ant-upload button:hover, .AttachmentManagement .btn-upload .ant-upload button:focus{
+  border-color: transparent
+}
+
+.inputNumber .ant-input-number-input {
+  text-align: center;
+}

@@ -173,8 +173,7 @@
       dataId: '',
       dataNode: {
         name: '',
-        children: [],
-        type: "commonPrefix"
+        objectType: "commonPrefix"
       }
     }
   },
@@ -206,28 +205,10 @@
         if (err) {
           return false
         }
-        // let url = `/sys-mgt/sys-dicts/`
-        // const data = this.addOrEditForm.getFieldsValue()
-        // if (this.dataId) {
-        //   url = url  + this.dataId
-        //   const rst = await this.$axios.put(url, data)
-        //   if (rst.data.isSuccessed) {
-        //     this.$message.success('更新成功')
-        //   } else {
-        //     this.$message.error(`更新失败,原因:${rst.data.message}`)
-        //   }
-        // } else {
-        //   const rst = await this.$axios.post(url, data)
-        //   if (rst.data.isSuccessed) {
-        //     this.$message.success('添加成功')
-        //   } else {
-        //     this.$message.error(`添加失败,原因:${rst.data.message}`)
-        //   }
-        // }
         if (this.operation === 2){
           this.dataNode.name = this.name + (this.dataNode.name.endsWith('/') ? this.dataNode.name : (this.dataNode.name + '/'))
         }
-        this.editData.push(this.dataNode)
+        this.editData.unshift(this.dataNode)
         this.addOrEditForm.resetFields()
         this.$emit('submit')
       })

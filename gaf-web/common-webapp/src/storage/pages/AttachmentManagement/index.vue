@@ -3,14 +3,35 @@
     <div class="page-single">
       <gaf-table-layout>
         <template #actions>
-          <button @click="handleAdd" class="btn-fun blue btn-m10">
+          <button @click="handleAdd" class="btn-fun blue">
             <span><a-icon type="plus-circle" /> 新建目录</span>
           </button>
           <!-- <button @click="batchDel" class="btn-fun red">
           <span><a-icon type="delete" />
           批量删除</span>
         </button> -->
+        <div class="AttachmentManagement">
+        <gaf-upload
+          text="上传"
+          class="btn-upload"
+          :showUploadList="false"
+          :dir="dir"
+          :configName="configName"
+          minioServiceUrl="/storage/api/"
+          @uploadComplate="uploadComplate"
+        ></gaf-upload>
+        </div>
         </template>
+        <template #filter>
+        <div class="search-position">
+          <a-input-search
+            @search="onSearch"
+            placeholder="请输入名称查询"
+            size="large"
+          >
+          </a-input-search>
+        </div>
+      </template>
         <!-- <template #filter>
         <div style="margin-top: 5px">
           <a-input-search
@@ -54,28 +75,38 @@
             class="table-style"
             size="middle"
           >
-            <template slot="name" slot-scope="text">
-              {{ getName(text) }}
+            <template slot="name" slot-scope="text, record">
+              <a
+                v-if="record.objectType === 'commonPrefix'"
+                @click.stop="() => handleConfig(record)"
+                href="javascript:;"
+                class="btn-margin"
+                ><u>{{ getName(text) }}</u>
+              </a>
+              <span v-else>{{ getName(text) }}</span>
             </template>
             <template v-if="timeFormat" slot="timeRender" slot-scope="text">
               {{ timeFormat(text) }}
             </template>
+            <template slot="size" slot-scope="text, record">
+              {{ getSize(record) }}
+            </template>
             <template slot="operation" slot-scope="text, record">
               <a
-                @click.stop="() => handleAddChild(record)"
+                @click.stop="() => share(record)"
                 class="btn-margin"
                 href="javascript:;"
-                v-if="record.type === 'commonPrefix'"
+                v-if="record.objectType === 'object'"
               >
-                新建子目录
+                分享
               </a>
               <!-- <a-divider
                 type="vertical"
                 v-if="record.type === 'commonPrefix'"
               /> -->
               <a
+                v-if="record.objectType === 'object'"
                 @click.stop="() => handleDownload(record)"
-                v-if="record.type === 'object'"
                 class="btn-margin"
                 href="javascript:;"
               >
@@ -95,15 +126,7 @@
                 type="vertical"
                 v-if="record.type === 'commonPrefix'"
               /> -->
-              <gaf-upload
-                text="上传"
-                class="btn-upload"
-                :showUploadList="false"
-                :dir="record.name"
-                minioServiceUrl="/storage/file-storage/"
-                @uploadComplate="uploadComplate"
-                v-if="record.type === 'commonPrefix'"
-              ></gaf-upload>
+              
             </template>
             <template v-if="timeFormat" slot="timeRender" slot-scope="text">
               {{ timeFormat(text) }}
@@ -134,17 +157,42 @@
         >
         </add-edit-form>
       </a-modal>
+      <a-modal
+        v-model="openFileSharing"
+        :width="800"
+        :centered="true"
+        @cancel="handleBackFileSharing"
+        destroy-on-close
+        title="文件分享"
+        @ok="handleOkFileSharing"
+        okText="复制链接"
+      >
+        <file-sharing
+          ref="FileSharing"
+          :title="title"
+          :fileData="fileData"
+          @submit="handleSubmit"
+          @back="handleBack"
+          :operation="operation"
+          :name="name"
+          :dir="dir"
+          :configName="configName"
+        >
+        </file-sharing>
+      </a-modal>
     </div>
   </div>
 </template>
 
 <script>
 import AddEditForm from "../../views/AttachmentManagement/AddOrEditForm";
+import FileSharing from "../../views/AttachmentManagement/FileSharing";
 import { gafDownloadUtil } from "gaf-ui";
 
 export default {
   components: {
     AddEditForm,
+    FileSharing,
   },
   props: {
     dicTypeId: {
@@ -155,6 +203,10 @@ export default {
       type: String,
       default: null,
     },
+    configName: {
+      type: String,
+      default: null,
+    }
   },
   data() {
     return {
@@ -170,8 +222,11 @@ export default {
       selectedRowKeys: [],
       // ${functionName}表格数据
       dataList: [],
+      searchTextDataList: [],
       // 是否显示添加修改弹出层
       open: false,
+      openFileSharing: false,
+      fileData: null,
       // 分页参数
       pagination: {
         pageSize: 10,
@@ -198,11 +253,12 @@ export default {
           scopedSlots: { customRender: "name" },
         },
         {
-          title: "大小(KB)",
+          title: "大小",
           dataIndex: "size",
           key: "size",
           width: 125,
           align: "center",
+          scopedSlots: { customRender: "size" },
         },
         {
           title: "时态",
@@ -218,6 +274,7 @@ export default {
           fixed: "right",
         },
       ],
+      dir: ''
     };
   },
   watch: {
@@ -265,14 +322,22 @@ export default {
     handleOk() {
       this.$refs.addEditForm.submitForm()
     },
+    handleOkFileSharing() {
+      this.$refs.FileSharing.submitForm()
+    },
     handleSearchFieldChange(value) {
       this.searchedColumn = value;
     },
     // 搜索查询
     async onSearch(val) {
-      this.searchText = val;
       this.pagination.current = 1;
-      await this.getList();
+      if (val === "") {
+        await this.getList(this.dir);
+      } else {
+        this.dataList = this.searchTextDataList.filter(
+          (ltem) => ltem.name.includes(val) === true
+        );
+      }
     },
     // 页码，排序项发生改变时，重新获取列表数据
     tableChange(pageInfo, filters, sorter) {
@@ -298,7 +363,7 @@ export default {
           this.expanded = false;
           this.loading = false;
           res.data.forEach((element) => {
-            if (element.type === "commonPrefix") {
+            if (element.objectType === "commonPrefix") {
               element.children = [];
             }
           });
@@ -336,6 +401,10 @@ export default {
       this.editData = this.dataList;
       this.title = "新建目录";
     },
+    share(row) {
+      this.fileData = row
+      this.openFileSharing = true;
+    },
     // 添加修改提交后
     handleSubmit() {
       this.dataList = [...this.dataList];
@@ -346,9 +415,12 @@ export default {
       this.editData = [];
       this.open = false;
     },
+    handleBackFileSharing() {
+      this.openFileSharing = false;
+    },
     // 下载
     handleDownload(row) {
-      gafDownloadUtil(this.$axios, "/storage/file-storage/", row.name);
+      gafDownloadUtil(this.$axios, `/storage/api/`,this.configName, row.name);
     },
     handleAddChild(row) {
       this.operation = 2;
@@ -379,7 +451,7 @@ export default {
     },
     // 删除数据
     async handleDelete(row) {
-      const url = `/storage/file-storage/` + row.name;
+      const url = `/storage/api/${this.configName}/` + row.name;
       const rst = await this.$axios.delete(url);
       if (rst.data.isSuccessed) {
         this.$message.success("删除成功");
@@ -387,6 +459,9 @@ export default {
         this.$message.error(`删除失败,原因:${rst.data.message}`);
       }
       this.$nextTick(() => {
+        if (this.dataList.length === 1) {
+          this.$emit('popRoutes')
+        }
         this.getList();
         this.expandedRowKeys = [];
       });
@@ -422,9 +497,9 @@ export default {
       // eslint-disable-next-line no-console
       console.log(selected, selectedRows, changeRows);
     },
-    async getList() {
+    async getList(prefix) {
       this.loading = true;
-      let url = `/storage/file-storage/list-objects`;
+      let url = `/storage/api/${this.configName}/list-objects/`;
       if (this.searchText.trim() && this.searchedColumn) {
         url =
           url +
@@ -432,6 +507,10 @@ export default {
           this.searchedColumn +
           "&searchFieldValue=" +
           this.searchText.trim();
+      }
+      if (prefix) {
+        url =
+          url + prefix
       }
       // if (this.sorter.order && this.sorter.field) {
       //   url =
@@ -456,18 +535,19 @@ export default {
         //   })
         // }
         this.dataList = res.data;
-        this.dataList.forEach((element) => {
-          if (element.type === "commonPrefix") {
-            element.children = [];
-          }
-        });
+        this.searchTextDataList = res.data;
+        // this.dataList.forEach((element) => {
+        //   if (element.type === "commonPrefix") {
+        //     element.children = [];
+        //   }
+        // });
       } else {
         this.$message.error(`查询失败,原因:${res.message}`);
       }
     },
     uploadComplate() {
-      this.getList();
-      this.expandedRowKeys = [];
+      this.getList(this.dir);
+      // this.expandedRowKeys = [];
     },
     getName(data) {
       let name = data.split("/");
@@ -477,6 +557,24 @@ export default {
         return name[name.length - 1];
       }
     },
+    getSize(row) {
+      if (row.objectType === 'object') {
+        let Units = [' KB', ' MB', ' GB', ' TB']
+        let size = row.size
+        let index = 0
+        for(let i=0;size >= 1024; i++) {
+          size = size / 1024
+          index = i
+        }
+        return size.toFixed(2)+Units[index]
+      }
+      
+    },
+    handleConfig(record) {
+      this.dir = record.name
+      this.$emit('addbreadcrumb', record)
+      this.getList(record.name)
+    }
   },
 };
 </script>
@@ -488,15 +586,8 @@ export default {
 .btn-m10 {
   margin-left: 29px;
 }
-.btn-upload {
+.AttachmentManagement {
   display: inline-block;
-  button {
-    height: auto;
-    background-color: rgb(221, 171, 92);
-    border: 1px solid transparent;
-    padding: 2px 5px;
-    border-radius: 5px;
-    color: #fff;
-  }
+  margin-left: 10px;
 }
 </style>
