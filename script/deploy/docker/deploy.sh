@@ -70,6 +70,11 @@ base() {
 }
 
 monitor() {
+    #设置工作目录
+    workspace
+    #检查命令
+    check_commands
+
     #添加数据库数据
     load_db_data
     #启动GAF基础环境监控应用
