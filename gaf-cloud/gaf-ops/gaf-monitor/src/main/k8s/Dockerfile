@@ -1,4 +1,4 @@
-FROM harbor.gaf.net.cn/library/backend-base:debian
+FROM registry.cn-hangzhou.aliyuncs.com/supermap-gaf/backend-base:debian
 MAINTAINER user "user@supermap.com"
 # Java启动参数
 ENV JAVA_OPTS ''

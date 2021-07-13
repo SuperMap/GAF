@@ -1,4 +1,4 @@
-FROM harbor.gaf.net.cn/library/ugo-base:1.0
+FROM registry.cn-hangzhou.aliyuncs.com/supermap-gaf/ugo-base:1.0
 MAINTAINER user "user@supermap.com"
 # 需要配置数据库
 ENV GAF_ENV_DATASOURCE_URL 'jdbc:postgresql://localhost:5432/postgres'
