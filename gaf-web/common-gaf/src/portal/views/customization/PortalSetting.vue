@@ -8,6 +8,7 @@
               <a-select-option value="group">默认</a-select-option>
               <a-select-option value="top">顶部</a-select-option>
               <a-select-option value="left">侧栏</a-select-option>
+              <a-select-option value="topLeft">顶部侧栏</a-select-option>
               <a-select-option value="system">子系统模式</a-select-option>
             </a-select>
           </a-form-item>
