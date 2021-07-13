@@ -148,7 +148,7 @@
 
 <script>
   import moment from 'moment'
-
+  import {GafStorage} from 'gaf-ui'
   export default {
   props: {
     title: {
@@ -166,7 +166,15 @@
     name: {
       type: String,
       dafault: ''
-    }
+    },
+    dir: {
+      type: String,
+      default: null,
+    },
+    configName: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
@@ -206,11 +214,14 @@
           return false
         }
         if (this.operation === 2){
-          this.dataNode.name = this.name + (this.dataNode.name.endsWith('/') ? this.dataNode.name : (this.dataNode.name + '/'))
+          this.dataNode.name = this.dir + this.name + (this.dataNode.name.endsWith('/') ? this.dataNode.name : (this.dataNode.name + '/'))
         }
-        this.editData.unshift(this.dataNode)
+        const gafstorage = new GafStorage(this.$axios, '/storage/api/')
+        gafstorage.setConfigName(this.configName)
+        gafstorage.createEmptyDir(this.dataNode.name)
+        // this.editData.unshift(this.dataNode)
         this.addOrEditForm.resetFields()
-        this.$emit('submit')
+        this.$emit('submit', this.dir)
       })
     },
     // 从新增修改模态框返回列表

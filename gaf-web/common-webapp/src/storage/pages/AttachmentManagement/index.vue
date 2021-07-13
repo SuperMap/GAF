@@ -1,6 +1,6 @@
 <template>
-  <div class="app-container">
-    <div class="page-single">
+  <div>
+    <div>
       <gaf-table-layout>
         <template #actions>
           <button @click="handleAdd" class="btn-fun blue">
@@ -23,15 +23,15 @@
         </div>
         </template>
         <template #filter>
-        <div class="search-position">
-          <a-input-search
-            @search="onSearch"
-            placeholder="请输入名称查询"
-            size="large"
-          >
-          </a-input-search>
-        </div>
-      </template>
+          <div class="search-position">
+            <a-input-search
+              @search="onSearch"
+              placeholder="请输入名称查询"
+              size="large"
+            >
+            </a-input-search>
+          </div>
+        </template>
         <!-- <template #filter>
         <div style="margin-top: 5px">
           <a-input-search
@@ -150,6 +150,8 @@
           ref="addEditForm"
           :title="title"
           :editData="editData"
+          :dir="dir"
+          :configName="configName"
           @submit="handleSubmit"
           @back="handleBack"
           :operation="operation"
@@ -171,11 +173,9 @@
           ref="FileSharing"
           :title="title"
           :fileData="fileData"
-          @submit="handleSubmit"
           @back="handleBack"
           :operation="operation"
           :name="name"
-          :dir="dir"
           :configName="configName"
         >
         </file-sharing>
@@ -406,9 +406,11 @@ export default {
       this.openFileSharing = true;
     },
     // 添加修改提交后
-    handleSubmit() {
-      this.dataList = [...this.dataList];
+    handleSubmit(prefix) {
       this.open = false;
+      setTimeout(() => {
+        this.getList(prefix);
+      }, 200)
     },
     // 添加修改返回后
     handleBack() {
@@ -462,7 +464,7 @@ export default {
         if (this.dataList.length === 1) {
           this.$emit('popRoutes')
         }
-        this.getList();
+        this.getList(this.dir);
         this.expandedRowKeys = [];
       });
     },
@@ -571,9 +573,17 @@ export default {
       
     },
     handleConfig(record) {
+      console.log(record)
       this.dir = record.name
       this.$emit('addbreadcrumb', record)
       this.getList(record.name)
+    },
+    setDir(path) {
+      if (path) {
+        this.dir = path
+      } else {
+        this.dir = ''
+      }
     }
   },
 };

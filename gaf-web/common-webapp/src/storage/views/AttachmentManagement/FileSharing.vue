@@ -256,7 +256,6 @@
       this.$emit('back')
     },
     async onChange() {
-      let allMinutes = this.days * 1440 + this.hours * 60 + this.minutes
       if (this.days === 7) {
         this.hours = 0
         this.minutes = 0
@@ -264,9 +263,15 @@
       if (this.days === 0 && this.hours === 0 && this.minutes === 0) {
         this.days = 7
       }
+      let allMinutes = this.days * 1440 + this.hours * 60 + this.minutes
       let url = `/storage/api/${this.configName}/share/${this.fileData.name}?expiration=${allMinutes}`
       const res = await this.$axios.$get(url);
-      this.linkValue = res.data.download
+      if (res.isSuccessed) {
+        this.linkValue = res.data.download
+      } else {
+        this.$message.error(`设置失败,原因:${res.message}`)
+      }
+      
     }
   }
 }

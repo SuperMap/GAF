@@ -282,8 +282,10 @@ export default {
             this.isShow = false
             if (index === 1) {
               this.$refs.AttachmentManagement.getList()
+              this.$refs.AttachmentManagement.setDir()
             } else {
               this.$refs.AttachmentManagement.getList(route.path)
+              this.$refs.AttachmentManagement.setDir(route.path)
             }
 
           }
