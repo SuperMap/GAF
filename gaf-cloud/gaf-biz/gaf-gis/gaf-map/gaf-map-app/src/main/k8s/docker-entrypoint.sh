@@ -1,4 +1,4 @@
 #!/bin/bash
-
+export JAVA_OPTS=`sed -e 's/^"//' -e 's/"$//' <<< "$JAVA_OPTS"`
 sh -c /opt/init.sh
-exec java ${JAVA_OPTS:1:-1} -jar app.jar --spring.profiles.active=prod "$@"
+exec java $JAVA_OPTS -jar app.jar --spring.profiles.active=prod "$@"
