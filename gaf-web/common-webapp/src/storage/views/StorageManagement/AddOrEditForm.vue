@@ -95,6 +95,10 @@
               {
                 rules: [
                   {
+                    required: true,
+                    message: '请输入用户名',
+                  },
+                  {
                     pattern: /^.{0,255}$/,
                     message: '长度不能超过255',
                   },
@@ -112,6 +116,10 @@
               'secretKey',
               {
                 rules: [
+                  {
+                    required: true,
+                    message: '请输入密码',
+                  },
                   {
                     pattern: /^.{0,255}$/,
                     message: '长度不能超过255',
