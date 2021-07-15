@@ -1,4 +1,4 @@
-FROM harbor.gaf.net.cn/library/ugo-base:1.0
+FROM registry.cn-hangzhou.aliyuncs.com/supermap-gaf/ugo-base:1.0
 MAINTAINER user "user@supermap.com"
 # Java启动参数
 ENV JAVA_OPTS ''

@@ -15,7 +15,6 @@ import com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo;
 import com.supermap.gaf.authority.vo.AuthUserParttimeVo;
 import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.exception.GafException;
-import com.supermap.gaf.project.client.ProjCodeBaseUsersClient;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.utils.LogUtil;
 import org.slf4j.Logger;
@@ -48,8 +47,6 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
     private AuthPostRoleService authPostRoleService;
     @Autowired
     private AuthUserRoleService authUserRoleService;
-    @Autowired(required = false)
-    private ProjCodeBaseUsersClient projCodeBaseUsersClient;
     @Autowired
     private BatchSortAndCodeService batchSortAndCodeService;
 
@@ -111,14 +108,6 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
             if (user == null) {
                 throw new GafException("未找到该用户信息");
             }
-            boolean hasAppRoleBeforeInsert = hasAppRole(user, appRoleIds, authUserParttimes -> {});
-            if (!hasAppRoleBeforeInsert) {
-                try{
-                    projCodeBaseUsersClient.addDevUser(user.getRealName(), user.getName(), user.getEmail());
-                } catch (Exception e) {
-                    logger.info("新增代码库用户失败", e);
-                }
-            }
         }
 
         authUserParttime.setTenantId(Objects.requireNonNull(SecurityUtilsExt.getUser()).getTenantId());
@@ -158,14 +147,6 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
             AuthUser user = authUserService.getById(parttime.getUserId());
             if (user == null) {
                 throw new GafException("未找到该用户信息");
-            }
-            boolean hasAppRoleAfterDelete = this.hasAppRole(user, appRoleIds, authUserParttimes -> {});
-            if (!hasAppRoleAfterDelete) {
-                try{
-                    projCodeBaseUsersClient.blockDevUser(user.getName());
-                } catch (Exception e) {
-                    logger.info("删除代码库用户失败", e);
-                }
             }
         }
 
@@ -212,28 +193,6 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
             AuthUser user = authUserService.getById(authUserParttime.getUserId());
             if (user == null) {
                 throw new GafException("未找到该用户信息");
-            }
-            boolean hasAppRole = this.hasAppRole(user, appRoleIds, authUserParttimes -> authUserParttimes.removeIf(parttime -> parttime.getUserParttimeId() .equals( authUserParttime.getUserParttimeId() )));
-            if (!hasAppRole) {
-                // 查看新的岗位是否有app角色
-                List<AuthPostRole>  authNewPostRoles = authPostRoleService.getByPostId(newPostId, true);
-                boolean newPostHasAppRole = authNewPostRoles.stream().anyMatch(authPostRole -> appRoleIds.contains(authPostRole.getRoleId()));
-                // 查看原来的岗位是否有app角色
-                List<AuthPostRole>  authPostRoles = authPostRoleService.getByPostId(oldPostId, true);
-                boolean oldPostHasAppRole = authPostRoles.stream().anyMatch(authPostRole -> appRoleIds.contains(authPostRole.getRoleId()));
-                if (newPostHasAppRole && !oldPostHasAppRole) {
-                    try{
-                        projCodeBaseUsersClient.addDevUser(user.getRealName(),user.getName(),user.getEmail());
-                    } catch (Exception e) {
-                        logger.info("添加代码库用户失败", e);
-                    }
-                } else if (!newPostHasAppRole && oldPostHasAppRole) {
-                    try{
-                        projCodeBaseUsersClient.blockDevUser(user.getName());
-                    } catch (Exception e) {
-                        logger.info("删除代码库用户失败", e);
-                    }
-                }
             }
         }
         return authUserParttime;

@@ -143,7 +143,7 @@ services:
 
 
   gaf-postgres:
-    image: harbor.gaf.net.cn/library/postgres:10.10
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/postgres:10.10
     networks:
     - gaf-net
     ports:
@@ -157,7 +157,7 @@ services:
     container_name: gaf-postgres
     command: postgres -c 'max_connections=2000'
   gaf-redis:
-    image: harbor.gaf.net.cn/library/redis:5
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/redis:5
     networks:
     - gaf-net
     volumes:
@@ -165,7 +165,7 @@ services:
     container_name: gaf-redis
     command: ["redis-server","/usr/local/etc/redis/redis.conf"]
   gaf-minio:
-    image: harbor.gaf.net.cn/library/minio:latest
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/minio:latest
     networks:
     - gaf-net
     ports:
@@ -179,7 +179,7 @@ services:
     container_name: gaf-minio
     command: server /data
   gaf-s3fs-mount:
-    image: harbor.gaf.net.cn/library/gaf-s3fs-mount:latest
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/gaf-s3fs-mount:latest
     networks:
     - gaf-net
     privileged: true
@@ -192,7 +192,7 @@ services:
     - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs:shared
     container_name: gaf-s3fs-mount
   gaf-cadvisor:
-    image: harbor.gaf.net.cn/library/google/cadvisor:v0.33.0
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/cadvisor:v0.33.0
     networks:
     - gaf-net
     volumes:
@@ -202,7 +202,7 @@ services:
     - /var/lib/docker/:/var/lib/docker:ro
     container_name: gaf-cadvisor
   gaf-node-exporter:
-    image: harbor.gaf.net.cn/library/prom/node-exporter:v1.0.1
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/node-exporter:v1.0.1
     networks:
     - gaf-net
     volumes:
@@ -216,7 +216,7 @@ services:
     - '--collector.filesystem.ignored-fs-types="^(sys|proc|auto|cgroup|devpts|ns|au|fuse\.lxc|mqueue)(fs|)$$"'
     container_name: gaf-node-exporter
   gaf-prometheus:
-    image: harbor.gaf.net.cn/library/prom/prometheus:v2.23.0
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/prometheus:v2.23.0
     networks:
     - gaf-net
     ports:
@@ -228,7 +228,7 @@ services:
     restart: always
     command: ["--config.file=/etc/prometheus/prometheus.yml","--storage.tsdb.path=/prometheus"]
   gaf-grafana:
-    image: harbor.gaf.net.cn/library/grafana/grafana:7.3.1-ubuntu
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/grafana:7.3.1-ubuntu
     networks:
     - gaf-net
     ports:
@@ -238,7 +238,7 @@ services:
     - ${GAF_VOL_DIR}/vol_grafana/index.html:/usr/share/grafana/public/views/index.html
     container_name: gaf-grafana
   gaf-elasticsearch:
-    image: harbor.gaf.net.cn/library/elasticsearch:7.9.3
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/elasticsearch:7.9.3
     networks:
     - gaf-net
     ports:
@@ -250,14 +250,14 @@ services:
     container_name: gaf-elasticsearch
     restart: always
   gaf-fluentd-es:
-    image: harbor.gaf.net.cn/library/fluentd-es:1.0
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/fluentd-es:1.0
     networks:
     - gaf-net
     volumes:
     - ${GAF_VOL_DIR}/vol_fluentd-es/fluent.conf:/fluentd/etc/fluent.conf
     container_name: gaf-fluentd-es
   gaf-zipkin:
-    image: harbor.gaf.net.cn/library/openzipkin/zipkin:2
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/zipkin:2
     networks:
     - gaf-net
     environment:
