@@ -96,4 +96,12 @@ public interface WebgisServiceService {
 
     List selectAssociationDataServices(String gisServiceId);
 
+    /**
+     * 根据多种类型分页查询服务
+     * @param typeCodes
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    Page<WebgisService> listByTypeCodes(String typeCodes, int pageNum, int pageSize);
 }

@@ -103,6 +103,15 @@
         </foreach>
         AND status = true
     </select>
+    <select id="selectByTypeCodes" parameterType="java.util.List" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_service"
+        WHERE type_code IN
+        <foreach collection="typeCodes" index="index" item="typeCode" open="(" close=")" separator=",">
+            #{typeCode}
+        </foreach>
+        AND status = true
+    </select>
     <insert id="insert" useGeneratedKeys="true" keyColumn="gis_service_id" keyProperty="gisServiceId" parameterType="com.supermap.gaf.webgis.entity.WebgisService">
         INSERT INTO "webgis_service"
         <trim prefix="(" suffix=")" suffixOverrides=",">

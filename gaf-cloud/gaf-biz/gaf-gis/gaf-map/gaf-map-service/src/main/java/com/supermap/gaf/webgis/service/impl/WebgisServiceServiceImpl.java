@@ -355,6 +355,15 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
         return re;
     }
 
+    @Override
+    public Page<WebgisService> listByTypeCodes(String typeCodes, int pageNum, int pageSize) {
+        String[] typeCodeArr = typeCodes.split(",");
+        List<String>arr = Arrays.asList(typeCodeArr);
+        PageInfo<WebgisService> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
+            webgisServiceMapper.selectByTypeCodes(arr);
+        });
+        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
+    }
 
 
 //    public static void main(String[] args) {

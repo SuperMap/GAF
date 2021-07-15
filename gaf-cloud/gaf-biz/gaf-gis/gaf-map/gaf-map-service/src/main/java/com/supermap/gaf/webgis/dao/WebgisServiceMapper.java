@@ -81,4 +81,11 @@ public interface WebgisServiceMapper{
 	 * @return 若未查询到则返回空集合
 	 */
 	List<WebgisService> selectNotInSet(@Param("vo") WebgisServiceConditonVo webgisServiceConditonVo, @Param("serviceIdSet") Set<String> serviceIdSet);
+
+	/**
+	 * 查询多种类型下的所有服务
+	 * @param typeCodes
+	 * @return
+	 */
+	List<WebgisService>selectByTypeCodes(@Param("typeCodes")List<String>typeCodes);
 }
