@@ -207,9 +207,13 @@ public class WebgisServiceResource{
 		return MessageResult.successe(Void.class).status(200).message("更新操作成功").build();
     }
 
-
-
-	
-
-
+    @POST
+    @Path("/get-by-webgis-ids")
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "根据id集合批量查询webgis服务", notes = "根据id集合批量查询webgis服务")
+    @ApiImplicitParam(name = "webgisIds",value = "webgis服务id集合",paramType = "body",dataType = "list",required = true )
+    public MessageResult<List<WebgisService>> getByWebgisIds(List<String>webgisIds){
+        List<WebgisService> webgisServices = webgisServiceService.listByIds(webgisIds);
+        return MessageResult.data(webgisServices).status(200).message("获取成功").build();
+    }
 }
