@@ -207,9 +207,30 @@ public class WebgisServiceResource{
 		return MessageResult.successe(Void.class).status(200).message("更新操作成功").build();
     }
 
+    @POST
+    @Path("/get-by-webgis-ids")
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "根据id集合批量查询webgis服务", notes = "根据id集合批量查询webgis服务")
+    @ApiImplicitParam(name = "webgisIds",value = "webgis服务id集合",paramType = "body",dataType = "list",required = true )
+    public MessageResult<List<WebgisService>> getByWebgisIds(List<String>webgisIds){
+        List<WebgisService> webgisServices = webgisServiceService.listByIds(webgisIds);
+        return MessageResult.data(webgisServices).status(200).message("获取成功").build();
+    }
 
-
-	
-
-
+    @GET
+    @Path("/get-type-codes")
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "根据服务类型集合查询所有服务", notes = "根据服务类型集合查询所有服务")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "typeCodes",value = "typeCodes服务类型集合",paramType = "query",dataType = "String",required = true ),
+            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[0,infinity]",paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range[0,infinity]", paramType = "query", dataType = "integer")
+    })
+    public MessageResult<Page> getByTypeCodes(@QueryParam("typeCodes") String typeCodes,
+                                              @DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
+                                              @DefaultValue("10")@QueryParam("pageSize")Integer pageSize
+                                              ){
+        Page<WebgisService> webgisServicePage = webgisServiceService.listByTypeCodes(typeCodes, pageNum, pageSize);
+        return MessageResult.successe(Page.class).data(webgisServicePage).status(200).message("获取成功").build();
+    }
 }
