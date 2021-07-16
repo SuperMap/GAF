@@ -12,10 +12,5 @@
     <artifactId>gaf-common-base-data</artifactId>
     <version>2.1</version>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-        </dependency>
-    </dependencies>
+
 </project>

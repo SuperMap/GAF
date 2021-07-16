@@ -28,10 +28,6 @@
         </dependency>
         <dependency>
             <groupId>com.supermap.gaf</groupId>
-            <artifactId>gaf-common-base-data</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.supermap.gaf</groupId>
             <artifactId>gaf-analysis-service</artifactId>
             <version>${project.version}</version>
         </dependency>

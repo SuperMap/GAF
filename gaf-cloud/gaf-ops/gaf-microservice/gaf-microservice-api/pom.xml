@@ -33,10 +33,7 @@
             <groupId>com.supermap.gaf</groupId>
             <artifactId>gaf-common-api-scanner</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.supermap.gaf</groupId>
-            <artifactId>gaf-common-base-data</artifactId>
-        </dependency>
+
 
     </dependencies>
 

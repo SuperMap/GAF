@@ -1,7 +1,7 @@
 -- liquibase formatted sql logicalFilePath:ddl/sys_dict
 
 -- changeset SYS:20210406-0
-CREATE TABLE "sys_dict" ("data_dict_id" VARCHAR(36) NOT NULL, "dict_code" VARCHAR(30), "dict_name" VARCHAR(30) NOT NULL, "dict_value" VARCHAR(50), "dict_class" VARCHAR(10), "seq" INTEGER, "pid" VARCHAR(36), "dict_desc" VARCHAR(255), "status" BOOLEAN DEFAULT TRUE, "created_time" TIMESTAMP WITHOUT TIME ZONE, "created_by" VARCHAR(36), "updated_time" TIMESTAMP WITHOUT TIME ZONE, "updated_by" VARCHAR(36), "tenant_id" VARCHAR(36), "visibility" BOOLEAN DEFAULT TRUE, "catalog_id" VARCHAR(36), "ext_properties" VARCHAR(500), CONSTRAINT "sys_dict_pkey" PRIMARY KEY ("data_dict_id"));
+CREATE TABLE "sys_dict" ("data_dict_id" VARCHAR(36) NOT NULL, "dict_code" VARCHAR(30), "dict_name" VARCHAR(255) NOT NULL, "dict_value" VARCHAR(255), "dict_class" VARCHAR(10), "seq" INTEGER, "pid" VARCHAR(36), "dict_desc" VARCHAR(255), "status" BOOLEAN DEFAULT TRUE, "created_time" TIMESTAMP WITHOUT TIME ZONE, "created_by" VARCHAR(36), "updated_time" TIMESTAMP WITHOUT TIME ZONE, "updated_by" VARCHAR(36), "tenant_id" VARCHAR(36), "visibility" BOOLEAN DEFAULT TRUE, "catalog_id" VARCHAR(36), "ext_properties" VARCHAR(500), CONSTRAINT "sys_dict_pkey" PRIMARY KEY ("data_dict_id"));
 COMMENT ON TABLE "sys_dict" IS '系统数据字典表';
 COMMENT ON COLUMN "sys_dict"."data_dict_id" IS '字典id。主键,uuid';
 COMMENT ON COLUMN "sys_dict"."dict_code" IS '编码。分类编码';

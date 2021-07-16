@@ -1,3 +1,13 @@
+#查看是否存在GAF项目路径
+check_gaf_project_exist(){
+    if [ -d "${Gaf_Project_Path}/gaf-web" ] && [ -d "${Gaf_Project_Path}/gaf-cloud" ]; then
+        echo " "
+    else
+        echo "GAF工程项目不存在，无法继续执行构建"
+        exit 1
+    fi
+}
+
 #检查docker是否有对应容器名正在运行
 check_container_exist(){
   local component=$1
@@ -38,9 +48,8 @@ wait_container_health(){
 
 #判断命令是否安装
 check_commands(){
-  commands=(docker docker-compose psql git java mvn yarn)
   commands_flag=""
-  for command_name in ${commands[*]}; do
+  for command_name in $*; do
       if ! [ -x "$(command -v $command_name)" ]; then
           echo "检查命令是否安装[$command_name] : FALSE"
           commands_flag=$command_name

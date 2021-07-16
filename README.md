@@ -48,11 +48,7 @@ GAF平台提供了GIS应用开发模板，方便GIS应用开发者通过模板�
 - Linux系统-系统要求CentOS7.5
 - Docker[[帮助]](script/deploy/docker/README.md#docker)-容器运行环境
 - docker-compose[[帮助]](script/deploy/docker/README.md#docker-compose)-容器启动命令
-- psql[[帮助]](script/deploy/docker/README.md#psql)-数据库的脚本运行命令
 - Git[[帮助]](script/deploy/docker/README.md#git)-用与克隆代码
-- Java[[帮助]](script/deploy/docker/README.md#java)-用于Maven构建
-- Maven[[帮助]](script/deploy/docker/README.md#maven)-后端应用构建工具
-- node.js环境、yarn命令[[帮助]](script/deploy/docker/README.md#node-yarn)-用于构建打包前端项目
 
 ### Step 2:克隆代码
 
