@@ -6,7 +6,6 @@
 package com.supermap.gaf.webgis.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.sun.istack.internal.NotNull;
 import com.supermap.gaf.annotation.ConfigName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
