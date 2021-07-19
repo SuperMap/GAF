@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>com.supermap.gaf</groupId>
 		<artifactId>gaf-storage</artifactId>
-		<version>2.1</version>
+		<version>2.1.1-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>gaf-storage-app</artifactId>
-	<version>2.1</version>
+	<version>2.1.1-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
@@ -22,11 +22,6 @@
 			<groupId>com.supermap.gaf</groupId>
 			<artifactId>gaf-common-log</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.supermap.gaf</groupId>
-			<artifactId>gaf-common-base-data</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>com.supermap.gaf</groupId>
 			<artifactId>gaf-storage-service</artifactId>

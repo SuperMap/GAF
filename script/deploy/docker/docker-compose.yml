@@ -160,10 +160,8 @@ services:
     image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/redis:5
     networks:
     - gaf-net
-    volumes:
-    - ${GAF_VOL_DIR}/vol_redis/redis.conf:/usr/local/etc/redis/redis.conf
     container_name: gaf-redis
-    command: ["redis-server","/usr/local/etc/redis/redis.conf"]
+    command: ["redis-server","/usr/local/bin/redis.conf"]
   gaf-minio:
     image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/minio:latest
     networks:

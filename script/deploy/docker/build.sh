@@ -25,9 +25,23 @@ workspace() {
 }
 
 build() {
+     #检查命令
+    check_commands docker java mvn yarn
+    #构建前端产出dist目录
     build_frontend
     cd $Root_Current_Dir/../../../
+    #构建前端、后端镜像
     build_images
+}
+
+container_build() {
+    #检查命令
+    check_commands docker
+    #寻找项目路径，挂载点
+    export Gaf_Project_Path=`readlink -f $Root_Current_Dir/../../../`
+    check_gaf_project_exist
+    #创建docker容器，容器内进行编译打包镜像
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $Gaf_Project_Path:/opt/GAF registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 bash /opt/GAF/script/deploy/docker/build.sh build
 }
 
 
@@ -42,13 +56,13 @@ case "$1" in
 "help")
 	usage
 ;;
-"push")
+"build")
     workspace
-    push
+    build
 ;;
 *)
 	workspace
-    build
+	container_build
 ;;
 esac
 

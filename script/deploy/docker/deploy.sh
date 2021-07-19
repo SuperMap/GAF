@@ -24,40 +24,44 @@ workspace() {
     source $Root_Current_Dir/bin/gaf-func.sh
     #加载环境变量
     source $Root_Current_Dir/.env
+    export GAF_BASE_DATA_PATH=`readlink -f $GAF_BASE_DATA_PATH`
 }
 
 base() {
     #设置工作目录
     workspace
-
     #检查命令
-    check_commands
-
+    check_commands docker docker-compose
     #开启防火墙规则
     port_gaf
-
     #创建docker网络
     create_docker_network gaf-net
-
     #创建挂载卷
     mkdir -p ${GAF_VOL_DIR}
     #拷贝挂载数据
-    cp -rf $Root_Current_Dir/data/vol/. ${GAF_VOL_DIR}
     cp -rf $Root_Current_Dir/conf/GAF_ENV_CONFIG.env ${GAF_VOL_DIR}
     #替换GAF_ENV_CONFIG.env里的变量
     sed_config_env
-
     #启动GAF基础环境数据存储应用
     LOAD_SERVICE="gaf-postgres gaf-redis gaf-minio gaf-s3fs-mount"
     docker-compose up -d $LOAD_SERVICE
-
+    #向postgres数据库导入基础数据
+    wait_gaf_db
+    source $Root_Current_Dir/conf/GAF_ENV_CONFIG.env
+    docker run --rm --net=gaf-net -v $GAF_BASE_DATA_PATH:/opt/liquibase-data registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 \
+        liquibase \
+          --driver=$GAF_ENV_DATASOURCE_DRIVER \
+          --classpath=/usr/local/liquibase/liquibase-classpath/postgresql-42.2.23.jar \
+          --url=$GAF_ENV_DATASOURCE_URL \
+          --username=$GAF_ENV_DATASOURCE_USERNAME \
+          --password=$GAF_ENV_DATASOURCE_PASSWORD \
+          --changeLogFile=liquibase-data/entry/gaf-cloud-base.xml \
+          update
     #启动GAF优先启动应用
     LOAD_SERVICE="gaf-microservice-rigister gaf-microservice-conf"
     docker-compose up -d gaf-microservice-rigister gaf-microservice-conf
     #等待优先启动应用启动完成
     wait_container_health $LOAD_SERVICE
-
-
     #启动其他GAF基础应用
     LOAD_SERVICE="gaf-microservice-api gaf-microservice-gateway gaf-sys-mgt gaf-authentication gaf-authority gaf-microservice-governance gaf-portal gaf-map gaf-data-mgt gaf-storage gaf-analysis gaf-webapp gaf-mapapp"
     docker-compose up -d $LOAD_SERVICE
@@ -73,10 +77,23 @@ monitor() {
     #设置工作目录
     workspace
     #检查命令
-    check_commands
-
-    #添加数据库数据
-    load_db_data
+    check_commands docker docker-compose
+    #拷贝挂载数据
+    cp -rf $Root_Current_Dir/data/vol/vol_fluentd-es ${GAF_VOL_DIR}
+    cp -rf $Root_Current_Dir/data/vol/vol_grafana ${GAF_VOL_DIR}
+    cp -rf $Root_Current_Dir/data/vol/vol_prometheus ${GAF_VOL_DIR}
+    #向postgres数据库导入基础数据
+    source $Root_Current_Dir/conf/GAF_ENV_CONFIG.env
+    docker run --rm --net=gaf-net -v $GAF_BASE_DATA_PATH:/opt/liquibase-data registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 \
+        liquibase \
+          --driver=$GAF_ENV_DATASOURCE_DRIVER \
+          --classpath=/usr/local/liquibase/liquibase-classpath/postgresql-42.2.23.jar \
+          --url=$GAF_ENV_DATASOURCE_URL \
+          --username=$GAF_ENV_DATASOURCE_USERNAME \
+          --password=$GAF_ENV_DATASOURCE_PASSWORD \
+          --changeLogFile=liquibase-data/entry/gaf-monitor.xml \
+          update
+    docker run --rm --net=gaf-net -e PGPASSWORD=$GAF_ENV_DATASOURCE_PASSWORD registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 createdb -h gaf-postgres -p 5432 -U $GAF_ENV_DATASOURCE_USERNAME grafana
     #启动GAF基础环境监控应用
     LOAD_SERVICE="gaf-elasticsearch gaf-fluentd-es gaf-zipkin"
     docker-compose up -d $LOAD_SERVICE
