@@ -33,13 +33,13 @@
                     message: '长度不能超过255',
                   },
                   {
-                    pattern: /[^\u4E00-\u9FA5]/,
+                    pattern: /^[^\u4e00-\u9fa5]+$/,
                     message: '不能使用中文字符'
                   }
                 ],
               },
             ]"
-            :disabled="operation === 1"
+            :disabled="operation === 3"
             placeholder="请输入名称"
             allow-clear
           />
@@ -61,7 +61,7 @@
                 ],
               },
             ]"
-            :disabled="operation === 3"
+            :disabled="operation === 1"
             placeholder="请输入s3协议地址"
             allow-clear
           />
@@ -83,7 +83,7 @@
                 ],
               },
             ]"
-            :disabled="operation === 3"
+            :disabled="operation === 1"
             placeholder="请输入s3协议bucket名称"
             allow-clear
           />
@@ -105,7 +105,7 @@
                 ],
               },
             ]"
-            :disabled="operation === 3"
+            :disabled="operation === 1"
             placeholder="请输入用户名"
             allow-clear
           />
@@ -127,7 +127,7 @@
                 ],
               },
             ]"
-            :disabled="operation === 3"
+            :disabled="operation === 1"
             placeholder="请输入密码"
             auto-clear
           />
@@ -186,7 +186,7 @@
       <a-button
         class="submit-gray"
         type="primary"
-        :loading="loading"
+        :loading="loading2"
         @click="check"
       >
         验证
@@ -218,6 +218,8 @@ export default {
   data() {
     return {
       dataId: "",
+      loading2: false,
+      loading: false
     };
   },
   beforeMount() {
@@ -250,6 +252,7 @@ export default {
         }
         let url = `/storage/tenant-server-configs/`;
         const data = this.addOrEditForm.getFieldsValue();
+        this.loading = true
         if (this.dataId) {
           url = url + this.dataId;
           const rst = await this.$axios.put(url, data);
@@ -266,8 +269,27 @@ export default {
             this.$message.error(`添加失败,原因:${rst.data.message}`);
           }
         }
+        this.loading = false
         this.addOrEditForm.resetFields();
         this.$emit("submit");
+      });
+    },
+    check() {
+      this.addOrEditForm.validateFields(async (err) => {
+        if (err) {
+          event.preventDefault();
+          return false;
+        }
+        let url = `/storage/validate-s3config/`;
+        const data = this.addOrEditForm.getFieldsValue();
+        this.loading2 = true
+        const rst = await this.$axios.post(url, data);
+        if (rst.data.isSuccessed) {
+          this.$message.success("验证通过");
+        } else {
+          this.$message.error(`验证失败`);
+        }
+        this.loading2 = false
       });
     },
     // 从新增修改模态框返回列表
