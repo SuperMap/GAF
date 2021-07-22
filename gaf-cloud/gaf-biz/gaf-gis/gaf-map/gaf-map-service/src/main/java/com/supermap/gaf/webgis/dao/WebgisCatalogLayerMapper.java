@@ -4,11 +4,14 @@
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
 */
 package com.supermap.gaf.webgis.dao;
+
 import com.supermap.gaf.webgis.entity.WebgisCatalogLayer;
 import com.supermap.gaf.webgis.vo.WebgisCatalogLayerSelectVo;
-import java.util.*;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 图层数据访问类
@@ -76,4 +79,11 @@ public interface WebgisCatalogLayerMapper{
 	 * @return 若未查询到则返回为空
 	 */
     List<String> selectServiceIdsByCatalogId(@Param("layerCatalogId") String layerCatalogId);
+
+	/**
+	 * 根据图层id集合获取图层集合
+	 * @param catalogLayerIds 图层id集合
+	 * @return 图层集合
+	 */
+	List<WebgisCatalogLayer> selectByIds(List<String> catalogLayerIds);
 }
