@@ -57,7 +57,7 @@
               @click.stop="() => setTenantSynchronization(record)"
               href="javascript:;"
             >
-              同步
+              <u>同步</u>
             </a>
             <!-- <a-divider type="vertical" />
         <a-popconfirm

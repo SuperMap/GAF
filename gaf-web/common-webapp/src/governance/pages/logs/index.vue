@@ -26,7 +26,7 @@
         </a-col>
       </a-row>
       <a-row type="flex" justify="start" align="middle">
-        <a-col>
+        <a-col style="margin-right: 5px;">
           <label>时间选择</label>
           <a-select @change="onPastTimeChange" default-value="1天">
             <a-select-option v-for="o in pastTimeSelect" :key="o" :value="o">

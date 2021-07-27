@@ -117,6 +117,7 @@ export default {
           title: '服务名称',
           dataIndex: 'name',
           key: 'name',
+          width: '200px'
         },
         {
           title: '服务类型',
@@ -129,7 +130,7 @@ export default {
           dataIndex: 'address',
           key: 'address',
           scopedSlots: { customRender: 'address' },
-          width: '550px',
+          // width: '550px',
         },
         {
           title: '时态',
@@ -153,7 +154,7 @@ export default {
     },
   },
   created() {
-    this.options = this.options.filter(item => item.value !== 'RESTDATA')
+    this.options = this.options.filter(item => item.value !== 'RESTDATA' && item.value !== 'RESTSPATIALANALYST')
     this.options.forEach(item => {
       if(item.value !== '-1'){
         this.optionsSeach.push(`&types=${item.value}`)
@@ -193,7 +194,7 @@ export default {
           '&searchFieldName=' +
           this.searchedColumn +
           '&searchFieldValue=' +
-          this.searchValue.trim()
+          encodeURI(this.searchValue.trim())
       }
       if (this.sorter.order && this.sorter.field) {
         url =

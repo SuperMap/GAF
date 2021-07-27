@@ -277,6 +277,7 @@
               'status',
               { valuePropName: 'checked', initialValue: true }
             ]"
+            :style="{ background:'#1890FF'}"
             :disabled="operation === 2"
             @click="statusClick"
             checked-children="启用"
@@ -611,7 +612,7 @@ export default {
   text-align: center;
   margin: 15px 0;
 }
-.ant-switch-checked {
-  background-color: rgba(94, 192, 94, 0.5);
-}
+// .ant-switch-checked {
+//   background-color: rgba(94, 192, 94, 0.5);
+// }
 </style>

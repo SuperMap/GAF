@@ -7,8 +7,8 @@
       </div> -->
       <div>
         <button
-          style="height: 40px; border-top-right-radius: 20px"
-          class="btn-fun gray"
+          style="height: 40px;border-top-right-radius: 20px;border: none;color: #fff;background: rgb(24, 144, 255);"
+          class="btn-fun"
           @click="backToList"
           ><a-icon type="rollback" />返回</button
         >

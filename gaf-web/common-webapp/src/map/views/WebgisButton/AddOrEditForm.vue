@@ -42,7 +42,17 @@
         </a-form-item>
         <a-form-item label="按钮类别">
           <a-select
-            v-decorator="['type']"
+            v-decorator="[
+              'type',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: '请选择类别',
+                  }
+                ],
+              },
+            ]"
             :disabled="operation === 1 || operation === 3"
             placeholder="请选择类别"
             allow-clear

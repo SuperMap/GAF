@@ -102,9 +102,8 @@
                     <a
                       @click="removeRow(routeInfo.filters, record)"
                       size="small"
-                      class="btn-del"
                     >
-                      <a-icon type="delete" />删除
+                      <u>删除</u>
                     </a>
                   </span>
                 </div>
@@ -181,9 +180,8 @@
                     <a
                       @click="removeRow(routeInfo.predicates, record)"
                       size="small"
-                      class="btn-del"
                     >
-                      <a-icon type="delete" />删除
+                      <u>删除</u>
                     </a>
                   </span>
                 </div>

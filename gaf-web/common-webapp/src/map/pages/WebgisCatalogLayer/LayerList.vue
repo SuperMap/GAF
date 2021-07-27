@@ -3,12 +3,23 @@
     <gaf-table-layout v-show="!open">
       <template #actions>
         <button
-          class="btn-fun blue"
+          class="btn-fun blue btn-16"
           visible="true"
           @click="handleLink"
         >
           <a-icon type="link" />批量关联服务
         </button>
+        <a-popconfirm
+            class="btn-fun blue"
+            title="删除后无法恢复，确认是否继续?"
+            ok-text="确认"
+            cancel-text="取消"
+            @confirm="() => batchDel()"
+          >
+            <button class="btn-fun blue">
+              <span>批量删除</span>
+            </button>
+          </a-popconfirm>
       </template>
       <template #filter>
         <a-select
@@ -28,9 +39,13 @@
       <template #default>
         <gaf-table-with-page
           :pagination="pagination"
+          :row-selection="{
+            selectedRowKeys: selectedRowKeys,
+            onChange: onSelectChange,
+          }"
           :data-source="webgisCatalogLayerList"
           :loading="loading"
-          :row-key="(r, i) => i.toString()"
+          :row-key="(r) => r.catalogLayerId"
           :columns="
             columns.filter((item) => item.dataIndex !== 'catalogLayerId')
           "
@@ -123,6 +138,7 @@
       // -------------------------
       // ---选择服务相关数据
       tempSelectedRowKeys: [],
+      selectedRowKeys: [],
       tempSelectedRows: [],
       // 是否显示服务选择列表
       showMutiSelectList: false,
@@ -217,6 +233,15 @@
       this.tempSelectedRowKeys = selectedRowKeys
       this.tempSelectedRows = selectedRows
     },
+    onSelectChange(selectedRowKeys) {
+      this.selectedRowKeys = selectedRowKeys;
+      this.selectRowLength = selectedRowKeys.length;
+      if (this.selectedRowKeys.length > 0) {
+        this.multiple = false;
+      } else {
+        this.multiple = true;
+      }
+    },
     onOk() {
       // 校验
       if (this.tempSelectedRows && this.tempSelectedRows.length > 0) {
@@ -286,6 +311,31 @@
       this.operation = 3
       this.open = true
       this.editData = row
+    },
+    //批量删除
+    async batchDel() {
+      const url = "/map/webgis-catalog-layers/";
+      const selectedRowKeys = this.selectedRowKeys;
+      if (selectedRowKeys.length !== 0) {
+        const rst = await this.$axios.delete(url, { data: selectedRowKeys });
+        if (rst.data.isSuccessed) {
+          this.$message.success("删除成功");
+        } else {
+          this.$message.error(`删除失败,原因:${rst.data.message}`);
+        }
+        this.$nextTick(() => {
+          if (
+            this.pagination.current !== 1 &&
+            selectedRowKeys.length === this.webgisButtonList.length
+          ) {
+            this.pagination.current--;
+          }
+          this.getList();
+          this.selectedRowKeys = [];
+        });
+      } else {
+        this.$message.warn("请选择您要删除的内容");
+      }
     },
     // 删除数据
     async handleDelete(row) {
