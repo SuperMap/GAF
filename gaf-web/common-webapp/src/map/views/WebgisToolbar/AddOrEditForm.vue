@@ -90,13 +90,13 @@
                 "
               >
                 <template slot="optinTable" slot-scope="text, record">
-                  <button
+                  <a
                     ref="ToolbarTransfer"
-                    class="btn-edit"
+                    class="btn-margin"
                     @click.stop="handleUpdate(record)"
                   >
-                    编辑
-                  </button>
+                    <u>编辑</u>
+                  </a>
                 </template>
               </a-table>
             </template>

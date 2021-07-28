@@ -1,6 +1,6 @@
 <template>
   <div class="page-single">
-    <div>
+    <div style="margin-bottom: 10px">
       <button @click="handleAdd" class="btn-fun blue">
         添加至{{`${role.roleName}`}}
       </button>

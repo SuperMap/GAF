@@ -4,28 +4,26 @@
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
 */
 package com.supermap.gaf.webgis.service.impl;
-import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
-import com.supermap.gaf.webgis.entity.WebgisService;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
+import com.supermap.gaf.shiro.SecurityUtilsExt;
+import com.supermap.gaf.shiro.commontypes.ShiroUser;
+import com.supermap.gaf.webgis.dao.WebgisCatalogLayerMapper;
+import com.supermap.gaf.webgis.entity.WebgisCatalogLayer;
+import com.supermap.gaf.webgis.entity.WebgisService;
+import com.supermap.gaf.webgis.service.WebgisCatalogLayerService;
 import com.supermap.gaf.webgis.service.WebgisServiceService;
 import com.supermap.gaf.webgis.util.Page;
+import com.supermap.gaf.webgis.vo.WebgisCatalogLayerSelectVo;
 import com.supermap.gaf.webgis.vo.WebgisServiceToLayerVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.supermap.gaf.webgis.service.WebgisCatalogLayerService;
-import com.supermap.gaf.webgis.entity.WebgisCatalogLayer;
-import com.supermap.gaf.webgis.vo.WebgisCatalogLayerSelectVo;
-import com.supermap.gaf.webgis.dao.WebgisCatalogLayerMapper;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.supermap.gaf.shiro.SecurityUtilsExt;
-import com.supermap.gaf.shiro.commontypes.ShiroUser;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 图层服务实现类
@@ -129,7 +127,7 @@ public class WebgisCatalogLayerServiceImpl implements WebgisCatalogLayerService{
     @Transactional(rollbackFor = Exception.class)
 	@Override
     public void batchDelete(List<String> catalogLayerIds){
-        List<WebgisCatalogLayer> layers = getWebgisCatalogLayerByCatalogIds(catalogLayerIds);
+        List<WebgisCatalogLayer> layers = webgisCatalogLayerMapper.selectByIds(catalogLayerIds);
         if (layers != null && layers.size() > 0) {
             Set<String> catalogIds = layers.stream().map(WebgisCatalogLayer::getLayerCatalogId).collect(Collectors.toSet());
             webgisCatalogLayerMapper.batchDelete(catalogLayerIds);

@@ -32,6 +32,16 @@
             </a-input-search>
           </div>
         </template>
+        <template #filter>
+        <div class="search-position">
+          <a-input-search
+            @search="onSearch"
+            placeholder="请输入名称查询"
+            size="large"
+          >
+          </a-input-search>
+        </div>
+      </template>
         <!-- <template #filter>
         <div style="margin-top: 5px">
           <a-input-search
@@ -461,9 +471,9 @@ export default {
         this.$message.error(`删除失败,原因:${rst.data.message}`);
       }
       this.$nextTick(() => {
-        if (this.dataList.length === 1) {
-          this.$emit('popRoutes')
-        }
+        // if (this.dataList.length === 1) {
+        //   this.$emit('popRoutes')
+        // }
         this.getList(this.dir);
         this.expandedRowKeys = [];
       });

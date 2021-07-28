@@ -146,8 +146,10 @@ export default {
 
 <style lang="less" scoped>
 .reset-password {
-  background-color: rgb(95, 192, 221);
+  background-color: #329DFF;
   color: white;
+  margin-top: 10px;
+  border: none;
 }
 .center {
   margin: auto;
@@ -159,6 +161,7 @@ export default {
   height: 100%;
   width: 100%;
   text-align: center;
+  margin: 10px 0;
 }
 td {
   padding: 10px;

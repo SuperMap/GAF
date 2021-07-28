@@ -75,7 +75,7 @@
               href="javascript:;"
               class="btn-margin"
             >
-              详情
+              <u>详情</u>
             </a>
 
             <a
@@ -83,7 +83,7 @@
               href="javascript:;"
               class="btn-margin"
             >
-              编辑
+              <u>编辑</u>
             </a>
 
             <a-popconfirm
@@ -92,7 +92,7 @@
               ok-text="确认"
               cancel-text="取消"
             >
-              <a href="javascript:;" class="btn-margin"> 删除</a>
+              <a href="javascript:;" class="btn-margin"> <u>删除</u></a>
             </a-popconfirm>
 
             <a
@@ -100,10 +100,13 @@
               href="javascript:;"
               class="btn-margin"
             >
-              分配菜单
+              <u>分配菜单</u>
             </a>
-            <a @click.stop="() => handleAssignAPI(record)" href="javascript:;">
-              分配API
+            <a @click.stop="() => handleAssignAPI(record)" href="javascript:;" class="btn-margin">
+              <u>分配API</u>
+            </a>
+            <a @click.stop="() => handleRoleFile(record)" href="javascript:;">
+              <u>分配文件</u>
             </a>
           </template>
           <template slot="timeRender" v-if="timeFormat" slot-scope="text">
@@ -146,16 +149,34 @@
     >
       <role-menu :role="role"></role-menu>
     </gaf-drawer>
+    <gaf-drawer
+      :visible="RoleFileVisible"
+      :width="500"
+      :footer="null"
+      :centered="true"
+      @close="handleBackRoleFile"
+      :closable="false"
+      placement="right"
+      destroy-on-close
+    >
+      <role-file
+       :role="role"
+       title="分配文件"
+       @back="handleBackRoleFile"
+      ></role-file>
+    </gaf-drawer>
   </div>
 </template>
 
 <script>
 import AddEditForm from "./RoleAddOrEditForm";
 import roleMenu from "./RoleMenu";
+import roleFile from "./RoleFile";
 export default {
   components: {
     AddEditForm,
     roleMenu,
+    roleFile
   },
   props: {
     tenant: {
@@ -178,6 +199,7 @@ export default {
   data() {
     return {
       drawerVisible2: false,
+      RoleFileVisible: false,
       roleId: "",
       // 搜索项
       searchKey: "",
@@ -412,6 +434,9 @@ export default {
       this.editData = {};
       this.open = false;
     },
+    handleBackRoleFile() {
+      this.RoleFileVisible = false;
+    },
     // 修改数据
     handleUpdate(row) {
       this.operation = 3;
@@ -499,6 +524,10 @@ export default {
     },
     handleAssignMenu(row) {
       this.drawerVisible2 = true;
+      this.role = row;
+    },
+    handleRoleFile(row) {
+      this.RoleFileVisible = true;
       this.role = row;
     },
     handleAssignAPI(row) {

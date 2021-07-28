@@ -165,6 +165,14 @@
         WHERE status = true
         <if test ="null != layerCatalogId and '' != layerCatalogId"> AND layer_catalog_id = #{layerCatalogId}</if>
     </select>
+    <select id="selectByIds" resultType="com.supermap.gaf.webgis.entity.WebgisCatalogLayer">
+        SELECT <include refid="Base_Column_List" />
+        FROM "webgis_catalog_layer"
+        WHERE status = true AND catalog_layer_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 
 
 </mapper>

@@ -21,22 +21,20 @@
         <template slot="mappingMethodBtn" slot-scope="text, record">
           <div v-if="record.mapped === false">
             <div v-if="record.mappingMethod == 2">
-              <a-button
+              <a
                 @click.stop="() => toMapped(record)"
-                v-model="record.data"
-                class="mapping-btn"
+                href="javascript:;"
               >
-                <span>去映射</span>
-              </a-button>
+                <u>去映射</u>
+              </a>
             </div>
             <div v-if="record.mappingMethod == 1">
-              <a-button
+              <a
                 @click.stop="() => mapping(record)"
-                v-model="record.data"
-                class="mapping-btn"
+                href="javascript:;"
               >
-                <span>映射</span>
-              </a-button>
+                <u>映射</u>
+              </a>
             </div>
           </div>
           <div v-else-if="record.mapped === true"></div>

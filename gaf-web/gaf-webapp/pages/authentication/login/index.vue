@@ -4,6 +4,7 @@
 <script>
 import { login } from 'common-webbase'
 export default {
+  layout: 'login',
   components: {
     login,
   },

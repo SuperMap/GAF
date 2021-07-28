@@ -94,7 +94,7 @@
               <a-switch
                 :disabled="true"
                 :checked="record.status"
-                :style="{ background: record.status ? '#1890FF' : '#2F4F4F' }"
+                :style="{ background: record.status ? '#1890FF' : '#BFBFBF' }"
                 checked-children="有效"
                 un-checked-children="禁用"
               />

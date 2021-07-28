@@ -10,8 +10,8 @@
     align="center"
   >
     <template slot="operation" slot-scope="text, record">
-      <a @click.stop="() => handleResetPassword(record)" href="javascript:;" class="btn-configure">
-        <a-icon type="setting" /> 重置密码
+      <a @click.stop="() => handleResetPassword(record)" href="javascript:;">
+       <u>重置密码</u>
       </a>
     </template>
   </gaf-table-with-page>

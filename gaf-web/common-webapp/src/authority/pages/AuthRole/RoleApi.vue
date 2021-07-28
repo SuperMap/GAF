@@ -60,13 +60,13 @@
         <div class="main-top">
           <button
             @click="handleAdd"
-            class="btn-fun blue"
+            class="btn-fun blue btn-16"
           >
             保存
           </button>
           <button
             @click="handleBack"
-            class="btn-fun red"
+            class="btn-fun blue"
           >
             返回
           </button>
@@ -227,7 +227,6 @@
 }
 .selectroleApi {
   font-size: 18px;
-  background: skyblue;
   padding: 5px 10px;
   border-radius: 5px;
   font-weight: bold;
