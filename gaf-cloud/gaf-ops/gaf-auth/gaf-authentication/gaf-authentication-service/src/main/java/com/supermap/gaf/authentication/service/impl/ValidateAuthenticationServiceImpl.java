@@ -98,6 +98,7 @@ public class ValidateAuthenticationServiceImpl implements ValidateAuthentication
         if (isAdminAccess(details.getAuthRoleList())){
             return true;
         }
+
         return accessValid(authorizationParam,authResourceApiList);
     }
 

@@ -43,11 +43,6 @@ public class RootResource {
         return com.supermap.gaf.sys.mgt.resource.root.RootResource.class;
     }
 
-    @Path("/storage")
-    public Class<com.supermap.gaf.storage.resource.root.RootResource> storageRootResourceClass() {
-        return com.supermap.gaf.storage.resource.root.RootResource.class;
-    }
-
     @Path("/analysis")
     public Class<com.supermap.gaf.analysis.resource.root.AnalysisRootResource> analysisRootResourceClass() {
         return com.supermap.gaf.analysis.resource.root.AnalysisRootResource.class;

@@ -6,6 +6,7 @@ import com.supermap.gaf.authority.service.AuthUserQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,4 +30,5 @@ public class AuthUserInfoDetailsDbImpl implements IauthUserInfoDetails {
         List<AuthRole> authRoles = authAuthorizationQueryService.listAuthorizationRole(userId);
         return new AuthUserInfoDetails(authUser,authResourceApis,authResourceModules,authRoles);
     }
+
 }

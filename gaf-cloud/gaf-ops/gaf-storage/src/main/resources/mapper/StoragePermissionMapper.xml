@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.storage.dao.StoragePermissionMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.storage.entity.Permission">
+        <result column="resource" jdbcType="VARCHAR" property="resource" />
+        <result column="scope" jdbcType="VARCHAR" property="scope" />
+        <result column="id" jdbcType="VARCHAR" property="id" />
+        <result column="ower" jdbcType="VARCHAR" property="ower" />
+        <result column="config_name" jdbcType="VARCHAR" property="configName" />
+        <result column="parent_resource" jdbcType="VARCHAR" property="parentResource" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        resource,
+        scope,
+        id,
+        ower,
+        config_name,
+        parent_resource    </sql>
+    <sql id="Insert_Column_List">
+        resource,
+        scope,
+        ower,
+        config_name,
+        parent_resource    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "storage_permission"
+        WHERE id = #{id}
+    </select>
+    <select id="selectByOwersAndConfigName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "storage_permission"
+        WHERE config_name = #{configName} and ower  IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+	<select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "storage_permission"
+        <trim prefix="WHERE" suffixOverrides="AND">
+                <if test='resource != null'>resource = #{resource} AND </if>
+                <if test='scope != null'>scope = #{scope} AND </if>
+                <if test='id != null'>id = #{id} AND </if>
+                <if test='ower != null'>ower = #{ower} AND </if>
+                <if test='configName != null'>config_name = #{configName} AND </if>
+                <if test='parentResource != null'>parent_resource = #{parentResource} AND </if>
+            <if test ='null != equalFieldName'>${equalFieldName}
+                <choose>
+                    <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                    <otherwise>  is null </otherwise>
+                </choose>
+                AND
+            </if>
+            <if test ='null != searchFieldName and null != searchFieldValue'>${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')  AND </if>
+        </trim>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="false" keyColumn="id" keyProperty="id" parameterType="com.supermap.gaf.storage.entity.Permission">
+        INSERT INTO "storage_permission"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != resource'>resource,</if>
+			<if test ='null != scope'>scope,</if>
+			<if test ='null != id'>id,</if>
+			<if test ='null != ower'>ower,</if>
+			<if test ='null != configName'>config_name,</if>
+			<if test ='null != parentResource'>parent_resource,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != resource'>#{resource},</if>
+			<if test ='null != scope'>#{scope},</if>
+			<if test ='null != id'>#{id},</if>
+			<if test ='null != ower'>#{ower},</if>
+			<if test ='null != configName'>#{configName},</if>
+			<if test ='null != parentResource'>#{parentResource},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "storage_permission"(<include refid="Insert_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.resource}  ,  #{item.scope}  ,  #{item.ower}  ,  #{item.configName}  ,  #{item.parentResource}  )
+        </foreach>
+    </insert>
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "storage_permission" 
+        WHERE id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+	<delete id="delete" >
+        DELETE FROM "storage_permission"
+        WHERE id = #{id}
+    </delete>
+    <delete id="deleteByOwer" >
+        DELETE FROM "storage_permission"
+        WHERE ower = #{ower}
+    </delete>
+
+    <delete id="deleteByOwerAndParentResourcesNotResource" >
+        DELETE FROM "storage_permission"
+        WHERE ower = #{ower} and resource != #{resource}
+        and parent_resource IN
+        <foreach collection="list" index="index" item="parentResource" open="(" close=")" separator=",">
+            #{parentResource}
+        </foreach>
+
+    </delete>
+    <delete id="deleteByOwerAndResource" >
+        DELETE FROM "storage_permission"
+        WHERE ower = #{ower}
+        and resource = #{resource}
+    </delete>
+    <update id="update" parameterType="com.supermap.gaf.storage.entity.Permission">
+        UPDATE "storage_permission"
+        <set>
+			<if test ='null != resource'>resource = #{resource},</if>				
+			<if test ='null != scope'>scope = #{scope},</if>				
+			<if test ='null != ower'>ower = #{ower},</if>				
+			<if test ='null != configName'>config_name = #{configName},</if>				
+			<if test ='null != parentResource'>parent_resource = #{parentResource},</if>				
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

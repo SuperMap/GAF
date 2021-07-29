@@ -2,11 +2,11 @@ server:
   port: 5000
 eureka:
   instance:
-    metadataMap:
-      prometheus:
-        path: /actuator/prometheus
-        port: '8080'
-        scrape: 'true'
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
 fluentd:
   enable: 'true'
   host: 192.168.11.118
@@ -14,13 +14,14 @@ fluentd:
   tagPrefix: gaf-dev
 gateway:
   security:
+    apiAuthzEnable: true
     centerLoginUrl: /authentication/login/center
     centerLogoutUrl: /authentication/logout
     gatewayLoginUrl: /login
     gatewayLogoutUrl: /logout
     indexUrl: /viewer/#/
     publicUrls: /viewer/**,/monitor/**,/grafana/**,/**/actuator/**,/authentication/**,/authority/tenant/**,/base/fileservice/file/upload/swagger/*,/cloud-portal/**,/logout,/oauth/**,/oauth2/**,/login/**,/api/**,/**/view/**,
-      /**/*.js,/*.*, /lang/**,/img/**,/**/static/**,/**/_static/**, /docs/**,/security/token/**,/config/**,/_static/**,/samples/**,/portal/customization**,/portal/user/profile**,/es/**,/log/env/logFluentdEsUrl,/map/webgis-view/**,/map/webgis-apps/*/config
+      /**/*.js,/*.*, /lang/**,/img/**,/**/static/**,/**/_static/**, /docs/**,/security/token/**,/config/**,/_static/**,/samples/**,/portal/customization**,/portal/user/profile**,/es/**,/log/env/logFluentdEsUrl,/map/webgis-view/**,/map/webgis-preview/**,/map/webgis-apps/*/config,/ureport/**
 management:
   endpoint:
     health:

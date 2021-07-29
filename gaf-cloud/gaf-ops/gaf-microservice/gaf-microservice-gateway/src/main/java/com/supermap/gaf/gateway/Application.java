@@ -27,7 +27,7 @@ import org.springframework.http.codec.ServerCodecConfigurer;
 @ComponentScan(basePackages = {"com.supermap.gaf"})
 @EnableDiscoveryClient
 @MapperScan({"com.supermap.gaf.**.dao","com.supermap.gaf.authority.mapper"})
-@EnableFeignClients("com.supermap.gaf.authentication.client")
+@EnableFeignClients({"com.supermap.gaf.authentication.client","com.supermap.gaf.authority.client"})
 public class Application {
 
     public static void main(String[] args) {

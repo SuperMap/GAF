@@ -277,7 +277,7 @@
         <perf4j.version>0.9.16</perf4j.version>
         <phantomjsdriver.version>1.4.4</phantomjsdriver.version>
         <pngj.version>2.1.0</pngj.version>
-        <postgresql.version>42.2.2.jre7</postgresql.version>
+        <postgresql.version>42.2.2</postgresql.version>
         <powermock.version>1.6.5</powermock.version>
         <proguard.version>6.0.3</proguard.version>
         <quartz.version>2.3.0</quartz.version>
@@ -378,6 +378,16 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-actuator-autoconfigure</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-logging</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-log4j2</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
             <dependency>
@@ -688,6 +698,11 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore-nio</artifactId>
                 <version>${httpcore.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${logging.log4j.api.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
@@ -1742,17 +1757,17 @@
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-s3</artifactId>
-                <version>1.11.939</version>
+                <version>1.12.10</version>
             </dependency>
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk</artifactId>
-                <version>1.11.939</version>
+                <version>1.12.10</version>
             </dependency>
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-core</artifactId>
-                <version>1.11.939</version>
+                <version>1.12.10</version>
                 <optional>false</optional>
             </dependency>
             <dependency>
@@ -1763,7 +1778,7 @@
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-kinesis</artifactId>
-                <version>1.11.1024</version>
+                <version>1.12.10</version>
             </dependency>
             <dependency>
                 <groupId>org.liquibase</groupId>

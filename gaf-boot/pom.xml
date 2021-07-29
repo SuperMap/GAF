@@ -120,17 +120,6 @@
         </dependency>
         <dependency>
             <groupId>com.supermap.gaf</groupId>
-            <artifactId>gaf-storage-service</artifactId>
-            <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.cloud</groupId>
-                    <artifactId>spring-cloud-starter-openfeign</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.supermap.gaf</groupId>
             <artifactId>gaf-analysis-service</artifactId>
             <version>${project.version}</version>
             <exclusions>

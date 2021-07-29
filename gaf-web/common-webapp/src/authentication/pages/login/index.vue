@@ -62,7 +62,6 @@
         </a-form>
       </div>
     </div>
-    <div class="gaf-login-slide">
       <a-modal :width="360" :footer="null" v-model="visible" title="滑动验证">
         <slide-verify
           ref="slideblock"
@@ -78,7 +77,6 @@
         ></slide-verify>
       </a-modal>
     </div>
-  </div>
 </template>
 
 

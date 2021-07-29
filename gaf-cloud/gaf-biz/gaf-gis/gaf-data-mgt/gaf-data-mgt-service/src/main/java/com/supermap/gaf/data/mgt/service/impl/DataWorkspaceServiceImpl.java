@@ -12,6 +12,7 @@ import com.supermap.data.Workspace;
 import com.supermap.data.WorkspaceConnectionInfo;
 import com.supermap.data.WorkspaceType;
 import com.supermap.data.WorkspaceVersion;
+import com.supermap.gaf.common.storage.client.StorageClient;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.data.mgt.common.IServerManager;
 import com.supermap.gaf.data.mgt.entity.DataWorkspace;
@@ -24,14 +25,13 @@ import com.supermap.gaf.data.mgt.vo.WorkspaceIdServiceType;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
-import com.supermap.gaf.storage.service.MinioConfigHandlerI;
-import com.supermap.gaf.storage.service.S3ClientService;
 import com.supermap.services.providers.util.CommontypesConversion;
 import com.supermap.services.rest.management.ServiceType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +42,10 @@ import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * 工作空间服务实现类
@@ -56,17 +58,17 @@ public class DataWorkspaceServiceImpl implements DataWorkspaceService{
 	private static final Logger  log = LoggerFactory.getLogger(DataWorkspaceServiceImpl.class);
 
 	@Autowired
-    private MinioConfigHandlerI minioConfigHandlerI;
-	
-	@Autowired
     private DataWorkspaceMapper dataWorkspaceMapper;
 
     @Autowired
     private IServerManager iServerManager;
-	@Autowired
-	private S3ClientService s3ClientService;
+
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    @Qualifier("DatamgtStorageClient")
+    private StorageClient storageClient;
 	
 	@Override
     public DataWorkspace getById(String workspaceId){
@@ -87,9 +89,8 @@ public class DataWorkspaceServiceImpl implements DataWorkspaceService{
     }
 
     @Override
-    public void createWorkspace(String path) throws AuthenticationException {
-	    Path root = Paths.get(minioConfigHandlerI.getVolumeRootPath());
-        Path  serverPath = root.resolve(path);
+    public void createWorkspace(String path)  {
+        Path  serverPath = Paths.get(storageClient.getVolumePath(path,SecurityUtilsExt.getUser().getAuthUser().getTenantId(),false).getPath());
         Workspace workspace = new Workspace();
         WorkspaceConnectionInfo connectionInfo = new WorkspaceConnectionInfo();
         connectionInfo.setServer(serverPath.toString());
@@ -133,12 +134,12 @@ public class DataWorkspaceServiceImpl implements DataWorkspaceService{
 	
 	@Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteDataWorkspace(String workspaceId) throws AuthenticationException {
+    public void deleteDataWorkspace(String workspaceId){
         DataWorkspace dataWorkspace = getById(workspaceId);
         if(dataWorkspace!=null){
             dataWorkspaceMapper.delete(workspaceId);
             if(isFileType(dataWorkspace.getTypeCode()) && !StringUtils.isEmpty(dataWorkspace.getServer())){
-                s3ClientService.deleteObjects(Arrays.asList(dataWorkspace.getServer()));
+                storageClient.delete(dataWorkspace.getServer(),SecurityUtilsExt.getUser().getAuthUser().getTenantId());
             }
         }
     }
@@ -147,13 +148,16 @@ public class DataWorkspaceServiceImpl implements DataWorkspaceService{
     }
 	@Override
     @Transactional(rollbackFor = Exception.class)
-    public void batchDelete(List<String> workspaceIds) throws AuthenticationException {
+    public void batchDelete(List<String> workspaceIds){
         List<DataWorkspace> workspaces = dataWorkspaceMapper.selectByIds(workspaceIds);
         if(!CollectionUtils.isEmpty(workspaces)){
             dataWorkspaceMapper.batchDelete(workspaceIds);
-            List<String> keyNames = workspaces.stream().filter(dataWorkspace -> isFileType(dataWorkspace.getTypeCode())&&!StringUtils.isEmpty(dataWorkspace.getServer()))
-                    .map(DataWorkspace::getServer).collect(Collectors.toList());
-            s3ClientService.deleteObjects(keyNames);
+            String tenantId = SecurityUtilsExt.getUser().getAuthUser().getTenantId();
+            for(DataWorkspace item:workspaces){
+                if(isFileType(item.getTypeCode())&&!StringUtils.isEmpty(item.getServer())){
+                    storageClient.delete(item.getServer(),tenantId);
+                }
+            }
         }
     }
 	
@@ -251,7 +255,7 @@ public class DataWorkspaceServiceImpl implements DataWorkspaceService{
         return publishResult;
     }
 
-    private WorkspaceConnectionInfo getWorkspaceConnectionInfo(DataWorkspace workspace) throws AuthenticationException {
+    private WorkspaceConnectionInfo getWorkspaceConnectionInfo(DataWorkspace workspace)  {
         WorkspaceConnectionInfo workspaceConnectionInfo = new WorkspaceConnectionInfo();
         workspaceConnectionInfo.setName(workspace.getWsName());
         WorkspaceType type = (WorkspaceType)WorkspaceType.parse(WorkspaceType.class, workspace.getTypeCode());
@@ -259,8 +263,8 @@ public class DataWorkspaceServiceImpl implements DataWorkspaceService{
         workspaceConnectionInfo.setUser(workspace.getUserName());
         workspaceConnectionInfo.setPassword(workspace.getPassword());
         if (WorkspaceType.SXWU.equals(type) || WorkspaceType.SMWU.equals(type)){
-            String volumeRootPath = minioConfigHandlerI.getVolumeRootPath();
-            workspaceConnectionInfo.setServer(Paths.get(volumeRootPath,workspace.getServer()).toString());
+            Path  serverPath = Paths.get(storageClient.getVolumePath(workspace.getServer(),SecurityUtilsExt.getUser().getAuthUser().getTenantId(),false).getPath());
+            workspaceConnectionInfo.setServer(serverPath.toString());
         } else {
             workspaceConnectionInfo.setServer(workspace.getServer());
             workspaceConnectionInfo.setDatabase(workspace.getDatabase());

@@ -6,9 +6,8 @@
 package com.supermap.gaf.shiro.handler;
 
 import com.supermap.gaf.shiro.SecurityUtilsExt;
-import com.supermap.gaf.storage.spi.TenantInfoI;
-
-import javax.security.sasl.AuthenticationException;
+import com.supermap.gaf.common.storage.spi.TenantInfoI;
+import com.supermap.gaf.common.storage.spi.exceptions.StorageTenantException;
 
 /**
  * The type Tenant info.
@@ -21,14 +20,14 @@ public class TenantInfoImpl implements TenantInfoI {
      * Gets tenant id.
      *
      * @return the tenant id
-     * @throws AuthenticationException the authentication exception
+     * @throws StorageTenantException the authentication exception
      */
     @Override
-    public String getTenantId() throws AuthenticationException {
+    public String getTenantId() throws StorageTenantException {
         try{
-            return SecurityUtilsExt.getUser().getAuthUser().getTenantId();
+            return SecurityUtilsExt.getUser().getAuthUser().getTenantId().replace("_","-");
         }catch (Exception e){
-            throw new AuthenticationException();
+            throw new StorageTenantException();
         }
     }
 

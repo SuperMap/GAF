@@ -25,17 +25,13 @@ import reactor.core.publisher.Mono;
  */
 public class AccessValidFilter implements GlobalFilter, Ordered {
 
-
     private Logger log = LogUtil.getLocLogger(com.supermap.gaf.gateway.filters.AccessValidFilter.class);
     private static final String TOKEN_USERID_CLIM = "sub";
-
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         return chain.filter(exchange);
     }
-
-
 
     @Override
     public int getOrder() {

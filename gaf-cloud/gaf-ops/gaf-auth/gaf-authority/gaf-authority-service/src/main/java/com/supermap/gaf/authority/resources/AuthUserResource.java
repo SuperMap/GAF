@@ -5,7 +5,11 @@
 */
 package com.supermap.gaf.authority.resources;
 
+import com.supermap.gaf.authority.client.AuthUserClient;
+import com.supermap.gaf.authority.commontype.AuthRole;
 import com.supermap.gaf.authority.commontype.AuthUser;
+import com.supermap.gaf.authority.service.AuthAuthorizationQueryService;
+import com.supermap.gaf.authority.service.AuthUserQueryService;
 import com.supermap.gaf.authority.service.AuthUserService;
 import com.supermap.gaf.authority.vo.*;
 import com.supermap.gaf.commontypes.MessageResult;
@@ -24,6 +28,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,11 +42,15 @@ import java.util.stream.Collectors;
  */
 @Component
 @Api(value = "用户接口")
-public class AuthUserResource {
+public class AuthUserResource implements AuthUserClient {
     private final AuthUserService authUserService;
+    private final AuthUserQueryService authUserQueryService;
+    private final AuthAuthorizationQueryService authAuthorizationQueryService;
 
-    public AuthUserResource(AuthUserService authUserService) {
+    public AuthUserResource(AuthUserService authUserService, AuthAuthorizationQueryService authAuthorizationQueryService, AuthUserQueryService authUserQueryService) {
         this.authUserService = authUserService;
+        this.authAuthorizationQueryService = authAuthorizationQueryService;
+        this.authUserQueryService = authUserQueryService;
     }
 
     @ApiOperation(value = "查询用户", notes = "根据id查询用户")
@@ -173,6 +182,18 @@ public class AuthUserResource {
     @Path("/list-by-post/{postId}")
     public MessageResult<List<AuthUser>> listUserByPost(@PathParam("postId") String postId) {
         List<AuthUser> data = authUserService.listUserByPost(postId);
+        return MessageResult.data(data).message("查询成功").build();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/{username}/roles")
+    public MessageResult<List<AuthRole>> selectUserRoles(@PathParam("username") String username) {
+        AuthUser authUser = authUserQueryService.getByUserName(username);
+        List<AuthRole> data = new ArrayList<>();
+        if(authUser!=null){
+            data = authAuthorizationQueryService.listAuthorizationRole(authUser.getUserId());
+        }
         return MessageResult.data(data).message("查询成功").build();
     }
 

@@ -1,0 +1,323 @@
+<template>
+  <div>
+    <!-- <template>
+      <a-breadcrumb separator=">" class="modal-line">
+        <span class="vertical-line">| </span>
+        <a-breadcrumb-item class="text-bolder">{{ title }}</a-breadcrumb-item>
+      </a-breadcrumb>
+    </template> -->
+    <div class="page-modal-box">
+      <a-form
+        :form="addOrEditForm"
+        layout="horizontal"
+        :label-col="{ span: 5 }"
+        :wrapper-col="{ span: 15 }"
+        hide-required-mark
+      >
+        <a-form-item label="分享链接">
+          <a-input
+            id="inputLink"
+            v-model="linkValue"
+            :disabled="operation === 1"
+            placeholder="请输入名称"
+            allow-clear
+          />
+        </a-form-item>
+        <a-form-item label="过期时间">
+          <a-row type="flex" justify="space-between">
+            <a-col :span="7">
+              <a-input-number
+                v-model="days"
+                class="inputNumber"
+                :formatter="(value) => `${value} days`"
+                :min="0"
+                :max="7"
+                @change="onChange"
+              />
+            </a-col>
+            <a-col :span="7">
+              <a-input-number
+                v-model="hours"
+                class="inputNumber"
+                :formatter="(value) => `${value} hours`"
+                :min="0"
+                :max="23"
+                @change="onChange"
+              />
+            </a-col>
+            <a-col :span="7">
+              <a-input-number
+                v-model="minutes"
+                class="inputNumber"
+                :formatter="(value) => `${value} minutes`"
+                :min="0"
+                :max="59"
+                @change="onChange"
+              />
+            </a-col>
+          </a-row>
+        </a-form-item>
+        <!-- <a-form-item v-show="false" label="父级id">
+          <a-input
+            :disabled="operation === 1"
+            v-decorator="['pid']"
+            placeholder="请输入父级id"
+            allow-clear
+          />
+        </a-form-item>
+         <a-form-item v-show="false" label="字典类别编码">
+          <a-input
+            :disabled="operation === 1"
+            v-decorator="['dictCode']"
+            placeholder="请输入字典类别编码"
+            allow-clear
+          />
+        </a-form-item>
+        <a-form-item label="名称">
+          <a-input
+            :disabled="operation === 1"
+            v-decorator="[
+              'dictName',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入名称'
+                  }
+                ]
+              }
+            ]"
+            placeholder="请输入名称"
+            allow-clear
+          />
+        </a-form-item>
+        <a-form-item label="字典值">
+          <a-input
+            :disabled="operation === 1"
+            v-decorator="[
+              'dictValue'            ]"
+            placeholder="请输入值"
+            allow-clear
+          />
+        </a-form-item>
+        <a-form-item label="序号">
+          <a-input-number
+            :disabled="operation === 1"
+            v-decorator="['seq']"
+            :precision="0"
+            :min="1"
+          />
+        </a-form-item>
+        <a-form-item label="可见性">
+          <a-switch
+            :disabled="operation === 1"
+            v-decorator="['visibility',{valuePropName: 'checked',initialValue: true}]"
+          >
+            <a-icon slot="checkedChildren" type="check" />
+            <a-icon slot="unCheckedChildren" type="close" />
+          </a-switch>
+        </a-form-item>
+        <a-form-item label="扩展属性">
+          <a-textarea
+            :disabled="operation === 1"
+            v-decorator="['extProperties']"
+            placeholder="请输入json格式字符串"
+            :auto-size="{ minRows: 3, maxRows: 5 }"
+          />
+        </a-form-item>
+        <a-form-item label="描述">
+          <a-textarea
+            :disabled="operation === 1"
+            v-decorator="['dictDesc']"
+            placeholder="请输入描述"
+            auto-size
+          />
+        </a-form-item>
+        <div v-if="operation === 1">
+          <a-form-item label="创建时间">
+            <a-date-picker
+              v-decorator="['createdTime']"
+              show-time
+              placeholder="请选择创建时间"
+              disabled
+            />
+          </a-form-item>
+          <a-form-item label="创建人">
+            <a-input
+              v-decorator="[
+                'createdBy'            ]"
+              placeholder="请输入创建人"
+              allow-clear
+              disabled
+            />
+          </a-form-item>
+          <a-form-item label="修改时间">
+            <a-date-picker
+              v-decorator="['updatedTime']"
+              show-time
+              placeholder="请选择修改时间"
+              disabled
+            />
+          </a-form-item>
+          <a-form-item label="修改人">
+            <a-input
+              v-decorator="[
+                'updatedBy'            ]"
+              placeholder="请输入修改人"
+              allow-clear
+              disabled
+            />
+          </a-form-item> -->
+        <!-- </div> -->
+        <!-- <div class="btn-div">
+          <button @click="submitForm" class="submit-gray">
+            确定
+          </button>
+          &nbsp;&nbsp;&nbsp;
+          <button @click="backToList" class="cancel-modal">取消</button>
+        </div> -->
+      </a-form>
+    </div>
+  </div>
+</template>
+
+<script>
+import moment from 'moment'
+
+export default {
+  props: {
+    title: {
+      type: String,
+      default: '',
+    },
+    editData: {
+      type: Array,
+      default: () => [],
+    },
+    operation: {
+      type: Number,
+      default: 0,
+    },
+    name: {
+      type: String,
+      dafault: '',
+    },
+    configName: {
+      type: String,
+      default: null,
+    },
+    fileData: {
+      type: Object,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      dataId: '',
+      dataNode: {
+        name: '',
+        children: [],
+        type: 'commonPrefix',
+      },
+      days: 7,
+      hours: 0,
+      minutes: 0,
+      linkValue: '',
+    }
+  },
+  created() {
+    this.onChange()
+  },
+  beforeMount() {
+    this.addOrEditForm = this.$form.createForm(this, { name: 'addOrEditForm' })
+  },
+  mounted() {
+    const copyData = { ...this.editData }
+    this.dataId = copyData.dataDictId
+    delete copyData.dataDictId
+    delete copyData.status
+    delete copyData.tenantId
+    if (this.operation !== 1) {
+      delete copyData.createdTime
+      delete copyData.updatedTime
+      delete copyData.createdBy
+      delete copyData.updatedBy
+    }
+    if (copyData.createdTime)
+      copyData.createdTime = moment(new Date(copyData.createdTime))
+    if (copyData.updatedTime)
+      copyData.updatedTime = moment(new Date(copyData.updatedTime))
+    this.addOrEditForm.setFieldsValue({ ...copyData })
+  },
+  methods: {
+    moment,
+    submitForm() {
+      const newInput = document.createElement('input')
+      newInput.value = this.linkValue
+      document.body.appendChild(newInput)
+      newInput.select()
+      document.execCommand('Copy')
+      newInput.remove()
+      this.$message.success('复制成功')
+      // this.addOrEditForm.validateFields(async (err) => {
+      //   if (err) {
+      //     return false
+      //   }
+      //   if (this.operation === 2){
+      //     this.dataNode.name = this.name + (this.dataNode.name.endsWith('/') ? this.dataNode.name : (this.dataNode.name + '/'))
+      //   }
+      //   this.editData.push(this.dataNode)
+      //   this.addOrEditForm.resetFields()
+      //   this.$emit('submit')
+      // })
+    },
+    // 从新增修改模态框返回列表
+    backToList() {
+      this.addOrEditForm.resetFields()
+      this.$emit('back')
+    },
+    async onChange() {
+      if (this.days === 7) {
+        this.hours = 0
+        this.minutes = 0
+      }
+      if (this.days === 0 && this.hours === 0 && this.minutes === 0) {
+        this.days = 7
+      }
+      const allMinutes = this.days * 1440 + this.hours * 60 + this.minutes
+      const url = `/storage/api/platform/${this.configName}/share/${this.fileData.name}?expiration=${allMinutes}`
+      const res = await this.$axios.$get(url)
+      if (res.isSuccessed) {
+        this.linkValue = res.data.download
+      } else {
+        this.$message.error(`设置失败,原因:${res.message}`)
+      }
+    },
+  },
+}
+</script>
+
+<style lang="less" scoped>
+button {
+  width: 80px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.page-container {
+  width: 100%;
+  height: 100%;
+}
+
+.page-container-box {
+  height: 100%;
+}
+
+.btn-div {
+  text-align: center;
+  margin: 15px 0;
+}
+.inputNumber {
+  width: 100%;
+}
+</style>

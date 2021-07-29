@@ -9,11 +9,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.supermap.data.AltitudeMode;
+import com.supermap.gaf.common.storage.client.StorageClient;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
-import com.supermap.gaf.storage.service.MinioConfigHandlerI;
-import com.supermap.gaf.storage.service.S3ClientService;
 import com.supermap.gaf.webgis.dao.WebgisRoamRouteMapper;
 import com.supermap.gaf.webgis.domain.WebgisRouteInfo;
 import com.supermap.gaf.webgis.domain.WebgisRouteStopInfo;
@@ -27,6 +26,8 @@ import com.supermap.realspace.*;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,18 +57,16 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService{
 
     private final WebgisRoamStopService webgisRoamStopService;
 
-    private final MinioConfigHandlerI minioConfigHandlerI;
-
     @Value("${gaf.map.fly-manager.file-path:/public/map/fpf}")
     String routeFilePath;
 
-    private final S3ClientService s3ClientService;
+    @Autowired
+    @Qualifier("WebgisStorageClient")
+    private StorageClient storageClient;
 
-    public WebgisRoamRouteServiceImpl(WebgisRoamRouteMapper webgisRoamRouteMapper, WebgisRoamStopService webgisRoamStopService, MinioConfigHandlerI minioConfigHandlerI, S3ClientService s3ClientService) {
+    public WebgisRoamRouteServiceImpl(WebgisRoamRouteMapper webgisRoamRouteMapper, WebgisRoamStopService webgisRoamStopService) {
         this.webgisRoamRouteMapper = webgisRoamRouteMapper;
         this.webgisRoamStopService = webgisRoamStopService;
-        this.minioConfigHandlerI = minioConfigHandlerI;
-        this.s3ClientService = s3ClientService;
     }
 
 
@@ -169,8 +168,8 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService{
         return Paths.get(routeFilePath, userId, fileName + ".fpf");
     }
 
-    private Path getFpfFileAblolutePath(String fpfFilePath) throws AuthenticationException {
-        return Paths.get(minioConfigHandlerI.getVolumeRootPath(),fpfFilePath);
+    private Path getFpfFileAblolutePath(String fpfFilePath){
+        return Paths.get(storageClient.getVolumePath(fpfFilePath,SecurityUtilsExt.getUser().getAuthUser().getTenantId(),false).getPath());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -402,7 +401,7 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService{
         if (fpfPath.startsWith("/")) {
             fpfPath = fpfPath.replaceFirst("/","");
         }
-        return s3ClientService.getUrl(fpfPath).toString();
+        return storageClient.getVolumePath(fpfPath,SecurityUtilsExt.getUser().getAuthUser().getTenantId(),true).getPublicUrl();
     }
 
     @Override

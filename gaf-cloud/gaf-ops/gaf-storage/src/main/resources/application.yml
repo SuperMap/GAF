@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: gaf-storage
+  jersey:
+    application-path: /storage
+  datasource:
+    password: ${GAF_STORAGE_DB_PASSWORD}
+    url: ${GAF_STORAGE_DB_URL}
+    username: ${GAF_STORAGE_DB_USERNAME}
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: ${GAF_STORAGE_EUREKA_ADDR}
+    register-with-eureka: ${GAF_STORAGE_EUREKA_ENABLE}
+    fetch-registry: ${GAF_STORAGE_EUREKA_ENABLE}
+server:
+  port: 8080
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    default-fetch-size: 100
+    default-statement-timeout: 30
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#default_db: jdbc:sqlite:${GAF_STORAGE_DATA_PATH}
+
+GAF_STORAGE_TENANTID_HEADER: TENANT_ID
+GAF_STORAGE_PERMISSION_HEADER: PERMISSION
+GAF_STORAGE_PERMISSION_ENABLE: true
+GAF_STORAGE_SUPER_OWER: admin
+#GAF_STORAGE_DB_URL: ${default_db}
+GAF_STORAGE_DB_URL: jdbc:postgresql://localhost:5432/test2
+GAF_STORAGE_DB_USERNAME: postgres
+GAF_STORAGE_DB_PASSWORD: root
+GAF_STORAGE_DATA_PATH: storage.db
+GAF_STORAGE_EUREKA_ENABLE: false
+GAF_STORAGE_EUREKA_ADDR: http://127.0.0.1:8761/eureka/
+GAF_STORAGE_AUTHENTICATION_ENABLE: true

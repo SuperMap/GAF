@@ -78,6 +78,8 @@
 ._*
 
 **/static
+**/gaf-storage/**/node
+!**/gaf-storage/**/static
 !**/gaf-microservice-api/**/static
 !**/gaf-web/**/static
 !**/gaf-common-rest/**/static

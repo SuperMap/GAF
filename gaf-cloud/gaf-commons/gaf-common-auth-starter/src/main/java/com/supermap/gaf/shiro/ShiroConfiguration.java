@@ -14,12 +14,11 @@ import java.util.Map;
 
 import javax.servlet.Filter;
 
-import com.supermap.gaf.authority.client.AuthUserInfoDetailsClient;
 import com.supermap.gaf.authority.service.impl.AuthUserInfoDetailsDbImpl;
 import com.supermap.gaf.authority.service.impl.AuthUsernameJwtImpl;
 import com.supermap.gaf.shiro.handler.TenantInfoImpl;
 import com.supermap.gaf.shiro.realms.CustomTokenRealm;
-import com.supermap.gaf.storage.spi.TenantInfoI;
+import com.supermap.gaf.common.storage.spi.TenantInfoI;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.mgt.SecurityManager;

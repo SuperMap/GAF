@@ -8,6 +8,8 @@ package com.supermap.gaf.gateway.filters;
 import com.supermap.gaf.authentication.client.ValidateClient;
 import com.supermap.gaf.authentication.entity.entity.AuthenticationResult;
 import com.supermap.gaf.authentication.entity.entity.AuthorizationParam;
+import com.supermap.gaf.authority.client.AuthUserClient;
+import com.supermap.gaf.authority.commontype.AuthRole;
 import com.supermap.gaf.authority.enums.ResourceApiMethodEnum;
 import com.supermap.gaf.gateway.commontypes.ExchangeAuthenticationAttribute;
 import com.supermap.gaf.gateway.util.GafFluxUtils;
@@ -16,9 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME;
 import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.GATEWAY_AUTHORIZATION_VALIDATE_FILTER_ORDER;
@@ -36,8 +42,12 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.GATEWAY
  */
 @Component
 public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordered {
+    private static final String STORAGE_URI_PREFIX = "/storage/api/";
+    private static final String STORAGE_PERMISSION_HEADER = "PERMISSION";
     @Autowired
     private ValidateClient validateClient;
+    @Autowired
+    private AuthUserClient authUserClient;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -52,6 +62,13 @@ public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordere
         authorizationParam.setUsername(authenticationResult.getUsername());
         authorizationParam.setUri(exchange.getRequest().getURI().getPath());
         authorizationParam.setMethod(ResourceApiMethodEnum.valueOf(exchange.getRequest().getMethod().name()).getValue());
+
+        // 文件权限
+        if(authorizationParam.getUri().startsWith(STORAGE_URI_PREFIX)){
+            List<AuthRole> authRoles = authUserClient.selectUserRoles(authenticationResult.getUsername()).getData();
+            ServerHttpRequest newRequest = exchange.getRequest().mutate().header(STORAGE_PERMISSION_HEADER,authRoles.stream().map(item->item.getRoleId()).collect(Collectors.joining(","))).build();
+            return chain.filter(exchange.mutate().request(newRequest).build());
+        }
 
         Boolean result = validateClient.authorization(authorizationParam);
         if (!BooleanUtils.isTrue(result)){

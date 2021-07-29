@@ -13,18 +13,14 @@ import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.commontypes.ShiroUser;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
-import com.supermap.gaf.storage.service.MinioConfigHandlerI;
-import com.supermap.gaf.storage.service.S3ClientService;
 import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.security.sasl.AuthenticationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -38,27 +34,10 @@ import java.util.Map;
 @Component
 @Api(value = "租户接口")
 public class AuthTenantResource{
-    @Autowired
-    private MinioConfigHandlerI minioConfigHandlerI;
-    @Autowired
-    private S3ClientService s3ClientService;
-
     private final AuthTenantService authTenantService;
 
     public AuthTenantResource(AuthTenantService authTenantService) {
         this.authTenantService = authTenantService;
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    @Path("/s3-config")
-    public MessageResult<String> getVolumeConfig() throws AuthenticationException {
-        String configIni = minioConfigHandlerI.getConfigIni();
-        if(StringUtils.isEmpty(configIni)){
-            return MessageResult.failed(String.class).status(200).message("未找到有关配置").build();
-        }
-        s3ClientService.initBucket();
-        return MessageResult.data(configIni).status(200).message("查询成功").build();
     }
 
     @ApiOperation(value = "查询当前用户所属租户")

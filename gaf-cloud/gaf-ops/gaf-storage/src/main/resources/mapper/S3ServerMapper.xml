@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.storage.dao.S3ServerMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.storage.entity.S3Server">
+        <result column="access_key" jdbcType="VARCHAR" property="accessKey" />
+        <result column="secret_key" jdbcType="VARCHAR" property="secretKey" />
+        <result column="service_endpoint" jdbcType="VARCHAR" property="serviceEndpoint" />
+        <result column="id" jdbcType="VARCHAR" property="id" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        access_key,
+        secret_key,
+        service_endpoint,
+        id    </sql>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "storage_s3_server"
+        WHERE id = #{id}
+    </select>
+	<select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "storage_s3_server"
+        <trim prefix="WHERE" suffixOverrides="AND">
+                <if test='accessKey != null'>access_key = #{accessKey} AND </if>
+                <if test='secretKey != null'>secret_key = #{secretKey} AND </if>
+                <if test='serviceEndpoint != null'>service_endpoint = #{serviceEndpoint} AND </if>
+                <if test='id != null'>id = #{id} AND </if>
+        </trim>
+             </select>
+    <insert id="insert" useGeneratedKeys="false" keyColumn="id" keyProperty="id" parameterType="com.supermap.gaf.storage.entity.S3Server">
+        INSERT INTO "storage_s3_server"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != accessKey'>access_key,</if>
+			<if test ='null != secretKey'>secret_key,</if>
+			<if test ='null != serviceEndpoint'>service_endpoint,</if>
+			<if test ='null != id'>id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != accessKey'>#{accessKey},</if>
+			<if test ='null != secretKey'>#{secretKey},</if>
+			<if test ='null != serviceEndpoint'>#{serviceEndpoint},</if>
+			<if test ='null != id'>#{id},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "storage_s3_server"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.accessKey}  ,  #{item.secretKey}  ,  #{item.serviceEndpoint}  ,  #{item.id}  )
+        </foreach>
+    </insert>
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "storage_s3_server"
+        WHERE id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+	<delete id="delete" >
+        DELETE FROM "storage_s3_server"
+        WHERE id = #{id}
+    </delete>
+    <update id="update" parameterType="com.supermap.gaf.storage.entity.S3Server">
+        UPDATE "storage_s3_server"
+        <set>
+			<if test ='null != accessKey'>access_key = #{accessKey},</if>				
+			<if test ='null != secretKey'>secret_key = #{secretKey},</if>				
+			<if test ='null != serviceEndpoint'>service_endpoint = #{serviceEndpoint},</if>				
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>
