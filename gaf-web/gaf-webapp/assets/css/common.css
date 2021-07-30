@@ -193,7 +193,8 @@ box-shadow: 0 0 0 rgba(128, 128, 128, 0.3);
     /* margin-right: 3%; */
     width: 210px;
     height: 40px;
-    float: right;
+    /* float: right; */
+    display: inline-block;
 }
 
 .ant-input-affix-wrapper .ant-input:not(:last-child) {
@@ -945,8 +946,9 @@ table {
 }
 
 .select-box {
-    margin: 15px 0 0 65%;
-    position: absolute;
+    /* margin: 15px 0 0 65%;
+    position: absolute; */
+    display: inline-block;
 }
 
 .ant-tree.ant-tree-show-line li:not(:last-child)::before {

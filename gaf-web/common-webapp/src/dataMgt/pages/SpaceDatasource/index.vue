@@ -73,7 +73,7 @@
             <span>项</span>
             <a-popconfirm
               @confirm="() => clearOptions(record)"
-              title="清空后无法恢复，确认是否继续?"
+              title="是否清除勾选?"
               ok-text="确认"
               cancel-text="取消"
             >
@@ -674,5 +674,8 @@ export default {
 }
 .ant-calendar-range-picker-input {
   text-align: left;
+}
+.search-position {
+  float: right;
 }
 </style>

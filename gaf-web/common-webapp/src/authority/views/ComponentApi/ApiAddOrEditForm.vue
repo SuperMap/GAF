@@ -187,7 +187,7 @@
     </div>
     <div class="drawer-footer">
       <div v-show="operation === 1" class="drawer-footer-div">
-        <button @click="backToList" class="cancel-modal margin410"
+        <button @click="backToList" class="cancel-modal"
           >{{this.operation === 1 ? "返回" : "取消"}}</button
         >
       </div>

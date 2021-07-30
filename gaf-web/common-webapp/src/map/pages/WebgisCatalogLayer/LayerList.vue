@@ -254,6 +254,8 @@
       } else {
         this.$message.info('请选择至少一个服务')
       }
+      this.tempSelectedRows = []
+      this.tempSelectedRowKeys = []
     },
     onCancel() {
       // 清空临时变量
