@@ -8,6 +8,7 @@ package com.supermap.gaf.authority.configuration;
 import com.supermap.gaf.authority.resources.root.RootResource;
 import com.supermap.gaf.exception.GafExceptionMapper;
 import com.supermap.gaf.exception.ValidExceptionMapper;
+import com.supermap.gaf.rest.config.CorsFilter;
 import io.swagger.jaxrs.config.BeanConfig;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,8 @@ public class JerseyConfig extends ResourceConfig {
         register(RootResource.class);
         register(ValidExceptionMapper.class);
         register(GafExceptionMapper.class);
+        //跨域过滤器
+        register(CorsFilter.class);
     }
 
 

@@ -7,6 +7,7 @@ package com.supermap.gaf.portal.configuration;
 
 import javax.annotation.PostConstruct;
 
+import com.supermap.gaf.rest.config.CorsFilter;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,8 @@ public class JerseyConfig extends ResourceConfig {
         register(PortalRootResoure.class);
         register(FastJsonProvider.class);
         register(JaxrsStaticResource.class);
+        //跨域过滤器
+        register(CorsFilter.class);
     }
     
     @PostConstruct

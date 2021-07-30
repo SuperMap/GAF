@@ -22,6 +22,10 @@
         </dependency>
         <dependency>
             <groupId>com.supermap.gaf</groupId>
+            <artifactId>gaf-common-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.supermap.gaf</groupId>
             <artifactId>gaf-common-auth</artifactId>
         </dependency>
         <dependency>

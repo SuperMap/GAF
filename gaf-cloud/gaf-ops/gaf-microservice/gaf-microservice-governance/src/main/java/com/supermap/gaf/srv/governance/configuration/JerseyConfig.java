@@ -5,6 +5,7 @@
 */
 package com.supermap.gaf.srv.governance.configuration;
 
+import com.supermap.gaf.rest.config.CorsFilter;
 import com.supermap.gaf.srv.governance.resources.root.RootResource;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.config.SwaggerContextService;
@@ -31,6 +32,8 @@ import java.util.Arrays;
 public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
     public JerseyConfig() {
         register(RootResource.class);
+        //跨域过滤器
+        register(CorsFilter.class);
     }
 
     private ServletConfig servletConfig;

@@ -8,6 +8,7 @@ package com.supermap.gaf.webgis.configuration;
 
 import com.supermap.gaf.exception.GafExceptionMapper;
 import com.supermap.gaf.exception.ValidExceptionMapper;
+import com.supermap.gaf.rest.config.CorsFilter;
 import com.supermap.gaf.webgis.resource.root.WebgisRootResource;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.config.SwaggerContextService;
@@ -38,6 +39,8 @@ public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
         register(WebgisRootResource.class);
         register(GafExceptionMapper.class);
         register(ValidExceptionMapper.class);
+        //跨域过滤器
+        register(CorsFilter.class);
     }
     /**
             * 配置swagger

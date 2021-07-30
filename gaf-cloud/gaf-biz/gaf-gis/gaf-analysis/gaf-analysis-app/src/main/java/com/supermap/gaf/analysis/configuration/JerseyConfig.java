@@ -7,6 +7,7 @@ package com.supermap.gaf.analysis.configuration;
 
 
 import com.supermap.gaf.analysis.resource.root.AnalysisRootResource;
+import com.supermap.gaf.rest.config.CorsFilter;
 import io.swagger.jaxrs.config.BeanConfig;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,11 @@ import javax.annotation.PostConstruct;
  * @author dqc
  */
 @Component
-public class JerseyConfiguration extends ResourceConfig{
-    public JerseyConfiguration() {
+public class JerseyConfig extends ResourceConfig{
+    public JerseyConfig() {
         register(AnalysisRootResource.class);
+        //跨域过滤器
+        register(CorsFilter.class);
     }
 
     @PostConstruct

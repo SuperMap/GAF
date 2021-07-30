@@ -9,6 +9,7 @@ package com.supermap.gaf.data.mgt.configuration;
 import com.supermap.gaf.data.mgt.resource.root.RootResource;
 import com.supermap.gaf.exception.GafExceptionMapper;
 import com.supermap.gaf.exception.ValidExceptionMapper;
+import com.supermap.gaf.rest.config.CorsFilter;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.config.SwaggerContextService;
 import io.swagger.jaxrs.listing.ApiListingResource;
@@ -38,6 +39,8 @@ public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
         register(RootResource.class);
         register(GafExceptionMapper.class);
         register(ValidExceptionMapper.class);
+        //跨域过滤器
+        register(CorsFilter.class);
     }
     /**
             * 配置swagger
