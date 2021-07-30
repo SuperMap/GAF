@@ -203,7 +203,7 @@ h1 {
   width: 400px;
   /* margin: 180px auto; */
   /* margin-right: 150px; */
-  padding: 35px 35px 15px 35px;
+  padding: 100px 50px 50px 50px;
   /* margin-top: 80px; */
 
   position: absolute;
@@ -211,17 +211,15 @@ h1 {
   top: 200px;
 
   border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  box-shadow: 0 0 10px #d7d8db;
-  border: 1px solid #dcdfe6;
+  height: 420px;
 }
 .gaf-img {
   position: absolute;
-  right: 180px;
-  top: 80px;
+  right: 150px;
+  top: 220px;
   bottom: 0;
   width: 400px;
+  z-index: 1;
 }
 #components-form-demo-normal-login .login-form {
   max-width: 300px;
