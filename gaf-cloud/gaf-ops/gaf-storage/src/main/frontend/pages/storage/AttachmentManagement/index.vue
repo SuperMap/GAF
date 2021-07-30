@@ -382,7 +382,7 @@ export default {
         this.sorter.order = null
         this.sorter.field = null
       }
-      this.getList()
+      // this.getList()
     },
     async onExpand(expanded, record) {
       if (expanded && !record.expanded) {

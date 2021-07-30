@@ -19,6 +19,21 @@
             </a>
           </template>
         </a-breadcrumb>
+        <span class="logout"
+          ><a-dropdown :trigger="['click']">
+            <a class="ant-dropdown-link" @click.stop="() => logout()">
+              退出 <a-icon type="logout" />
+            </a>
+            <!-- <a-menu slot="overlay">
+              <a-menu-item>
+                <a href="javascript:;">个人中心</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a href="javascript:;" @click.stop="() => logout()">退出</a>
+              </a-menu-item>
+            </a-menu> -->
+          </a-dropdown></span
+        >
       </div>
       <div v-show="isShow">
         <gaf-table-layout>
@@ -507,6 +522,11 @@ export default {
         this.routes.pop()
       }
     },
+    async logout() {
+      const url = `post/logout`
+      await this.$axios.post(url)
+      this.$message.success('退出成功')
+    },
   },
 }
 </script>
@@ -522,8 +542,12 @@ export default {
 .breadcrumb {
   position: relative;
   top: 10px;
-  left: 16px;
+  padding: 0 16px;
   z-index: 10;
+  line-height: 21px;
+}
+.breadcrumb > div {
+  display: inline-block;
 }
 .app-container::after {
   content: '';
@@ -533,5 +557,10 @@ export default {
 .page-single {
   min-height: 100vh;
   height: auto;
+}
+.logout {
+  float: right;
+  font-size: 1.2em;
+  color: #fff !important;
 }
 </style>
