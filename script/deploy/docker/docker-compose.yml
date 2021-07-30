@@ -177,7 +177,7 @@ services:
     container_name: gaf-minio
     command: server /data
   gaf-s3fs-mount:
-    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/gaf-s3fs-mount:latest
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/gaf-s3fs-mount:v2.0
     networks:
     - gaf-net
     privileged: true
