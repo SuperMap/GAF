@@ -21,9 +21,11 @@
         </a-breadcrumb>
         <span class="logout"
           ><a-dropdown :trigger="['click']">
-            <a class="ant-dropdown-link" @click.stop="() => logout()">
-              退出 <a-icon type="logout" />
-            </a>
+            <form id="logoutForm" method="post" action="/logout">
+              <a class="ant-dropdown-link" @click.stop="() => logout()">
+                退出 <a-icon type="logout" />
+              </a>
+            </form>
             <!-- <a-menu slot="overlay">
               <a-menu-item>
                 <a href="javascript:;">个人中心</a>
@@ -522,10 +524,11 @@ export default {
         this.routes.pop()
       }
     },
-    async logout() {
-      const url = `post/logout`
-      await this.$axios.post(url)
-      this.$message.success('退出成功')
+    logout() {
+      document.getElementById('logoutForm').submit()
+      // const url = `/logout`
+      // this.$axios.post(url)
+      // this.$message.success('退出成功')
     },
   },
 }

@@ -42,8 +42,9 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.GATEWAY
  */
 @Component
 public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordered {
-    private static final String STORAGE_URI_PREFIX = "/storage/api/";
+    private static final String STORAGE_FILTER_URL_REGIX = "^/storage/api/tenant[^/]*/.*";
     private static final String STORAGE_PERMISSION_HEADER = "PERMISSION";
+
     @Autowired
     private ValidateClient validateClient;
     @Autowired
@@ -56,7 +57,6 @@ public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordere
         if (attribute.getIsPublicUrl() || attribute.getIsIndexUrl() || !apiAuthzEnabled){
             return chain.filter(exchange);
         }
-
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
         AuthorizationParam authorizationParam = new AuthorizationParam();
         authorizationParam.setUsername(authenticationResult.getUsername());
@@ -64,7 +64,7 @@ public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordere
         authorizationParam.setMethod(ResourceApiMethodEnum.valueOf(exchange.getRequest().getMethod().name()).getValue());
 
         // 文件权限
-        if(authorizationParam.getUri().startsWith(STORAGE_URI_PREFIX)){
+        if(authorizationParam.getUri().matches(STORAGE_FILTER_URL_REGIX)){
             List<AuthRole> authRoles = authUserClient.selectUserRoles(authenticationResult.getUsername()).getData();
             ServerHttpRequest newRequest = exchange.getRequest().mutate().header(STORAGE_PERMISSION_HEADER,authRoles.stream().map(item->item.getRoleId()).collect(Collectors.joining(","))).build();
             return chain.filter(exchange.mutate().request(newRequest).build());

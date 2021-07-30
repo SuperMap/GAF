@@ -77,6 +77,10 @@
             <version>2.1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
@@ -88,6 +92,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -124,7 +129,6 @@
                         <id>build</id>
                         <goals>
                             <goal>yarn</goal>
-
                         </goals>
                         <configuration>
                             <workingDirectory>src/main/frontend/</workingDirectory>
@@ -159,6 +163,20 @@
                         <nonFilteredFileExtension>png</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                     <includeEmptyDirs>true</includeEmptyDirs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <configuration>
+                    <dockerfile>${project.basedir}/src/main/k8s/Dockerfile</dockerfile>
+                    <repository>${CUSTOM_REGISTRY}${project.artifactId}</repository>
+                    <tag>${CUSTOM_TAG}</tag>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <skipDockerInfo>true</skipDockerInfo>
+                    <skipBuild>false</skipBuild>
+                    <skipPush>false</skipPush>
                 </configuration>
             </plugin>
         </plugins>
