@@ -6,10 +6,6 @@
 export default {
   async beforeMount() {
     try {
-      const routePath = this.$route.path
-      if (routePath === '/authentication/login') {
-        return
-      }
       const url = '/portal/user/profile/detail'
       const data = await this.$axios.$get(url)
       // const data = {
