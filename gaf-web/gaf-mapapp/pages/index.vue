@@ -4,21 +4,17 @@
     <tenant-admin v-else-if="isTenant" />
     <common-user v-else-if="isUser" />
      {{ Math.random() }}-->
-    <with-login v-if="isLogin" />
-    <!-- <my-webgis-app v-if="isLogin" /> -->
-    <no-login v-else />
+    <with-login />
   </div>
 </template>
 <script>
 // import { MyWebgisApp } from 'common-mapapp'
-import NoLogin from '../views/home/NoLogin'
 import WithLogin from '../views/home/WithLogin'
 /* import SystemAdmin from '../views/home/SystemAdmin'
 import TenantAdmin from '../views/home/TenantAdmin'
 import CommonUser from '../views/home/CommonUser' */
 export default {
   components: {
-    NoLogin,
     WithLogin,
     // MyWebgisApp,
     /* SystemAdmin,

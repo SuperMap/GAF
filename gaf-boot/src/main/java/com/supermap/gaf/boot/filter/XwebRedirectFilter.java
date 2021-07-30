@@ -18,10 +18,10 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.SEPARAT
  * 注意： 该代码对应gaf-microservice-gateway中的同名的filter,功能逻辑等应该保持一致
  *
  *  此过滤器提供的重定向逻辑
- *  这些重定向逻辑只是暂时存在于域名直接指向网关的情况下
- *       1.'/'请求，跳转到indexUrl
- *       2.gatewayLoginUrl请求，跳转到centerLoginUrl
- *       3.gatewayLogoutUrl请求，跳转到centerLogoutUrl
+ * 这些重定向逻辑只是暂时存在于域名直接指向网关的情况下
+ *      1.'/'请求，跳转到indexUrl
+ *      2.gatewayLoginUrl请求，跳转到centerLoginUrl
+ *      3.gatewayLogoutUrl请求，跳转到centerLogoutUrl
  * @author wxl
  * @date 2021/4/17
  */
