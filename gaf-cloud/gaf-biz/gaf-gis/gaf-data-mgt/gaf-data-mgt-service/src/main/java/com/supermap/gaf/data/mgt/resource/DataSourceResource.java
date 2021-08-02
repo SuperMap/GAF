@@ -28,7 +28,7 @@ import java.util.List;
  */
 
 @Component
-@Api(value = "数据源接口")
+@Api(value = "数据源接口2")
 public class DataSourceResource {
 
     @Autowired

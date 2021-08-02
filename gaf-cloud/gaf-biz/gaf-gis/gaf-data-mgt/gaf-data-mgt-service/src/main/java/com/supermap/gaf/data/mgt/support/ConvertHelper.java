@@ -30,20 +30,23 @@ public class ConvertHelper {
     @Autowired
     private MinioConfigHandlerI minioConfigHandlerI;
 
-    // 不支持非空间数据源
-    public DatasourceConnectionInfo conver2DatasourceConnectionInfo(SysResourceDatasource sysResourceDatasource) {
+    public boolean isFileType(EngineType engineType) {
+        return EngineType.UDB.equals(engineType) || EngineType.UDBX.equals(engineType);
+    }
+
+    private void checkSdx(SysResourceDatasource sysResourceDatasource) {
         if (!sysResourceDatasource.getIsSdx()) {
             throw new GafException("不支持非空间数据源连接转换为空间数据源连接");
         }
-        final EngineType engineType = (EngineType) EngineType.parse(EngineType.class, sysResourceDatasource.getTypeCode());
-        if (EngineType.UDB.equals(engineType) || EngineType.UDBX.equals(engineType)) {
-            try {
-                String filePath = Paths.get(minioConfigHandlerI.getVolumeRootPath()).resolve(sysResourceDatasource.getAddr()).toString();
-                return  new DatasourceConnectionInfo(filePath,sysResourceDatasource.getDsName() + UUID.randomUUID(),sysResourceDatasource.getPassword());
-            } catch (AuthenticationException e) {
-                e.printStackTrace();
-                throw new GafException(e);
-            }
+    }
+
+    // 不支持非空间数据源
+    public DatasourceConnectionInfo conver2DatasourceConnectionInfo(SysResourceDatasource sysResourceDatasource) {
+        checkSdx(sysResourceDatasource);
+        EngineType engineType = (EngineType) EngineType.parse(EngineType.class, sysResourceDatasource.getTypeCode());
+        if (isFileType(engineType)) {
+            String realPath = resolve(sysResourceDatasource.getAddr());
+            return  new DatasourceConnectionInfo(realPath,sysResourceDatasource.getDsName() + UUID.randomUUID(),sysResourceDatasource.getPassword());
         }
         String tns = sysResourceDatasource.getAddr();
         String database = sysResourceDatasource.getDbName();
@@ -56,6 +59,22 @@ public class ConvertHelper {
             datasourceConnectionInfo.setDriver("SQL SERVER");
         }
         return datasourceConnectionInfo;
+    }
+
+
+    /**
+     * 解析文件型数据源在oss存储里的真实路径
+     *
+     * @param addr 文件型数据源的路径
+     * @return oss存储里的真实路径
+     */
+    public String resolve(String addr) {
+        try {
+            return Paths.get(minioConfigHandlerI.getVolumeRootPath()).resolve(addr).toString();
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            throw new GafException(e);
+        }
     }
 
 }

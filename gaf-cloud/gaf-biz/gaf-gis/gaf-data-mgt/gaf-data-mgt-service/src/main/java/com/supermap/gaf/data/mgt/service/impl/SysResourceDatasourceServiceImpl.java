@@ -23,6 +23,7 @@ import com.supermap.gaf.sys.mgt.model.DictData;
 import com.supermap.gaf.sys.mgt.model.DictDataNode;
 import com.supermap.gaf.utils.TreeUtil;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -45,16 +46,13 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
     public static final int LENGTH_16 = 16;
     public static final int LENGTH_32 = 32;
 
-    private final SysResourceDatasourceMapper sysResourceDatasourceMapper;
-    private final SysDictClient sysDictClient;
+    @Autowired
+    private SysResourceDatasourceMapper sysResourceDatasourceMapper;
+    @Autowired
+    private SysDictClient sysDictClient;
 
     @Value("${gaf.database.secretKey:}")
     private String secretKey;
-
-    public SysResourceDatasourceServiceImpl(SysResourceDatasourceMapper sysResourceDatasourceMapper, SysDictClient sysDictClient) {
-        this.sysResourceDatasourceMapper = sysResourceDatasourceMapper;
-        this.sysDictClient = sysDictClient;
-    }
 
     private String encrypt(String text, String secretKey) {
         if (StringUtils.isEmpty(secretKey)) {
