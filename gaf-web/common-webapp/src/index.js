@@ -42,10 +42,12 @@ import hosts from './monitor/pages/hosts'
 //
 import DataWorkspace from './dataMgt/pages/DataWorkspace'
 import SpaceDatasource from './dataMgt/pages/SpaceDatasource'
+import SpaceDatasourceTemplate from './dataMgt/pages/SpaceDatasourceTemplate'
 import DataRights from './dataMgt/pages/DataRights'
 
 import AttachmentManagement from './storage/pages/AttachmentManagement'
 import StorageManagement from './storage/pages/StorageManagement'
+
 const components = [
     //访问控制
     AuthRole, AuthTenant,
@@ -62,7 +64,7 @@ const components = [
     //容器监控
     containers,hosts,
     //
-    DataWorkspace,SpaceDatasource,DataRights,
+    DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,
     //
     AttachmentManagement,StorageManagement
 ];
@@ -116,7 +118,7 @@ export {
     containers,
     hosts,
     //
-    DataWorkspace,SpaceDatasource,DataRights,
+    DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,
     //
     AttachmentManagement,StorageManagement
 };

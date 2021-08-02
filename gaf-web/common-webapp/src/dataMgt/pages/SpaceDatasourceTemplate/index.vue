@@ -49,7 +49,7 @@
               <a-col :span="6">
                 <a-input-search
                   @search="onSearch"
-                  placeholder="请输入数据源别名查询"
+                  placeholder="请输入数据源模板别名查询"
                   size="large"
                 >
                 </a-input-search>
@@ -65,8 +65,8 @@
             <b>{{ selectRowLength }}</b>
             <span>项</span>
             <a-popconfirm
-              @confirm="() => clearOptions(record)"
-              title="是否清除勾选?"
+              @confirm="() => clearOptions()"
+              title="清空后无法恢复，确认是否继续?"
               ok-text="确认"
               cancel-text="取消"
             >
@@ -127,10 +127,6 @@
               >
                 <u>详情</u>
               </a>
-              <!-- <a-divider type="vertical" />
-                <a @click.stop="() => handleUpdate(record)" href="javascript:;" class="btn-edit">
-                  <a-icon type="edit" /> 编辑
-                </a> -->
               <a-popconfirm
                 @confirm="() => handleDelete(record)"
                 title="删除后无法恢复，确认是否继续?"
@@ -172,7 +168,7 @@
 </template>
 
 <script>
-import AddEditForm from "../../views/SpaceDatasource/AddOrEditForm";
+import AddEditForm from "../../views/SpaceDatasourceTemplate/AddOrEditForm";
 import moment from "moment";
 import "~/assets/css/common.css";
 
@@ -220,7 +216,7 @@ export default {
       },
       // 详情：1，新增：2，编辑：3
       operation: 0,
-      // 提供添加服务时使用，用做数据源分类展示
+      // 提供添加服务时使用，用做数据源模板分类展示
       catalogCode: "",
       // 左侧目录树添加所有类型节点
       searchAllNode: {
@@ -231,7 +227,7 @@ export default {
       },
       columns : [
         {
-          title: "数据源别名",
+          title: "数据源模板别名",
           width: '18%',
           scopedSlots: {
             filterDropdown: "filterDropdown",
@@ -242,16 +238,17 @@ export default {
           key: "ds_name",
         },
         {
-          title: "数据源分类",
+          title: "数据源模板分类",
           dataIndex: "catalogCode",
           key: "catalog_code",
           scopedSlots: { customRender: "catalogType" },
           width: '10%',
         },
         {
-          title: "数据源类型",
+          title: "数据源模板类型",
           dataIndex: "typeCode",
           key: "type_code",
+          scopedSlots: { customRender: "typeCode" },
           width: '10%',
         },
         {
@@ -380,7 +377,7 @@ export default {
         this.catalogCode = this.searchText2;
       }
       this.operation = 2;
-      this.title = "添加数据源";
+      this.title = "添加数据源模板";
       this.open = true;
     },
     // 添加修改提交后
@@ -398,7 +395,7 @@ export default {
     handleUpdate(row) {
       this.operation = 3;
       this.open = true;
-      this.title = "修改数据源";
+      this.title = "修改数据源模板";
       this.editData = row;
     },
     //详情展示
@@ -440,7 +437,7 @@ export default {
     //获取表单数据
     async getList() {
       this.loading = true;
-      let url = `/data-mgt/sys-resource-datasources?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&isSdx=true`;
+      let url = `/data-mgt/sys-resource-datasources?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&isSdx=true&isTemplate=true`;
       if (this.searchText2 && this.searchText2 !== "all") {
         url = url + "&catalogCode" + "=" + this.searchText2.trim();
       }
@@ -497,7 +494,7 @@ export default {
         this.getList();
       }
     },
-    //获取数据源分类树形数据
+    //获取数据源模板分类树形数据
     async getDataOfTree() {
       const url = `/sys-mgt/sys-dicts/NR_DATA_CATEGORY/tree`;
       const params = { level: 3 };
@@ -569,8 +566,5 @@ export default {
 }
 .ant-calendar-range-picker-input {
   text-align: left;
-}
-.search-position {
-  float: right;
 }
 </style>

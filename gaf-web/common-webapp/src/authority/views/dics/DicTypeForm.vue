@@ -130,7 +130,7 @@
 
 <script>
     import moment from 'moment'
-    import treeUtil from '../../utils/tree/TreeUtil.js'
+    import treeUtil from '../../../common/utils/TreeUtil'
 
     export default {
   props: {
