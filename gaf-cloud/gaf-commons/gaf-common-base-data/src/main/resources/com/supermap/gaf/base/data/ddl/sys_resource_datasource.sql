@@ -27,3 +27,7 @@ COMMENT ON COLUMN "sys_resource_datasource"."catalog_code" IS '数据源分类�
 COMMENT ON COLUMN "sys_resource_datasource"."region_code" IS '行政区划。选自数据字典：行政区划，存各级code斜级分隔(level1code/level2code...)';
 COMMENT ON COLUMN "sys_resource_datasource"."time_attribute" IS '时态。年月日,yyyyMMdd';
 COMMENT ON COLUMN "sys_resource_datasource"."is_sdx" IS '是否空间数据库。true:是，false:否';
+
+-- changeset SYS:20210723-0
+ALTER TABLE sys_resource_datasource ADD is_template BOOLEAN default false;
+COMMENT ON COLUMN "sys_resource_datasource"."is_template" IS '是否是空间数据库模板。true:是, false:否';

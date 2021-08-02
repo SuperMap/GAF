@@ -7,12 +7,15 @@
     <include  file="./component/common-auth.xml" relativeToChangelogFile="true"/>
     <include file="../ddl/data_workspace.sql" relativeToChangelogFile="true"/>
     <include file="../ddl/config_properties.sql" relativeToChangelogFile="true"/>
-
+    <include file="../ddl/sys_resource_datasource.sql" relativeToChangelogFile="true"/>
     <include file="../ddl/sys_dict.sql" relativeToChangelogFile="true"/>
+
     <include file="../changelog/dict/base_0catalog.sql" relativeToChangelogFile="true"/>
     <include file="../changelog/dict/WorkSpaceType.sql" relativeToChangelogFile="true"/>
+    <include file="../changelog/dict/data_source_type.sql" relativeToChangelogFile="true"/>
+    <include file="../changelog/dict/ordinary_data_source_type.sql" relativeToChangelogFile="true"/>
 
     <include file="../changelog/component-module-menu/gaf-data-mgt.sql" relativeToChangelogFile="true"/>
-
+    <include file="../changelog/gaf-data-mgt/update0_20210722.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

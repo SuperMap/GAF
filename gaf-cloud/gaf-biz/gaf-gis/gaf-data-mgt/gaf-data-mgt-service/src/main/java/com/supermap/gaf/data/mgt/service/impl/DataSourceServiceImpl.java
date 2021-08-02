@@ -6,13 +6,13 @@
 package com.supermap.gaf.data.mgt.service.impl;
 
 import com.supermap.data.*;
+import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
 import com.supermap.gaf.data.mgt.entity.DataSourceInfo;
 import com.supermap.gaf.data.mgt.entity.GDataset;
 import com.supermap.gaf.data.mgt.service.DataSourceService;
+import com.supermap.gaf.data.mgt.service.SysResourceDatasourceService;
+import com.supermap.gaf.data.mgt.support.ConvertHelper;
 import com.supermap.gaf.data.mgt.util.DatasourceParser;
-import com.supermap.gaf.exception.GafException;
-import com.supermap.gaf.sys.mgt.commontype.SysResourceDatasource;
-import com.supermap.gaf.sys.mgt.service.SysResourceDatasourceQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,10 @@ import java.util.Objects;
 public class DataSourceServiceImpl implements DataSourceService {
 
     @Autowired
-    private SysResourceDatasourceQueryService sysResourceDatasourceQueryService;
+    private SysResourceDatasourceService sysResourceDatasourceService;
+
+    @Autowired
+    private ConvertHelper convertHelper;
 
     @Override
     public List<GDataset> listDataset(DataSourceInfo dataSourceInfo) {
@@ -43,12 +46,13 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Override
     public List<GDataset> listDataset(String datasourceId) {
-        SysResourceDatasource sysResourceDatasource = sysResourceDatasourceQueryService.getById(datasourceId);
+        SysResourceDatasource sysResourceDatasource = sysResourceDatasourceService.getById(datasourceId);
         Boolean isSdx = sysResourceDatasource.getIsSdx();
         if (!isSdx) {
             return Collections.emptyList();
         }
-        Datasource datasource = DatasourceParser.openDatasource(convert(sysResourceDatasource));
+        final DatasourceConnectionInfo datasourceConnectionInfo = convertHelper.conver2DatasourceConnectionInfo(sysResourceDatasource);
+        Datasource datasource = DatasourceParser.openDatasource(datasourceConnectionInfo);
         List<GDataset> gDatasets = listDatasets(datasource);
         Workspace workspace = datasource.getWorkspace();
         workspace.close();
@@ -78,42 +82,6 @@ public class DataSourceServiceImpl implements DataSourceService {
             data.add(gDataset);
         }
         return data;
-    }
-
-
-    /**
-     * 转换数据连接信息
-     * @param sysResourceDatasource 数据源连接信息
-     * @return
-     */
-    private DatasourceConnectionInfo convert(SysResourceDatasource sysResourceDatasource) {
-        DatasourceConnectionInfo datasourceConnectionInfo = new DatasourceConnectionInfo();
-        datasourceConnectionInfo.setServer(sysResourceDatasource.getAddr());
-        datasourceConnectionInfo.setAlias(sysResourceDatasource.getDbName());
-        datasourceConnectionInfo.setUser(sysResourceDatasource.getUserName());
-        datasourceConnectionInfo.setPassword(sysResourceDatasource.getPassword());
-        datasourceConnectionInfo.setDatabase(sysResourceDatasource.getDbName());
-        String typeCode = sysResourceDatasource.getTypeCode().toLowerCase();
-        switch (typeCode) {
-            case "udb":
-                datasourceConnectionInfo.setEngineType(EngineType.UDB);
-                break;
-            case "udbx":
-                datasourceConnectionInfo.setEngineType(EngineType.UDBX);
-                break;
-            case "postgresql":
-                datasourceConnectionInfo.setEngineType(EngineType.POSTGRESQL);
-                break;
-            case "mysql":
-                datasourceConnectionInfo.setEngineType(EngineType.MYSQL);
-                break;
-            case "oracle":
-                datasourceConnectionInfo.setEngineType(EngineType.ORACLEPLUS);
-                break;
-            default:
-                throw  new GafException("不支持此类型！");
-        }
-        return datasourceConnectionInfo;
     }
 
 }

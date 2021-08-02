@@ -5,10 +5,7 @@
 */
 package com.supermap.gaf.data.mgt.resource.root;
 
-import com.supermap.gaf.data.mgt.resource.DataSourceResource;
-import com.supermap.gaf.data.mgt.resource.DataWorkspaceResource;
-import com.supermap.gaf.data.mgt.resource.IServerResource;
-import com.supermap.gaf.data.mgt.resource.ServiceResource;
+import com.supermap.gaf.data.mgt.resource.*;
 import com.supermap.gaf.rest.jersey.JaxrsStaticViewResource;
 import io.swagger.annotations.Api;
 import org.springframework.stereotype.Component;
@@ -52,6 +49,10 @@ public class RootResource {
         return ServiceResource.class;
     }
 
+    @Path("/sys-resource-datasources")
+    public Class<SysResourceDatasourceResource> sysResourceDatasourceResource() {
+        return SysResourceDatasourceResource.class;
+    }
 //    @Path("/minio-service")
 //    public Class<MinioServiceResource> minioServiceResource() {
 //        return MinioServiceResource.class;

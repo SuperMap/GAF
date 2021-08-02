@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.mgt.mapper.SysResourceDatasourceMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.data.mgt.commontype.SysResourceDatasource">
+        <result column="datasource_id" jdbcType="VARCHAR" property="datasourceId" />
+        <result column="ds_name" jdbcType="VARCHAR" property="dsName" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="addr" jdbcType="VARCHAR" property="addr" />
+        <result column="port" jdbcType="INTEGER" property="port" />
+        <result column="db_name" jdbcType="VARCHAR" property="dbName"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="status" jdbcType="BIT" property="status"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+        <result column="type_code" jdbcType="VARCHAR" property="typeCode"/>
+        <result column="catalog_code" jdbcType="VARCHAR" property="catalogCode"/>
+        <result column="region_code" jdbcType="VARCHAR" property="regionCode"/>
+        <result column="time_attribute" jdbcType="VARCHAR" property="timeAttribute"/>
+        <result column="is_sdx" jdbcType="BIT" property="isSdx"/>
+        <result column="is_template" jdbcType="BIT" property="isTemplate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        datasource_id,
+        ds_name,
+        type,
+        sort_sn,
+        addr,
+        port,
+        db_name,
+        user_name,
+        password,
+        description,
+        status,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        tenant_id,
+        type_code,
+        catalog_code,
+        region_code,
+        time_attribute,
+        is_sdx,
+        is_template
+    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM "sys_resource_datasource"
+        WHERE datasource_id = #{datasourceId} AND status = true
+    </select>
+    <select id="getByName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM "sys_resource_datasource"
+        WHERE ds_name = #{dsName} AND status = true and is_sdx = #{isSdx} and is_template = #{isTemplate}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM "sys_resource_datasource"
+        WHERE status = true
+        <if test='null != startTime'>AND date(time_attribute) >=  date(#{startTime}) </if>
+        <if test='null != endTime'>AND date(#{endTime}) >= date(time_attribute)</if>
+        <if test='null != sdx'>AND is_sdx = #{sdx}</if>
+        <if test='null != template'>AND is_template = #{template}</if>
+        <if test='null != catalogCode'>AND catalog_code = #{catalogCode}</if>
+        <if test='null != typeCodes and typeCodes.size() > 0'>
+            AND type_code in
+            <foreach collection="typeCodes" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='null != searchFieldName and null != searchFieldValue'>AND ${searchFieldName} LIKE CONCAT('%',
+            #{searchFieldValue}, '%')
+        </if>
+        <if test='null != orderFieldName and null != orderMethod'>order by ${orderFieldName} ${orderMethod}</if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="datasource_id" keyProperty="datasourceId" parameterType="com.supermap.gaf.sys.mgt.commontype.SysResourceDatasource">
+        INSERT INTO "sys_resource_datasource"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != datasourceId'>datasource_id,</if>
+			<if test ='null != dsName'>ds_name,</if>
+			<if test ='null != type'>type,</if>
+			<if test ='null != sortSn'>sort_sn,</if>
+			<if test ='null != addr'>addr,</if>
+			<if test ='null != port'>port,</if>
+            <if test='null != dbName'>db_name,</if>
+            <if test='null != userName'>user_name,</if>
+            <if test='null != password'>password,</if>
+            <if test='null != description'>description,</if>
+            status,
+            created_time,
+            <if test='null != createdBy'>created_by,</if>
+            updated_time,
+            <if test='null != updatedBy'>updated_by,</if>
+            <if test='null != tenantId'>tenant_id,</if>
+            <if test='null != typeCode'>type_code,</if>
+            <if test='null != catalogCode'>catalog_code,</if>
+            <if test='null != regionCode'>region_code,</if>
+            <if test='null != timeAttribute'>time_attribute,</if>
+            <if test='null != isSdx'>is_sdx,</if>
+            <if test='null != isTemplate'>is_template,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != datasourceId'>#{datasourceId},</if>
+			<if test ='null != dsName'>#{dsName},</if>
+			<if test ='null != type'>#{type},</if>
+			<if test ='null != sortSn'>#{sortSn},</if>
+			<if test ='null != addr'>#{addr},</if>
+			<if test ='null != port'>#{port},</if>
+            <if test='null != dbName'>#{dbName},</if>
+            <if test='null != userName'>#{userName},</if>
+            <if test='null != password'>#{password},</if>
+            <if test='null != description'>#{description},</if>
+            true,
+            now(),
+            <if test='null != createdBy'>#{createdBy},</if>
+            now(),
+            <if test='null != updatedBy'>#{updatedBy},</if>
+            <if test='null != tenantId'>#{tenantId},</if>
+            <if test='null != typeCode'>#{typeCode},</if>
+            <if test='null != catalogCode'>#{catalogCode},</if>
+            <if test='null != regionCode'>#{regionCode},</if>
+            <if test='null != timeAttribute'>#{timeAttribute},</if>
+            <if test='null != isSdx'>#{isSdx},</if>
+            <if test='null != isTemplate'>#{isTemplate},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "sys_resource_datasource"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.datasourceId} , #{item.dsName} , #{item.type} , #{item.sortSn} , #{item.addr} , #{item.port} ,
+            #{item.dbName} , #{item.userName} , #{item.password} , #{item.description} , true , now() ,
+            #{item.createdBy} , now() , #{item.updatedBy} , #{item.tenantId},#{item.typeCode},#{item.catalogCode},
+            #{item.regionCode}, #{item.timeAttribute},#{item.isSdx},#{item.isTemplate} )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        UPDATE sys_resource_datasource SET status = false
+        WHERE datasource_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        UPDATE sys_resource_datasource SET status = false
+        WHERE datasource_id = #{datasourceId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.sys.mgt.commontype.SysResourceDatasource">
+        UPDATE "sys_resource_datasource"
+        <set>
+			<if test ='null != dsName'>ds_name = #{dsName},</if>
+            <if test='null != type'>type = #{type},</if>
+            <if test='null != sortSn'>sort_sn = #{sortSn},</if>
+            <if test='null != addr'>addr = #{addr},</if>
+            <if test='null != port'>port = #{port},</if>
+            <if test='null != dbName'>db_name = #{dbName},</if>
+            <if test='null != userName'>user_name = #{userName},</if>
+            <if test='null != password'>password = #{password},</if>
+            <if test='null != description'>description = #{description},</if>
+            updated_time = now(),
+            <if test='null != updatedBy'>updated_by = #{updatedBy},</if>
+            <if test='null != tenantId'>tenant_id = #{tenantId},</if>
+            <if test='null != typeCode'>type_code = #{typeCode},</if>
+            <if test='null != catalogCode'>catalog_code = #{catalogCode},</if>
+            <if test='null != regionCode'>region_code = #{regionCode},</if>
+            <if test='null != timeAttribute'>time_attribute = #{timeAttribute},</if>
+            <if test='null != isSdx'>is_sdx = #{isSdx},</if>
+            <if test='null != isTemplate'>is_template = #{isTemplate},</if>
+        </set>
+        WHERE datasource_id = #{datasourceId}  AND status = true
+    </update>
+
+</mapper>
