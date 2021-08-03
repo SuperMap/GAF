@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.menu.utils;
 
 import com.supermap.gaf.portal.menu.commontypes.MenuInfo;
@@ -11,10 +11,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 public class MenuManager {
 
     public static List<String> getSubMenuIds(List<MenuInfo> menus, String parentId) {
@@ -22,7 +22,7 @@ public class MenuManager {
         Stack<String> stack = new Stack<>();
         stack.push(parentId);
         while (!stack.empty()) {
-            String id = (String)stack.pop();
+            String id = (String) stack.pop();
             menuIds.add(id);
             for (MenuInfo menu : menus) {
                 if (menu.getPid().equals(id)) {
@@ -33,7 +33,7 @@ public class MenuManager {
         return menuIds;
     }
 
-    public static Map<String,String> getMenuMapping(List<MenuInfo> menus) {
+    public static Map<String, String> getMenuMapping(List<MenuInfo> menus) {
         Map<String, String> menuMap = new HashMap<String, String>(16);
         for (MenuInfo menu : menus) {
             menuMap.put(menu.getName(), menu.getId());
@@ -41,8 +41,8 @@ public class MenuManager {
         return menuMap;
     }
 
-    public static void concatName(List<MenuInfo> menuArr){
-        Map<String,MenuInfo> map = new HashMap<String, MenuInfo>(16);
+    public static void concatName(List<MenuInfo> menuArr) {
+        Map<String, MenuInfo> map = new HashMap<String, MenuInfo>(16);
         menuArr.stream().forEach(menu -> map.put(menu.getId(), menu));
         Set<MenuInfo> parents = new HashSet<>();
         List<MenuInfo> lost = new ArrayList<>();

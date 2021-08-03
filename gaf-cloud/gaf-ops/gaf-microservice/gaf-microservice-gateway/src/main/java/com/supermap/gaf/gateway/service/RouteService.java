@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.service;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -33,10 +33,11 @@ public interface RouteService {
      * @param param
      * @return
      */
-    MessageResult<List <GatewayRouteDefinition>> queryRoutes(RouteSearchParam param);
+    MessageResult<List<GatewayRouteDefinition>> queryRoutes(RouteSearchParam param);
 
     /**
      * 删除路由信息
+     *
      * @param id
      * @return
      * @throws Exception
@@ -61,6 +62,7 @@ public interface RouteService {
 
     /**
      * 批量删除路由信息
+     *
      * @param ids
      * @return
      * @throws Exception

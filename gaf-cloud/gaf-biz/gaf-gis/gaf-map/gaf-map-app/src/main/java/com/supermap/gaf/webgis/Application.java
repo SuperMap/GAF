@@ -2,9 +2,8 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis;
-
 
 
 import com.supermap.gaf.utils.MybatisBatchUtil;
@@ -19,6 +18,7 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,24 +26,23 @@ import org.springframework.web.client.RestTemplate;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
-
+ */
 
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
         "com.supermap.gaf"
-})
+}, excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.supermap.gaf.common.storage.*"))
 @EnableDiscoveryClient
 @EnableHystrix
 @ServletComponentScan
-@MapperScan(basePackages = {"com.supermap.gaf.**.dao","com.supermap.gaf.**.mapper"})
+@MapperScan(basePackages = {"com.supermap.gaf.**.dao", "com.supermap.gaf.**.mapper"})
 @EnableFeignClients(basePackages = {"com.supermap.gaf.**.client"})
 @EnableTransactionManagement
 public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args );
+        SpringApplication.run(Application.class, args);
     }
 
 
@@ -55,18 +54,18 @@ public class Application {
         return restTemplate;
     }
 
-//    @Bean
+    //    @Bean
 //    RemoteCommonService remoteCommonService(@Autowired RestTemplate restTemplate) {
 //        RemoteCommonService remoteCommonService = new RemoteCommonService();
 //        remoteCommonService.setRestTemplate(restTemplate);
 //        return remoteCommonService;
 //    }
     @Bean
-    MybatisBatchUtil mybatisBatchUtil(SqlSessionFactory sqlSessionFactory){
-        return  new MybatisBatchUtil(sqlSessionFactory);
+    MybatisBatchUtil mybatisBatchUtil(SqlSessionFactory sqlSessionFactory) {
+        return new MybatisBatchUtil(sqlSessionFactory);
     }
 
-    
+
 //    @Bean
 //    DBStructureInitListener dbStructureInitListener(@Autowired DatasourceConnInfo connInfo) {
 //        DBStructureInitListener dbInitListener = new DBStructureInitListener();

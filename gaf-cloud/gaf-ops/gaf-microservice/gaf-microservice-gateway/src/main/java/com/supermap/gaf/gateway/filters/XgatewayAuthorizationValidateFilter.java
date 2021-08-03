@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.filters;
 
 import com.supermap.gaf.authentication.client.ValidateClient;
@@ -31,11 +31,12 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.GATEWAY
 
 /**
  * 注意： 该代码对应gaf-boot中的同名的filter,功能逻辑等应该保持一致
- *
+ * <p>
  * 此过滤器提供用户API鉴权的逻辑
  * 验证认证信息
- *      1.如果是indexurl或publicurl直接通过
- *      2.如果开启网关api验证，则请求接口验证是否有权限通过网关
+ * 1.如果是indexurl或publicurl直接通过
+ * 2.如果开启网关api验证，则请求接口验证是否有权限通过网关
+ *
  * @author : duke
  * @date:2021/3/25
  * @since 2020/11/23 3:44 PM
@@ -54,7 +55,7 @@ public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordere
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
         boolean apiAuthzEnabled = attribute.getGatewaySecurityProperties().isApiAuthzEnable();
-        if (attribute.getIsPublicUrl() || attribute.getIsIndexUrl() || !apiAuthzEnabled){
+        if (attribute.getIsPublicUrl() || attribute.getIsIndexUrl() || !apiAuthzEnabled) {
             return chain.filter(exchange);
         }
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
@@ -64,15 +65,15 @@ public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordere
         authorizationParam.setMethod(ResourceApiMethodEnum.valueOf(exchange.getRequest().getMethod().name()).getValue());
 
         // 文件权限
-        if(authorizationParam.getUri().matches(STORAGE_FILTER_URL_REGIX)){
+        if (authorizationParam.getUri().matches(STORAGE_FILTER_URL_REGIX)) {
             List<AuthRole> authRoles = authUserClient.selectUserRoles(authenticationResult.getUsername()).getData();
-            ServerHttpRequest newRequest = exchange.getRequest().mutate().header(STORAGE_PERMISSION_HEADER,authRoles.stream().map(item->item.getRoleId()).collect(Collectors.joining(","))).build();
+            ServerHttpRequest newRequest = exchange.getRequest().mutate().header(STORAGE_PERMISSION_HEADER, authRoles.stream().map(item -> item.getRoleId()).collect(Collectors.joining(","))).build();
             return chain.filter(exchange.mutate().request(newRequest).build());
         }
 
         Boolean result = validateClient.authorization(authorizationParam);
-        if (!BooleanUtils.isTrue(result)){
-            return GafFluxUtils.unAuth(exchange,"API资源访问权限不足");
+        if (!BooleanUtils.isTrue(result)) {
+            return GafFluxUtils.unAuth(exchange, "API资源访问权限不足");
         }
         return chain.filter(exchange);
 

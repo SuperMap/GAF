@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ctrlaction;
 
 import com.supermap.data.Workspace;
@@ -30,15 +30,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * @date:2021/3/25
  * @author SuperMap
+ * @date:2021/3/25
  */
 public class CtrlActionRegistryWorkspace extends CtrlAction {
 
     public static boolean enable = false;
-	public CtrlActionRegistryWorkspace(IBaseItem caller) {
-		super(caller);
-	}
+
+    public CtrlActionRegistryWorkspace(IBaseItem caller) {
+        super(caller);
+    }
 
     @Override
     public boolean enable() {
@@ -46,10 +47,10 @@ public class CtrlActionRegistryWorkspace extends CtrlAction {
     }
 
     @Override
-	public void run() {
+    public void run() {
         Workspace oldWorkspace = ApplicationContextUtils.getWorkspace();
         // 检查是否修改以及是否需要先保存
-        if(WorkspaceUtilities.isWorkspaceModified()) {
+        if (WorkspaceUtilities.isWorkspaceModified()) {
 
             int result = JOptionPaneUtilities.showConfirmDialogWithCancel(CoreProperties.getString("String_SaveWorkspacePrompt"));
             if (result == 1 && CommonUtils.isFileTypeSource(oldWorkspace.getConnectionInfo())) {
@@ -67,25 +68,25 @@ public class CtrlActionRegistryWorkspace extends CtrlAction {
         }
         // 先在工作空间树查询是否存在
         DefaultMutableTreeNode re = CtrlActionSynchronizeWorkspace.checkWorkspace(oldWorkspace.getConnectionInfo());
-        
-        if(re!=null){
+
+        if (re != null) {
             JOptionPaneUtilities.showMessageDialog("存在同名工作空间，请修改文件名！");
             return;
-        }else{
-            if(JOptionPaneUtilities.showConfirmDialog(GAFProperties.getString("String_WorkspaceRegistry"))==0){
+        } else {
+            if (JOptionPaneUtilities.showConfirmDialog(GAFProperties.getString("String_WorkspaceRegistry")) == 0) {
                 registry(oldWorkspace);
             }
         }
-	}
+    }
 
     private void registry(Workspace oldWorkspace) {
         try {
             WorkspaceConnectionInfo connectionInfo = oldWorkspace.getConnectionInfo();
 
-            GafClient.instance().registryWorkspace(connectionInfo,"datas/");
+            GafClient.instance().registryWorkspace(connectionInfo, "datas/");
             CommonUtils.refreshWorkspaceTree();
             CommonUtils.uploadWorkspace(oldWorkspace);
-        }catch (Exception e) {
+        } catch (Exception e) {
             ApplicationContextUtils.getOutput().output(e.getMessage());
         }
     }

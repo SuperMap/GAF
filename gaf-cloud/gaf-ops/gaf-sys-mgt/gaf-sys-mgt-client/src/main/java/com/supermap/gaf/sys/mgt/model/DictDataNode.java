@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.sys.mgt.model;
 
 
@@ -19,14 +19,15 @@ import java.util.List;
 
 /**
  * 字典数据树节点
+ *
  * @author wangxiaolong
  * @date 2021-01-08
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("字典数据树节点")
-@EqualsAndHashCode(callSuper=true)
-public class DictDataNode extends DictData implements Serializable , ITreeNode<String, DictDataNode> {
+@EqualsAndHashCode(callSuper = true)
+public class DictDataNode extends DictData implements Serializable, ITreeNode<String, DictDataNode> {
 
     @ApiModelProperty("父级id")
     private String pid;

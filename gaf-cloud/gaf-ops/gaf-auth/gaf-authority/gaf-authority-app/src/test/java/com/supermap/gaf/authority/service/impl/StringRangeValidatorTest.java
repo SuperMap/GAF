@@ -6,9 +6,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.regex.Pattern;
 
 /**
- *
  * @author wxl
- * @since  2021/6/22
+ * @since 2021/6/22
  */
 public class StringRangeValidatorTest {
     private static Pattern orderFileNamePattern = Pattern.compile("private String orderFieldName;");
@@ -22,7 +21,7 @@ public class StringRangeValidatorTest {
 
 
     private static String asString(File file) throws IOException {
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
@@ -31,8 +30,9 @@ public class StringRangeValidatorTest {
             return sb.toString();
         }
     }
-    private static void stringToFile(String s,File file) throws IOException {
-        try (FileWriter fileWriter = new FileWriter(file)){
+
+    private static void stringToFile(String s, File file) throws IOException {
+        try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write(s);
             fileWriter.flush();
         }
@@ -57,20 +57,22 @@ public class StringRangeValidatorTest {
                 if (name.endsWith("SelectVo.java")) {
                     String srcSelectVo = asString(file1);
                     if (srcSelectVo.contains("@StringRange")) {
-                        return  FileVisitResult.CONTINUE;
+                        return FileVisitResult.CONTINUE;
                     }
-                    String entityClassName = name.substring(0, name.indexOf("SelectVo.java"));;
+                    String entityClassName = name.substring(0, name.indexOf("SelectVo.java"));
+                    ;
                     String s = orderFileNamePattern.matcher(srcSelectVo).replaceFirst(String.format(orderReplaceTemplate, entityClassName));
                     String s1 = searchFieldNamePattern.matcher(s).replaceFirst(String.format(searchReplaceTemplate, entityClassName));
                     String s2 = equalFieldNamePattern.matcher(s1).replaceFirst(String.format(equalReplaceTemplate, entityClassName));
                     String s3 = orderMethodPattern.matcher(s2).replaceFirst(orderMethodReplace);
-                    stringToFile(s3,file1);
+                    stringToFile(s3, file1);
                 } else if (name.endsWith("Resource.java")) {
                     String srcResource = asString(file1);
-                    String entityClassName = name.substring(0, name.indexOf("Resource.java"));;
+                    String entityClassName = name.substring(0, name.indexOf("Resource.java"));
+                    ;
                     final String s = Pattern.compile("(@Valid )*@BeanParam ?" + entityClassName + "SelectVo").matcher(srcResource).replaceFirst("@Valid @BeanParam " + entityClassName + "SelectVo");
-                    final String s1 = Pattern.compile("(@StringRange\\(entityClass = "+entityClassName+".class\\) )*@QueryParam\\(\"searchFieldName\"\\)").matcher(s).replaceFirst("@StringRange(entityClass = "+entityClassName+".class) @QueryParam(\"searchFieldName\")");
-                    final String s2 = Pattern.compile("(@StringRange\\(entityClass = "+entityClassName+".class\\) )*@QueryParam\\(\"orderFieldName\"\\)").matcher(s1).replaceFirst("@StringRange(entityClass = "+entityClassName+".class) @QueryParam(\"orderFieldName\")");
+                    final String s1 = Pattern.compile("(@StringRange\\(entityClass = " + entityClassName + ".class\\) )*@QueryParam\\(\"searchFieldName\"\\)").matcher(s).replaceFirst("@StringRange(entityClass = " + entityClassName + ".class) @QueryParam(\"searchFieldName\")");
+                    final String s2 = Pattern.compile("(@StringRange\\(entityClass = " + entityClassName + ".class\\) )*@QueryParam\\(\"orderFieldName\"\\)").matcher(s1).replaceFirst("@StringRange(entityClass = " + entityClassName + ".class) @QueryParam(\"orderFieldName\")");
                     final String s3 = Pattern.compile("(@StringRange\\(\\{\"asc\",\"desc\"}\\) )*@QueryParam\\(\"orderMethod\"\\)").matcher(s2).replaceFirst("@StringRange({\"asc\",\"desc\"}) @QueryParam(\"orderMethod\")");
                     stringToFile(s3, file1);
                 }

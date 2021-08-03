@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.commontypes;
 
 import io.swagger.annotations.ApiModel;
@@ -17,31 +17,31 @@ import java.io.Serializable;
 @ApiModel("应用配置文件信息")
 public class ConfigPropertiesGroup implements Serializable {
     /**
-     *  应用名称
+     * 应用名称
      */
-    @ApiModelProperty(value = "应用名称",example = "GAF-XX")
+    @ApiModelProperty(value = "应用名称", example = "GAF-XX")
     private String application;
     /**
      * 环境
      */
-    @ApiModelProperty(value = "环境",example = "prod")
+    @ApiModelProperty(value = "环境", example = "prod")
     private String profile;
     /**
      * 分支
      */
-    @ApiModelProperty(value = "分支",example = "master")
+    @ApiModelProperty(value = "分支", example = "master")
     private String label;
 
     /**
      * 租户id
      */
-    @ApiModelProperty(value = "租户id",example = "123")
+    @ApiModelProperty(value = "租户id", example = "123")
     private String tenantId;
 
     /**
      *
      */
-    @ApiModelProperty(value = "配置数量",example = "10")
+    @ApiModelProperty(value = "配置数量", example = "10")
     private Integer propertiesCount;
 
     public ConfigPropertiesGroup() {

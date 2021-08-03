@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.entity;
 
 import io.swagger.annotations.ApiModel;
@@ -29,12 +29,12 @@ public class BuildS3MParameter implements Serializable {
     @ApiModelProperty(value = "数据源信息", example = "{}")
     private DataSourceInfo dataSourceInfo;
 
-    @ApiModelProperty(value = "数据集名称列表",example = "[test1,test2]")
+    @ApiModelProperty(value = "数据集名称列表", example = "[test1,test2]")
     private List<String> datasetNames;
 
-    @ApiModelProperty(value = "是否覆写",example = "false")
+    @ApiModelProperty(value = "是否覆写", example = "false")
     private boolean isOverWrite;
 
-    @ApiModelProperty(value = "缓存存放路径",example = "/xx/xx")
+    @ApiModelProperty(value = "缓存存放路径", example = "/xx/xx")
     private String outputFolder;
 }

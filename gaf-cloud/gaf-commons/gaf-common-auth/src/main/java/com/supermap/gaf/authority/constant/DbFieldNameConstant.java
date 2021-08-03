@@ -7,7 +7,6 @@ package com.supermap.gaf.authority.constant;
 public final class DbFieldNameConstant {
 
 
-
     private DbFieldNameConstant() {
     }
     // ---------------- 通用字段

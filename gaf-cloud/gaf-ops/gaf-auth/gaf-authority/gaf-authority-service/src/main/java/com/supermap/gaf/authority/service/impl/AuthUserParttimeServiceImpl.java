@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.*;
@@ -30,9 +30,9 @@ import java.util.stream.Collectors;
 
 /**
  * 用户挂职服务实现类
+ *
  * @author yangdong
  * @date:2021/3/25
- *
  */
 @Service
 public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
@@ -126,7 +126,7 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
                 parentIds.add(authUserParttime.getUserId());
             });
             authUserParttimeMapper.batchInsert(authUserParttimes);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthUserParttime.class,parentIds);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthUserParttime.class, parentIds);
         }
 
     }
@@ -153,7 +153,7 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
 
     }
 
-    private boolean hasAppRole(AuthUser user , Set<String> appRoleIds, Consumer<List<AuthUserParttime>> handleParttimes) {
+    private boolean hasAppRole(AuthUser user, Set<String> appRoleIds, Consumer<List<AuthUserParttime>> handleParttimes) {
         boolean hasAppRole = false;
         // todo: 获取用户所属租户  后序要改
         // 查询用户所在当前租户下是否有挂职信息
@@ -165,7 +165,7 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
             postIds.add(user.getPostId());
         }
         if (postIds.size() > 0) {
-            List<AuthPostRole>  authPostRoleList = authPostRoleService.listByPostIds(postIds);
+            List<AuthPostRole> authPostRoleList = authPostRoleService.listByPostIds(postIds);
             hasAppRole = authPostRoleList.stream().anyMatch(authPostRole -> appRoleIds.contains(authPostRole.getRoleId()));
         }
         if (!hasAppRole) {
@@ -181,12 +181,12 @@ public class AuthUserParttimeServiceImpl implements AuthUserParttimeService {
         checkUniqueness(authUserParttime, true);
         AuthUserParttime oldParttime = this.getById(authUserParttime.getUserParttimeId());
         authUserParttimeMapper.update(authUserParttime);
-        String parentId = authUserParttime.getUserId()!=null? authUserParttime.getUserId():oldParttime.getUserId();
-        batchSortAndCodeService.revisionSortSnForUpdate(AuthUserParttime.class,parentId,oldParttime.getSortSn(),authUserParttime.getSortSn());
+        String parentId = authUserParttime.getUserId() != null ? authUserParttime.getUserId() : oldParttime.getUserId();
+        batchSortAndCodeService.revisionSortSnForUpdate(AuthUserParttime.class, parentId, oldParttime.getSortSn(), authUserParttime.getSortSn());
 
         String oldPostId = oldParttime.getPostId();
         String newPostId = authUserParttime.getPostId();
-        if (!oldPostId .equals( newPostId )) {
+        if (!oldPostId.equals(newPostId)) {
             List<String> nameEns = CodeBaseRoleEnum.getAllNames();
             List<AuthRole> appRoles = authRoleService.listByNameEn(nameEns);
             Set<String> appRoleIds = appRoles.stream().map(AuthRole::getRoleId).collect(Collectors.toSet());

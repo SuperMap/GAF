@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.resources;
 
 import com.supermap.gaf.portal.menu.service.CustomationServices;
@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @Api(value = "用户简要信息接口")
 public class UserProfileResource {
 
@@ -40,7 +40,7 @@ public class UserProfileResource {
     @Qualifier("portal")
     private MenuService menuService;
 
-    @ApiOperation(value = "查看用户简要信息",notes = "查看用户简要信息")
+    @ApiOperation(value = "查看用户简要信息", notes = "查看用户简要信息")
     @Path("/")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -48,7 +48,7 @@ public class UserProfileResource {
         return userProfileService.queryUserProfile();
     }
 
-    @ApiOperation(value = "查看用户个人信息",notes = "查看用户个人信息，包括门户定制信息、个人信息、授权菜单")
+    @ApiOperation(value = "查看用户个人信息", notes = "查看用户个人信息，包括门户定制信息、个人信息、授权菜单")
     @Path("/detail")
     @GET
     @Produces({MediaType.APPLICATION_JSON})

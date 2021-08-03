@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ctrlaction;
 
 import com.supermap.data.Datasource;
@@ -21,25 +21,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @date:2021/3/25
  * @author SuperMap
+ * @date:2021/3/25
  */
 public class CtrlActionDatasourceRegistry extends CtrlAction {
-	public CtrlActionDatasourceRegistry(IBaseItem caller) {
-		super(caller);
-	}
+    public CtrlActionDatasourceRegistry(IBaseItem caller) {
+        super(caller);
+    }
 
     @Override
-	public void run() {
+    public void run() {
         Catalog catalog = (Catalog) ((DefaultMutableTreeNode) GafDatasourceManager.gafDatasourceManagerTree.getLastSelectedPathComponent()).getUserObject();
         Workspace workspace = ApplicationContextUtils.getWorkspace();
-        Datasources datasources= workspace.getDatasources();
+        Datasources datasources = workspace.getDatasources();
         List<SelectableDatasource> datasourceList = new ArrayList<>();
-        for(int i=0;i<datasources.getCount();++i){
-            if(datasources.get(i).isOpened()){
+        for (int i = 0; i < datasources.getCount(); ++i) {
+            if (datasources.get(i).isOpened()) {
                 datasourceList.add(new SelectableDatasource(datasources.get(i)));
             }
         }
-        new DialogSelectDatasource(datasourceList,catalog).showDialog();
-	}
+        new DialogSelectDatasource(datasourceList, catalog).showDialog();
+    }
 }

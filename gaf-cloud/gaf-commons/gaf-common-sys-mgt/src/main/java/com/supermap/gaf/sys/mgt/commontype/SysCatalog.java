@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.sys.mgt.commontype;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -21,10 +21,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
-* 目录
+ * 目录
+ *
+ * @author wangxiaolong
  * @date:2021/3/25
-* @author wangxiaolong
-*/
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -75,7 +76,7 @@ public class SysCatalog implements Serializable {
     @QueryParam("status")
     @NotNull
     @ApiModelProperty("状态。逻辑删除字段")
-    @JSONField(name="isStatus")
+    @JSONField(name = "isStatus")
     @LogicDeleteField
     private Boolean status;
     @QueryParam("createdTime")

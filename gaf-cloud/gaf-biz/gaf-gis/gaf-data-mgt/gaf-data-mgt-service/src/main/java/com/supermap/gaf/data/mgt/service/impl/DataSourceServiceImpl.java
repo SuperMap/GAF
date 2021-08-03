@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.service.impl;
 
 import com.supermap.data.*;
@@ -59,6 +59,7 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     /**
      * 获取数据源下的所有数据集
+     *
      * @param datasource 数据源
      * @return 数据集集合
      */
@@ -83,6 +84,7 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     /**
      * 转换数据连接信息
+     *
      * @param sysResourceDatasource 数据源连接信息
      * @return
      */
@@ -111,7 +113,7 @@ public class DataSourceServiceImpl implements DataSourceService {
                 datasourceConnectionInfo.setEngineType(EngineType.ORACLEPLUS);
                 break;
             default:
-                throw  new GafException("不支持此类型！");
+                throw new GafException("不支持此类型！");
         }
         return datasourceConnectionInfo;
     }

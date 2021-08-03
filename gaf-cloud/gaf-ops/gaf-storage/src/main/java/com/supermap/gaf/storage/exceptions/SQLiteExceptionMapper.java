@@ -10,12 +10,12 @@ import javax.ws.rs.ext.ExceptionMapper;
 
 import static org.sqlite.SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE;
 
-public class SQLiteExceptionMapper implements ExceptionMapper<UncategorizedSQLException>{
+public class SQLiteExceptionMapper implements ExceptionMapper<UncategorizedSQLException> {
     @Override
-    public Response toResponse(UncategorizedSQLException e){
-        if(e.getSQLException() instanceof SQLiteException){
+    public Response toResponse(UncategorizedSQLException e) {
+        if (e.getSQLException() instanceof SQLiteException) {
             SQLiteException sqLiteException = (SQLiteException) e.getSQLException();
-            if(sqLiteException.getResultCode() == SQLITE_CONSTRAINT_UNIQUE){
+            if (sqLiteException.getResultCode() == SQLITE_CONSTRAINT_UNIQUE) {
                 MessageResult body = MessageResult.failed(Object.class).status(Response.Status.CONFLICT.getStatusCode())
                         .message("键重复冲突(name)").build();
                 return Response.ok().type(MediaType.APPLICATION_JSON_TYPE).entity(body).build();

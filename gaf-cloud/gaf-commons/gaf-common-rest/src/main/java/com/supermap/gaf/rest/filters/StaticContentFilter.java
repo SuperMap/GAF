@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.rest.filters;
 
 import java.io.IOException;
@@ -26,12 +26,13 @@ import com.supermap.gaf.utils.ClassLoaderUtil;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class StaticContentFilter {
 
     private static final String STATIC_FLAG = "/static/";
     private static final int STATIC_FLAG_LEN = STATIC_FLAG.length();
     private Map<String, String> contentTypeMap;
+
     {
         Map<String, String> map = Maps.newHashMap();
         map.put("html", "text/html");
@@ -59,7 +60,7 @@ public class StaticContentFilter {
             chain.doFilter(request, response);
             return;
         }
-        
+
         int dotIndex = StringUtils.lastIndexOf(uri, '.');
         if (dotIndex != -1) {
             String suffix = StringUtils.substring(uri, dotIndex + 1);
@@ -68,14 +69,14 @@ public class StaticContentFilter {
                 response.setContentType(contentType);
             }
         }
-        try(InputStream is = ClassLoaderUtil.contextLoader().getResourceAsStream(resource);
-                ServletOutputStream os = response.getOutputStream();) {
+        try (InputStream is = ClassLoaderUtil.contextLoader().getResourceAsStream(resource);
+             ServletOutputStream os = response.getOutputStream();) {
             if (is == null) {
                 chain.doFilter(request, response);
                 return;
             }
             IOUtils.copy(is, os);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             //解析异常
         }
         chain.doFilter(request, response);

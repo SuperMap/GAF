@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.config.authc.usernamepassword;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,35 +45,35 @@ public class UsernamePasswordAuthenticationSuccessHandler implements Authenticat
         String clientId = httpServletRequest.getParameter(CLIENT_ID);
         String responseType = httpServletRequest.getParameter(RESPONSE_TYPE);
         String username = authentication.getName();
-        String sessionId = UUID.randomUUID().toString().replace("-","");
+        String sessionId = UUID.randomUUID().toString().replace("-", "");
         //跳转第三方登陆oidc
-        if (!StringUtils.isEmpty(customSessionId)){
+        if (!StringUtils.isEmpty(customSessionId)) {
             //TODO checksession
-            httpServletResponse.sendRedirect(String.format(LOGIN_CALLBACK_WITH_OIDC_VALIDATED + "?username=%s&%s=%s",username,CUSTOM_LOGIN_SESSION_NAME,customSessionId));
+            httpServletResponse.sendRedirect(String.format(LOGIN_CALLBACK_WITH_OIDC_VALIDATED + "?username=%s&%s=%s", username, CUSTOM_LOGIN_SESSION_NAME, customSessionId));
             return;
         }
         OAuth2AccessToken oAuth2AccessToken = null;
         String loginSuccessRedirectUrl = null;
         //作为第三方登录oauth
-        if (!StringUtils.isEmpty(clientId) && !StringUtils.isEmpty(responseType)){
-            oAuth2AccessToken = customLoginService.createOauth2AccessTokenWithoutPassword(username,clientId);
+        if (!StringUtils.isEmpty(clientId) && !StringUtils.isEmpty(responseType)) {
+            oAuth2AccessToken = customLoginService.createOauth2AccessTokenWithoutPassword(username, clientId);
             loginSuccessRedirectUrl = OAUTH2_AUTHORIZE + "?" + httpServletRequest.getQueryString();
-        }else {
+        } else {
             oAuth2AccessToken = customLoginService.createOauth2AccessTokenWithoutPassword(username);
             loginSuccessRedirectUrl = LOGIN_SUCCESS_REDIRECT;
         }
         //自定义custom_client登陆
-        updateLoginState(sessionId,username,oAuth2AccessToken,httpServletResponse);
-        loginSuccessResponse(httpServletResponse,loginSuccessRedirectUrl);
+        updateLoginState(sessionId, username, oAuth2AccessToken, httpServletResponse);
+        loginSuccessResponse(httpServletResponse, loginSuccessRedirectUrl);
     }
 
     /**
      * 登陆后状态修改
      */
-    private void updateLoginState(String sessionId,String username,OAuth2AccessToken oAuth2AccessToken,HttpServletResponse httpServletResponse){
+    private void updateLoginState(String sessionId, String username, OAuth2AccessToken oAuth2AccessToken, HttpServletResponse httpServletResponse) {
         userLoginMapper.updateLoginTime(username);
-        customLoginService.storeLoginSession(sessionId,username,oAuth2AccessToken,null,null,null);
-        Cookie cookie = new Cookie(CUSTOM_LOGIN_SESSION_NAME,sessionId);
+        customLoginService.storeLoginSession(sessionId, username, oAuth2AccessToken, null, null, null);
+        Cookie cookie = new Cookie(CUSTOM_LOGIN_SESSION_NAME, sessionId);
         cookie.setPath("/");
         httpServletResponse.addCookie(cookie);
     }
@@ -81,7 +81,7 @@ public class UsernamePasswordAuthenticationSuccessHandler implements Authenticat
     /**
      * 登陆成功返回信息
      */
-    private void loginSuccessResponse(HttpServletResponse httpServletResponse,String redirectUrl) throws IOException{
+    private void loginSuccessResponse(HttpServletResponse httpServletResponse, String redirectUrl) throws IOException {
         //下面防止axios 拦截不到302请求
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         MessageResult result = MessageResult.successe(String.class).status(HttpStatus.FOUND.value()).data(redirectUrl).build();

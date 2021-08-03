@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.cache;
 
 
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 /**
  * The type Cache registry result cache.
  *
- * @date:2021/3/25
  * @author heykb
+ * @date:2021/3/25
  */
 @Component
 @Primary
@@ -35,14 +35,15 @@ public class CacheRegistryResultCache extends AbstractRegistryResultCache implem
     public void afterPropertiesSet() throws Exception {
         this.cache = cacheManager.getCache("Gaf-Map");
     }
+
     @Override
     public BatchRegistryServiceResult get(String code) {
-        return cache.get(REGISTRY_RESULT_CACHE_PREFIX+code,BatchRegistryServiceResult.class);
+        return cache.get(REGISTRY_RESULT_CACHE_PREFIX + code, BatchRegistryServiceResult.class);
     }
 
     @Override
     public void put(String code, BatchRegistryServiceResult data) {
-        cache.put(REGISTRY_RESULT_CACHE_PREFIX+code,data);
+        cache.put(REGISTRY_RESULT_CACHE_PREFIX + code, data);
     }
 
 

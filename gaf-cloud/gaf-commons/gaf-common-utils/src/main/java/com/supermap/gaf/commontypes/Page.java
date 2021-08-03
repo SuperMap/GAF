@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.commontypes;
 
 import java.io.Serializable;
@@ -16,9 +16,9 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 
-@ApiModel(description= "页面查询的基类")
+@ApiModel(description = "页面查询的基类")
 public class Page<T> implements Serializable {
     /**
      * @since 8.1.0
@@ -33,11 +33,10 @@ public class Page<T> implements Serializable {
     @ApiModelProperty(value = "总数")
     private int total;
     @ApiModelProperty(value = "内容")
-    private List <T> content;
+    private List<T> content;
     @ApiModelProperty(value = "查询参数")
     protected SearchParameter searchParameter;
-    
-    
+
 
     public Page() {
         this.pageSize = 10;
@@ -70,11 +69,11 @@ public class Page<T> implements Serializable {
         calculateTotalPage();
     }
 
-    public List <T> getContent() {
+    public List<T> getContent() {
         return content;
     }
 
-    public void setContent(List <T> content) {
+    public void setContent(List<T> content) {
         this.content = content;
     }
 

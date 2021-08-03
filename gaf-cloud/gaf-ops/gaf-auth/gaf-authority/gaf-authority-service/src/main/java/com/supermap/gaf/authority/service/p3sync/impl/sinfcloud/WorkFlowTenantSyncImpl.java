@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.p3sync.impl.sinfcloud;
 
 import com.alibaba.fastjson.JSONObject;
@@ -98,7 +98,6 @@ public class WorkFlowTenantSyncImpl extends AbstractSync {
 
     /**
      * 递归获取工作流租户列表
-     *
      */
     private void getTenant(List<Object> tenantGroups, List<P3SyncResult> p3SyncResults) {
         for (Object tenantGroup : tenantGroups) {

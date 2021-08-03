@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.utils;
 
 import java.io.IOException;
@@ -21,8 +21,7 @@ import com.supermap.gaf.services.resource.CommonResource;
 
 /**
  * @author:yj
- * @date:2021/3/25
- * DES加密 解密算法
+ * @date:2021/3/25 DES加密 解密算法
  */
 public class DesUtil {
 
@@ -31,6 +30,7 @@ public class DesUtil {
     private final static String DEFAULT_KEY = "SuperMap_Land";
     private static ResourceManager rm = new ResourceManager(CommonResource.class);
     private static final LocLogger logger = LogUtil.getLocLogger(DesUtil.class, rm);
+
     public static void main(String[] args) throws Exception {
         String data = "ED5wLgc3Mnw=";
         System.out.println(decrypt(data));
@@ -39,6 +39,7 @@ public class DesUtil {
 
     /**
      * 使用 默认key 加密
+     *
      * @return String
      */
     public static String encrypt(String data) {
@@ -54,6 +55,7 @@ public class DesUtil {
 
     /**
      * 使用 默认key 解密
+     *
      * @return String
      */
     public static String decrypt(String data) {
@@ -71,10 +73,9 @@ public class DesUtil {
 
     /**
      * Description 根据键值进行加密
-     * 
+     *
      * @param data
-     * @param key
-     *            加密键byte数组
+     * @param key  加密键byte数组
      * @return
      * @throws Exception
      */
@@ -85,10 +86,9 @@ public class DesUtil {
 
     /**
      * Description 根据键值进行解密
-     * 
+     *
      * @param data
-     * @param key
-     *            加密键byte数组
+     * @param key  加密键byte数组
      * @return
      * @throws IOException
      * @throws Exception
@@ -103,10 +103,9 @@ public class DesUtil {
 
     /**
      * Description 根据键值进行加密
-     * 
+     *
      * @param data
-     * @param key
-     *            加密键byte数组
+     * @param key  加密键byte数组
      * @return
      * @throws Exception
      */
@@ -132,10 +131,9 @@ public class DesUtil {
 
     /**
      * Description 根据键值进行解密
-     * 
+     *
      * @param data
-     * @param key
-     *            加密键byte数组
+     * @param key  加密键byte数组
      * @return
      * @throws Exception
      */

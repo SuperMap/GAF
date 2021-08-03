@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.event;
 
 import com.supermap.gaf.configmgt.services.ConfigServerMgtService;
@@ -20,14 +20,14 @@ import org.springframework.stereotype.Component;
  * @description
  */
 @Component
-public class ConfigurationChangedListener implements ApplicationListener<ConfigurationChangedEvent>{
+public class ConfigurationChangedListener implements ApplicationListener<ConfigurationChangedEvent> {
 
 
     @Autowired
     private ConfigServerMgtService configServerMgtService;
 
     private Logger logger = LogUtil.getLocLogger(ConfigurationChangedListener.class);
-    
+
     @Override
     public void onApplicationEvent(ConfigurationChangedEvent event) {
         configServerMgtService.refreshConfiguration(event.getApplication());

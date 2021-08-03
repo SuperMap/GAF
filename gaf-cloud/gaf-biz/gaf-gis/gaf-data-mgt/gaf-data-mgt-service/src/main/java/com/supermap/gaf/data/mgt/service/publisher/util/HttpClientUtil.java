@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-* @author:yw
-* @Date 2021-3-12
+ * @author:yw
+ * @Date 2021-3-12
  * http工具类
  */
 public final class HttpClientUtil {
@@ -34,6 +34,7 @@ public final class HttpClientUtil {
     private static String encode = "UTF-8";
     private static String mimeType = "application/json";
     private static final Integer CODE = 200;
+
     /**
      * 执行get请求
      *

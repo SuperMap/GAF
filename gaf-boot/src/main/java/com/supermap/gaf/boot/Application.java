@@ -25,9 +25,10 @@ import org.springframework.web.client.RestTemplate;
 public class Application {
 
     @Bean
-    MybatisBatchUtil mybatisBatchUtil(SqlSessionFactory sqlSessionFactory){
-        return  new MybatisBatchUtil(sqlSessionFactory);
+    MybatisBatchUtil mybatisBatchUtil(SqlSessionFactory sqlSessionFactory) {
+        return new MybatisBatchUtil(sqlSessionFactory);
     }
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

@@ -6,7 +6,7 @@ public class ConfigName extends HashMap<String, Object> {
     public static final String NAME_TAG = "name";
 
     public ConfigName(String name) {
-        put(NAME_TAG,name);
+        put(NAME_TAG, name);
     }
 
     public String getName() {
@@ -14,7 +14,7 @@ public class ConfigName extends HashMap<String, Object> {
     }
 
     public void setName(String name) {
-        put(NAME_TAG,name);
+        put(NAME_TAG, name);
     }
 
 }

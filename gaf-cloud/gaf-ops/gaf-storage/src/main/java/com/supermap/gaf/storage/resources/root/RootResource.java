@@ -41,21 +41,23 @@ public class RootResource implements InitializingBean {
     @Autowired
     private VolumeConfigResource volumeConfigResource;
 
-    private final Map<String,FileStorageResource> fileStorageResourceMap = new HashMap<>();
+    private final Map<String, FileStorageResource> fileStorageResourceMap = new HashMap<>();
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        for(SelectMode item:SelectMode.values()){
+        for (SelectMode item : SelectMode.values()) {
             fileStorageResourceMap.put(item.getPathName(), new FileStorageResource(s3ClientService, item));
         }
     }
+
     @Path("/api/{selectMode}/{configName}")
     public FileStorageResource fileStorageResource(@PathParam("selectMode") String selectMode) {
         return fileStorageResourceMap.get(selectMode);
     }
+
     @Path("/tenant-server-configs")
-    public Class<TenantSpaceConfigResource> tenantServerConfigResource(){
-        return  TenantSpaceConfigResource.class;
+    public Class<TenantSpaceConfigResource> tenantServerConfigResource() {
+        return TenantSpaceConfigResource.class;
     }
 
     @GET
@@ -63,19 +65,22 @@ public class RootResource implements InitializingBean {
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "分页条件查询", notes = "分页条件查询")
     public MessageResult<Page> allocated(@BeanParam SpaceSelectVo spaceSelectVo,
-                                         @DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
-                                         @DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
+                                         @DefaultValue("1") @QueryParam("pageNum") Integer pageNum,
+                                         @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
         Page<Space> page = tenantSpaceConfigService.allocated(spaceSelectVo, pageNum, pageSize);
         return MessageResult.successe(Page.class).data(page).status(200).message("查询成功").build();
     }
+
     @Path("/global-server-configs")
-    public Class<GlobalServerConfigResource> globalServerConfigResource(){
-        return  GlobalServerConfigResource.class;
+    public Class<GlobalServerConfigResource> globalServerConfigResource() {
+        return GlobalServerConfigResource.class;
     }
+
     @Path("/permissions")
-    public Class<StoragePermissionResource> storagePermissionResource(){
-        return  StoragePermissionResource.class;
+    public Class<StoragePermissionResource> storagePermissionResource() {
+        return StoragePermissionResource.class;
     }
+
     @Path("/volume")
     public VolumeConfigResource volumeConfigResource() {
         return volumeConfigResource;
@@ -85,11 +90,11 @@ public class RootResource implements InitializingBean {
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "验证S3Config配置", notes = "验证S3Config配置")
     @Path("/validate-s3config")
-    public MessageResult<Void> validateS3Config(MinioConfig minioConfig){
-        try{
+    public MessageResult<Void> validateS3Config(MinioConfig minioConfig) {
+        try {
             AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
             s3Client.doesBucketExistV2(minioConfig.getBucketName());
-        }catch (Exception e){
+        } catch (Exception e) {
             return MessageResult.failed(Void.class).message(e.getMessage()).build();
         }
         return MessageResult.successe(Void.class).message("验证成功").build();

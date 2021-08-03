@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.commontypes.tree;
 
 import io.swagger.annotations.ApiModel;
@@ -12,12 +12,12 @@ import java.util.List;
 
 /**
  * 默认树节点
+ *
  * @author:yj
  * @date:2021/3/25
- *
  */
 @ApiModel("默认树节点")
-public class DefaultTreeNode implements ITreeNode<String,DefaultTreeNode> {
+public class DefaultTreeNode implements ITreeNode<String, DefaultTreeNode> {
     /**
      * 节点的唯一标识，即id
      */

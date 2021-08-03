@@ -6,9 +6,11 @@ import java.util.HashMap;
 
 public class ObjectInfo extends HashMap<String, Object> {
     private static final long serialVersionUID = 1L;
-    public static enum ObjectType{
-        commonPrefix,object;
+
+    public static enum ObjectType {
+        commonPrefix, object;
     }
+
     public static final String NAME_TAG = "name";
     public static final String OBJECT_TYPE_TAG = "objectType";
     public static final String SIZE_TAG = "size";
@@ -16,15 +18,16 @@ public class ObjectInfo extends HashMap<String, Object> {
 
 
     public static ObjectInfo fileInfo(String name, Long size, Date lastModified) {
-        ObjectInfo re =  new ObjectInfo();
+        ObjectInfo re = new ObjectInfo();
         re.setName(name);
         re.setSize(size);
         re.setLastModified(lastModified);
         re.setObjectType(ObjectType.object);
         return re;
     }
+
     public static ObjectInfo dirInfo(String name) {
-        ObjectInfo re =  new ObjectInfo();
+        ObjectInfo re = new ObjectInfo();
         re.setName(name);
         re.setObjectType(ObjectType.commonPrefix);
         return re;
@@ -36,7 +39,7 @@ public class ObjectInfo extends HashMap<String, Object> {
     }
 
     public void setName(String name) {
-        put(NAME_TAG,name);
+        put(NAME_TAG, name);
     }
 
     public ObjectType getObjectType() {
@@ -44,7 +47,7 @@ public class ObjectInfo extends HashMap<String, Object> {
     }
 
     public void setObjectType(ObjectType objectType) {
-        put(OBJECT_TYPE_TAG,objectType);
+        put(OBJECT_TYPE_TAG, objectType);
     }
 
     public Long getSize() {
@@ -52,7 +55,7 @@ public class ObjectInfo extends HashMap<String, Object> {
     }
 
     public void setSize(Long size) {
-        put(SIZE_TAG,size);
+        put(SIZE_TAG, size);
     }
 
     public Date getLastModified() {
@@ -60,6 +63,6 @@ public class ObjectInfo extends HashMap<String, Object> {
     }
 
     public void setLastModified(Date lastModified) {
-        put(LAST_MODIFIED_TAG,lastModified);
+        put(LAST_MODIFIED_TAG, lastModified);
     }
 }

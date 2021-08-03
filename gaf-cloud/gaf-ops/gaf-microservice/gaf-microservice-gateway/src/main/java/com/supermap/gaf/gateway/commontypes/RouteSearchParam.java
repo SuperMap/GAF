@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.commontypes;
 
 import com.supermap.gaf.gateway.GatewayRouteType;
@@ -20,13 +20,13 @@ public class RouteSearchParam {
     private String tenantId;
     private GatewayRouteType type;
     private boolean enable = true;
-    private List <String> ids;
+    private List<String> ids;
 
-    public List <String> getIds() {
+    public List<String> getIds() {
         return ids;
     }
 
-    public void setIds(List <String> ids) {
+    public void setIds(List<String> ids) {
         this.ids = ids;
     }
 

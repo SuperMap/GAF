@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.api.scanner.service.impl;
 
 import com.supermap.gaf.api.scanner.dao.SwaggerApiDocMapper;
@@ -29,11 +29,11 @@ public class SwaggerApiDocServiceImpl implements SwaggerApiDocService {
     @Override
     public boolean syncApiDoc(ApiDoc apiDoc) {
         //查询是否有对应name的apidoc，如果有则更新，没有则新增
-        if (apiDoc != null && !StringUtils.isEmpty(apiDoc.getName())){
+        if (apiDoc != null && !StringUtils.isEmpty(apiDoc.getName())) {
             ApiDoc existApiDoc = swaggerApiDocMapper.getApiDoc(apiDoc.getName());
-            if (null != existApiDoc){
+            if (null != existApiDoc) {
                 swaggerApiDocMapper.updateApiDoc(apiDoc);
-            }else {
+            } else {
                 apiDoc.setId(UUID.randomUUID().toString());
                 swaggerApiDocMapper.addApiDoc(apiDoc);
             }

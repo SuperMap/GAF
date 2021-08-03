@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.common.storage.service;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @date:2021/3/25
  */
 public interface S3ClientService {
-    default int deleteObjects(List<String> prefixs){
+    default int deleteObjects(List<String> prefixs) {
         throw new NotImplementedException("deleteObject()");
     }
 
@@ -50,7 +50,7 @@ public interface S3ClientService {
     URL getUrl(String configName, String keyName, SelectModeI selectMode);
 
 
-    default URL getUrl(String keyName){
+    default URL getUrl(String keyName) {
         throw new NotImplementedException("deleteObject()");
     }
 
@@ -72,7 +72,7 @@ public interface S3ClientService {
      * @param contentMd5 the content md 5
      * @return the upload sign url
      */
-    String getUploadSignUrl(String configName, String keyName,String contentMd5, SelectModeI selectMode);
+    String getUploadSignUrl(String configName, String keyName, String contentMd5, SelectModeI selectMode);
 
 
     /**
@@ -83,7 +83,7 @@ public interface S3ClientService {
      * @param minute     the minute
      * @return the string
      */
-    String share(String configName, String keyName,long minute,String secret, SelectModeI selectMode);
+    String share(String configName, String keyName, long minute, String secret, SelectModeI selectMode);
 
     /**
      * Gets download sign url.
@@ -103,7 +103,7 @@ public interface S3ClientService {
      * @param userObjectMetadata the user object metadata
      * @return the string
      */
-    String createMultiUpload(String configName, String keyName,Map<String,String> userObjectMetadata, SelectModeI selectMode);
+    String createMultiUpload(String configName, String keyName, Map<String, String> userObjectMetadata, SelectModeI selectMode);
 
 
     /**
@@ -115,7 +115,7 @@ public interface S3ClientService {
      * @param maxPartNum the max part num
      * @return the map
      */
-    Map<Integer,String> multiUploadSignUrl(String configName, String keyName, String uploadId, int maxPartNum, SelectModeI selectMode);
+    Map<Integer, String> multiUploadSignUrl(String configName, String keyName, String uploadId, int maxPartNum, SelectModeI selectMode);
 
 
     /**
@@ -149,7 +149,7 @@ public interface S3ClientService {
      * @param partNums   the part nums
      * @return the map
      */
-    Map<Integer,String> uploadPartsSignUrl(String configName, String path, String uploadId, List<Integer> partNums, SelectModeI selectMode);
+    Map<Integer, String> uploadPartsSignUrl(String configName, String path, String uploadId, List<Integer> partNums, SelectModeI selectMode);
 
 
     /**

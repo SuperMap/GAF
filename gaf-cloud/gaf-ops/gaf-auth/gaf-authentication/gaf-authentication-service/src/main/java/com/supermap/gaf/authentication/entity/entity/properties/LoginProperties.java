@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.entity.entity.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
  */
 @ConfigurationProperties(prefix = "login")
 @Component
-public class LoginProperties{
+public class LoginProperties {
     public static final int THIRDPARTY_PROPERTY_LEVEL = 2;
     /**
      * eg: oidc:keycloak
@@ -30,14 +30,14 @@ public class LoginProperties{
 
     @PostConstruct
     public void validate() {
-        if (StringUtils.isEmpty(enabledThirdParty)){
+        if (StringUtils.isEmpty(enabledThirdParty)) {
             return;
         }
         String[] enableThirdParts = enabledThirdParty.split(":");
-        if (enableThirdParts.length != THIRDPARTY_PROPERTY_LEVEL){
-            throw new IllegalStateException("enable-third-party must be like 'oidc:keyclaok',param after split having length is "+ THIRDPARTY_PROPERTY_LEVEL);
+        if (enableThirdParts.length != THIRDPARTY_PROPERTY_LEVEL) {
+            throw new IllegalStateException("enable-third-party must be like 'oidc:keyclaok',param after split having length is " + THIRDPARTY_PROPERTY_LEVEL);
         }
-        if (StringUtils.isEmpty(enableThirdParts[0]) || StringUtils.isEmpty(enableThirdParts[1])){
+        if (StringUtils.isEmpty(enableThirdParts[0]) || StringUtils.isEmpty(enableThirdParts[1])) {
             throw new IllegalStateException("enable-third-party param must not be empty");
         }
     }

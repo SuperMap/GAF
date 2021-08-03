@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.filters;
 
 import com.supermap.gaf.utils.LogUtil;
@@ -20,8 +20,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 /**
  * @author dqc
- * @date:2021/3/25
- * 此过滤器主要是将token从网关传递到微服务，微服务解析这个token获得登录认证信息
+ * @date:2021/3/25 此过滤器主要是将token从网关传递到微服务，微服务解析这个token获得登录认证信息
  */
 public class JwtTokenFilter implements GlobalFilter, Ordered {
 
@@ -31,6 +30,7 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
 
     /**
      * 过滤器
+     *
      * @param exchange
      * @param chain
      * @return
@@ -41,9 +41,9 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
     }
 
 
-
     /**
      * 请求头带oauth token的请求
+     *
      * @param chain
      * @param exchange
      * @param token
@@ -52,9 +52,9 @@ public class JwtTokenFilter implements GlobalFilter, Ordered {
     private Mono<Void> appendTokenHeader(GatewayFilterChain chain, ServerWebExchange exchange, String token) {
         //判断是否存在auth请求头，如果存在，不添加
         List<String> authHeader = exchange.getRequest().getHeaders().get(AUTHORIZATION);
-        if (authHeader != null && !authHeader.isEmpty()){
+        if (authHeader != null && !authHeader.isEmpty()) {
             return chain.filter(exchange);
-        }else {
+        } else {
             ServerHttpRequest newRequest = exchange.getRequest().mutate().header(AUTHORIZATION, JWT_PREFIX + " " + token).build();
             return chain.filter(exchange.mutate().request(newRequest).build());
         }

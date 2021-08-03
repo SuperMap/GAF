@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.util;
 
 import com.alibaba.fastjson.JSONArray;
@@ -33,8 +33,8 @@ public class MicroServiceConversion {
      * @param serviceInstances
      * @return
      */
-    public static List <ServiceInstanceInfo> getMicroServiceInfo(List <ServiceInstance> serviceInstances) {
-        List <ServiceInstanceInfo> serviceInstanceInfos = new ArrayList <>();
+    public static List<ServiceInstanceInfo> getMicroServiceInfo(List<ServiceInstance> serviceInstances) {
+        List<ServiceInstanceInfo> serviceInstanceInfos = new ArrayList<>();
         for (ServiceInstance serviceInstance : serviceInstances) {
             EurekaDiscoveryClient.EurekaServiceInstance eurekaServiceInstance = (EurekaDiscoveryClient.EurekaServiceInstance) serviceInstance;
             InstanceInfo instanceInfo = eurekaServiceInstance.getInstanceInfo();
@@ -54,13 +54,13 @@ public class MicroServiceConversion {
         return serviceInstanceInfos;
     }
 
-    public static MicroServiceInfo getMicroServiceInfo(String microServiceInfoJsonStr){
+    public static MicroServiceInfo getMicroServiceInfo(String microServiceInfoJsonStr) {
         MicroServiceInfo microServiceInfo = new MicroServiceInfo();
         JSONObject applicatoinJsonObj = (JSONObject) JSONObject.parseObject(microServiceInfoJsonStr).get("application");
         if (applicatoinJsonObj != null) {
             microServiceInfo.name = applicatoinJsonObj.get("name").toString();
             JSONArray instanceJsonArr = (JSONArray) applicatoinJsonObj.get("instance");
-            List <ServiceInstanceInfo> serviceInstanceInfos = new ArrayList <>();
+            List<ServiceInstanceInfo> serviceInstanceInfos = new ArrayList<>();
             for (Object obj : instanceJsonArr) {
                 ServiceInstanceInfo serviceInstanceInfo = new ServiceInstanceInfo();
                 serviceInstanceInfo.appName = JsonUtils.getValue((JSONObject) obj, "app", String.class);

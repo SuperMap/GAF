@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.menu.dao.impl;
 
 import com.supermap.gaf.portal.menu.commontypes.MenuInfo;
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @Service
 public class MenuDaoImpl implements MenuDao {
     @Autowired
@@ -30,13 +30,13 @@ public class MenuDaoImpl implements MenuDao {
     }
 
     @Override
-    public int deleteMenuById(@Param("id")String menuId) {
+    public int deleteMenuById(@Param("id") String menuId) {
         return sqlSession.delete("deleteMenuById", menuId);
     }
 
     @Override
     public int deleteMenuByFlag(@Param("flag") String flag) {
-        return sqlSession.delete("deleteMenuByFlag",flag);
+        return sqlSession.delete("deleteMenuByFlag", flag);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class MenuDaoImpl implements MenuDao {
     }
 
     @Override
-    public MenuInfo queryMenuById(@Param("id")String menuId) {
+    public MenuInfo queryMenuById(@Param("id") String menuId) {
         return sqlSession.selectOne("queryMenuById", menuId);
     }
 

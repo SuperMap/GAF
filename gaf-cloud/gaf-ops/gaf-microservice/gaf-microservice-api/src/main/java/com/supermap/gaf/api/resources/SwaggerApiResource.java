@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.api.resources;
 
 import com.supermap.gaf.api.scanner.entity.ApiDoc;
@@ -22,8 +22,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * @author dqc
- * @date:2021/3/25
- * /docs/swagger
+ * @date:2021/3/25 /docs/swagger
  */
 @Component
 @Path("/")
@@ -33,17 +32,16 @@ public class SwaggerApiResource {
     private SwaggerApiDocService apiDocService;
 
 
-
-    @ApiOperation(value = "读取对应服务的Apidoc",notes = "读取某个服务的swagger.json文件内容，用于前端展示api界面")
+    @ApiOperation(value = "读取对应服务的Apidoc", notes = "读取某个服务的swagger.json文件内容，用于前端展示api界面")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "serviceName",value = "服务名",paramType = "path",dataType = "string",required = true,example = "GAF-XX")
+            @ApiImplicitParam(name = "serviceName", value = "服务名", paramType = "path", dataType = "string", required = true, example = "GAF-XX")
     })
     @Path("/{serviceName}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getSwagger(@PathParam("serviceName")String serviceName) throws Exception{
+    public String getSwagger(@PathParam("serviceName") String serviceName) throws Exception {
         ApiDoc apiDoc = apiDocService.getApiDoc(serviceName);
-        if (null != apiDoc){
+        if (null != apiDoc) {
             return apiDoc.getData();
         }
         return null;

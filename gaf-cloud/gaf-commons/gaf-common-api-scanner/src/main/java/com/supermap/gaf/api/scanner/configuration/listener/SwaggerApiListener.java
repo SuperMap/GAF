@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.api.scanner.configuration.listener;
 
 import com.supermap.gaf.api.scanner.entity.ApiDoc;
@@ -60,20 +60,20 @@ public class SwaggerApiListener extends ObjectMapperFactory implements Applicati
             //获取swagger
             swagger = beanConfig.getSwagger();
             //加统一前缀
-            if(StringUtils.isEmpty(swagger.getBasePath())){
+            if (StringUtils.isEmpty(swagger.getBasePath())) {
                 swagger.setBasePath(pathPrefix);
             }
             swaggerMap = swagger.getPaths();
-            if (swaggerMap == null){
+            if (swaggerMap == null) {
                 logger.info("swagger-api文档json入库程序【无API】...");
                 return;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.info("swagger-api文档json入库程序【无API】...");
             return;
         }
         Set<String> keySet = swaggerMap.keySet();
-        for (String key : keySet){
+        for (String key : keySet) {
             Path path = swaggerMap.get(key);
             //调整对象内参数备注问题
             fixSwaggerParameters(path);
@@ -81,23 +81,23 @@ public class SwaggerApiListener extends ObjectMapperFactory implements Applicati
         //上传resource到数据库
         try {
             SysComponent sysComponent = swaggerApiInitializingService.searchSysComponent();
-            if (null != sysComponent){
+            if (null != sysComponent) {
                 swaggerApiInitializingService.initializeSysCatalog(sysComponent, swagger);
-                swaggerApiInitializingService.initializeSysResourceApi(sysComponent,swagger);
+                swaggerApiInitializingService.initializeSysResourceApi(sysComponent, swagger);
                 logger.info("resource-api入库【成功】...");
-            }else {
+            } else {
                 throw new NullPointerException("未查询到系统模块数据，暂不入库");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 //            e.printStackTrace();
             logger.error("resource-api入库【失败】...");
         }
         //上传api_doc到数据库
         try {
-            ApiDoc apiDoc = new ApiDoc(appName,createJson().writeValueAsString(swagger));
+            ApiDoc apiDoc = new ApiDoc(appName, createJson().writeValueAsString(swagger));
             apiDocService.syncApiDoc(apiDoc);
             logger.info("swagger-api文档api_doc入库程序【成功】...");
-        }catch (Exception e){
+        } catch (Exception e) {
 //            e.printStackTrace();
             logger.error("swagger-api文档api_doc入库程序【失败】...");
         }
@@ -109,15 +109,15 @@ public class SwaggerApiListener extends ObjectMapperFactory implements Applicati
      * 2.修复swagger在使用@ApiImplicitParams时，如果type为body，会导致生成重复的参数。
      * 这里采取策略为：如果有相同参数，删除没有describe字段的参数
      */
-    private void fixSwaggerParameters(Path path){
+    private void fixSwaggerParameters(Path path) {
         List<Operation> operations = path.getOperations();
-        for (Operation operation : operations){
+        for (Operation operation : operations) {
             List<Parameter> parameters = operation.getParameters();
             //修复1的swagger对象问题
             parameters = parameters.stream().sorted((o1, o2) -> {
-                if (!StringUtils.isEmpty(o1.getDescription()) && StringUtils.isEmpty(o2.getDescription())){
+                if (!StringUtils.isEmpty(o1.getDescription()) && StringUtils.isEmpty(o2.getDescription())) {
                     return -1;
-                }else {
+                } else {
                     return 0;
                 }
             }).collect(Collectors.toList());
@@ -127,15 +127,15 @@ public class SwaggerApiListener extends ObjectMapperFactory implements Applicati
             int bodyTypeNoDescribeIndex = -1;
             for (int i = 0; i < parameters.size(); i++) {
                 Parameter parameter = parameters.get(i);
-                if (parameter.getIn().equals(bodyTypeName)){
-                    if (!StringUtils.isEmpty(parameter.getDescription())){
+                if (parameter.getIn().equals(bodyTypeName)) {
+                    if (!StringUtils.isEmpty(parameter.getDescription())) {
                         bodyTypeDescribeIndex = i;
-                    }else {
+                    } else {
                         bodyTypeNoDescribeIndex = i;
                     }
                 }
             }
-            if (bodyTypeNoDescribeIndex != -1 && bodyTypeDescribeIndex != -1){
+            if (bodyTypeNoDescribeIndex != -1 && bodyTypeDescribeIndex != -1) {
                 parameters.remove(bodyTypeNoDescribeIndex);
             }
             operation.setParameters(parameters);

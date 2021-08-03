@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.utils;
 
 import com.alibaba.fastjson.JSON;
@@ -33,27 +33,32 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @date:2021/3/25
  * @author heykb
+ * @date:2021/3/25
  */
 public class HttpUtils {
 
     public static Object doGet(String url, Class<?> resultType) throws Exception {
-        return doGet(url,null,null,resultType);
+        return doGet(url, null, null, resultType);
     }
-    public static Object doGet(String url,Map<String, String> urlParams, Class<?> resultType) throws Exception {
-        return doGet(url,urlParams,null,resultType);
+
+    public static Object doGet(String url, Map<String, String> urlParams, Class<?> resultType) throws Exception {
+        return doGet(url, urlParams, null, resultType);
     }
-    public static Object doPostJson(String url, String jsonBody,Class<?> resultType) throws Exception {
-        return doPostJson(url,jsonBody,null,null,resultType);
+
+    public static Object doPostJson(String url, String jsonBody, Class<?> resultType) throws Exception {
+        return doPostJson(url, jsonBody, null, null, resultType);
     }
-    public static Object doPostJson(String url,String jsonBody,Map<String, String> urlParams, Class<?> resultType) throws Exception {
-        return doPostJson(url,jsonBody,urlParams,null,resultType);
+
+    public static Object doPostJson(String url, String jsonBody, Map<String, String> urlParams, Class<?> resultType) throws Exception {
+        return doPostJson(url, jsonBody, urlParams, null, resultType);
     }
-    public static Object doPutJson(String url,String jsonBody,Map<String, String> urlParams, Class<?> resultType) throws Exception {
-        return doPutJson(url,jsonBody,urlParams,null,resultType);
+
+    public static Object doPutJson(String url, String jsonBody, Map<String, String> urlParams, Class<?> resultType) throws Exception {
+        return doPutJson(url, jsonBody, urlParams, null, resultType);
     }
-    public static Object doGet(String url, Map<String, String> urlParams, Map<String,String> headers, Class<?> resultType) throws Exception {
+
+    public static Object doGet(String url, Map<String, String> urlParams, Map<String, String> headers, Class<?> resultType) throws Exception {
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
         Object result = null;
@@ -79,16 +84,16 @@ public class HttpUtils {
                 int status = response.getStatusLine().getStatusCode();
                 if (status >= 200 && status < 300) {
                     HttpEntity entity = response.getEntity();
-                    return entity != null ? EntityUtils.toString(entity,"UTF-8") : null;
-                }else if(status == 401 || status == 302){
+                    return entity != null ? EntityUtils.toString(entity, "UTF-8") : null;
+                } else if (status == 401 || status == 302) {
                     throw new AuthenticationException();
-                }else {
+                } else {
                     throw new ClientProtocolException("Unexpected response status: " + status);
                 }
             };
             request.getParams().setParameter(ClientPNames.HANDLE_REDIRECTS, false);
-            String resultString = httpclient.execute(request,responseHandler);
-            result = JSON.parseObject(resultString,resultType);
+            String resultString = httpclient.execute(request, responseHandler);
+            result = JSON.parseObject(resultString, resultType);
         } finally {
             try {
                 if (responseBody != null) {
@@ -101,7 +106,8 @@ public class HttpUtils {
         }
         return result;
     }
-    public static Object doPostJson(String url, List<NameValuePair> params, Class<?> resultType)throws Exception{
+
+    public static Object doPostJson(String url, List<NameValuePair> params, Class<?> resultType) throws Exception {
         CloseableHttpClient httpClient = HttpClients.createDefault();
 
         Object result;
@@ -111,24 +117,24 @@ public class HttpUtils {
             builder.setHost(r.getHost()).setPort(r.getPort()).setScheme(r.getProtocol())
                     .setPath(r.getPath()).setCustomQuery(r.getQuery()).setFragment(r.getRef());
             URI uri = builder.build();
-            HttpPost request =   new HttpPost(uri);
-            request.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
+            HttpPost request = new HttpPost(uri);
+            request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
             request.setHeader("Content-type", "application/x-www-form-urlencoded");
             ResponseHandler<String> responseHandler = response -> {
                 int status = response.getStatusLine().getStatusCode();
                 if (status >= 200 && status < 300) {
                     HttpEntity responseEntity = response.getEntity();
-                    return responseEntity != null ? EntityUtils.toString(responseEntity,"UTF-8") : null;
-                }else if(status == 401 || status == 302){
+                    return responseEntity != null ? EntityUtils.toString(responseEntity, "UTF-8") : null;
+                } else if (status == 401 || status == 302) {
                     throw new AuthenticationException();
-                }else {
+                } else {
                     throw new ClientProtocolException("Unexpected response status: " + status);
                 }
             };
             request.getParams().setParameter(ClientPNames.HANDLE_REDIRECTS, false);
-            String resultString = httpClient.execute(request,responseHandler);
-            result = JSON.parseObject(resultString,resultType);
-        }finally {
+            String resultString = httpClient.execute(request, responseHandler);
+            result = JSON.parseObject(resultString, resultType);
+        } finally {
             try {
                 httpClient.close();
             } catch (IOException e) {
@@ -137,7 +143,8 @@ public class HttpUtils {
         }
         return result;
     }
-    public static Object doPostJson(String url, String jsonBody,Map<String, String> urlParams, Map<String,String> headers, Class<?> resultType) throws Exception {
+
+    public static Object doPostJson(String url, String jsonBody, Map<String, String> urlParams, Map<String, String> headers, Class<?> resultType) throws Exception {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         Object result = null;
         try {
@@ -157,7 +164,7 @@ public class HttpUtils {
                     request.addHeader(key, headers.get(key));
                 }
             }
-            if(jsonBody!=null){
+            if (jsonBody != null) {
                 StringEntity entity = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
                 request.setEntity(entity);
             }
@@ -165,15 +172,15 @@ public class HttpUtils {
                 int status = response.getStatusLine().getStatusCode();
                 if (status >= 200 && status < 300) {
                     HttpEntity responseEntity = response.getEntity();
-                    return responseEntity != null ? EntityUtils.toString(responseEntity,"UTF-8") : null;
-                }else if(status == 401 || status == 302){
+                    return responseEntity != null ? EntityUtils.toString(responseEntity, "UTF-8") : null;
+                } else if (status == 401 || status == 302) {
                     throw new AuthenticationException();
-                }else {
+                } else {
                     throw new ClientProtocolException("Unexpected response status: " + status);
                 }
             };
-            String resultString = httpclient.execute(request,responseHandler);
-            result = JSON.parseObject(resultString,resultType);
+            String resultString = httpclient.execute(request, responseHandler);
+            result = JSON.parseObject(resultString, resultType);
         } finally {
             try {
                 httpclient.close();
@@ -183,7 +190,8 @@ public class HttpUtils {
         }
         return result;
     }
-    public static Object doPutJson(String url, String jsonBody,Map<String, String> urlParams, Map<String,String> headers, Class<?> resultType) throws Exception {
+
+    public static Object doPutJson(String url, String jsonBody, Map<String, String> urlParams, Map<String, String> headers, Class<?> resultType) throws Exception {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         Object result = null;
         CloseableHttpResponse responseBody = null;
@@ -204,7 +212,7 @@ public class HttpUtils {
                     request.addHeader(key, headers.get(key));
                 }
             }
-            if(jsonBody!=null){
+            if (jsonBody != null) {
                 StringEntity entity = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
                 request.setEntity(entity);
             }
@@ -212,15 +220,15 @@ public class HttpUtils {
                 int status = response.getStatusLine().getStatusCode();
                 if (status >= 200 && status < 300) {
                     HttpEntity responseEntity = response.getEntity();
-                    return responseEntity != null ? EntityUtils.toString(responseEntity,"UTF-8") : null;
-                }else if(status == 401 || status == 302){
+                    return responseEntity != null ? EntityUtils.toString(responseEntity, "UTF-8") : null;
+                } else if (status == 401 || status == 302) {
                     throw new AuthenticationException();
-                }else {
+                } else {
                     throw new ClientProtocolException("Unexpected response status: " + status);
                 }
             };
-            String resultString = httpclient.execute(request,responseHandler);
-            result = JSON.parseObject(resultString,resultType);
+            String resultString = httpclient.execute(request, responseHandler);
+            result = JSON.parseObject(resultString, resultType);
         } finally {
             try {
                 if (responseBody != null) {

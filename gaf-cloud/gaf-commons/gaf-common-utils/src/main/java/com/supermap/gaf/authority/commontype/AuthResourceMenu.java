@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.commontype;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -23,10 +23,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
-* 菜单
+ * 菜单
+ *
+ * @author wxl
  * @date:2021/3/25
-* @author wxl
-*/
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -52,10 +53,10 @@ public class AuthResourceMenu implements Serializable {
     @ApiModelProperty("图标")
     private String icon;
     @ApiModelProperty(value = "是否可见。true:可见，false:不可见", example = "true", allowableValues = "true,false")
-    @JSONField(name="isVisible")
+    @JSONField(name = "isVisible")
     private Boolean visible;
     @ApiModelProperty("状态。逻辑删除字段")
-    @JSONField(name="isStatus")
+    @JSONField(name = "isStatus")
     @LogicDeleteField
     private Boolean status = true;
     @ApiModelProperty(value = "排序序号", example = "1", allowableValues = "range[1,infinity]")

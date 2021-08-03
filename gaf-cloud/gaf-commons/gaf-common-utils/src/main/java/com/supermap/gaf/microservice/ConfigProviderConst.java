@@ -15,7 +15,7 @@ public final class ConfigProviderConst {
      * k8s的configMap
      */
     public static final String K8S_CONFIG_MAP = "CONFIG_MAP";
-    
+
     /**
      * 管理服务key，可以通过服务依赖来动态更改
      */

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.rest.filters;
 
 import java.util.Map;
@@ -20,13 +20,13 @@ import com.supermap.services.rest.util.UrlpostfixMapping;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class RequestWrapper extends HttpServletRequestWrapper {
 
     public RequestWrapper(HttpServletRequest request) {
         super(request);
     }
-    
+
     /**
      * <p>
      * 获取指定的请求头的值（字符串形式）。
@@ -36,7 +36,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      * @return 请求头的值。如果 HTTP 请求中不包含指定名称的请求头，则返回 null。
      */
     public String getHeader(String name) {
-        
+
         if (name.equalsIgnoreCase("Accept")) {
             return this.getAccept();
         } else if (name.equalsIgnoreCase("Content-Type")) {
@@ -50,7 +50,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
      */
     private String getContentTypeByRequest() {
         String contentType = null;
-        final String[] contentTypeHeadNames = new String[] { "X-RequestEntity-ContentType", "Content-Type" };
+        final String[] contentTypeHeadNames = new String[]{"X-RequestEntity-ContentType", "Content-Type"};
         String queryString = this.getQueryString();
         Map<String, String> queryStringMap = HttpUtil.getURLParameters(queryString);
         for (String contentTypeHeadName : contentTypeHeadNames) {

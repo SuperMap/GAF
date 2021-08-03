@@ -6,7 +6,7 @@ package com.supermap.gaf.commontypes;
 public class RevisionSortSnParam {
     private String tableName;
     private String parentIdFieldName;
-    private String parentId ;
+    private String parentId;
     private String idFieldName;
     private String sortSnFieldName;
     private String updatedTimeFieldName;

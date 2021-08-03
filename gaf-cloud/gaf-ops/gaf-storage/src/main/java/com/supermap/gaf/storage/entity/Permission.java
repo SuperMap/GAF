@@ -11,8 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 
- * @author zrc 
+ * @author zrc
  * @date yyyy-mm-dd
  */
 @Data
@@ -20,7 +19,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("")
-public class Permission implements Serializable{
+public class Permission implements Serializable {
     private static final long serialVersionUID = 1L;
     @NotNull
     @ApiModelProperty("资源。如xx/xx.jpg, xx/")
@@ -35,8 +34,8 @@ public class Permission implements Serializable{
     @ApiModelProperty("所有者")
     private String ower;
     /**
-    * 默认值1：''::character varying
-    */
+     * 默认值1：''::character varying
+     */
     @ApiModelProperty("存储配置name")
     private String configName;
     @NotNull

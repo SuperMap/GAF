@@ -2,18 +2,17 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.service.publisher.manager;
 
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.data.mgt.entity.PublishServiceParameter;
 
 /**
-* @author:yw
-* @Date 2021-3-12
+ * @author:yw
+ * @Date 2021-3-12
  * 服务发布分发者接口
- * @date:2021/3/25
- * 【说明】该调度方式并未实现高并发能力
+ * @date:2021/3/25 【说明】该调度方式并未实现高并发能力
  */
 public interface IPublishDispatcher {
 
@@ -31,6 +30,7 @@ public interface IPublishDispatcher {
 
     /**
      * 服务发布分发者，负责服务发布流程的调度
+     *
      * @param originParameter
      * @return
      */

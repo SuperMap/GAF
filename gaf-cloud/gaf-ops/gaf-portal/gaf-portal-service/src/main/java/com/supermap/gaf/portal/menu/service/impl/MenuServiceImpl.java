@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.menu.service.impl;
 
 import com.alibaba.fastjson.JSON;
@@ -24,10 +24,10 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @Service
 @Qualifier("portal")
 public class MenuServiceImpl implements MenuService {
@@ -115,6 +115,7 @@ public class MenuServiceImpl implements MenuService {
         }
         return menuArrPermession;
     }
+
     @Override
     public String queryMenu() {
         String msg;
@@ -165,7 +166,7 @@ public class MenuServiceImpl implements MenuService {
             // 去掉根节点 并将根节点下的节点的menuCatalogId设置为""
             Set<String> rootMenuIds = new HashSet<>();
             Iterator<AuthResourceMenu> iterator = authResourceMenus.iterator();
-            for (; iterator.hasNext();) {
+            for (; iterator.hasNext(); ) {
                 AuthResourceMenu menu = iterator.next();
                 if ("0".equals(menu.getMenuCatalogId())) {
                     rootMenuIds.add(menu.getResourceMenuId());
@@ -215,8 +216,8 @@ public class MenuServiceImpl implements MenuService {
         }
         String containsParam = "?";
         //菜单实际地址（带模块入口参数）
-        if(!StringUtils.isBlank(authResourceMenu.getParams())) {
-            if(!StringUtils.isBlank(authResourceModule.getModuleUrl()) && !authResourceModule.getModuleUrl().contains(containsParam)) {
+        if (!StringUtils.isBlank(authResourceMenu.getParams())) {
+            if (!StringUtils.isBlank(authResourceModule.getModuleUrl()) && !authResourceModule.getModuleUrl().contains(containsParam)) {
                 authResourceModule.setModuleUrl(authResourceModule.getModuleUrl() + "?");
             }
             authResourceModule.setModuleUrl(authResourceModule.getModuleUrl() + authResourceMenu.getParams().trim());
@@ -230,7 +231,7 @@ public class MenuServiceImpl implements MenuService {
         if (equalParam.equals(authResourceModule.getTarget())) {
             menuInfo.setTarget(equalParam);
         }
-        String param ="2";
+        String param = "2";
         if (param.equals(authResourceModule.getType())) {
             menuInfo.setEmbed(true);
         }

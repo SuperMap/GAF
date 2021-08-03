@@ -18,6 +18,7 @@ import java.util.List;
 public interface WebgisServiceClient {
     /**
      * 根据id集合批量查询webgis服务
+     *
      * @param webgisIds
      * @return
      */

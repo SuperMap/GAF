@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.sys.mgt.commontype;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -19,7 +19,8 @@ import java.util.Date;
 
 /**
  * 字典
- * @author wangxiaolong 
+ *
+ * @author wangxiaolong
  * @date 2021-01-08
  */
 @Data
@@ -27,7 +28,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("字典")
-public class SysDict implements Serializable{
+public class SysDict implements Serializable {
     @NotNull
     @ApiModelProperty("字典id")
     private String dataDictId;
@@ -47,10 +48,10 @@ public class SysDict implements Serializable{
     @ApiModelProperty("描述")
     private String dictDesc;
     /**
-    * 默认值1：true
-    */
+     * 默认值1：true
+     */
     @ApiModelProperty("状态。逻辑删除字段")
-    @JSONField(name="isStatus")
+    @JSONField(name = "isStatus")
     private Boolean status;
     @ApiModelProperty("创建时间")
     private Date createdTime;

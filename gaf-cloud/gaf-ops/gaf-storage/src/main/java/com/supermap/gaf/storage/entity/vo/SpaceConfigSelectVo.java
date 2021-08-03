@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 
 import javax.ws.rs.QueryParam;
 import java.util.Date;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("条件查询实体")
-public class SpaceConfigSelectVo{
+public class SpaceConfigSelectVo {
     private static final long serialVersionUID = 1L;
     private String id;
     @QueryParam("serviceEndpoint")

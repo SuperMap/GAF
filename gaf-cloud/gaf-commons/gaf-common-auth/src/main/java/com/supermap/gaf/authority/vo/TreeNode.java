@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,13 +18,12 @@ import java.util.List;
 
 /**
  * @author:yj
- * @date:2021/3/25
- * 树节点
+ * @date:2021/3/25 树节点
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("树节点")
-public class TreeNode implements Serializable, ITreeNode<String,TreeNode> {
+public class TreeNode implements Serializable, ITreeNode<String, TreeNode> {
     @ApiModelProperty("树节点key,唯一")
     private String key;
     @ApiModelProperty("树节点名")
@@ -44,9 +43,8 @@ public class TreeNode implements Serializable, ITreeNode<String,TreeNode> {
     /**
      * 树节点的父Id
      */
-    @ApiModelProperty(value = "节点父id ",allowableValues = "注意原始节点的若为根节点，则它的parentId(父id)必须为\"0\"")
+    @ApiModelProperty(value = "节点父id ", allowableValues = "注意原始节点的若为根节点，则它的parentId(父id)必须为\"0\"")
     private String parentId;
-
 
 
     @ApiModelProperty("节点类型")

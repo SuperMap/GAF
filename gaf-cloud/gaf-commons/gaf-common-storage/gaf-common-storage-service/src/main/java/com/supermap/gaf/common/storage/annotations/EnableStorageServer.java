@@ -10,5 +10,5 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @ImportAutoConfiguration(StorageServerAutoConfiguration.class)
-public @interface EnableStorageServer{
+public @interface EnableStorageServer {
 }

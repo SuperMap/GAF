@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.configuration;
 
 
@@ -28,13 +28,14 @@ import javax.servlet.ServletConfig;
 import java.util.Arrays;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @Component
 public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
     private ServletConfig servletConfig;
+
     public JerseyConfig() {
         register(RootResource.class);
         register(GafExceptionMapper.class);
@@ -42,8 +43,9 @@ public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
         //跨域过滤器
         register(CorsFilter.class);
     }
+
     /**
-            * 配置swagger
+     * 配置swagger
      */
     @PostConstruct
     public void configureSwagger() {
@@ -62,7 +64,7 @@ public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
         securityRequirement.requirement("token");
         SecurityRequirement securityRequirement2 = new SecurityRequirement();
         securityRequirement.requirement("basicAuth");
-        swagger.setSecurity(Arrays.asList(securityRequirement,securityRequirement2));
+        swagger.setSecurity(Arrays.asList(securityRequirement, securityRequirement2));
         new SwaggerContextService().withServletConfig(servletConfig).updateSwagger(swagger);
     }
 

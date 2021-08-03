@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.service.impl;
 
 import com.github.pagehelper.PageHelper;
@@ -32,11 +32,12 @@ import java.util.*;
 
 /**
  * 工具条服务实现类
- * @author zhurongcheng 
+ *
+ * @author zhurongcheng
  * @date yyyy-mm-dd
  */
 @Service
-public class WebgisToolbarServiceImpl implements WebgisToolbarService{
+public class WebgisToolbarServiceImpl implements WebgisToolbarService {
 
     @Autowired
     private WebgisConfigService webgisConfigService;
@@ -51,74 +52,74 @@ public class WebgisToolbarServiceImpl implements WebgisToolbarService{
     @Autowired
     private BatchSortAndCodeService batchSortAndCodeService;
 
-	@Override
-    public WebgisToolbar getById(String toolbarId){
-        if(toolbarId == null){
+    @Override
+    public WebgisToolbar getById(String toolbarId) {
+        if (toolbarId == null) {
             throw new GafException("toolbarId不能为空");
         }
         WebgisToolbar webgisToolbar = webgisToolbarMapper.select(toolbarId);
-        if(webgisToolbar==null){
+        if (webgisToolbar == null) {
             throw new GafException("指定工具条不存在");
         }
         return webgisToolbar;
     }
-	
-	@Override
+
+    @Override
     public Page<WebgisToolbar> listByPageCondition(WebgisToolbarSelectVo webgisToolbarSelectVo, int pageNum, int pageSize) {
         PageInfo<WebgisToolbar> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             webgisToolbarMapper.selectList(webgisToolbarSelectVo);
         });
-        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
+        return Page.create(pageInfo.getPageNum(), pageInfo.getPageSize(), (int) pageInfo.getTotal(), pageInfo.getPages(), pageInfo.getList());
     }
 
     @Override
-    public void checkAvailable(WebgisToolbar toolbar, boolean isUpdate){
-	    if(isUpdate && toolbar.getToolbarId() == null){
+    public void checkAvailable(WebgisToolbar toolbar, boolean isUpdate) {
+        if (isUpdate && toolbar.getToolbarId() == null) {
             throw new GafException("参数toolbarId不能为空");
         }
-	    if(toolbar.getName()!=null){
+        if (toolbar.getName() != null) {
             List<WebgisToolbar> toolbars = webgisToolbarMapper.selectList(WebgisToolbarSelectVo.builder()
                     .equalFieldName("type").equalFieldValue(toolbar.getType())
                     .name(toolbar.getName()).build());
-            if(!CollectionUtils.isEmpty(toolbars) && (!isUpdate || toolbars.size()>1)){
+            if (!CollectionUtils.isEmpty(toolbars) && (!isUpdate || toolbars.size() > 1)) {
                 throw new GafException("指定名称已存在");
-            }else if(!CollectionUtils.isEmpty(toolbars) && !toolbar.getToolbarId().equals(toolbars.get(0).getToolbarId())){
+            } else if (!CollectionUtils.isEmpty(toolbars) && !toolbar.getToolbarId().equals(toolbars.get(0).getToolbarId())) {
                 throw new GafException("指定名称已存在");
             }
         }
     }
 
-	@Override
+    @Override
     @Transactional
-    public WebgisToolbar insertWebgisToolbar(WebgisToolbarVo toolbarVo){
+    public WebgisToolbar insertWebgisToolbar(WebgisToolbarVo toolbarVo) {
         // 尝试解析配置，提前告知格式问题，特别是json串
         webgisConfigService.parseConfig(toolbarVo);
 
         //TODO: 主键非GeneratedKey，此处添加自定义主键生成策略
         WebgisToolbar webgisToolbar = new WebgisToolbar();
-        BeanUtils.copyProperties(toolbarVo,webgisToolbar);
+        BeanUtils.copyProperties(toolbarVo, webgisToolbar);
         String toolBarId = UUID.randomUUID().toString();
         webgisToolbar.setToolbarId(toolBarId);
-        checkAvailable(webgisToolbar,false);
+        checkAvailable(webgisToolbar, false);
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
         webgisToolbar.setCreatedBy(shiroUser.getAuthUser().getName());
         webgisToolbar.setUpdatedBy(shiroUser.getAuthUser().getName());
 
         List<WebgisToolbarButton> toolbarButtons = toolbarVo.getWebgisToolbarButtons();
         Set<String> buttonIds = new HashSet<>();
-        for(WebgisToolbarButton toolbarButton:toolbarButtons){
-            if(buttonIds.contains(toolbarButton.getButtonId())){
+        for (WebgisToolbarButton toolbarButton : toolbarButtons) {
+            if (buttonIds.contains(toolbarButton.getButtonId())) {
                 throw new GafException("一个工具条不能添加重复的按钮");
             }
             buttonIds.add(toolbarButton.getButtonId());
             WebgisButton button = webgisButtonService.getById(toolbarButton.getButtonId());
             boolean typeValid = true;
-            if(StringUtils.isEmpty(button.getType())){
+            if (StringUtils.isEmpty(button.getType())) {
                 typeValid = StringUtils.isEmpty(webgisToolbar.getType());
-            }else{
+            } else {
                 typeValid = button.getType().equals(webgisToolbar.getType());
             }
-            if(!typeValid){
+            if (!typeValid) {
                 throw new GafException("工具条、按钮类型不匹配");
             }
             toolbarButton.setToolbarButtonId(UUID.randomUUID().toString());
@@ -128,64 +129,64 @@ public class WebgisToolbarServiceImpl implements WebgisToolbarService{
         }
         webgisToolbarMapper.insert(webgisToolbar);
         webgisToolbarButtonMapper.batchInsert(toolbarButtons);
-        batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisToolbarButton.class,Arrays.asList(webgisToolbar.getToolbarId()));
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisToolbarButton.class, Arrays.asList(webgisToolbar.getToolbarId()));
         return webgisToolbar;
     }
-	
-	@Override
-    public void batchInsert(List<WebgisToolbar> webgisToolbars){
-		if (webgisToolbars != null && webgisToolbars.size() > 0) {
-	        webgisToolbars.forEach(webgisToolbar -> {
-				webgisToolbar.setToolbarId(UUID.randomUUID().toString());
-                checkAvailable(webgisToolbar,false);
-				ShiroUser shiroUser = SecurityUtilsExt.getUser();
-				webgisToolbar.setCreatedBy(shiroUser.getAuthUser().getName());
-				webgisToolbar.setUpdatedBy(shiroUser.getAuthUser().getName());
+
+    @Override
+    public void batchInsert(List<WebgisToolbar> webgisToolbars) {
+        if (webgisToolbars != null && webgisToolbars.size() > 0) {
+            webgisToolbars.forEach(webgisToolbar -> {
+                webgisToolbar.setToolbarId(UUID.randomUUID().toString());
+                checkAvailable(webgisToolbar, false);
+                ShiroUser shiroUser = SecurityUtilsExt.getUser();
+                webgisToolbar.setCreatedBy(shiroUser.getAuthUser().getName());
+                webgisToolbar.setUpdatedBy(shiroUser.getAuthUser().getName());
             });
             webgisToolbarMapper.batchInsert(webgisToolbars);
         }
-        
+
     }
-	
-	@Override
+
+    @Override
     @Transactional
-    public void deleteWebgisToolbar(String toolbarId){
+    public void deleteWebgisToolbar(String toolbarId) {
         webgisToolbarMapper.delete(toolbarId);
         webgisToolbarButtonMapper.deleteByToolBarId(toolbarId);
     }
 
-	@Override
+    @Override
     @Transactional
-    public void batchDelete(List<String> toolbarIds){
-        if(!CollectionUtils.isEmpty(toolbarIds)) {
+    public void batchDelete(List<String> toolbarIds) {
+        if (!CollectionUtils.isEmpty(toolbarIds)) {
             webgisToolbarMapper.batchDelete(toolbarIds);
             webgisToolbarButtonMapper.batchDeleteByToolbarIds(toolbarIds);
         }
 
     }
-	
-	@Override
+
+    @Override
     @Transactional
-    public WebgisToolbar updateWebgisToolbar(WebgisToolbarVo toolbarVo){
+    public WebgisToolbar updateWebgisToolbar(WebgisToolbarVo toolbarVo) {
         WebgisToolbar webgisToolbar = new WebgisToolbar();
-        BeanUtils.copyProperties(toolbarVo,webgisToolbar);
-        checkAvailable(webgisToolbar,true);
-		ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        BeanUtils.copyProperties(toolbarVo, webgisToolbar);
+        checkAvailable(webgisToolbar, true);
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
         webgisToolbar.setUpdatedBy(shiroUser.getAuthUser().getName());
         Set<String> buttonIds = new HashSet<>();
-        for(WebgisToolbarButton toolbarButton:toolbarVo.getWebgisToolbarButtons()){
-            if(buttonIds.contains(toolbarButton.getButtonId())){
+        for (WebgisToolbarButton toolbarButton : toolbarVo.getWebgisToolbarButtons()) {
+            if (buttonIds.contains(toolbarButton.getButtonId())) {
                 throw new GafException("一个工具条不能添加重复的按钮");
             }
             buttonIds.add(toolbarButton.getButtonId());
             WebgisButton button = webgisButtonService.getById(toolbarButton.getButtonId());
             boolean typeValid = true;
-            if(StringUtils.isEmpty(button.getType())){
+            if (StringUtils.isEmpty(button.getType())) {
                 typeValid = StringUtils.isEmpty(webgisToolbar.getType());
-            }else{
+            } else {
                 typeValid = button.getType().equals(webgisToolbar.getType());
             }
-            if(!typeValid){
+            if (!typeValid) {
                 throw new GafException("工具条、按钮类型不匹配");
             }
             toolbarButton.setToolbarButtonId(UUID.randomUUID().toString());
@@ -196,13 +197,13 @@ public class WebgisToolbarServiceImpl implements WebgisToolbarService{
         webgisToolbarMapper.update(webgisToolbar);
         webgisToolbarButtonMapper.deletePhysicalByToolBarId(webgisToolbar.getToolbarId());
         webgisToolbarButtonMapper.batchInsert(toolbarVo.getWebgisToolbarButtons());
-        batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisToolbarButton.class,Arrays.asList(webgisToolbar.getToolbarId()));
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisToolbarButton.class, Arrays.asList(webgisToolbar.getToolbarId()));
         return webgisToolbar;
     }
 
     @Override
     public WebgisToolbarDo getDoById(String toolbarId) {
-	    getById(toolbarId);
+        getById(toolbarId);
         return webgisToolbarMapper.getDoById(toolbarId);
     }
 

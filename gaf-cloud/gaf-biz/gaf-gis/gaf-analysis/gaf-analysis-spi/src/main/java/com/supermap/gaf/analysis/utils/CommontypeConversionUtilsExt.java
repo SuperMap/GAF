@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.analysis.utils;
 
 import com.supermap.gaf.analysis.entity.SpatialAnalysisDataConnInfo;
@@ -15,12 +15,11 @@ import org.slf4j.LoggerFactory;
 /**
  * 类型转换
  *
- * @date:2021/3/25
  * @author wangyan
+ * @date:2021/3/25
  */
 public class CommontypeConversionUtilsExt {
     private static final Logger logger = LoggerFactory.getLogger(CommontypeConversionUtilsExt.class);
-
 
 
     public static com.supermap.data.DatasourceConnectionInfo getUgcDataSourceConnectionInfo(SpatialAnalysisDataConnInfo targetDataConnInfo) {

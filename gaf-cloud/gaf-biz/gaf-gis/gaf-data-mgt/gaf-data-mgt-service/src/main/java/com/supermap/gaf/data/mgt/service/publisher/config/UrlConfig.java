@@ -1,8 +1,8 @@
 package com.supermap.gaf.data.mgt.service.publisher.config;
 
 /**
-* @author:yw
-* @Date 2021-3-12
+ * @author:yw
+ * @Date 2021-3-12
  * 服务发布url配置
  */
 public final class UrlConfig {

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.monitor.resources;
 
 import io.swagger.annotations.Api;
@@ -19,9 +19,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * @author : duke
+ * @date:2021/3/25 /monitor/webhook
  * @since 2020/12/22 9:49 AM
- * @date:2021/3/25
- * /monitor/webhook
  */
 @Path("/")
 @Api("webhook接口")
@@ -30,7 +29,7 @@ public class WebhookResources {
 
     @ApiOperation(value = "监控告警的webhook提醒接口", notes = "监控告警发送通知到monitor组件")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "alertMsg",value = "提醒消息",paramType = "body",dataType = "string",required = true)
+            @ApiImplicitParam(name = "alertMsg", value = "提醒消息", paramType = "body", dataType = "string", required = true)
     })
     @Path("/alert")
     @POST

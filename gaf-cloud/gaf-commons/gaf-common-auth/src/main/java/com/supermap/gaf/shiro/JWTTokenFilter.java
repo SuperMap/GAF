@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro;
 
 import java.io.IOException;
@@ -30,18 +30,18 @@ import com.supermap.gaf.shiro.commontypes.JWTToken;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 @Deprecated
 public class JWTTokenFilter extends AbstractFilter {
 
     private static final Logger log = LoggerFactory.getLogger(AccessControlFilter.class);
     private static String JWT_HEADER = "Authorization";
     private static String JWT_PREFIX = "Bearer";
-    
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        if(!SecurityUtils.getSubject().isAuthenticated()) {
+        if (!SecurityUtils.getSubject().isAuthenticated()) {
             AuthenticationToken token = createToken(request, response);
             if (token != null) {// 如果是jwt header鉴权的请求
                 try {
@@ -56,7 +56,7 @@ public class JWTTokenFilter extends AbstractFilter {
         //token不记录登录状态，登录
         SecurityUtils.getSubject().logout();
     }
-    
+
 //    /**
 //     * 是否放行
 //     */
@@ -86,16 +86,17 @@ public class JWTTokenFilter extends AbstractFilter {
 //    }
 
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
-        if(request instanceof HttpServletRequest) {
-            HttpServletRequest httpRequest = (HttpServletRequest)request;
+        if (request instanceof HttpServletRequest) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
             String authHeader = httpRequest.getHeader(JWT_HEADER);
-            if(StringUtils.isNoneEmpty(authHeader)) {
+            if (StringUtils.isNoneEmpty(authHeader)) {
                 String jwtToken = authHeader.trim();
-                if(StringUtils.isNotEmpty(JWT_PREFIX)) {
+                if (StringUtils.isNotEmpty(JWT_PREFIX)) {
                     String[] split = authHeader.trim().split("\\s+");
-                    if (split !=null && split.length == 2 && split[0].equalsIgnoreCase(JWT_PREFIX)) {
+                    if (split != null && split.length == 2 && split[0].equalsIgnoreCase(JWT_PREFIX)) {
                         jwtToken = split[1];
-                    };
+                    }
+                    ;
                 }
                 return new JWTToken(jwtToken);
             }

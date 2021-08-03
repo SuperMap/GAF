@@ -37,30 +37,30 @@ public class StoragePermissionFilter implements Filter {
     public StoragePermissionFilter(StoragePermissionMapper storagePermissionMapper) {
         this.storagePermissionMapper = storagePermissionMapper;
     }
-   
-    
+
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String owersString = request.getHeader(StorageCustomConfig.PERMISSION_HEADER);
         String relativePath = request.getPathInfo();
-        String value = String.format(TEMPLATE,request.getMethod().toLowerCase(),relativePath);
-        if(VOLUME_PATH_PATTERN.matcher(value).matches()){
-            filterChain.doFilter(servletRequest,servletResponse);
+        String value = String.format(TEMPLATE, request.getMethod().toLowerCase(), relativePath);
+        if (VOLUME_PATH_PATTERN.matcher(value).matches()) {
+            filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        if(StringUtils.isEmpty(owersString)){
+        if (StringUtils.isEmpty(owersString)) {
             response.setStatus(403);
             return;
         }
-        Set<String> owers = StorageCommonUtils.split(owersString,true,true);
-        if(owers.isEmpty()){
+        Set<String> owers = StorageCommonUtils.split(owersString, true, true);
+        if (owers.isEmpty()) {
             response.setStatus(403);
             return;
-        }else if(owers.contains(StorageCustomConfig.SUPER_OWER)){
+        } else if (owers.contains(StorageCustomConfig.SUPER_OWER)) {
             // 超级用户放行
-            filterChain.doFilter(servletRequest,servletResponse);
+            filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
 
@@ -69,56 +69,56 @@ public class StoragePermissionFilter implements Filter {
         String configName;
         String path;
         Matcher m;
-        if((m = UPLOAD_PATTERN.matcher(value)).matches()){
+        if ((m = UPLOAD_PATTERN.matcher(value)).matches()) {
             needPermission.add(PermissionType.upload);
-            if(METADATA_PATTERN.matcher(value).matches()){
+            if (METADATA_PATTERN.matcher(value).matches()) {
                 needPermission.add(PermissionType.share);
             }
-        }else if((m = QUERY_PATTERN.matcher(value)).matches()){
+        } else if ((m = QUERY_PATTERN.matcher(value)).matches()) {
             needPermission.add(PermissionType.query);
-        }else if((m = SHARE_PATTERN.matcher(value)).matches()){
+        } else if ((m = SHARE_PATTERN.matcher(value)).matches()) {
             needPermission.add(PermissionType.share);
-        }else if((m = DOWNLOAD_PATTERN.matcher(value)).matches()){
+        } else if ((m = DOWNLOAD_PATTERN.matcher(value)).matches()) {
             needPermission.add(PermissionType.download);
-        }else if((m = DELETE_PATTERN.matcher(value)).matches()){
+        } else if ((m = DELETE_PATTERN.matcher(value)).matches()) {
             needPermission.add(PermissionType.delete);
-        }else{
+        } else {
             response.setStatus(403);
             return;
         }
         configName = m.group(CONFIGNAME_GROUP_INDEX);
-        path = m.group(PATH_GROUP_INDEX)==null?"":m.group(PATH_GROUP_INDEX);
-        List<Permission> permissions = storagePermissionMapper.selectByOwersAndConfigName(configName,owers);
+        path = m.group(PATH_GROUP_INDEX) == null ? "" : m.group(PATH_GROUP_INDEX);
+        List<Permission> permissions = storagePermissionMapper.selectByOwersAndConfigName(configName, owers);
         Set<PermissionType> hasPermissions = new HashSet<>();
-        for(Permission item:permissions){
-            if(path.startsWith(item.getResource())){
-                for(String scopeItem:item.getScope().split(",")){
-                    try{
+        for (Permission item : permissions) {
+            if (path.startsWith(item.getResource())) {
+                for (String scopeItem : item.getScope().split(",")) {
+                    try {
                         hasPermissions.add(PermissionType.valueOf(scopeItem));
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             }
         }
-        if(hasPermissions.isEmpty()){
+        if (hasPermissions.isEmpty()) {
             response.setStatus(403);
             return;
         }
         boolean passable = false;
-        for(PermissionType permissionType:needPermission){
-            if(hasPermissions.contains(permissionType)){
+        for (PermissionType permissionType : needPermission) {
+            if (hasPermissions.contains(permissionType)) {
                 passable = true;
                 break;
             }
         }
-        if(passable){
-            filterChain.doFilter(servletRequest,servletResponse);
+        if (passable) {
+            filterChain.doFilter(servletRequest, servletResponse);
             return;
-        }else{
+        } else {
             response.setStatus(403);
             return;
         }
     }
-
 
 
 }

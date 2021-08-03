@@ -22,13 +22,13 @@ public class AllocateSpaceServiceImpl implements AllocateSpaceService {
         PageInfo<Space> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             spaceMapper.selectList(SpaceSelectVo.builder().target(spaceId).createdType(CreatedType.ALLOCATED.getValue()).build());
         });
-        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
+        return Page.create(pageInfo.getPageNum(), pageInfo.getPageSize(), (int) pageInfo.getTotal(), pageInfo.getPages(), pageInfo.getList());
     }
 
     @Override
     public void allocate(Space space) {
         Space parent = spaceMapper.select(space.getParentSpaceId());
-        if(space!=null){
+        if (parent != null) {
             space.setCreatedType(CreatedType.ALLOCATED.getValue());
             spaceMapper.insert(space);
         }

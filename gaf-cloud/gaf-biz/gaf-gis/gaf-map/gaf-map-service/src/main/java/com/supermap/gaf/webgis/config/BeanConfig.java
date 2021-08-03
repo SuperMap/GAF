@@ -18,12 +18,13 @@ public class BeanConfig {
 
     @Bean("BalancedRestTemplate")
     @LoadBalanced
-    public RestTemplate restTemplate(){
+    public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
     @Bean("WebgisStorageClient")
-    public StorageClient storageClient(){
-        return new StorageClient(storagePreUrl,configName,restTemplate());
+    public StorageClient storageClient() {
+        return new StorageClient(storagePreUrl, configName, restTemplate());
     }
 
 }

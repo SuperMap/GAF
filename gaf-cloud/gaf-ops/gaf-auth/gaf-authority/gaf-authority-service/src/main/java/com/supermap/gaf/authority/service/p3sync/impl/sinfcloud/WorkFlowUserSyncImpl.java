@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.p3sync.impl.sinfcloud;
 
 import com.alibaba.fastjson.JSONObject;
@@ -112,7 +112,6 @@ public class WorkFlowUserSyncImpl extends AbstractSync {
 
     /**
      * 组装第三方资源参数
-     *
      */
     private AuthUser buildP3Param(AuthP3MappingRule authP3MappingRule, AuthUser param, Map<String, Object> paramMap) {
         //3.1、查询第三方租户id

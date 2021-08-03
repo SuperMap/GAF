@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.AuthResourceModule;
@@ -23,12 +23,12 @@ import java.util.stream.Collectors;
 
 /**
  * 模块服务实现类
+ *
  * @author zhm
  * @date:2021/3/25
- *
  */
 @Service
-public class AuthResourceModuleServiceImpl implements AuthResourceModuleService{
+public class AuthResourceModuleServiceImpl implements AuthResourceModuleService {
     private final AuthResourceModuleMapper authResourceModuleMapper;
 
     private final SysCatalogService sysCatalogService;
@@ -41,15 +41,15 @@ public class AuthResourceModuleServiceImpl implements AuthResourceModuleService{
     }
 
     @Override
-    public AuthResourceModule getById(String resourceModuleId){
-        if(resourceModuleId == null){
+    public AuthResourceModule getById(String resourceModuleId) {
+        if (resourceModuleId == null) {
             throw new GafException("resourceModuleId不能为空");
         }
         return authResourceModuleMapper.select(resourceModuleId);
     }
 
     @Override
-    public List<TreeNode> getModuleNodes(){
+    public List<TreeNode> getModuleNodes() {
         List<AuthResourceModule> authResourceModules = authResourceModuleMapper.listModules();
         List<TreeNode> collect = authResourceModules.stream().map(module -> {
             TreeNode node = new TreeNode();
@@ -65,79 +65,79 @@ public class AuthResourceModuleServiceImpl implements AuthResourceModuleService{
         return collect;
     }
 
-	@Override
-    public Map<String,Object> pageList(AuthResourceModuleSelectVo authResourceModuleSelectVo){
-        if(authResourceModuleSelectVo.getPageSize()==null || authResourceModuleSelectVo.getPageSize()==0){
-           authResourceModuleSelectVo.setPageSize(50);
-       }
+    @Override
+    public Map<String, Object> pageList(AuthResourceModuleSelectVo authResourceModuleSelectVo) {
+        if (authResourceModuleSelectVo.getPageSize() == null || authResourceModuleSelectVo.getPageSize() == 0) {
+            authResourceModuleSelectVo.setPageSize(50);
+        }
         List<AuthResourceModule> pageList;
-        if(authResourceModuleSelectVo.getOffset() == null || authResourceModuleSelectVo.getOffset() < CommonConstant.OFFSET_MAX_FOR_SQL_BETTER){
+        if (authResourceModuleSelectVo.getOffset() == null || authResourceModuleSelectVo.getOffset() < CommonConstant.OFFSET_MAX_FOR_SQL_BETTER) {
             pageList = authResourceModuleMapper.pageList(authResourceModuleSelectVo);
-        }else{
+        } else {
             pageList = authResourceModuleMapper.bigOffsetPageList(authResourceModuleSelectVo);
         }
-		int totalCount=authResourceModuleMapper.pageListCount();
+        int totalCount = authResourceModuleMapper.pageListCount();
         Map<String, Object> result = new HashMap<>(2);
-		result.put("pageList", pageList);
-		result.put("totalCount", totalCount);
-        return result;
-    }
-	
-	@Override
-    public Map<String,Object> searchList(AuthResourceModuleSelectVo authResourceModuleSelectVo){
-        if(authResourceModuleSelectVo.getPageSize()==null || authResourceModuleSelectVo.getPageSize()==0){
-           authResourceModuleSelectVo.setPageSize(50);
-       }
-        List<AuthResourceModule> pageList;
-		pageList = authResourceModuleMapper.searchList(authResourceModuleSelectVo);
-		Integer totalCount = authResourceModuleMapper.countOneField(authResourceModuleSelectVo.getSearchFieldName(),authResourceModuleSelectVo.getSearchFieldValue());
-        Map<String, Object> result = new HashMap<>(2);
-		result.put("pageList", pageList);
-		result.put("totalCount", totalCount);
+        result.put("pageList", pageList);
+        result.put("totalCount", totalCount);
         return result;
     }
 
-	@Override
+    @Override
+    public Map<String, Object> searchList(AuthResourceModuleSelectVo authResourceModuleSelectVo) {
+        if (authResourceModuleSelectVo.getPageSize() == null || authResourceModuleSelectVo.getPageSize() == 0) {
+            authResourceModuleSelectVo.setPageSize(50);
+        }
+        List<AuthResourceModule> pageList;
+        pageList = authResourceModuleMapper.searchList(authResourceModuleSelectVo);
+        Integer totalCount = authResourceModuleMapper.countOneField(authResourceModuleSelectVo.getSearchFieldName(), authResourceModuleSelectVo.getSearchFieldValue());
+        Map<String, Object> result = new HashMap<>(2);
+        result.put("pageList", pageList);
+        result.put("totalCount", totalCount);
+        return result;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public AuthResourceModule insertAuthResourceModule(AuthResourceModule authResourceModule){
-		authResourceModule.setResourceModuleId(UUID.randomUUID().toString());
+    public AuthResourceModule insertAuthResourceModule(AuthResourceModule authResourceModule) {
+        authResourceModule.setResourceModuleId(UUID.randomUUID().toString());
         authResourceModuleMapper.insert(authResourceModule);
         batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceModule.class, Collections.singletonList(authResourceModule.getModuleCatalogId()));
         return authResourceModule;
     }
-	
-	@Override
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public void batchInsert(List<AuthResourceModule> authResourceModules){
-		if (authResourceModules != null && authResourceModules.size() > 0) {
+    public void batchInsert(List<AuthResourceModule> authResourceModules) {
+        if (authResourceModules != null && authResourceModules.size() > 0) {
             Set<String> parentIds = new HashSet<>();
-	        authResourceModules.forEach(authResourceModule -> {
-				authResourceModule.setResourceModuleId(UUID.randomUUID().toString());
+            authResourceModules.forEach(authResourceModule -> {
+                authResourceModule.setResourceModuleId(UUID.randomUUID().toString());
                 parentIds.add(authResourceModule.getModuleCatalogId());
             });
             authResourceModuleMapper.batchInsert(authResourceModules);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceModule.class,parentIds);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceModule.class, parentIds);
         }
-        
+
     }
-	
-	@Override
-    public void deleteAuthResourceModule(String resourceModuleId){
+
+    @Override
+    public void deleteAuthResourceModule(String resourceModuleId) {
         authResourceModuleMapper.delete(resourceModuleId);
     }
 
-	@Override
-    public void batchDelete(List<String> resourceModuleIds){
+    @Override
+    public void batchDelete(List<String> resourceModuleIds) {
         authResourceModuleMapper.batchDelete(resourceModuleIds);
     }
-	
-	@Override
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public AuthResourceModule updateAuthResourceModule(AuthResourceModule authResourceModule){
-	    AuthResourceModule oldAuthResourceModule = getById(authResourceModule.getResourceModuleId());
+    public AuthResourceModule updateAuthResourceModule(AuthResourceModule authResourceModule) {
+        AuthResourceModule oldAuthResourceModule = getById(authResourceModule.getResourceModuleId());
         authResourceModuleMapper.update(authResourceModule);
-        String parentId = authResourceModule.getResourceModuleId()!=null? authResourceModule.getResourceModuleId():oldAuthResourceModule.getResourceModuleId();
-        batchSortAndCodeService.revisionSortSnForUpdate(AuthResourceModule.class,parentId,oldAuthResourceModule.getSortSn(),authResourceModule.getSortSn());
+        String parentId = authResourceModule.getResourceModuleId() != null ? authResourceModule.getResourceModuleId() : oldAuthResourceModule.getResourceModuleId();
+        batchSortAndCodeService.revisionSortSnForUpdate(AuthResourceModule.class, parentId, oldAuthResourceModule.getSortSn(), authResourceModule.getSortSn());
         return authResourceModule;
     }
 

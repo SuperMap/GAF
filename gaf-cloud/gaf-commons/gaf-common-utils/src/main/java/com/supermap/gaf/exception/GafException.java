@@ -2,6 +2,7 @@ package com.supermap.gaf.exception;
 
 /**
  * 自定义异常
+ *
  * @author wxl
  */
 public class GafException extends RuntimeException {
@@ -16,10 +17,12 @@ public class GafException extends RuntimeException {
     public GafException(String message) {
         super(message);
     }
+
     public GafException(String message, int code) {
         super(message);
         this.code = code;
     }
+
     public GafException(Throwable cause) {
         super(cause);
     }

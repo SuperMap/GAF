@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.sys.mgt.util;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -15,28 +15,28 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * @date:2021/3/25
  * @author C
+ * @date:2021/3/25
  */
 public class JdbcUtils {
     private static final Logger logger = LogUtil.getLocLogger(JdbcUtils.class);
 
-    public static Connection openConnection(String url,String username,String password) throws SQLException {
-        Properties props =new Properties();
+    public static Connection openConnection(String url, String username, String password) throws SQLException {
+        Properties props = new Properties();
         props.setProperty("user", username);
         props.setProperty("password", password);
         props.setProperty("remarks", "true");
-        return DriverManager.getConnection(url,props);
+        return DriverManager.getConnection(url, props);
     }
 
-    public static MessageResult<Void> checkConnectionInfo(String url, String username, String password){
+    public static MessageResult<Void> checkConnectionInfo(String url, String username, String password) {
         Connection connection = null;
-        try{
-            connection = openConnection(url,username,password);
+        try {
+            connection = openConnection(url, username, password);
             return MessageResult.successe(Void.class).message("测试连接成功").build();
         } catch (SQLException e) {
             logger.info("打开数据库连接失败", e);
-            return  MessageResult.failed(Void.class).message("测试连接失败" + e.getMessage()).build();
+            return MessageResult.failed(Void.class).message("测试连接失败" + e.getMessage()).build();
         } finally {
             try {
                 if (connection != null) {

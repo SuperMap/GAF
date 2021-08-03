@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.dynamicroute;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -33,7 +33,7 @@ public class DefaultAbstractDynamicRouteServiceImpl extends AbstractDynamicRoute
     }
 
     @Override
-    public List <RouteDefinition> getRouteDefinitions() {
+    public List<RouteDefinition> getRouteDefinitions() {
         return routeDefinitionWriter.getRouteDefinitions().collectList().block();
     }
 
@@ -94,10 +94,10 @@ public class DefaultAbstractDynamicRouteServiceImpl extends AbstractDynamicRoute
      * @return
      */
     @Override
-    public MessageResult<Mono <ResponseEntity <Object>>> delete(String id) {
-        MessageResult<Mono <ResponseEntity <Object>>> result = new MessageResult<>();
+    public MessageResult<Mono<ResponseEntity<Object>>> delete(String id) {
+        MessageResult<Mono<ResponseEntity<Object>>> result = new MessageResult<>();
         try {
-            Mono <ResponseEntity <Object>> mono = this.routeDefinitionWriter.delete(Mono.just(id)).then(Mono.defer(() -> {
+            Mono<ResponseEntity<Object>> mono = this.routeDefinitionWriter.delete(Mono.just(id)).then(Mono.defer(() -> {
                 result.setMessage("删除成功");
                 notifyChanged();
                 return Mono.just(ResponseEntity.ok().build());

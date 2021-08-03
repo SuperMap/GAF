@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro;
 
 import java.io.IOException;
@@ -46,12 +46,13 @@ import com.nimbusds.openid.connect.sdk.Nonce;
 import com.nimbusds.openid.connect.sdk.claims.IDTokenClaimsSet;
 import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
 import com.nimbusds.openid.connect.sdk.rp.OIDCClientInformation;
+
 @SuppressWarnings({"rawtypes", "unchecked"})
 
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class JWTOidcValidator {
 
     public static final int DEFAULT_MAX_CLOCK_SKEW = 60;
@@ -59,7 +60,7 @@ public class JWTOidcValidator {
     private Issuer expectedIssuer;
 
     private ClientID clientID;
-   
+
     private JWSKeySelector jwsKeySelector;
 
     private JWEKeySelector jweKeySelector;
@@ -82,7 +83,7 @@ public class JWTOidcValidator {
     }
 
     public JWTOidcValidator(final Issuer expectedIssuer, final ClientID clientID, final JWSAlgorithm expectedJWSAlg, final URL jwkSetURI,
-            final ResourceRetriever resourceRetriever) {
+                            final ResourceRetriever resourceRetriever) {
 
         this(expectedIssuer, clientID, new JWSVerificationKeySelector(expectedJWSAlg, new RemoteJWKSet(jwkSetURI, resourceRetriever)), null);
     }
@@ -163,7 +164,7 @@ public class JWTOidcValidator {
         ConfigurableJWTProcessor<?> jwtProcessor = new DefaultJWTProcessor();
         jwtProcessor.setJWSKeySelector(jwsKeySelector);
         jwtProcessor.setJWEKeySelector(jweKeySelector);
-        
+
         Set<Audience> auds = new HashSet<>();
         auds.add(new Audience("account"));
         auds.add(new Audience(this.clientID));
@@ -227,7 +228,7 @@ public class JWTOidcValidator {
     }
 
     protected static JWEKeySelector createJWEKeySelector(final OIDCProviderMetadata opMetadata, final OIDCClientInformation clientInfo,
-            final JWKSource clientJWKSource) throws GeneralException {
+                                                         final JWKSource clientJWKSource) throws GeneralException {
 
         final JWEAlgorithm expectedJWEAlg = clientInfo.getOIDCMetadata().getIDTokenJWEAlg();
         final EncryptionMethod expectedJWEEnc = clientInfo.getOIDCMetadata().getIDTokenJWEEnc();
@@ -275,7 +276,7 @@ public class JWTOidcValidator {
     }
 
     public static JWTOidcValidator create(final Issuer opIssuer, final OIDCClientInformation clientInfo, final JWKSource clientJWKSource,
-            final int connectTimeout, final int readTimeout) throws GeneralException, IOException {
+                                          final int connectTimeout, final int readTimeout) throws GeneralException, IOException {
 
         OIDCProviderMetadata opMetadata = OIDCProviderMetadata.resolve(opIssuer, connectTimeout, readTimeout);
 

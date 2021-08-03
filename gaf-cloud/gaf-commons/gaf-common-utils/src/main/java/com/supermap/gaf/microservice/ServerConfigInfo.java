@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.microservice;
 
 import java.io.Serializable;
@@ -19,8 +19,9 @@ public class ServerConfigInfo implements Serializable {
 
     /**
      * <p>
-     * 
+     *
      * </p>
+     *
      * @since 1.0.0
      */
     private static final long serialVersionUID = -8442035178734834682L;
@@ -45,8 +46,6 @@ public class ServerConfigInfo implements Serializable {
      * 配置键值对
      */
     private List<ConfigurationInfo> properties;
-
-
 
 
     public String getApplication() {
@@ -92,7 +91,7 @@ public class ServerConfigInfo implements Serializable {
     public ServerConfigInfo() {
     }
 
-    public ServerConfigInfo(String tenantId, String application, String profile, String label, List <ConfigurationInfo> properties) {
+    public ServerConfigInfo(String tenantId, String application, String profile, String label, List<ConfigurationInfo> properties) {
         this.tenantId = tenantId;
         this.application = application;
         this.profile = profile;

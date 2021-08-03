@@ -20,12 +20,12 @@ import org.springframework.context.annotation.Bean;
 public class ServiceAppApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ServiceAppApplication.class, args );
+        SpringApplication.run(ServiceAppApplication.class, args);
     }
 
     @Bean
-    @ConditionalOnProperty(value = "GAF_STORAGE_PERMISSION_ENABLE",havingValue = "true")
-    public FilterRegistrationBean<StoragePermissionFilter> securityHeaderFilterRegistrationBean(@Autowired StoragePermissionMapper storagePermissionMapper){
+    @ConditionalOnProperty(value = "GAF_STORAGE_PERMISSION_ENABLE", havingValue = "true")
+    public FilterRegistrationBean<StoragePermissionFilter> securityHeaderFilterRegistrationBean(@Autowired StoragePermissionMapper storagePermissionMapper) {
         FilterRegistrationBean<StoragePermissionFilter> bean = new FilterRegistrationBean<>();
         bean.setFilter(new StoragePermissionFilter(storagePermissionMapper));
         String urlPatternTemplate = "/storage/api/%s/*";

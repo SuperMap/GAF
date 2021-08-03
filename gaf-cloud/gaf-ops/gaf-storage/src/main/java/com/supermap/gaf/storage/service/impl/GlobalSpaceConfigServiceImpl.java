@@ -27,77 +27,78 @@ import java.util.UUID;
 
 /**
  * 服务实现类
+ *
  * @author zrc
  * @date yyyy-mm-dd
  */
 @Service
 public class GlobalSpaceConfigServiceImpl implements GlobalSpaceConfigService {
 
-	private static final Logger  log = LoggerFactory.getLogger(GlobalSpaceConfigServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(GlobalSpaceConfigServiceImpl.class);
 
-	@Autowired
-	private SpaceMapper spaceMapper;
+    @Autowired
+    private SpaceMapper spaceMapper;
 
-	@Autowired
-	private S3ServerMapper s3ServerMapper;
+    @Autowired
+    private S3ServerMapper s3ServerMapper;
 
 
-	@Override
-    public SpaceConfig getById(String id){
-        if(id == null){
+    @Override
+    public SpaceConfig getById(String id) {
+        if (id == null) {
             throw new IllegalArgumentException("id不能为空");
         }
         List<SpaceConfig> spaceConfigs = spaceMapper.selectSpaceConfig(SpaceConfigSelectVo.builder().id(id).targetType(TargetType.PLATFORM.getValue()).build());
-        if(CollectionUtils.isEmpty(spaceConfigs)){
+        if (CollectionUtils.isEmpty(spaceConfigs)) {
             return null;
-        }else{
+        } else {
             return spaceConfigs.get(0);
         }
     }
 
-	@Override
+    @Override
     public Page<SpaceConfig> listByPageCondition(SpaceConfigSelectVo spaceConfigSelectVo, int pageNum, int pageSize) {
-	    spaceConfigSelectVo.setTargetType(TargetType.PLATFORM.getValue());
+        spaceConfigSelectVo.setTargetType(TargetType.PLATFORM.getValue());
         spaceMapper.selectSpaceConfig(spaceConfigSelectVo);
         PageInfo<SpaceConfig> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             spaceMapper.selectSpaceConfig(spaceConfigSelectVo);
         });
-        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
+        return Page.create(pageInfo.getPageNum(), pageInfo.getPageSize(), (int) pageInfo.getTotal(), pageInfo.getPages(), pageInfo.getList());
     }
 
 
-	@Override
+    @Override
     @Transactional
-    public void insertGlobalServerConfig(SpaceConfig spaceConfig){
-	    String s3ServerId = UUID.randomUUID().toString();
+    public void insertGlobalServerConfig(SpaceConfig spaceConfig) {
+        String s3ServerId = UUID.randomUUID().toString();
         S3Server s3Server = S3Server.builder().id(s3ServerId).accessKey(spaceConfig.getAccessKey()).serviceEndpoint(spaceConfig.getServiceEndpoint())
                 .secretKey(spaceConfig.getSecretKey()).build();
         s3ServerMapper.insert(s3Server);
-	    Space space = Space.builder().id(UUID.randomUUID().toString()).name(spaceConfig.getName()).createdType(CreatedType.CREATED.getValue()).target("").targetType(TargetType.PLATFORM.getValue())
+        Space space = Space.builder().id(UUID.randomUUID().toString()).name(spaceConfig.getName()).createdType(CreatedType.CREATED.getValue()).target("").targetType(TargetType.PLATFORM.getValue())
                 .parentSpaceId(s3ServerId).storageName(spaceConfig.getBucketName()).description(spaceConfig.getDescription())
                 .totalSize(spaceConfig.getTotalSize()).build();
-	    spaceMapper.insert(space);
+        spaceMapper.insert(space);
     }
 
 
-	@Override
-    public void deleteGlobalServerConfig(String id){
+    @Override
+    public void deleteGlobalServerConfig(String id) {
         List<Space> spaces = spaceMapper.selectList(SpaceSelectVo.builder().id(id).targetType(TargetType.PLATFORM.getValue()).build());
-        if(!CollectionUtils.isEmpty(spaces)){
-            Space space =  spaces.get(0);
+        if (!CollectionUtils.isEmpty(spaces)) {
+            Space space = spaces.get(0);
             s3ServerMapper.delete(space.getParentSpaceId());
             spaceMapper.delete(id);
         }
     }
 
-	@Override
+    @Override
     @Transactional
-    public void batchDelete(List<String> ids){
-        List<Space> spaces = spaceMapper.selectByIdsAndTargetTypeAndTargetId(ids,TargetType.PLATFORM.getValue(),"");
-        if(!CollectionUtils.isEmpty(spaces)){
+    public void batchDelete(List<String> ids) {
+        List<Space> spaces = spaceMapper.selectByIdsAndTargetTypeAndTargetId(ids, TargetType.PLATFORM.getValue(), "");
+        if (!CollectionUtils.isEmpty(spaces)) {
             List<String> s3ServerIds = new ArrayList<>();
             List<String> spaceIds = new ArrayList<>();
-            for(Space item:spaces){
+            for (Space item : spaces) {
                 s3ServerIds.add(item.getParentSpaceId());
                 spaceIds.add(item.getId());
             }
@@ -107,20 +108,20 @@ public class GlobalSpaceConfigServiceImpl implements GlobalSpaceConfigService {
     }
 
 
-	@Override
+    @Override
     @Transactional
-    public void updateGlobalServerConfig(SpaceConfig spaceConfig){
+    public void updateGlobalServerConfig(SpaceConfig spaceConfig) {
         List<Space> spaces = spaceMapper.selectList(SpaceSelectVo.builder().id(spaceConfig.getId()).targetType(TargetType.PLATFORM.getValue()).build());
-        if(!CollectionUtils.isEmpty(spaces)){
-            Space space =  spaces.get(0);
+        if (!CollectionUtils.isEmpty(spaces)) {
+            Space space = spaces.get(0);
             S3Server s3Server = S3Server.builder().id(space.getParentSpaceId()).accessKey(spaceConfig.getAccessKey()).serviceEndpoint(spaceConfig.getServiceEndpoint())
                     .secretKey(spaceConfig.getSecretKey()).build();
             s3ServerMapper.update(s3Server);
             Space spaceUpdate = Space.builder().createdType(CreatedType.CREATED.getValue()).target("").targetType(TargetType.PLATFORM.getValue()).build();
-            BeanUtils.copyProperties(spaceConfig,spaceUpdate);
+            BeanUtils.copyProperties(spaceConfig, spaceUpdate);
             spaceMapper.update(spaceUpdate);
 
         }
     }
-    
+
 }

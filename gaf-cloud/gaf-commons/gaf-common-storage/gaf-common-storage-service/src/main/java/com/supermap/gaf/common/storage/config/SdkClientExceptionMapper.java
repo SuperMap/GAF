@@ -9,9 +9,9 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class SdkClientExceptionMapper implements ExceptionMapper<SdkClientException>{
+public class SdkClientExceptionMapper implements ExceptionMapper<SdkClientException> {
     @Override
-    public Response toResponse(SdkClientException e){
+    public Response toResponse(SdkClientException e) {
         MessageResult body = MessageResult.failed(Object.class).status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
                 .message(e.getMessage()).build();
         return Response.ok().type(MediaType.APPLICATION_JSON_TYPE).entity(body).build();

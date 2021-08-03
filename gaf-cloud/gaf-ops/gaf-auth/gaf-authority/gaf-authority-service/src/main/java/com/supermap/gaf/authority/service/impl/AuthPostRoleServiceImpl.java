@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.AuthPostRole;
@@ -35,9 +35,9 @@ import java.util.stream.Collectors;
 
 /**
  * 岗位角色服务实现类
+ *
  * @author yangdong
  * @date:2021/3/25
- * 
  */
 @Service
 public class AuthPostRoleServiceImpl implements AuthPostRoleService {
@@ -67,7 +67,7 @@ public class AuthPostRoleServiceImpl implements AuthPostRoleService {
     }
 
     @Override
-    public List<String> getByPostIds(List<String> postIds){
+    public List<String> getByPostIds(List<String> postIds) {
         if (postIds == null || CollectionUtils.isEmpty(postIds)) {
             return new ArrayList<>();
         }
@@ -83,50 +83,50 @@ public class AuthPostRoleServiceImpl implements AuthPostRoleService {
     }
 
     @Override
-    public List<AuthPostRole> getByPostId(String postId, Boolean status){
-        if(StringUtils.isEmpty(postId)){
+    public List<AuthPostRole> getByPostId(String postId, Boolean status) {
+        if (StringUtils.isEmpty(postId)) {
             return new ArrayList<>();
         }
-        return authPostRoleMapper.getByPostId(postId,status);
+        return authPostRoleMapper.getByPostId(postId, status);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void handlePostRole(PostRoleVo postRoleVo){
+    public void handlePostRole(PostRoleVo postRoleVo) {
         String postId = postRoleVo.getPostId();
-        if(postId == null || StringUtils.isEmpty(postId)){
+        if (postId == null || StringUtils.isEmpty(postId)) {
             throw new GafException("岗位id为空");
         }
         logger.info(postId);
-        if(authPostService.getById(postId)==null){
+        if (authPostService.getById(postId) == null) {
             throw new GafException("角色不存在：" + postId);
         }
-        List<String>  newList = postRoleVo.getRoleList();
-        List<String> oldList = getByPostId(postId,true).stream().map(AuthPostRole ::getRoleId).collect(Collectors.toList());
+        List<String> newList = postRoleVo.getRoleList();
+        List<String> oldList = getByPostId(postId, true).stream().map(AuthPostRole::getRoleId).collect(Collectors.toList());
         List<String> addList = new ArrayList<>();
         List<String> removeList = new ArrayList<>();
-        newList.forEach(item ->{
-            if(!oldList.contains(item)){
+        newList.forEach(item -> {
+            if (!oldList.contains(item)) {
                 addList.add(item);
             }
         });
         logger.info("toadd:");
         System.out.println(addList);
-        oldList.forEach(item ->{
-            if(!newList.contains(item)){
+        oldList.forEach(item -> {
+            if (!newList.contains(item)) {
                 removeList.add(item);
             }
         });
         logger.info("toremove:");
         //新增或修改
-        if(!CollectionUtils.isEmpty(addList)){
+        if (!CollectionUtils.isEmpty(addList)) {
             List<AuthPostRole> addPostRoleList = new ArrayList<>();
             List<String> updateList = new ArrayList<>();
-            addList.forEach(item->{
-                AuthPostRole oldPostRole = getByPostAndRole(postId,item,false);
-                if(oldPostRole!=null){
+            addList.forEach(item -> {
+                AuthPostRole oldPostRole = getByPostAndRole(postId, item, false);
+                if (oldPostRole != null) {
                     updateList.add(oldPostRole.getPostRoleId());
-                }else{
+                } else {
                     AuthPostRole authPostRole = AuthPostRole.builder()
                             .roleId(item)
                             .postId(postId)
@@ -137,22 +137,22 @@ public class AuthPostRoleServiceImpl implements AuthPostRoleService {
                 }
             });
             //批量修改
-            if(!CollectionUtils.isEmpty(updateList)){
+            if (!CollectionUtils.isEmpty(updateList)) {
                 batchUpdate(updateList);
             }
             //批量新增
-            if(!CollectionUtils.isEmpty(addPostRoleList)){
+            if (!CollectionUtils.isEmpty(addPostRoleList)) {
                 batchInsertPostRole(addPostRoleList);
             }
         }
 
         //禁用
-        if(!CollectionUtils.isEmpty(removeList)){
+        if (!CollectionUtils.isEmpty(removeList)) {
             //根据岗位id和角色id获取岗位角色关联id
             List<String> postRoleIds = new ArrayList<>();
-            removeList.forEach(item->{
-                AuthPostRole  authPostRole = getByPostAndRole(postId,item,true);
-                if(authPostRole !=null &&  !AuthUser.TENANT_ADMIN_ROLE_ID.equals(authPostRole.getRoleId())){
+            removeList.forEach(item -> {
+                AuthPostRole authPostRole = getByPostAndRole(postId, item, true);
+                if (authPostRole != null && !AuthUser.TENANT_ADMIN_ROLE_ID.equals(authPostRole.getRoleId())) {
                     postRoleIds.add(authPostRole.getPostRoleId());
                 }
             });
@@ -162,14 +162,14 @@ public class AuthPostRoleServiceImpl implements AuthPostRoleService {
         }
     }
 
-    public AuthPostRole getByPostAndRole(String postId, String roleId,Boolean status){
-        if(StringUtils.isEmpty(postId) || StringUtils.isEmpty(roleId)){
+    public AuthPostRole getByPostAndRole(String postId, String roleId, Boolean status) {
+        if (StringUtils.isEmpty(postId) || StringUtils.isEmpty(roleId)) {
             return null;
         }
-        return authPostRoleMapper.getByPostAndRole(postId, roleId,status);
+        return authPostRoleMapper.getByPostAndRole(postId, roleId, status);
     }
 
-    public void batchUpdate(List<String> authPostRoleIds){
+    public void batchUpdate(List<String> authPostRoleIds) {
         authPostRoleMapper.batchUpdate(authPostRoleIds);
     }
 
@@ -215,7 +215,7 @@ public class AuthPostRoleServiceImpl implements AuthPostRoleService {
     }
 
     @Override
-    public void batchInsertPostRole(List<AuthPostRole> authPostRoles){
+    public void batchInsertPostRole(List<AuthPostRole> authPostRoles) {
         if (authPostRoles != null && !CollectionUtils.isEmpty(authPostRoles)) {
             authPostRoles.forEach(authPostRole -> authPostRole.setPostRoleId(UUID.randomUUID().toString()));
             authPostRoleMapper.batchInsert(authPostRoles);

@@ -10,10 +10,10 @@ import com.supermap.gaf.utils.LogUtil;
 import org.slf4j.Logger;
 
 /**
-* @author:yd
-* @Date 2021-3-01
+ * @author:yd
+ * @Date 2021-3-01
  * 数据源解组件
-**/
+ **/
 public final class DatasourceParser {
     private DatasourceParser() {
     }

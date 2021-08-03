@@ -27,7 +27,7 @@ public enum GAFLicenseModuleType {
      * gaf门户组件
      */
     GAF_PORTAL(17604);
-    
+
     private int value;
     private static final List<GAFLicenseModuleType> ALL_TYPES = EnumUtils.getEnumList(GAFLicenseModuleType.class);
 
@@ -44,11 +44,11 @@ public enum GAFLicenseModuleType {
         Iterator<GAFLicenseModuleType> types = ALL_TYPES.iterator();
         while (types.hasNext()) {
             GAFLicenseModuleType type = types.next();
-            if(type.value == value) {
+            if (type.value == value) {
                 return type;
             }
         }
         return GAFLicenseModuleType.GAF_CORE;
     }
-    
+
 }

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.api.scanner.service.impl;
 
 import com.supermap.gaf.api.scanner.dao.SwaggerSysCatalogMapper;
@@ -20,8 +20,7 @@ import java.util.*;
 
 /**
  * @author wangxiaolong
- * @date:2021/3/25
- * 目录服务类
+ * @date:2021/3/25 目录服务类
  */
 @Service
 public class SwaggerSysCatalogServiceImpl implements SwaggerSysCatalogService {
@@ -37,8 +36,9 @@ public class SwaggerSysCatalogServiceImpl implements SwaggerSysCatalogService {
 
     /**
      * 插入组件对应的根目录
+     *
      * @param sysComponent 组件
-     * @param catalogType 参考 CatalogTypeEnum 只能是CatalogTypeEnum.MODULE_GROUP_TYPE;CatalogTypeEnum.API_GROUP_TYPE
+     * @param catalogType  参考 CatalogTypeEnum 只能是CatalogTypeEnum.MODULE_GROUP_TYPE;CatalogTypeEnum.API_GROUP_TYPE
      * @return
      */
     @Override
@@ -52,7 +52,7 @@ public class SwaggerSysCatalogServiceImpl implements SwaggerSysCatalogService {
                 .description(sysComponent.getNameCn() + "默认根目录")
                 .build();
         this.insertSysCatalog(build);
-        batchSortAndCodeService.revisionSortSnForInsertOrDelete(SysCatalog.class,Arrays.asList(build.getParentId()));
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(SysCatalog.class, Arrays.asList(build.getParentId()));
         return true;
     }
 
@@ -91,14 +91,14 @@ public class SwaggerSysCatalogServiceImpl implements SwaggerSysCatalogService {
             sysCatalog.setStatus(true);
         }
         swaggerSysCatalogMapper.insert(sysCatalog);
-        batchSortAndCodeService.revisionSortSnForInsertOrDelete(SysCatalog.class,Arrays.asList(sysCatalog.getParentId()));
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(SysCatalog.class, Arrays.asList(sysCatalog.getParentId()));
         return sysCatalog;
     }
 
 
     @Override
     public List<SysCatalog> getByComponentAndType(String componentId, String type) {
-        return swaggerSysCatalogMapper.getByComponentAndType(componentId,type);
+        return swaggerSysCatalogMapper.getByComponentAndType(componentId, type);
     }
 
 

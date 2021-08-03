@@ -47,6 +47,7 @@ public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
                 .map(beanDefinition -> ClassUtils.resolveClassName(beanDefinition.getBeanClassName(), getClassLoader()))
                 .collect(Collectors.toSet()));
     }
+
     private ServletConfig servletConfig;
 
 
@@ -66,7 +67,7 @@ public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
         securityRequirement.requirement("token");
         SecurityRequirement securityRequirement2 = new SecurityRequirement();
         securityRequirement.requirement("basicAuth");
-        swagger.setSecurity(Arrays.asList(securityRequirement,securityRequirement2));
+        swagger.setSecurity(Arrays.asList(securityRequirement, securityRequirement2));
         new SwaggerContextService().withServletConfig(servletConfig).updateSwagger(swagger);
         BeanConfig config = new BeanConfig();
 
@@ -75,7 +76,7 @@ public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
         config.setTitle("Spring Boot + Jersey + Swagger");
         config.setVersion("2");
         config.setContact("Me <me@example.com>");
-        config.setSchemes(new String[] {"http", "https"});
+        config.setSchemes(new String[]{"http", "https"});
         config.setResourcePackage(RootResource.class.getPackage().getName());
         config.setPrettyPrint(true);
 //        config.setScan(true);

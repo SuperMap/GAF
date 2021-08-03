@@ -2,9 +2,8 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.utils;
-
 
 
 import org.apache.ibatis.session.ExecutorType;
@@ -16,8 +15,9 @@ import java.util.function.BiConsumer;
 
 /**
  * mybatis批量插入更新工具类 使用时先注入SqlSessionFactory
- * @date:2021/3/25
+ *
  * @author wxl
+ * @date:2021/3/25
  */
 public class MybatisBatchUtil {
     /**
@@ -27,7 +27,7 @@ public class MybatisBatchUtil {
 
     private static SqlSessionFactory sqlSessionFactory;
 
-    public MybatisBatchUtil(SqlSessionFactory sqlSessionFactory){
+    public MybatisBatchUtil(SqlSessionFactory sqlSessionFactory) {
         MybatisBatchUtil.sqlSessionFactory = sqlSessionFactory;
     }
 
@@ -68,7 +68,7 @@ public class MybatisBatchUtil {
         if (entityList == null || entityList.size() == 0) {
             throw new MybatisBatchException("entityList must not be empty");
         }
-        try(SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH)) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH)) {
             M modelMapper = sqlSession.getMapper(mapperClass);
             int i = 0;
             for (T entity : entityList) {

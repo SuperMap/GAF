@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.srv.governance.entity.rest.configserver;
 
 import java.util.List;
@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class MicroServiceInfo {
     public String name;
-    public List <ServiceInstanceInfo> serviceInstanceInfos;
+    public List<ServiceInstanceInfo> serviceInstanceInfos;
 
-    public MicroServiceInfo(String name, List <ServiceInstanceInfo> serviceInstanceInfos) {
+    public MicroServiceInfo(String name, List<ServiceInstanceInfo> serviceInstanceInfos) {
         this.name = name;
         this.serviceInstanceInfos = serviceInstanceInfos;
     }

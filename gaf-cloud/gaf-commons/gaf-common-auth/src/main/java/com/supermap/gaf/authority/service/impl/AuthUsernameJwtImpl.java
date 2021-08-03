@@ -19,19 +19,19 @@ public class AuthUsernameJwtImpl implements IauthUsername {
 
     @Override
     public String getAuthUsername(Object o) {
-        if (o instanceof CustomToken){
-            CustomToken token = (CustomToken)o;
+        if (o instanceof CustomToken) {
+            CustomToken token = (CustomToken) o;
             HttpServletRequest request = token.getRequest();
             String authHeader = request.getHeader(CommonConstant.JWT_HEADER);
-            if(StringUtils.isNoneEmpty(authHeader)) {
+            if (StringUtils.isNoneEmpty(authHeader)) {
                 String jwtToken = authHeader.trim();
-                if(StringUtils.isNotEmpty(CommonConstant.JWT_PREFIX)) {
+                if (StringUtils.isNotEmpty(CommonConstant.JWT_PREFIX)) {
                     String[] split = authHeader.trim().split("\\s+");
-                    if (split !=null && split.length == 2 && split[0].equalsIgnoreCase(CommonConstant.JWT_PREFIX)) {
+                    if (split != null && split.length == 2 && split[0].equalsIgnoreCase(CommonConstant.JWT_PREFIX)) {
                         jwtToken = split[1];
                     }
                 }
-                return JJWTUtils.getUserNameFromJwsUntrusted(jwtToken,CommonConstant.JWT_USER_NAME_FIELD);
+                return JJWTUtils.getUserNameFromJwsUntrusted(jwtToken, CommonConstant.JWT_USER_NAME_FIELD);
             }
         }
         return null;

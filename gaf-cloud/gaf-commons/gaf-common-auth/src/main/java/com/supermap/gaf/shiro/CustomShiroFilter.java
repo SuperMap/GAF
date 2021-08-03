@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro;
 
 import java.io.IOException;
@@ -31,14 +31,14 @@ import com.supermap.gaf.utils.LogUtil;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 @Order(Integer.MAX_VALUE - 5)
 public class CustomShiroFilter extends AbstractShiroFilter {
 
     private static final Logger log = LogUtil.getLocLogger(CustomShiroFilter.class);
 
     public static String STATE_LESS_AUTH_TAG = "stateLessAuthTag";
-    
+
     protected CustomShiroFilter(WebSecurityManager webSecurityManager, FilterChainResolver resolver) {
         super();
         if (webSecurityManager == null) {
@@ -49,35 +49,35 @@ public class CustomShiroFilter extends AbstractShiroFilter {
             setFilterChainResolver(resolver);
         }
     }
-    
+
     @Override
     protected void doFilterInternal(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws ServletException, IOException {
         try {
             super.doFilterInternal(servletRequest, servletResponse, chain);
-        }finally {
+        } finally {
             //移除token登录的会话状态
             try {
                 Subject subject = ThreadContext.getSubject();
-                HttpServletRequest httpRequest = (HttpServletRequest)servletRequest;
-                if(subject != null && subject.isAuthenticated() 
-                        && (boolean)httpRequest.getAttribute(STATE_LESS_AUTH_TAG)) {
+                HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+                if (subject != null && subject.isAuthenticated()
+                        && (boolean) httpRequest.getAttribute(STATE_LESS_AUTH_TAG)) {
                     subject.logout();
                 }
-            }catch (Exception e) {
+            } catch (Exception e) {
                 // TODO: handle exception
             }
-            
+
         }
-        
+
     }
-    
+
     @Override
     protected WebSubject createSubject(ServletRequest request, ServletResponse response) {
         AuthenticationToken token = createToken(request, response);
         WebSubject subject = super.createSubject(request, response);
         // todo 测试置为null
 //        token = null;
-        if(token != null) {
+        if (token != null) {
             try {
                 ThreadContext.bind(subject);
                 subject.login(token);// 认证
@@ -87,11 +87,11 @@ public class CustomShiroFilter extends AbstractShiroFilter {
         }
         return subject;
     }
-    
+
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
-        if(request instanceof HttpServletRequest) {
-            HttpServletRequest httpRequest = (HttpServletRequest)request;
-            httpRequest.setAttribute(STATE_LESS_AUTH_TAG,  true);
+        if (request instanceof HttpServletRequest) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            httpRequest.setAttribute(STATE_LESS_AUTH_TAG, true);
             return new CustomToken(httpRequest);
         }
         return null;

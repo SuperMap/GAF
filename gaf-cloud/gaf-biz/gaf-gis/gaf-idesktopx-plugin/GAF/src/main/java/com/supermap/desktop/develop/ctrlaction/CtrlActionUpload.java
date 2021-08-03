@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ctrlaction;
 
 import com.supermap.data.Datasource;
@@ -35,13 +35,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * @date:2021/3/25
  * @author SuperMap
+ * @date:2021/3/25
  */
 public class CtrlActionUpload extends CtrlAction {
-	public CtrlActionUpload(IBaseItem caller) {
-		super(caller);
-	}
+    public CtrlActionUpload(IBaseItem caller) {
+        super(caller);
+    }
 
     @Override
     public boolean enable() {
@@ -49,30 +49,31 @@ public class CtrlActionUpload extends CtrlAction {
     }
 
     @Override
-	public void run() {
+    public void run() {
         TreePath selectedPath = UICommonToolkit.getWorkspaceManager().getWorkspaceTree().getSelectionPath();
-        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)selectedPath.getLastPathComponent();
-        TreeNodeData data = (TreeNodeData)selectedNode.getUserObject();
+        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) selectedPath.getLastPathComponent();
+        TreeNodeData data = (TreeNodeData) selectedNode.getUserObject();
         NodeDataType type = data.getType();
-        try{
+        try {
             if (type == NodeDataType.WORKSPACE) {
                 handleWorkspace();
             } else if (type == NodeDataType.DATASOURCE) {
                 handleDatasource((Datasource) data.getData());
             }
-         }catch (FileUploadException e) {
-            ApplicationContextUtils.getOutput().output(e.getMessage()+"上传失败");
+        } catch (FileUploadException e) {
+            ApplicationContextUtils.getOutput().output(e.getMessage() + "上传失败");
         } catch (Exception e) {
             ApplicationContextUtils.getOutput().output(e.getMessage());
         }
 
-	}
-    void handleDatasource(Datasource datasource){
+    }
+
+    void handleDatasource(Datasource datasource) {
         DatasourceConnectionInfo connectionInfo = datasource.getConnectionInfo();
-        if(!CommonUtils.isFileTypeSource(connectionInfo)){
+        if (!CommonUtils.isFileTypeSource(connectionInfo)) {
             JOptionPaneUtilities.showErrorMessageDialog("要求是文件型");
-        }else{
-            if(CtrlActionSynchronizeWorkspace.checkDatasource(connectionInfo) == null){
+        } else {
+            if (CtrlActionSynchronizeWorkspace.checkDatasource(connectionInfo) == null) {
                 JOptionPaneUtilities.showErrorMessageDialog("未找到同名数据源，请注册，或者更改文件名！");
                 return;
             }
@@ -80,9 +81,10 @@ public class CtrlActionUpload extends CtrlAction {
 
         }
     }
-	void handleWorkspace(){
+
+    void handleWorkspace() {
         Workspace oldWorkspace = ApplicationContextUtils.getWorkspace();
-        if(WorkspaceUtilities.isWorkspaceModified()) {
+        if (WorkspaceUtilities.isWorkspaceModified()) {
             int result = JOptionPaneUtilities.showConfirmDialogWithCancel(CoreProperties.getString("String_SaveWorkspacePrompt"));
             if (result == 1 && CommonUtils.isFileTypeSource(oldWorkspace.getConnectionInfo())) {
                 // 不保存
@@ -98,10 +100,10 @@ public class CtrlActionUpload extends CtrlAction {
 
         }
         WorkspaceConnectionInfo connectionInfo = oldWorkspace.getConnectionInfo();
-	    if(!CommonUtils.isFileTypeSource(connectionInfo)){
+        if (!CommonUtils.isFileTypeSource(connectionInfo)) {
             JOptionPaneUtilities.showErrorMessageDialog("类型不符合");
-        }else{
-            if(CtrlActionSynchronizeWorkspace.checkWorkspace(connectionInfo) == null){
+        } else {
+            if (CtrlActionSynchronizeWorkspace.checkWorkspace(connectionInfo) == null) {
                 JOptionPaneUtilities.showErrorMessageDialog("未找到同名工作空间，请注册，或者更改文件名！");
                 return;
             }

@@ -12,8 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 
- * @author zrc 
+ * @author zrc
  * @date yyyy-mm-dd
  */
 @Data
@@ -21,7 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("")
-public class Space implements Serializable{
+public class Space implements Serializable {
     @NotNull
     @ApiModelProperty("P, T，U")
     private String targetType;
@@ -43,8 +42,8 @@ public class Space implements Serializable{
     @ApiModelProperty("描述")
     private String description;
     /**
-    * 默认值1：'-1'::integer
-    */
+     * 默认值1：'-1'::integer
+     */
     @ApiModelProperty("空间大小")
     private Long totalSize;
 

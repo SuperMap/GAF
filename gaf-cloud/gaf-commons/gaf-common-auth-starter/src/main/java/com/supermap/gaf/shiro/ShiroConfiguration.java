@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro;
 
 import java.util.ArrayList;
@@ -62,13 +62,13 @@ import io.buji.pac4j.filter.SecurityFilter;
 
 /**
  * shiro全局配置类
+ *
  * @author h_sha
  * @date:2021/3/25
- *
  */
 @Configuration
 @ConditionalOnProperty(name = "shiro.enable", havingValue = "true", matchIfMissing = true)
-@EnableConfigurationProperties({ ShiroConfig.class })
+@EnableConfigurationProperties({ShiroConfig.class})
 public class ShiroConfiguration {
 
     public static final String DEFAULT_CALLBACK_URL = "callback";
@@ -92,12 +92,12 @@ public class ShiroConfiguration {
 
     @Bean
     public CustomTokenRealm customTokenRealmDb() {
-        CustomTokenRealm tokenRealm = new CustomTokenRealm(authUsernameJwt,authUserInfoDetailsDb);
+        CustomTokenRealm tokenRealm = new CustomTokenRealm(authUsernameJwt, authUserInfoDetailsDb);
         return tokenRealm;
     }
 
     @Bean
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         CustomShiroFilterFactoryBean shiroFilterFactoryBean = new CustomShiroFilterFactoryBean();
         // 设置安全管理器
@@ -150,7 +150,7 @@ public class ShiroConfiguration {
 
         // 设置回调处理
         if (CollectionUtils.isNotEmpty(clientList)) {
-        	config.setClients(new Clients(clientList));
+            config.setClients(new Clients(clientList));
 //            config.setClients(new Clients(clientList));
             config.getClients().setCallbackUrl(calculateCallBackUrl(shiroConfig.getServiceUrl()));
             // cas 认证后回调拦截器
@@ -172,13 +172,13 @@ public class ShiroConfiguration {
         filterMap.put("logout", logoutFilter);
         filterChainDefinitionMap.put(URL_PATH_SEPARATOR + DEFAULT_LOGOUT_URL, "logout");
         //追加公开地址权限
-        if(CollectionUtils.isNotEmpty(shiroConfig.getPublicUrls())) {
+        if (CollectionUtils.isNotEmpty(shiroConfig.getPublicUrls())) {
             for (String str : shiroConfig.getPublicUrls()) {
                 filterChainDefinitionMap.put(str, SHIRO_PUBLIC_FILTER);
-            }    
+            }
         }
         // 加载配置文件中自定义权限设置
-        if (CollectionUtils.isNotEmpty(shiroConfig.getUrlFilters())){
+        if (CollectionUtils.isNotEmpty(shiroConfig.getUrlFilters())) {
             for (String str : shiroConfig.getUrlFilters()) {
                 int index = str.indexOf(",");
                 if (index != -1) {
@@ -187,7 +187,7 @@ public class ShiroConfiguration {
             }
         }
 
-        
+
         shiroFilterFactoryBean.setFilters(filterMap);
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
@@ -195,7 +195,7 @@ public class ShiroConfiguration {
 
     /**
      * 核心的安全事务管理器 设置realm、cacheManager等
-     * 
+     *
      * @return
      */
     @Bean
@@ -213,14 +213,14 @@ public class ShiroConfiguration {
 
     @Bean
     @ConditionalOnProperty(name = "shiro.keycloak.enable", havingValue = "true")
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public GAFJWTTokenParser jwtTokenParser() {
         GAFJWTTokenParser tokenParser = new GAFJWTTokenParser();
         tokenParser.setConfiguration(shiroConfig.getKeycloak());
         RoleGenerator<OidcProfile> roleGenerator = new RoleGenerator<>(shiroConfig.getKeycloak());
         GroupGenerator<OidcProfile> groupGenerator = new GroupGenerator<>(shiroConfig.getKeycloak());
         PermissionGenerator permissionGenerator = new PermissionGenerator();
-        tokenParser.setAuthorizationGenerators(Arrays.asList(new AuthorizationGenerator[] { roleGenerator, groupGenerator, permissionGenerator }));
+        tokenParser.setAuthorizationGenerators(Arrays.asList(new AuthorizationGenerator[]{roleGenerator, groupGenerator, permissionGenerator}));
         return tokenParser;
     }
 
@@ -264,7 +264,8 @@ public class ShiroConfiguration {
     }
 
     /**
-     *  pac4j配置
+     * pac4j配置
+     *
      * @param casClient
      * @return
      */
@@ -272,10 +273,10 @@ public class ShiroConfiguration {
         Config config = new Config(casClient);
         return config;
     }
-    
+
     /**
      * 记住我管理器
-     * 
+     *
      * @return
      */
     @Bean
@@ -289,7 +290,7 @@ public class ShiroConfiguration {
 
     /**
      * cookie对象
-     * 
+     *
      * @return
      */
     @Bean
@@ -301,7 +302,7 @@ public class ShiroConfiguration {
 
     /**
      * 开启shiro aop注解支持. 使用代理方式;所以需要开启代码支持;否则@RequiresRoles等注解无法生效
-     * 
+     *
      * @param securityManager
      * @return
      */
@@ -314,7 +315,7 @@ public class ShiroConfiguration {
 
     /**
      * Shiro生命周期处理器
-     * 
+     *
      * @return
      */
     @Bean
@@ -324,11 +325,11 @@ public class ShiroConfiguration {
 
     /**
      * 自动创建代理
-     * 
+     *
      * @return
      */
     @Bean
-    @DependsOn({ "lifecycleBeanPostProcessor" })
+    @DependsOn({"lifecycleBeanPostProcessor"})
     public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         advisorAutoProxyCreator.setProxyTargetClass(true);
@@ -344,7 +345,7 @@ public class ShiroConfiguration {
         }
         return callbackUrl;
     }
-    
+
     @Bean
     @Lazy
     @ConditionalOnProperty(name = "shiro.keycloak.enable", havingValue = "true")
@@ -355,7 +356,7 @@ public class ShiroConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TenantInfoI.class)
-    public TenantInfoI tenantInfoI(){
+    public TenantInfoI tenantInfoI() {
         return new TenantInfoImpl();
     }
 

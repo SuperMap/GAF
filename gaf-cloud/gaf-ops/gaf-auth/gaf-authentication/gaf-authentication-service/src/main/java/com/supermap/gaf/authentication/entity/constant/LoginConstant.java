@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.entity.constant;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -47,23 +47,21 @@ public class LoginConstant {
     public static final String LOGIN_CALLBACK_WITH_OIDC_VALIDATED = "/authentication/login/callback/oidc/validated";
 
 
-
     public static final int TOKEN_EXPIRE = 7200;
 
     public static final int TOKEN_REFRESH_EXPIRE = 72000;
 
 
-
     @Value("${login.loginSuccessRedirect:}")
     public void setLoginSuccessRedirect(String loginSuccessRedirect) {
-        if (!StringUtils.isEmpty(loginSuccessRedirect)){
+        if (!StringUtils.isEmpty(loginSuccessRedirect)) {
             LoginConstant.LOGIN_SUCCESS_REDIRECT = loginSuccessRedirect;
         }
     }
 
     @Value("${login.loginUrl:}")
     public void setLoginUrl(String loginUrl) {
-        if (!StringUtils.isEmpty(loginUrl)){
+        if (!StringUtils.isEmpty(loginUrl)) {
             LoginConstant.LOGIN_URL = loginUrl;
         }
     }

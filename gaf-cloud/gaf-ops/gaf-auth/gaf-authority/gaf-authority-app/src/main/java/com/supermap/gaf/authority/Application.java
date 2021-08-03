@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority;
 
 import com.supermap.gaf.utils.MybatisBatchUtil;
@@ -19,12 +19,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * @date:2021/3/25
  * @author wxl
+ * @date:2021/3/25
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.supermap.gaf"})
-@MapperScan(basePackages = {"com.supermap.gaf.**.dao","com.supermap.gaf.dao"})
+@MapperScan(basePackages = {"com.supermap.gaf.**.dao", "com.supermap.gaf.dao"})
 @EnableFeignClients(basePackages = {"com.supermap.gaf"})
 @EnableDiscoveryClient
 @EnableAsync
@@ -32,8 +32,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAspectJAutoProxy(exposeProxy = true)
 public class Application {
     @Bean
-    MybatisBatchUtil mybatisBatchUtil(SqlSessionFactory sqlSessionFactory){
-        return  new MybatisBatchUtil(sqlSessionFactory);
+    MybatisBatchUtil mybatisBatchUtil(SqlSessionFactory sqlSessionFactory) {
+        return new MybatisBatchUtil(sqlSessionFactory);
     }
 
     public static void main(String[] args) {

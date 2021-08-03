@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 树原始节点类型枚举值
+ *
  * @author wxl
  */
 @AllArgsConstructor

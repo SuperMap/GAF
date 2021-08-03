@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.api.scanner.service.impl;
 
 import com.supermap.gaf.api.scanner.dao.SwaggerAuthResourceApiMapper;
@@ -17,8 +17,7 @@ import java.util.*;
 
 /**
  * @author zhm
- * @date:2021/3/25
- * api资源服务类
+ * @date:2021/3/25 api资源服务类
  */
 @Service
 public class SwaggerAuthResourceApiServiceImpl implements SwaggerAuthResourceApiService {
@@ -28,20 +27,21 @@ public class SwaggerAuthResourceApiServiceImpl implements SwaggerAuthResourceApi
     private BatchSortAndCodeService batchSortAndCodeService;
 
 
-
     /**
      * 新增api资源
+     *
      * @return
      */
     @Override
     @Transactional
-    public AuthResourceApi insertAuthResourceApi(AuthResourceApi authResourceApi){
+    public AuthResourceApi insertAuthResourceApi(AuthResourceApi authResourceApi) {
         //TODO: 主键非GeneratedKey，此处添加自定义主键生成策略
         authResourceApi.setResourceApiId(UUID.randomUUID().toString());
         swaggerAuthResourceApiMapper.insert(authResourceApi);
-        batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceApi.class,Arrays.asList(authResourceApi.getApiCatalogId()));
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceApi.class, Arrays.asList(authResourceApi.getApiCatalogId()));
         return authResourceApi;
     }
+
     @Override
     public List<AuthResourceApi> listByCatalogId(String catalogId) {
         return swaggerAuthResourceApiMapper.listByCatalogId(catalogId);
