@@ -1,3 +1,8 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.conversion;
 
 import com.alibaba.fastjson.JSON;
@@ -16,7 +21,7 @@ import java.util.function.Consumer;
 public interface ImportSettingParser{
 
 
-    ImportSetting parseImportSetting(String jsonStr);
+    ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer);
 
     //ImportDataInfo parseImportDataInfo(String jsonStr, ImportDataInfo importDataInfo);
 
@@ -55,7 +60,7 @@ public interface ImportSettingParser{
         JSONObject jo = jsonObject.getJSONObject("changeFieldName");
         if (jo != null && !jo.isEmpty()) {
             String oldFieldName = jo.getString("oldFieldName");
-            String newFeildName = jo.getString("newFeildName");
+            String newFeildName = jo.getString("newFieldName");
             if (oldFieldName != null && !oldFieldName.isEmpty() && newFeildName != null && !newFeildName.isEmpty()) {
                 biConsumer.accept(oldFieldName,newFeildName);
             }
@@ -82,38 +87,38 @@ public interface ImportSettingParser{
     }
 
 
-    default <S extends ImportSetting,D extends ImportDataInfo>  S parse(String jsonStr, Class<S> clazz, BiConsumer<S,JSONObject> setImport, Class<D> dataInfoClazz , BiConsumer<D,JSONObject> setDataInfo) {
-        JSONObject jo = JSON.parseObject(jsonStr);
-        String otherPart = jo.getString("otherPart");
-        if(otherPart == null || otherPart.isEmpty()) {
-            otherPart = "{}";
-        }
+    default <S extends ImportSetting,D extends ImportDataInfo>  S parse(JSONObject importSettingJO, Class<S> clazz, BiConsumer<S,JSONObject> setImport, Class<D> dataInfoClazz , BiConsumer<D,JSONObject> setDataInfo) {
+        JSONObject basePartJO = importSettingJO.getJSONObject("basePart");
+        String basePart = basePartJO == null ? "{}": basePartJO.toJSONString();
         ParserConfig parserConfig = ConversionConfig.getParseConfig();
-        S importSetting = JSON.parseObject(otherPart, clazz, parserConfig);
-        JSONObject jsonObject = JSON.parseObject(otherPart);
+        S importSetting = JSON.parseObject(basePart, clazz, parserConfig);
+        JSONObject jsonObject = JSON.parseObject(basePart);
         JSONObject scalingFactor = jsonObject.getJSONObject("scalingFactor");
-        double ratioX = scalingFactor.getDoubleValue("ratioX");
-        double ratioY = scalingFactor.getDoubleValue("ratioY");
-        double ratioZ = scalingFactor.getDoubleValue("ratioZ");
-        importSetting.setScalingFactor(ratioX,ratioY,ratioZ);
+        if (scalingFactor != null) {
+            double ratioX = scalingFactor.getDoubleValue("ratioX");
+            double ratioY = scalingFactor.getDoubleValue("ratioY");
+            double ratioZ = scalingFactor.getDoubleValue("ratioZ");
+            importSetting.setScalingFactor(ratioX,ratioY,ratioZ);
+        }
         setImport.accept(importSetting,jsonObject);
         if (dataInfoClazz == null) {
             return importSetting;
         }
-        String dataInfosPart = jo.getString("dataInfosPart");
-        if (dataInfosPart != null && !dataInfosPart.isEmpty()) {
-            JSONArray jsonArray = JSON.parseArray(dataInfosPart);
-            ImportDataInfos targetDataInfos = importSetting.getTargetDataInfos(null);
-            for (int i = 0; i < targetDataInfos.getCount(); i++) {
-                D importDataInfo = dataInfoClazz.cast(targetDataInfos.get(i));
-                JSONObject dataInfoJsonObj = jsonArray.getJSONObject(i);
-                String targetName = dataInfoJsonObj.getString("targetName");
-                if (targetName != null && !targetName.isEmpty()) {
-                    importDataInfo.setTargetName(targetName);
-                }
-                setDataInfo.accept(importDataInfo,dataInfoJsonObj);
-            }
+        JSONArray jsonArray = importSettingJO.getJSONArray("dataInfosPart");
+        if (jsonArray == null || jsonArray.size() == 0) {
+            return importSetting;
         }
+        ImportDataInfos targetDataInfos = importSetting.getTargetDataInfos(null);
+        for (int i = 0; i < jsonArray.size() && i < targetDataInfos.getCount(); i++) {
+            D importDataInfo = dataInfoClazz.cast(targetDataInfos.get(i));
+            JSONObject dataInfoJsonObj = jsonArray.getJSONObject(i);
+            String targetName = dataInfoJsonObj.getString("targetName");
+            if (targetName != null && !targetName.isEmpty()) {
+                importDataInfo.setTargetName(targetName);
+            }
+            setDataInfo.accept(importDataInfo,dataInfoJsonObj);
+        }
+        importSetting.setTargetDataInfos(targetDataInfos);
         return importSetting;
     }
 

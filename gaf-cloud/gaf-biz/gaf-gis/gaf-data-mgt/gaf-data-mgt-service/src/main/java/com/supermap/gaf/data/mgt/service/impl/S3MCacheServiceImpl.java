@@ -11,12 +11,13 @@ import com.supermap.data.processing.StorageType;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.data.mgt.entity.DataSourceInfo;
 import com.supermap.gaf.data.mgt.service.S3MCacheService;
-import com.supermap.gaf.data.mgt.util.DatasourceParser;
+import com.supermap.gaf.data.mgt.support.DatasourceParser;
 import com.supermap.gaf.data.mgt.util.FileUtils;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.utils.LogUtil;
 import com.supermap.realspace.CacheFileType;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -41,6 +42,9 @@ public class S3MCacheServiceImpl implements S3MCacheService {
     @Value("${supermap.gaf.s3m-threads-num:4}")
     private int threadsNum;
 
+    @Autowired
+    private DatasourceParser datasourceParser;
+
     @Override
     public MessageResult<String> buildS3M(DataSourceInfo dataSourceInfo, List<String> datasetNames, boolean isOverWrite, String outputFolder) {
         try {
@@ -53,7 +57,7 @@ public class S3MCacheServiceImpl implements S3MCacheService {
             // 数据集名称参数去重
             datasetNames = datasetNames.stream().distinct().collect(Collectors.toList());
 
-            Datasource datasource = DatasourceParser.parserDatasource(dataSourceInfo);
+            Datasource datasource = datasourceParser.parserDatasource(dataSourceInfo);
 
             // 切片结果存放路径
             if (StringUtils.isEmpty(outputFolder)) {

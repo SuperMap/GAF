@@ -7,14 +7,14 @@ package com.supermap.gaf.data.mgt.support;
 
 import com.supermap.data.DatasourceConnectionInfo;
 import com.supermap.data.EngineType;
+import com.supermap.gaf.common.storage.client.StorageClient;
 import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
 import com.supermap.gaf.exception.GafException;
-import com.supermap.gaf.storage.service.MinioConfigHandlerI;
+import com.supermap.gaf.shiro.SecurityUtilsExt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import javax.security.sasl.AuthenticationException;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 ;
@@ -28,7 +28,8 @@ import java.util.UUID;
 public class ConvertHelper {
 
     @Autowired
-    private MinioConfigHandlerI minioConfigHandlerI;
+    @Qualifier("DatamgtStorageClient")
+    private StorageClient storageClient;
 
     public boolean isFileType(EngineType engineType) {
         return EngineType.UDB.equals(engineType) || EngineType.UDBX.equals(engineType);
@@ -50,7 +51,7 @@ public class ConvertHelper {
         }
         String tns = sysResourceDatasource.getAddr();
         String database = sysResourceDatasource.getDbName();
-        String alias = sysResourceDatasource.getDsName() + UUID.randomUUID();
+        String alias = sysResourceDatasource.getDsName();
         String user = sysResourceDatasource.getUserName();
         String password = sysResourceDatasource.getPassword();
         DatasourceConnectionInfo datasourceConnectionInfo = new DatasourceConnectionInfo(tns, database, alias, user, password);
@@ -69,12 +70,7 @@ public class ConvertHelper {
      * @return oss存储里的真实路径
      */
     public String resolve(String addr) {
-        try {
-            return Paths.get(minioConfigHandlerI.getVolumeRootPath()).resolve(addr).toString();
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-            throw new GafException(e);
-        }
+        return storageClient.getVolumePath(addr, SecurityUtilsExt.getUser().getAuthUser().getTenantId(), false).getPath();
     }
 
 }

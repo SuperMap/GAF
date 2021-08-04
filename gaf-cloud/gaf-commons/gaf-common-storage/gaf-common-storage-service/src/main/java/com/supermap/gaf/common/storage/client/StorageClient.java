@@ -107,7 +107,7 @@ public class StorageClient {
         return body.getData();
     }
 
-    private String getDownloadSignUrl(String path, @Nullable String tenantId) {
+    public String getDownloadSignUrl(String path, @Nullable String tenantId) {
         HttpHeaders headers = new HttpHeaders();
         if(tenantId!=null){
             headers.set(tenantIdHeaderName, tenantId);

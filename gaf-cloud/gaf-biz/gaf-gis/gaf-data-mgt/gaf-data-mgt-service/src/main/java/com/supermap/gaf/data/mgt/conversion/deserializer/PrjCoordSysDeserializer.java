@@ -55,9 +55,6 @@ public class PrjCoordSysDeserializer implements ObjectDeserializer {
             throw new JSONException("parse type PrjCoordSys error, field : " + fieldName, ex);
         }
         PrjCoordSys prjCoordSys = PrjCoordSys.fromEPSG(intObj);
-        System.out.println("fieldName = " + fieldName);
-        System.out.println("getEPSGCode = " + prjCoordSys.getEPSGCode());
-        System.out.println("name = " + prjCoordSys.getName());
         return (T) prjCoordSys;
     }
 

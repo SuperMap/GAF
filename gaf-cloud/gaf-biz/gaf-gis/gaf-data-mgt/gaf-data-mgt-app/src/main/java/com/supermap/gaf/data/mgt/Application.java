@@ -14,6 +14,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -22,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 * @Date 2021-3-12
 **/
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.supermap.gaf"})
+@ComponentScan(basePackages = {"com.supermap.gaf"}, excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.supermap.gaf.common.storage.*"))
 @EnableDiscoveryClient
 @EnableFeignClients({"com.supermap.gaf"})
 @MapperScan(basePackages = {"com.supermap.gaf.**.dao", "com.supermap.gaf.**.mapper"})

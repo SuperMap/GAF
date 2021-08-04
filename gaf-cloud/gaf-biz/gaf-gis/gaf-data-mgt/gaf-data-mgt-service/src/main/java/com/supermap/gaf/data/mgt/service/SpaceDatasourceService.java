@@ -1,7 +1,12 @@
 package com.supermap.gaf.data.mgt.service;
 
-import com.supermap.data.conversion.ImportResult;
 import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
+import com.supermap.gaf.data.mgt.conversion.result.DataExportResult;
+import com.supermap.gaf.data.mgt.conversion.result.DataImportResult;
+import com.supermap.gaf.data.mgt.entity.DataSourceInfo;
+import com.supermap.gaf.data.mgt.entity.GDataset;
+
+import java.util.List;
 
 /**
  * 空间数据源功能
@@ -32,8 +37,35 @@ public interface SpaceDatasourceService {
 
     /**
      * 根据数据导入设置信息 导入数据
-     * @param importSettingJsonStr 数据导入设置信息
-     * @return 是否成功 true 成功 false 失败
+     * @param importSettingJsonArray 数据导入设置信息
+     * @return 导入结果
      */
-    ImportResult importData(String importSettingJsonStr);
+    DataImportResult importData(String importSettingJsonArray);
+
+
+    /**
+     * 根据数据导出设置信息 导出数据
+     *
+     * @param exportSettingJsonArray 数据导出设置信息
+     * @return 导出结果
+     */
+    DataExportResult exportData(String exportSettingJsonArray);
+
+
+    /**
+     * 获取数据源下所有数据集列表
+     *
+     * @param dataSourceInfo
+     * @return
+     */
+    List<GDataset> listDataset(DataSourceInfo dataSourceInfo);
+
+    /**
+     * 根据数据源id获取数据源连接信息，然后获取数据源下的数据集
+     *
+     * @param datasourceId 数据源id
+     * @return 数据集集合
+     */
+    List<GDataset> listDataset(String datasourceId);
+
 }

@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
 
-//import com.supermap.gaf.storage.resources.MinioServiceResource;
-
 /**
  * @date:2021/3/25
  * @author heykb
@@ -40,8 +38,8 @@ public class RootResource {
     }
 
     @Path("/datasource")
-    public Class<DataSourceResource> dataSourceResource() {
-        return DataSourceResource.class;
+    public Class<SpaceDatasourceResource> dataSourceResource() {
+        return SpaceDatasourceResource.class;
     }
 
     @Path("/services")
@@ -53,8 +51,4 @@ public class RootResource {
     public Class<SysResourceDatasourceResource> sysResourceDatasourceResource() {
         return SysResourceDatasourceResource.class;
     }
-//    @Path("/minio-service")
-//    public Class<MinioServiceResource> minioServiceResource() {
-//        return MinioServiceResource.class;
-//    }
 }

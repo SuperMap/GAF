@@ -10,6 +10,8 @@ import com.supermap.data.FieldType;
 import com.supermap.data.conversion.*;
 import com.supermap.gaf.data.mgt.conversion.ImportSettingParser;
 
+import java.util.function.Consumer;
+
 
 /**
  * @author wxl
@@ -20,27 +22,27 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
 
     AI_BIN_GRID {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingAiBinGrid.class,
-                    (importSettingAiBinGrid, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingAiBinGrid.class,
+                    (importSettingAiBinGrid, jsonObject) -> consumer.accept(importSettingAiBinGrid),
                     ImportDataInfoAiBinGrid.class,
                     (importDataInfoAiBinGrid, jsonObject) -> {});
         }
     },
     BIL {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingBIL.class,
-                    (importSettingBIL, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingBIL.class,
+                    (importSettingBIL, jsonObject) -> consumer.accept(importSettingBIL),
                     ImportDataInfoBIL.class,
                     (importDataInfoBIL, jsonObject) -> {});
         }
     },
     BIP {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingBIP.class,
-                    (importSettingBIL, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingBIP.class,
+                    (importSettingBIP, jsonObject) -> consumer.accept(importSettingBIP),
                     ImportDataInfoBIP.class,
                     (importDataInfoBIP, jsonObject) -> {});
         }
@@ -48,9 +50,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     //BMP,
     BSQ {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingBSQ.class,
-                    (importSettingBSQ, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingBSQ.class,
+                    (importSettingBSQ, jsonObject) -> consumer.accept(importSettingBSQ),
                     ImportDataInfoBSQ.class,
                     (importDataInfoBSQ, jsonObject) -> {});
         }
@@ -58,9 +60,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     //COVERAGE,
     CSV {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingCSV.class,
-                    (importSettingCSV, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingCSV.class,
+                    (importSettingCSV, jsonObject) -> consumer.accept(importSettingCSV),
                     ImportDataInfoCSV.class,
                     (importDataInfoCSV, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject, importDataInfoCSV::changeFieldName);
@@ -82,9 +84,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     DBF {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingDBF.class,
-                    (importSettingDBF, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingDBF.class,
+                    (importSettingDBF, jsonObject) -> consumer.accept(importSettingDBF),
                     ImportDataInfoDBF.class,
                     (importDataInfoDBF, jsonObject) -> {
                         super.parseTargetFieldInfos(jsonObject, fieldInfos -> importDataInfoDBF.setTargetFieldInfos(fieldInfos.toArray()));
@@ -96,9 +98,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     //DXF,
     E00 { //SpatialIndexInfo
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingE00.class,
-                    (importSettingE00, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingE00.class,
+                    (importSettingE00, jsonObject) -> consumer.accept(importSettingE00),
                     ImportDataInfoE00.class,
                     (importDataInfoE00, jsonObject) -> {
                         super.parseTargetFieldInfos(jsonObject, fieldInfos -> importDataInfoE00.setTargetFieldInfos(fieldInfos.toArray()));
@@ -107,9 +109,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     ECW {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingECW.class,
-                    (importSettingECW, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingECW.class,
+                    (importSettingECW, jsonObject) -> consumer.accept(importSettingECW),
                     ImportDataInfoECW.class,
                     (importDataInfoECW, jsonObject) -> {});
         }
@@ -117,18 +119,18 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     //FILE_GDB_VECTOR,
     GBDEM {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingGBDEM.class,
-                    (importSettingGBDEM, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingGBDEM.class,
+                    (importSettingGBDEM, jsonObject) -> consumer.accept(importSettingGBDEM),
                     ImportDataInfoGBDEM.class,
                     (importDataInfoGBDEM, jsonObject) -> {});
         }
     },
     GEO_3D_ML {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingGeo3DML.class,
-                    (importSettingGeo3DML, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingGeo3DML.class,
+                    (importSettingGeo3DML, jsonObject) -> consumer.accept(importSettingGeo3DML),
                     null,
                     (importDataInfoGeo3DML, jsonObject) -> {});
         }
@@ -136,9 +138,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     GEO_JSON {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingGeoJson.class,
-                    (importSettingGeoJson, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingGeoJson.class,
+                    (importSettingGeoJson, jsonObject) -> consumer.accept(importSettingGeoJson),
                     ImportDataInfoGeoJson.class,
                     (importDataInfoGeoJson, jsonObject) -> {
                         super.parseTargetFieldInfos(jsonObject, fieldInfos -> importDataInfoGeoJson.setTargetFieldInfos(fieldInfos.toArray()));
@@ -147,9 +149,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     GIF { // 需要后续单独处理WorldFilePath, 获取真实路径
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingGIF.class,
-                    (importSettingGIF, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingGIF.class,
+                    (importSettingGIF, jsonObject) -> consumer.accept(importSettingGIF),
                     ImportDataInfoGIF.class,
                     (importDataInfoGIF, jsonObject) -> {});
         }
@@ -158,9 +160,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     //GML,
     GPKG {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingGPKG.class,
-                    (importSettingGPKG, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingGPKG.class,
+                    (importSettingGPKG, jsonObject) -> consumer.accept(importSettingGPKG),
                     ImportDataInfoGPKG.class,
                     (importDataInfoGPKG, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject, importDataInfoGPKG::changeFieldName);
@@ -172,54 +174,54 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     GRD {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingGRD.class,
-                    (importSettingGRD, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingGRD.class,
+                    (importSettingGRD, jsonObject) -> consumer.accept(importSettingGRD),
                     ImportDataInfoGRD.class,
                     (importDataInfoGRD, jsonObject) -> {});
         }
     },
     GRIB {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingGRIB.class,
-                    (importSettingGRIB, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingGRIB.class,
+                    (importSettingGRIB, jsonObject) -> consumer.accept(importSettingGRIB),
                     ImportDataInfoGRIB.class,
                     (importDataInfoGRIB, jsonObject) -> {});
         }
     },
     IMG {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingIMG.class,
-                    (importSettingIMG, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingIMG.class,
+                    (importSettingIMG, jsonObject) -> consumer.accept(importSettingIMG),
                     ImportDataInfoIMG.class,
                     (importDataInfoIMG, jsonObject) -> {});
         }
     },
     JP2 {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingJP2.class,
-                    (importSettingJP2, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingJP2.class,
+                    (importSettingJP2, jsonObject) -> consumer.accept(importSettingJP2),
                     ImportDataInfoJP2.class,
                     (importDataInfoJP2, jsonObject) -> {});
         }
     },
     JPG {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingJPG.class,
-                    (importSettingJPG, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingJPG.class,
+                    (importSettingJPG, jsonObject) -> consumer.accept(importSettingJPG),
                     ImportDataInfoJPG.class,
                     (importDataInfoJPG, jsonObject) -> {});
         }
     },
     KML {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingKML.class,
-                    (importSettingKML, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingKML.class,
+                    (importSettingKML, jsonObject) -> consumer.accept(importSettingKML),
                     ImportDataInfoKML.class,
                     (importDataInfoKML, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject,importDataInfoKML::changeFieldName);
@@ -231,9 +233,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     KMZ {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingKMZ.class,
-                    (importSettingKMZ, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingKMZ.class,
+                    (importSettingKMZ, jsonObject) -> consumer.accept(importSettingKMZ),
                     ImportDataInfoKMZ.class,
                     (importDataInfoKMZ, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject,importDataInfoKMZ::changeFieldName);
@@ -245,9 +247,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     LIDAR {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingLIDAR.class,
-                    (importSettingLIDAR, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingLIDAR.class,
+                    (importSettingLIDAR, jsonObject) -> consumer.accept(importSettingLIDAR),
                     ImportDataInfoLIDAR.class,
                     (importDataInfoLIDAR, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject,importDataInfoLIDAR::changeFieldName);
@@ -260,9 +262,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     //MAPGIS,
     MIF {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingMIF.class,
-                    (importSettingMIF, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingMIF.class,
+                    (importSettingMIF, jsonObject) -> consumer.accept(importSettingMIF),
                     ImportDataInfoMIF.class,
                     (importDataInfoMIF, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject,importDataInfoMIF::changeFieldName);
@@ -274,9 +276,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     MODEL_3D_S {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingModel3DS.class,
-                    (importSettingModel3DS, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingModel3DS.class,
+                    (importSettingModel3DS, jsonObject) -> consumer.accept(importSettingModel3DS),
                     null,
                     (nullClazz, jsonObject) -> {});
         }
@@ -286,36 +288,36 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     //MODEL_FLT,
     MODEL_OSG {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingModelOSG.class,
-                    (importSettingModelOSG, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingModelOSG.class,
+                    (importSettingModelOSG, jsonObject) -> consumer.accept(importSettingModelOSG),
                     null,
                     (nullClazz, jsonObject) -> {});
         }
     },
     MODEL_X {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingModelX.class,
-                    (importSettingModelX, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingModelX.class,
+                    (importSettingModelX, jsonObject) -> consumer.accept(importSettingModelX),
                     null,
                     (nullClazz, jsonObject) -> {});
         }
     },
     MR_SID {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingMrSID.class,
-                    (importSettingMrSID, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingMrSID.class,
+                    (importSettingMrSID, jsonObject) -> consumer.accept(importSettingMrSID),
                     ImportDataInfoMrSID.class,
                     (importDataInfoMrSID, jsonObject) -> {});
         }
     },
     ORANGE_TAB {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingOrangeTab.class,
-                    (importSettingOrangeTab, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingOrangeTab.class,
+                    (importSettingOrangeTab, jsonObject) -> consumer.accept(importSettingOrangeTab),
                     ImportDataInfoOrangeTab.class,
                     (importDataInfoOrangeTab, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject,importDataInfoOrangeTab::changeFieldName);
@@ -329,27 +331,27 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     //PERSONAL_GDB_VECTOR,
     PNG { // 注意 WorldFilePath 需要单独处理解析为实际路径
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingPNG.class,
-                    (importSettingPNG, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingPNG.class,
+                    (importSettingPNG, jsonObject) -> consumer.accept(importSettingPNG),
                     ImportDataInfoPNG.class,
                     (importDataInfoPNG, jsonObject) -> {});
         }
     },
     RAW {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingRAW.class,
-                    (importSettingRAW, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingRAW.class,
+                    (importSettingRAW, jsonObject) -> consumer.accept(importSettingRAW),
                     ImportDataInfoRAW.class,
                     (importDataInfoRAW, jsonObject) -> {});
         }
     },
     SCV {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingSCV.class,
-                    (importSettingSCV, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingSCV.class,
+                    (importSettingSCV, jsonObject) -> consumer.accept(importSettingSCV),
                     ImportDataInfoSCV.class,
                     (importDataInfoSCV, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject,importDataInfoSCV::changeFieldName);
@@ -362,9 +364,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     //SDE_VECTOR,
     SHP {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingSHP.class,
-                    (importSettingSHP, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingSHP.class,
+                    (importSettingSHP, jsonObject) -> consumer.accept(importSettingSHP),
                     ImportDataInfoSHP.class,
                     (importDataInfoSHP, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject,importDataInfoSHP::changeFieldName);
@@ -376,27 +378,27 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     SIT {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingSIT.class,
-                    (importSettingSIT, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingSIT.class,
+                    (importSettingSIT, jsonObject) -> consumer.accept(importSettingSIT),
                     ImportDataInfoSIT.class,
                     (importDataInfoSIT, jsonObject) -> {});
         }
     },
     SKP {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingSKP.class,
-                    (importSettingSKP, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingSKP.class,
+                    (importSettingSKP, jsonObject) -> consumer.accept(importSettingSKP),
                     null,
                     (nullClazz, jsonObject) -> {});
         }
     },
     TAB {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingTAB.class,
-                    (importSettingTAB, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingTAB.class,
+                    (importSettingTAB, jsonObject) -> consumer.accept(importSettingTAB),
                     ImportDataInfoTAB.class,
                     (importDataInfoTAB, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject,importDataInfoTAB::changeFieldName);
@@ -408,9 +410,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     TEMS_BUILDING_VECTOR {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingTEMSBuildingVector.class,
-                    (importSettingTEMSBuildingVector, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingTEMSBuildingVector.class,
+                    (importSettingTEMSBuildingVector, jsonObject) -> consumer.accept(importSettingTEMSBuildingVector),
                     ImportDataInfoTEMSBuildingVector.class,
                     (importDataInfoTEMSBuildingVector, jsonObject) -> {
                         super.parseTargetFieldInfos(jsonObject, fieldInfos -> importDataInfoTEMSBuildingVector.setTargetFieldInfos(fieldInfos.toArray()));
@@ -419,18 +421,18 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     TEMS_CLUTTER {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingTEMSClutter.class,
-                    (importSettingTEMSClutter, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingTEMSClutter.class,
+                    (importSettingTEMSClutter, jsonObject) -> consumer.accept(importSettingTEMSClutter),
                     ImportDataInfoTEMSClutter.class,
                     (importDataInfoTEMSClutter, jsonObject) -> {});
         }
     },
     TEMS_TEXT_LABELS {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingTEMSTextLabels.class,
-                    (importSettingTEMSTextLabels, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingTEMSTextLabels.class,
+                    (importSettingTEMSTextLabels, jsonObject) -> consumer.accept(importSettingTEMSTextLabels),
                     ImportDataInfoTEMSTextLabels.class,
                     (importDataInfoTEMSTextLabels, jsonObject) -> {
                         super.parseTargetFieldInfos(jsonObject, fieldInfos -> importDataInfoTEMSTextLabels.setTargetFieldInfos(fieldInfos.toArray()));
@@ -439,9 +441,9 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     TEMS_VECTOR {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingTEMSVector.class,
-                    (importSettingTEMSVector, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingTEMSVector.class,
+                    (importSettingTEMSVector, jsonObject) -> consumer.accept(importSettingTEMSVector),
                     ImportDataInfoTEMSVector.class,
                     (importDataInfoTEMSVector, jsonObject) -> {
                         super.parseTargetFieldInfos(jsonObject, fieldInfos -> importDataInfoTEMSVector.setTargetFieldInfos(fieldInfos.toArray()));
@@ -450,27 +452,27 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     TIF { // WorldFilePath需要单独处理 为正确的真实路径
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingTIF.class,
-                    (importSettingTIF, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingTIF.class,
+                    (importSettingTIF, jsonObject) -> consumer.accept(importSettingTIF),
                     ImportDataInfoTIF.class,
                     (importDataInfoTIF, jsonObject) -> {});
         }
     },
     USGSDEM {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingUSGSDEM.class,
-                    (importSettingUSGSDEM, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingUSGSDEM.class,
+                    (importSettingUSGSDEM, jsonObject) -> consumer.accept(importSettingUSGSDEM),
                     ImportDataInfoUSGSDEM.class,
                     (importDataInfoUSGSDEM, jsonObject) -> {});
         }
     },
     VCT {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingVCT.class,
-                    (importSettingVCT, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingVCT.class,
+                    (importSettingVCT, jsonObject) -> consumer.accept(importSettingVCT),
                     ImportDataInfoVCT.class,
                     (importDataInfoVCT, jsonObject) -> {
                         super.parseChangeFieldName(jsonObject,importDataInfoVCT::changeFieldName);
@@ -482,22 +484,22 @@ public enum ImportSettingTypeEnum implements ImportSettingParser {
     },
     VRT {
         @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingVRT.class,
-                    (importSettingVRT, jsonObject) -> {},
+        public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+            return super.parse(importSettingJO, ImportSettingVRT.class,
+                    (importSettingVRT, jsonObject) -> consumer.accept(importSettingVRT),
                     ImportDataInfoVRT.class,
                     (importDataInfoVRT, jsonObject) -> {});
         }
-    },
-    WOR { // 需要单独处理 workspace
-        @Override
-        public ImportSetting parseImportSetting(String jsonStr) {
-            return super.parse(jsonStr, ImportSettingWOR.class,
-                    (importSettingWOR, jsonObject) -> {},
-                    ImportDataInfoWOR.class,
-                    (importDataInfoWOR, jsonObject) -> {});
-        }
     };
+    //WOR { // 需要单独处理 workspace
+    //    @Override
+    //    public ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer) {
+    //        return super.parse(importSettingJO, ImportSettingWOR.class,
+    //                (importSettingWOR, jsonObject) -> consumer.accept(importSettingWOR),
+    //                ImportDataInfoWOR.class,
+    //                (importDataInfoWOR, jsonObject) -> {});
+    //    }
+    //};
 
 }
 

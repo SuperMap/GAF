@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.UUID;
 
 /**
  *
@@ -68,6 +69,7 @@ public class CheckHelper {
 
     public MessageResult<Void> checkSdxConnect(SysResourceDatasource sysResourceDatasource) {
         DatasourceConnectionInfo datasourceConnectionInfo = convertHelper.conver2DatasourceConnectionInfo(sysResourceDatasource);
+        datasourceConnectionInfo.setAlias(datasourceConnectionInfo.getAlias() + "_" + UUID.randomUUID());
         Workspace workspace = null;
         Datasource datasource = null;
         try {
