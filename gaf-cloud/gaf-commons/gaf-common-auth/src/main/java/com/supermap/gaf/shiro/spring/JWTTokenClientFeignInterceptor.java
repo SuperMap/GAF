@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro.spring;
 
 import com.supermap.gaf.shiro.SecurityUtilsExt;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class JWTTokenClientFeignInterceptor implements RequestInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(JWTTokenClientFeignInterceptor.class);
@@ -35,7 +35,7 @@ public class JWTTokenClientFeignInterceptor implements RequestInterceptor {
             template.header(AUTHORIZATION_HEADER, "Bearer " + accessToken);
         } else {
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (requestAttributes!=null){
+            if (requestAttributes != null) {
                 HttpServletRequest request = requestAttributes.getRequest();
                 String authorization = request.getHeader(AUTHORIZATION_HEADER);
                 template.header(AUTHORIZATION_HEADER, authorization);

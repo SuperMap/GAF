@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.services.impl;
 
 import com.alibaba.fastjson.JSONArray;
@@ -42,8 +42,8 @@ public class EurekaServiceMgtServiceImpl implements EurekaServiceMgtService {
      * @return
      */
     @Override
-    public List <MicroServiceInfo> getAllMicroServices(String eurekaIp, String eurekaPort) {
-        List <MicroServiceInfo> microServiceInfos = new ArrayList <>();
+    public List<MicroServiceInfo> getAllMicroServices(String eurekaIp, String eurekaPort) {
+        List<MicroServiceInfo> microServiceInfos = new ArrayList<>();
         String url = "http://" + eurekaIp + ":" + eurekaPort + "/eureka/apps";
         String responseContent = OKHttpUtil.getUseOkhttp(url);
         JSONObject applicatoinsJsonObj = (JSONObject) JSONObject.parseObject(responseContent).get("applications");
@@ -81,12 +81,12 @@ public class EurekaServiceMgtServiceImpl implements EurekaServiceMgtService {
      * @return
      */
     @Override
-    public List <MicroServiceInfo> getAllMicroServices() {
-        List <String> services = discoveryClient.getServices();
-        List <MicroServiceInfo> microServiceInfos = new ArrayList <>();
+    public List<MicroServiceInfo> getAllMicroServices() {
+        List<String> services = discoveryClient.getServices();
+        List<MicroServiceInfo> microServiceInfos = new ArrayList<>();
         for (String serviceName : services) {
-            List <ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceName);
-            List <ServiceInstanceInfo> serviceInstanceInfos = MicroServiceConversion.getMicroServiceInfo(serviceInstances);
+            List<ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceName);
+            List<ServiceInstanceInfo> serviceInstanceInfos = MicroServiceConversion.getMicroServiceInfo(serviceInstances);
             microServiceInfos.add(new MicroServiceInfo(serviceName, serviceInstanceInfos));
         }
         return microServiceInfos;
@@ -100,8 +100,8 @@ public class EurekaServiceMgtServiceImpl implements EurekaServiceMgtService {
      */
     @Override
     public MicroServiceInfo getMicroService(String serviceName) {
-        List <ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceName);
-        List <ServiceInstanceInfo> serviceInstanceInfos = MicroServiceConversion.getMicroServiceInfo(serviceInstances);
+        List<ServiceInstance> serviceInstances = discoveryClient.getInstances(serviceName);
+        List<ServiceInstanceInfo> serviceInstanceInfos = MicroServiceConversion.getMicroServiceInfo(serviceInstances);
         return new MicroServiceInfo(serviceName, serviceInstanceInfos);
     }
 }

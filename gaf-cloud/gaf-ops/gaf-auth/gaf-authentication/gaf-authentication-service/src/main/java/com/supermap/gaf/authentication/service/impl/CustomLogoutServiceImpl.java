@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.service.impl;
 
 import com.supermap.gaf.authentication.service.CustomLogoutService;
@@ -25,21 +25,21 @@ import static com.supermap.gaf.authentication.entity.constant.LoginConstant.REDI
 @Service
 public class CustomLogoutServiceImpl implements CustomLogoutService {
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public boolean logout(String sessionId) {
         try {
-            if (!StringUtils.isEmpty(sessionId)){
+            if (!StringUtils.isEmpty(sessionId)) {
                 Set<Object> keys = redisTemplate.opsForHash().keys(REDIS_LOGIN_SESSION_PREFIX + sessionId);
-                if (null != keys){
-                    for (Object key : keys){
-                        redisTemplate.opsForHash().delete(REDIS_LOGIN_SESSION_PREFIX + sessionId,key);
+                if (null != keys) {
+                    for (Object key : keys) {
+                        redisTemplate.opsForHash().delete(REDIS_LOGIN_SESSION_PREFIX + sessionId, key);
                     }
                     return true;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("删除登录信息失败");
         }

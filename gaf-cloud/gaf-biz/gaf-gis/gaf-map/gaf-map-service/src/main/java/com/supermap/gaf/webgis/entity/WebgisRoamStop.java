@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.entity;
 
 import io.swagger.annotations.ApiModel;
@@ -18,7 +18,8 @@ import java.util.Date;
 
 /**
  * 漫游站点
- * @author wangxiaolong 
+ *
+ * @author wangxiaolong
  * @date yyyy-mm-dd
  */
 @Data
@@ -26,7 +27,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("漫游站点")
-public class WebgisRoamStop implements Serializable{
+public class WebgisRoamStop implements Serializable {
     @NotNull
     @ApiModelProperty("漫游点id")
     private String gisRoamStopId;
@@ -39,8 +40,8 @@ public class WebgisRoamStop implements Serializable{
     @ApiModelProperty("站点速度")
     private Double speed;
     /**
-    * 默认值1：false
-    */
+     * 默认值1：false
+     */
     @ApiModelProperty("是否使用站点速度")
     private Boolean usemyspeed;
     @ApiModelProperty("相机经度")

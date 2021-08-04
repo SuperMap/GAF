@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.utils;
 
 import com.supermap.gaf.authentication.entity.enums.ThirdPartyLoginTypeEumn;
@@ -36,7 +36,7 @@ public class ThirdPartyLoginTypePropertiesHolder implements InitializingBean {
 
     private String enabledThirdParty;
 
-    private Map<String,Object> thirdPartyContext;
+    private Map<String, Object> thirdPartyContext;
 
     public String getEnabledThirdParty() {
         return enabledThirdParty;
@@ -54,16 +54,16 @@ public class ThirdPartyLoginTypePropertiesHolder implements InitializingBean {
         //oidc
         Map<String, LoginOidcClientProperties.OidcClientInfo> oidcClientInfoMap = loginOidcClientProperties.getOidc();
         Set<String> oidcKeySet = oidcClientInfoMap.keySet();
-        for (String key : oidcKeySet){
+        for (String key : oidcKeySet) {
             String newKey = ThirdPartyLoginTypeEumn.OIDC.name() + ":" + key;
             thirdPartyContext.put(newKey.toLowerCase(), oidcClientInfoMap.get(key));
         }
 
-        if (StringUtils.isEmpty(this.enabledThirdParty)){
+        if (StringUtils.isEmpty(this.enabledThirdParty)) {
             return;
         }
         Object clientInfo = thirdPartyContext.get(this.enabledThirdParty.toLowerCase());
-        if (null == clientInfo){
+        if (null == clientInfo) {
             throw new IllegalStateException("third-party dot not exist info :" + this.enabledThirdParty);
         }
     }

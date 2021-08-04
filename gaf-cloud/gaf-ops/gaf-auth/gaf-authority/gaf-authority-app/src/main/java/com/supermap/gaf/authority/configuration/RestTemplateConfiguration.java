@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.configuration;
 
 import org.apache.http.conn.HttpClientConnectionManager;
@@ -19,8 +19,8 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @date:2021/3/25
  * @author yd
+ * @date:2021/3/25
  */
 @Configuration
 public class RestTemplateConfiguration {
@@ -41,7 +41,6 @@ public class RestTemplateConfiguration {
 
     /**
      * 让spring管理RestTemplate,参数相关配置
-     *
      */
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
@@ -86,7 +85,6 @@ public class RestTemplateConfiguration {
      * MaxTotal 连接池最大连接数
      * DefaultMaxPerRoute 每个主机的并发数，不能超过MaxTotal
      * ValidateAfterInactivity 可用空闲连接过期时间,重用空闲连接时会先检查是否空闲时间超过这个时间，如果超过，释放socket重新建立
-     *
      */
     @Bean
     public HttpClientConnectionManager poolingConnectionManager() {

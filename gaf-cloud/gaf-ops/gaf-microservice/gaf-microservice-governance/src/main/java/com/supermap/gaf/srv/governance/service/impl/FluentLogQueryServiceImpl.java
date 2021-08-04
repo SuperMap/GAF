@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.srv.governance.service.impl;
 
 import com.supermap.gaf.srv.governance.service.FluentLogQueryService;
@@ -40,7 +40,7 @@ public class FluentLogQueryServiceImpl implements FluentLogQueryService {
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.from(from);
         sourceBuilder.size(size);
-        sourceBuilder.sort(FLUENT_TIMESTAMP_FILED_NAME,timestampSort);
+        sourceBuilder.sort(FLUENT_TIMESTAMP_FILED_NAME, timestampSort);
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
@@ -48,12 +48,12 @@ public class FluentLogQueryServiceImpl implements FluentLogQueryService {
 
         boolQueryBuilder.must(timeRangeQuery);
 
-        if (!StringUtils.isEmpty(application)){
-            QueryBuilder appMatchPhraseQuery = QueryBuilders.matchPhraseQuery(FLUENT_APPLICATION_FILED_NAME,application);
+        if (!StringUtils.isEmpty(application)) {
+            QueryBuilder appMatchPhraseQuery = QueryBuilders.matchPhraseQuery(FLUENT_APPLICATION_FILED_NAME, application);
             boolQueryBuilder.must(appMatchPhraseQuery);
         }
-        if (!StringUtils.isEmpty(level)){
-            QueryBuilder levelMatchQuery = QueryBuilders.matchQuery(FLUENT_LEVEL_FILED_NAME,level);
+        if (!StringUtils.isEmpty(level)) {
+            QueryBuilder levelMatchQuery = QueryBuilders.matchQuery(FLUENT_LEVEL_FILED_NAME, level);
             boolQueryBuilder.must(levelMatchQuery);
         }
 
@@ -66,7 +66,7 @@ public class FluentLogQueryServiceImpl implements FluentLogQueryService {
         SearchResponse response = null;
         try {
             response = customClient.search(searchRequest, RequestOptions.DEFAULT);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("查询fluent日志错误");
         }

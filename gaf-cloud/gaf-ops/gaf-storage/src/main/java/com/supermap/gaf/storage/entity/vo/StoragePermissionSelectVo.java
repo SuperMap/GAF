@@ -1,4 +1,5 @@
 package com.supermap.gaf.storage.entity.vo;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -9,7 +10,8 @@ import lombok.NoArgsConstructor;
 import javax.ws.rs.QueryParam;
 
 /**
- *  条件查询实体
+ * 条件查询实体
+ *
  * @author zrc
  */
 @Data

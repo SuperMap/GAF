@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -22,7 +22,8 @@ import java.util.List;
 
 /**
  * 工具条
- * @author zhurongcheng 
+ *
+ * @author zhurongcheng
  * @date yyyy-mm-dd
  */
 @Data
@@ -30,7 +31,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("工具条按鈕配置詳情")
-public class WebgisToolbarVo implements Serializable{
+public class WebgisToolbarVo implements Serializable {
     @ApiModelProperty("工具条id")
     private String toolbarId;
     @NotNull
@@ -41,7 +42,7 @@ public class WebgisToolbarVo implements Serializable{
     @ApiModelProperty("描述")
     private String description;
     @ApiModelProperty("状态")
-    @JSONField(name="isStatus")
+    @JSONField(name = "isStatus")
     private Boolean status;
     @ApiModelProperty("创建时间")
     private Date createdTime;

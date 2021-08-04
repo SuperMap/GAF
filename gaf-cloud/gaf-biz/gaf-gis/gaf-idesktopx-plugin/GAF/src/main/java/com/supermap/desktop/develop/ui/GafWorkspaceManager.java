@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ui;
 
 import com.supermap.desktop.controls.ui.controls.SmFileChoose;
@@ -19,10 +19,10 @@ import static java.awt.GridBagConstraints.BOTH;
 import static javax.swing.SwingConstants.HORIZONTAL;
 
 /**
- * @date:2021/3/25
  * @author heykb
+ * @date:2021/3/25
  */
-public class GafWorkspaceManager extends JPanel{
+public class GafWorkspaceManager extends JPanel {
     public static GafTree gafWorkspaceManagerTree;
     private JScrollPane jScrollPane;
     private SmFileChoose smFileChoose;
@@ -36,12 +36,14 @@ public class GafWorkspaceManager extends JPanel{
         revalidate();
 
     }
-    private void initFileChoose(){
-        this.smFileChoose = new SmFileChoose("", FileChooseMode.SAVE_ONE,".");
+
+    private void initFileChoose() {
+        this.smFileChoose = new SmFileChoose("", FileChooseMode.SAVE_ONE, ".");
         this.smFileChoose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         this.smFileChoose.setTitle("下载工作空间到");
     }
-    void initComponent(GafTree tree){
+
+    void initComponent(GafTree tree) {
         gafWorkspaceManagerTree = tree;
         initFileChoose();
         this.refreshButton = new SmButton();
@@ -50,7 +52,7 @@ public class GafWorkspaceManager extends JPanel{
         this.setLayout(new GridBagLayout());
         this.add(this.refreshButton, (new GridBagConstraintsHelper(0, 1)).setFill(BOTH));
         this.add(jScrollPane, new GridBagConstraintsHelper(0, 0).setWeight(1, 1).setFill(BOTH));
-        this.refreshButton.addActionListener(e->{
+        this.refreshButton.addActionListener(e -> {
             try {
                 CommonUtils.refreshWorkspaceTree();
             } catch (Exception e1) {
@@ -71,6 +73,7 @@ public class GafWorkspaceManager extends JPanel{
 //            }
 //        });
     }
+
     public GafWorkspaceManager() {
         initComponent(new GafTree(null, GafTree.GafTreeType.WORKSPACE_TREE));
     }

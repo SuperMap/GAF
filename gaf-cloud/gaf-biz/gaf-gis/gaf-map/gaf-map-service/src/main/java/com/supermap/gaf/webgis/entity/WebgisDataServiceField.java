@@ -2,23 +2,27 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.entity;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.*;
 import javax.validation.constraints.*;
+
 import com.alibaba.fastjson.annotation.JSONField;
 
 import java.io.Serializable;
 
 /**
  * GIS数据服务字段
- * @author wangxiaolong 
+ *
+ * @author wangxiaolong
  * @date yyyy-mm-dd
  */
 @Data
@@ -26,7 +30,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("GIS数据服务字段")
-public class WebgisDataServiceField implements Serializable{
+public class WebgisDataServiceField implements Serializable {
     @NotNull
     @ApiModelProperty("GIS服务字段id")
     private String gisServiceFieldId;
@@ -42,7 +46,7 @@ public class WebgisDataServiceField implements Serializable{
     @ApiModelProperty("描述")
     private String description;
     @ApiModelProperty("状态")
-    @JSONField(name="isStatus")
+    @JSONField(name = "isStatus")
     private Boolean status;
     @ApiModelProperty("创建时间")
     private Date createdTime;

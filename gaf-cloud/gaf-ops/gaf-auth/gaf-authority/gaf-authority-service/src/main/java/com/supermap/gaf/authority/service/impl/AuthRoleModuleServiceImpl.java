@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.AuthRoleModule;
@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 
 /**
  * 角色模块服务实现类
+ *
  * @author yangdong
  * @date:2021/3/25
- * 
  */
 @Service
 public class AuthRoleModuleServiceImpl implements AuthRoleModuleService {
@@ -63,42 +63,42 @@ public class AuthRoleModuleServiceImpl implements AuthRoleModuleService {
     }
 
     @Override
-    public void handleRoleModule(RoleModuleVo roleModuleVo){
+    public void handleRoleModule(RoleModuleVo roleModuleVo) {
         String roleId = roleModuleVo.getRoleId();
-        if(roleId == null || StringUtils.isEmpty(roleId)){
+        if (roleId == null || StringUtils.isEmpty(roleId)) {
             throw new GafException("角色id为空");
         }
         logger.info(roleId);
 
-        if(authRoleService.getById(roleId)==null){
+        if (authRoleService.getById(roleId) == null) {
             throw new GafException("角色不存在：" + roleId);
         }
-        List<String>  newList = roleModuleVo.getModuleList();
-        List<String> oldList = getByRoleId(roleId,true).stream().map(AuthRoleModule ::getResourceModuleId).collect(Collectors.toList());
+        List<String> newList = roleModuleVo.getModuleList();
+        List<String> oldList = getByRoleId(roleId, true).stream().map(AuthRoleModule::getResourceModuleId).collect(Collectors.toList());
         List<String> addList = new ArrayList<>();
         List<String> removeList = new ArrayList<>();
-        newList.forEach(item ->{
-            if(!oldList.contains(item)){
+        newList.forEach(item -> {
+            if (!oldList.contains(item)) {
                 addList.add(item);
             }
         });
         logger.info("toadd:");
-        oldList.forEach(item ->{
-            if(!newList.contains(item)){
+        oldList.forEach(item -> {
+            if (!newList.contains(item)) {
                 removeList.add(item);
             }
         });
         logger.info("toremove:");
 
         //新增或修改
-        if(!CollectionUtils.isEmpty(addList)){
+        if (!CollectionUtils.isEmpty(addList)) {
             List<AuthRoleModule> addRoleModuleList = new ArrayList<>();
             List<String> updateList = new ArrayList<>();
-            addList.forEach(item->{
-                AuthRoleModule oldRoleModule = getByRoleAndModule(roleId,item,false);
-                if(oldRoleModule!=null){
+            addList.forEach(item -> {
+                AuthRoleModule oldRoleModule = getByRoleAndModule(roleId, item, false);
+                if (oldRoleModule != null) {
                     updateList.add(oldRoleModule.getRoleModuleId());
-                }else{
+                } else {
                     AuthRoleModule authRoleModule = AuthRoleModule.builder()
                             .resourceModuleId(item)
                             .roleId(roleId)
@@ -109,22 +109,22 @@ public class AuthRoleModuleServiceImpl implements AuthRoleModuleService {
                 }
             });
             //批量修改
-            if(!CollectionUtils.isEmpty(updateList)){
+            if (!CollectionUtils.isEmpty(updateList)) {
                 batchUpdate(updateList);
             }
             //批量新增
-            if(!CollectionUtils.isEmpty(addRoleModuleList)){
+            if (!CollectionUtils.isEmpty(addRoleModuleList)) {
                 batchInsertRoleModule(addRoleModuleList);
             }
         }
 
         //禁用
-        if(!CollectionUtils.isEmpty(removeList)){
+        if (!CollectionUtils.isEmpty(removeList)) {
             //根据角色id和接口id获取角色接口关联id
             List<String> roleModuleIds = new ArrayList<>();
-            removeList.forEach(item->{
-                AuthRoleModule  authRoleModule = getByRoleAndModule(roleId,item,true);
-                if(authRoleModule!=null){
+            removeList.forEach(item -> {
+                AuthRoleModule authRoleModule = getByRoleAndModule(roleId, item, true);
+                if (authRoleModule != null) {
                     roleModuleIds.add(authRoleModule.getRoleModuleId());
                 }
             });
@@ -133,22 +133,23 @@ public class AuthRoleModuleServiceImpl implements AuthRoleModuleService {
     }
 
     @Override
-    public List<AuthRoleModule> getByRoleId(String roleId, Boolean status){
-        if(StringUtils.isEmpty(roleId)){
+    public List<AuthRoleModule> getByRoleId(String roleId, Boolean status) {
+        if (StringUtils.isEmpty(roleId)) {
             return new ArrayList<>();
         }
-        return authRoleModuleMapper.getByRoleId(roleId,status);
+        return authRoleModuleMapper.getByRoleId(roleId, status);
     }
 
     /**
      * 根据角色id和接口id查询
+     *
      * @return 角色接口
      */
-    public AuthRoleModule getByRoleAndModule(String roleId, String moduleId,Boolean status){
-        if(StringUtils.isEmpty(roleId) || StringUtils.isEmpty(moduleId)){
+    public AuthRoleModule getByRoleAndModule(String roleId, String moduleId, Boolean status) {
+        if (StringUtils.isEmpty(roleId) || StringUtils.isEmpty(moduleId)) {
             return null;
         }
-        return authRoleModuleMapper.getByRoleAndModule(roleId, moduleId,status);
+        return authRoleModuleMapper.getByRoleAndModule(roleId, moduleId, status);
     }
 
     @Override
@@ -196,17 +197,19 @@ public class AuthRoleModuleServiceImpl implements AuthRoleModuleService {
 
 
     @Override
-    public void batchInsertRoleModule(List<AuthRoleModule> authRoleModules){
+    public void batchInsertRoleModule(List<AuthRoleModule> authRoleModules) {
         if (authRoleModules != null && !CollectionUtils.isEmpty(authRoleModules)) {
             authRoleModules.forEach(authRoleModule -> authRoleModule.setRoleModuleId(UUID.randomUUID().toString()));
             authRoleModuleMapper.batchInsert(authRoleModules);
         }
     }
+
     /**
      * 批量逻辑删除
+     *
      * @author zhm
      **/
-    public void batchUpdate(List<String> authRoleModuleIds){
+    public void batchUpdate(List<String> authRoleModuleIds) {
         authRoleModuleMapper.batchUpdate(authRoleModuleIds);
     }
 
@@ -229,6 +232,7 @@ public class AuthRoleModuleServiceImpl implements AuthRoleModuleService {
 
     /**
      * 唯一性校验，每个角色与模块的关系只能出现一次
+     *
      * @param authRoleModule 角色模块
      */
     private void checkUniqueness(AuthRoleModule authRoleModule) {

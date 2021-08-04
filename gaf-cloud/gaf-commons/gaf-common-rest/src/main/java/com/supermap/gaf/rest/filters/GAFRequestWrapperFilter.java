@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.rest.filters;
 
 import java.io.IOException;
@@ -23,10 +23,11 @@ import com.google.common.collect.Maps;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class GAFRequestWrapperFilter implements Filter {
 
     private Map<String, String> contentTypeMap;
+
     {
         Map<String, String> map = Maps.newHashMap();
         map.put("html", "text/html");
@@ -55,7 +56,7 @@ public class GAFRequestWrapperFilter implements Filter {
 
     @Override
     public void destroy() {
-       this.contentTypeMap.clear();
+        this.contentTypeMap.clear();
     }
 
 }

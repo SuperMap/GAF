@@ -22,7 +22,7 @@ public class GafGlobalEnvironments {
     )
     private static String alias;
 
-    public  static  String GAF_GLOBAL_ENVIRONMENTS_XML;
+    public static String GAF_GLOBAL_ENVIRONMENTS_XML;
     private static String userConfigPath;
     private static String globalConfigPath;
 
@@ -32,9 +32,11 @@ public class GafGlobalEnvironments {
         globalConfigPath = PathUtilities.getFullPathName("../" + GAF_GLOBAL_ENVIRONMENTS_XML, false);
         alias = GAFProperties.getString("String_Alias");
     }
+
     public static String getUserConfigPath() {
         return userConfigPath;
     }
+
     public static String getGlobalConfigPath() {
         return globalConfigPath;
     }
@@ -68,7 +70,7 @@ public class GafGlobalEnvironments {
         globalParameterFieldImportInterpreter.load(GafGlobalEnvironments.class, userConfigPath, "");
     }
 
-    public static void save(){
+    public static void save() {
         (new GlobalParameterFieldExportInterpreter()).save(GafGlobalEnvironments.class, userConfigPath, "");
     }
 

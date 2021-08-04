@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.util;
 
 import com.alibaba.fastjson.JSON;
@@ -58,22 +58,22 @@ public class RouteConvertUtil {
     }
 
     public static void main(String[] args) {
-        List <GatewayPredicateDefinition> predicates = new ArrayList <>();
+        List<GatewayPredicateDefinition> predicates = new ArrayList<>();
         predicates.add(new GatewayPredicateDefinition("Path", "/test/**"));
         predicates.add(new GatewayPredicateDefinition("Path2", "/test/**"));
         System.out.println(JSON.toJSONString(predicates));
     }
 
-    private static List <String> parsePredicateStr(List <GatewayPredicateDefinition> predicates) {
-        List <String> predicateStr = new ArrayList <>();
+    private static List<String> parsePredicateStr(List<GatewayPredicateDefinition> predicates) {
+        List<String> predicateStr = new ArrayList<>();
         for (GatewayPredicateDefinition predicate : predicates) {
             predicateStr.add(predicate.getName() + "=" + predicate.getArgs());
         }
         return predicateStr;
     }
 
-    private static List <String> parseFilterStr(List <GatewayFilterDefinition> filters) {
-        List <String> filterStr = new ArrayList <>();
+    private static List<String> parseFilterStr(List<GatewayFilterDefinition> filters) {
+        List<String> filterStr = new ArrayList<>();
         for (GatewayFilterDefinition filter : filters) {
             filterStr.add(filter.getName() + "=" + filter.getArgs());
         }
@@ -110,10 +110,10 @@ public class RouteConvertUtil {
      *
      * @return
      */
-    public static List <FilterDefinition> getFilterDefinition(GatewayRouteEntity gatewayRouteEntity) {
-        List <FilterDefinition> filterDefinitions = new ArrayList <>();
+    public static List<FilterDefinition> getFilterDefinition(GatewayRouteEntity gatewayRouteEntity) {
+        List<FilterDefinition> filterDefinitions = new ArrayList<>();
         if (!StringUtils.isEmpty(gatewayRouteEntity.getPredicates())) {
-            List <GatewayFilterDefinition> gatewayFilters = JSON.parseArray(gatewayRouteEntity.getFilters(), GatewayFilterDefinition.class);
+            List<GatewayFilterDefinition> gatewayFilters = JSON.parseArray(gatewayRouteEntity.getFilters(), GatewayFilterDefinition.class);
             for (GatewayFilterDefinition gatewayFilter : gatewayFilters) {
                 filterDefinitions.add(new FilterDefinition(gatewayFilter.getName() + "=" + gatewayFilter.getArgs()));
             }
@@ -126,10 +126,10 @@ public class RouteConvertUtil {
      *
      * @return
      */
-    public static List <PredicateDefinition> getPredicateDefinition(GatewayRouteEntity gatewayRouteEntity) {
-        List <PredicateDefinition> predicateDefinitions = new ArrayList <>();
+    public static List<PredicateDefinition> getPredicateDefinition(GatewayRouteEntity gatewayRouteEntity) {
+        List<PredicateDefinition> predicateDefinitions = new ArrayList<>();
         if (!StringUtils.isEmpty(gatewayRouteEntity.getFilters())) {
-            List <GatewayPredicateDefinition> gatewayPredicates = JSON.parseArray(gatewayRouteEntity.getPredicates(), GatewayPredicateDefinition.class);
+            List<GatewayPredicateDefinition> gatewayPredicates = JSON.parseArray(gatewayRouteEntity.getPredicates(), GatewayPredicateDefinition.class);
             for (GatewayPredicateDefinition gatewayPredicate : gatewayPredicates) {
                 predicateDefinitions.add(new PredicateDefinition(gatewayPredicate.getName() + "=" + gatewayPredicate.getArgs()));
             }
@@ -153,11 +153,11 @@ public class RouteConvertUtil {
         definition.setOrder(gatewayRouteEntity.getRouteOrder());
 
         //设置断言
-        List <PredicateDefinition> pdList = getPredicateDefinition(gatewayRouteEntity);
+        List<PredicateDefinition> pdList = getPredicateDefinition(gatewayRouteEntity);
         definition.setPredicates(pdList);
 
         //设置过滤器
-        List <FilterDefinition> filters = getFilterDefinition(gatewayRouteEntity);
+        List<FilterDefinition> filters = getFilterDefinition(gatewayRouteEntity);
         definition.setFilters(filters);
         URI uri = null;
         if (gatewayRouteEntity.getRouteUri().startsWith(HttpHost.DEFAULT_SCHEME_NAME)) {

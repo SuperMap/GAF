@@ -9,9 +9,9 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class AmazonS3ExceptionMapper implements ExceptionMapper<AmazonS3Exception>{
+public class AmazonS3ExceptionMapper implements ExceptionMapper<AmazonS3Exception> {
     @Override
-    public Response toResponse(AmazonS3Exception e){
+    public Response toResponse(AmazonS3Exception e) {
         MessageResult body = MessageResult.failed(Object.class).status(e.getStatusCode())
                 .message(e.toString()).build();
         return Response.ok().type(MediaType.APPLICATION_JSON_TYPE).entity(body).build();

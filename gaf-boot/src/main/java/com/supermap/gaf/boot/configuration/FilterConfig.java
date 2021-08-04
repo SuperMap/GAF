@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class FilterConfig {
 
     @Bean
-    public FilterRegistrationBean<SecurityHeaderFilter> securityHeaderFilterRegistrationBean(){
+    public FilterRegistrationBean<SecurityHeaderFilter> securityHeaderFilterRegistrationBean() {
         FilterRegistrationBean<SecurityHeaderFilter> bean = new FilterRegistrationBean<>();
         bean.setFilter(new SecurityHeaderFilter());
         bean.addUrlPatterns("/*");
@@ -24,7 +24,7 @@ public class FilterConfig {
     }
 
     @Bean
-    public FilterRegistrationBean<XwebRedirectFilter> xWebRedirectFilterRegistrationBean(@Autowired GatewaySecurityProperties gatewaySecurityProperties ){
+    public FilterRegistrationBean<XwebRedirectFilter> xWebRedirectFilterRegistrationBean(@Autowired GatewaySecurityProperties gatewaySecurityProperties) {
         FilterRegistrationBean<XwebRedirectFilter> bean = new FilterRegistrationBean<>();
         bean.setFilter(new XwebRedirectFilter(gatewaySecurityProperties));
         bean.addUrlPatterns("/*");
@@ -35,7 +35,7 @@ public class FilterConfig {
 
 
     @Bean
-    public FilterRegistrationBean<XgatewayAuthenticationQueryFilter> xGatewayAuthenticationQueryFilterRegistrationBean(@Autowired ValidateClient validateClient){
+    public FilterRegistrationBean<XgatewayAuthenticationQueryFilter> xGatewayAuthenticationQueryFilterRegistrationBean(@Autowired ValidateClient validateClient) {
         FilterRegistrationBean<XgatewayAuthenticationQueryFilter> bean = new FilterRegistrationBean<>();
         bean.setFilter(new XgatewayAuthenticationQueryFilter(validateClient));
         bean.addUrlPatterns("/*");
@@ -45,10 +45,8 @@ public class FilterConfig {
     }
 
 
-
-
     @Bean
-    public FilterRegistrationBean<XgatewayAuthenticationValidateFilter> xGatewayAuthenticationValidateFilterRegistrationBean(){
+    public FilterRegistrationBean<XgatewayAuthenticationValidateFilter> xGatewayAuthenticationValidateFilterRegistrationBean() {
         FilterRegistrationBean<XgatewayAuthenticationValidateFilter> bean = new FilterRegistrationBean<>();
         bean.setFilter(new XgatewayAuthenticationValidateFilter());
         bean.addUrlPatterns("/*");
@@ -58,7 +56,7 @@ public class FilterConfig {
     }
 
     @Bean
-    public FilterRegistrationBean<XgatewayAuthorizationValidateFilter> xGatewayAuthorizationValidateFilterRegistrationBean(@Autowired ValidateClient validateClient){
+    public FilterRegistrationBean<XgatewayAuthorizationValidateFilter> xGatewayAuthorizationValidateFilterRegistrationBean(@Autowired ValidateClient validateClient) {
         FilterRegistrationBean<XgatewayAuthorizationValidateFilter> bean = new FilterRegistrationBean<>();
         bean.setFilter(new XgatewayAuthorizationValidateFilter(validateClient));
         bean.addUrlPatterns("/*");
@@ -69,7 +67,7 @@ public class FilterConfig {
 
 
     @Bean
-    public FilterRegistrationBean<XgatewayRequestTokenFilter> xGatewayRequestTokenFilterRegistrationBean(){
+    public FilterRegistrationBean<XgatewayRequestTokenFilter> xGatewayRequestTokenFilterRegistrationBean() {
         FilterRegistrationBean<XgatewayRequestTokenFilter> bean = new FilterRegistrationBean<>();
         bean.setFilter(new XgatewayRequestTokenFilter());
         bean.addUrlPatterns("/*");

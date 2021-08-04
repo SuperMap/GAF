@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -41,9 +41,9 @@ public class GatewayRouteDefinition {
     @ApiModelProperty("路由的Id")
     private String routeId;
     @ApiModelProperty("路由断言集合配置")
-    private List <GatewayPredicateDefinition> predicates = new ArrayList <>();
+    private List<GatewayPredicateDefinition> predicates = new ArrayList<>();
     @ApiModelProperty("路由过滤器集合配置")
-    private List <GatewayFilterDefinition> filters = new ArrayList <>();
+    private List<GatewayFilterDefinition> filters = new ArrayList<>();
     @ApiModelProperty("路由规则转发的目标uri")
     private String uri;
     @ApiModelProperty("路由执行的顺序")
@@ -107,19 +107,19 @@ public class GatewayRouteDefinition {
         this.routeId = routeId;
     }
 
-    public List <GatewayPredicateDefinition> getPredicates() {
+    public List<GatewayPredicateDefinition> getPredicates() {
         return predicates;
     }
 
-    public void setPredicates(List <GatewayPredicateDefinition> predicates) {
+    public void setPredicates(List<GatewayPredicateDefinition> predicates) {
         this.predicates = predicates;
     }
 
-    public List <GatewayFilterDefinition> getFilters() {
+    public List<GatewayFilterDefinition> getFilters() {
         return filters;
     }
 
-    public void setFilters(List <GatewayFilterDefinition> filters) {
+    public void setFilters(List<GatewayFilterDefinition> filters) {
         this.filters = filters;
     }
 

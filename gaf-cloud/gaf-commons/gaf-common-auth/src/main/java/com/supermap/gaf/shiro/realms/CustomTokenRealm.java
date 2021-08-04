@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro.realms;
 
 import com.supermap.gaf.authority.commontype.*;
@@ -33,14 +33,14 @@ import java.util.Set;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 @Slf4j
 @Data
 public class CustomTokenRealm extends AuthorizingRealm {
     private IauthUserInfoDetails iauthUserInfoDetails;
     private IauthUsername iauthUsername;
 
-    public CustomTokenRealm(IauthUsername iauthUsername,IauthUserInfoDetails iauthUserInfoDetails) {
+    public CustomTokenRealm(IauthUsername iauthUsername, IauthUserInfoDetails iauthUserInfoDetails) {
         this.iauthUserInfoDetails = iauthUserInfoDetails;
         this.iauthUsername = iauthUsername;
     }
@@ -67,8 +67,8 @@ public class CustomTokenRealm extends AuthorizingRealm {
             List<AuthResourceApi> authResourceApis = userInfoDetails.getAuthResourceApiList();
             List<AuthResourceModule> authResourceModules = userInfoDetails.getAuthResourceModuleList();
             List<AuthRole> authRoles = userInfoDetails.getAuthRoleList();
-            SecurityUtilsExt.recordKeycloakUser(profile,authUser,authResourceApis,authResourceModules,authRoles);
-            final Pac4jPrincipal principal = new Pac4jPrincipal(Arrays.asList(new CommonProfile[] { profile }));
+            SecurityUtilsExt.recordKeycloakUser(profile, authUser, authResourceApis, authResourceModules, authRoles);
+            final Pac4jPrincipal principal = new Pac4jPrincipal(Arrays.asList(new CommonProfile[]{profile}));
             return new SimpleAuthenticationInfo(principal, Boolean.TRUE, getName());
         } catch (Exception e) {
             log.error("获取用户信息失败");

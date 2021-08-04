@@ -17,7 +17,7 @@ public class GafSettings extends BaseSettingPanel {
     private SmTextFieldLegit smTextFieldGafServer;
     private JLabel labelGafAlias;
     private SmTextFieldLegit smTextFieldGafAlias;
-    
+
     @Override
     protected void initComponents() {
         this.labelGafServer = new JLabel();
@@ -28,6 +28,7 @@ public class GafSettings extends BaseSettingPanel {
         this.panelGafSetting.setBorder(BorderFactory.createTitledBorder(GAFProperties.getString("String_BaseSetting")));
 
     }
+
     @Override
     protected void initListeners() {
         this.smTextFieldGafServer.setSmTextFieldLegit(new ISmTextFieldLegit() {
@@ -42,6 +43,7 @@ public class GafSettings extends BaseSettingPanel {
                     return true;
                 }
             }
+
             @Override
             public String getLegitValue(String currentValue, String backUpValue) {
                 return backUpValue;
@@ -59,6 +61,7 @@ public class GafSettings extends BaseSettingPanel {
                     return true;
                 }
             }
+
             @Override
             public String getLegitValue(String currentValue, String backUpValue) {
                 return backUpValue;
@@ -79,7 +82,7 @@ public class GafSettings extends BaseSettingPanel {
         setLayout(new GridBagLayout());
         this.initPanelGafSetting();
         this.add(this.panelGafSetting, (new GridBagConstraintsHelper(0, 0, 1, 1)).setWeight(1.0D, 1.0D).setAnchor(GridBagConstraints.NORTHWEST)
-                .setFill(GridBagConstraints.HORIZONTAL).setInsets(20,20).setIpad(50,0));
+                .setFill(GridBagConstraints.HORIZONTAL).setInsets(20, 20).setIpad(50, 0));
 
     }
 
@@ -102,10 +105,10 @@ public class GafSettings extends BaseSettingPanel {
 
     @Override
     protected void apply() {
-        for(Component changedValue:changedValues){
-            if (changedValue == this.smTextFieldGafServer){
+        for (Component changedValue : changedValues) {
+            if (changedValue == this.smTextFieldGafServer) {
                 GafGlobalEnvironments.setServer(this.smTextFieldGafServer.getText());
-            }else if(changedValue == this.smTextFieldGafAlias ){
+            } else if (changedValue == this.smTextFieldGafAlias) {
                 GafGlobalEnvironments.setAlias(this.smTextFieldGafAlias.getText());
             }
         }

@@ -2,14 +2,16 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.entity;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.*;
 import javax.validation.constraints.*;
 import javax.ws.rs.QueryParam;
@@ -20,7 +22,8 @@ import java.io.Serializable;
 
 /**
  * 地图按钮
- * @author zhurongcheng 
+ *
+ * @author zhurongcheng
  * @date 2020-12-05
  */
 @Data
@@ -28,7 +31,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("地图按钮")
-public class WebgisButton implements Serializable{
+public class WebgisButton implements Serializable {
     @NotNull
     @ApiModelProperty("按钮id")
     @QueryParam("buttonId")
@@ -48,7 +51,7 @@ public class WebgisButton implements Serializable{
     @ApiModelProperty("描述")
     private String description;
     @ApiModelProperty("状态")
-    @JSONField(name="isStatus")
+    @JSONField(name = "isStatus")
     private Boolean status;
     @ApiModelProperty("创建时间")
     private Date createdTime;

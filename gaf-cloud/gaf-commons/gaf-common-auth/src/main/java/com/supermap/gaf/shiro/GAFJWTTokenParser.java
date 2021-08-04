@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro;
 
 import com.nimbusds.jose.JOSEException;
@@ -37,7 +37,7 @@ import static org.pac4j.core.util.CommonHelper.assertNotNull;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class GAFJWTTokenParser {
 
     private KeycloakConfig configuration;
@@ -45,7 +45,7 @@ public class GAFJWTTokenParser {
     private ProfileDefinition<OidcProfile> profileDefinition = new OidcProfileDefinition<>();
     private List<AuthorizationGenerator<OidcProfile>> authorizationGenerators;
 
-    public OAuth20Profile parseOauthJWTToken(String token) throws Exception{
+    public OAuth20Profile parseOauthJWTToken(String token) throws Exception {
         OAuth20Profile profile = new OAuth20Profile() {
             @Override
             public void setAccessToken(String accessToken) {
@@ -58,7 +58,7 @@ public class GAFJWTTokenParser {
 
     public OidcProfile parseToken(String accessToken) throws Exception {
         try {
-            if(this.idTokenValidator == null) {
+            if (this.idTokenValidator == null) {
                 this.internalInit();
             }
             JWT idToken = JWTParser.parse(accessToken);
@@ -87,15 +87,15 @@ public class GAFJWTTokenParser {
             throw new AuthenticationException("JWT 令牌无效:" + e.getMessage());
         } catch (JOSEException e) {
             throw new AuthenticationException("JWT 令牌无效:" + e.getMessage());
-        } 
+        }
     }
-    
+
     protected void internalInit() {
         assertNotNull("configuration", getConfiguration());
         // check algorithms
         final List<JWSAlgorithm> metadataAlgorithms = getConfiguration().findProviderMetadata().getIDTokenJWSAlgs();
         CommonHelper.assertTrue(CommonHelper.isNotEmpty(metadataAlgorithms),
-            "There must at least one JWS algorithm supported on the OpenID Connect provider side");
+                "There must at least one JWS algorithm supported on the OpenID Connect provider side");
         JWSAlgorithm jwsAlgorithm;
         final JWSAlgorithm preferredAlgorithm = getConfiguration().getPreferredJwsAlgorithm();
         if (metadataAlgorithms.contains(preferredAlgorithm)) {
@@ -112,7 +112,7 @@ public class GAFJWTTokenParser {
         if (jwsAlgorithm == null) {
             this.setIdTokenValidator(new JWTOidcValidator(getConfiguration().findProviderMetadata().getIssuer(), clientID));
         } else if (CommonHelper.isNotBlank(getConfiguration().getSecret()) && (JWSAlgorithm.HS256.equals(jwsAlgorithm) ||
-            JWSAlgorithm.HS384.equals(jwsAlgorithm) || JWSAlgorithm.HS512.equals(jwsAlgorithm))) {
+                JWSAlgorithm.HS384.equals(jwsAlgorithm) || JWSAlgorithm.HS512.equals(jwsAlgorithm))) {
             this.setIdTokenValidator(createHMACTokenValidator(jwsAlgorithm, clientID, secret));
         } else {
             this.setIdTokenValidator(createRSATokenValidator(jwsAlgorithm, clientID));
@@ -120,7 +120,7 @@ public class GAFJWTTokenParser {
         this.getIdTokenValidator().setMaxClockSkew(getConfiguration().getMaxClockSkew());
 
     }
-    
+
     protected JWTOidcValidator createRSATokenValidator(final JWSAlgorithm jwsAlgorithm, final ClientID clientID) {
         try {
             return new JWTOidcValidator(getConfiguration().findProviderMetadata().getIssuer(), clientID, jwsAlgorithm,
@@ -157,5 +157,5 @@ public class GAFJWTTokenParser {
     public void setIdTokenValidator(JWTOidcValidator idTokenValidator) {
         this.idTokenValidator = idTokenValidator;
     }
-    
+
 }

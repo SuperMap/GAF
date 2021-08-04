@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.filters;
 
 
@@ -20,8 +20,7 @@ import reactor.core.publisher.Mono;
  * security检测是否登录跳转的过滤器
  * 无此过滤器，发起请求，会自动跳转第三方登录，然后访问请求的地址
  * 有此过滤器，登录只能通过loginUrl或/login登录，然后重定向到indexUrl
- * @date:2021/3/25
- * 如果登录或者请求js、html、publicUrl，此过滤放行
+ * @date:2021/3/25 如果登录或者请求js、html、publicUrl，此过滤放行
  */
 public class LoginFilter implements WebFilter {
     private Logger logger = LogUtil.getLocLogger(com.supermap.gaf.gateway.filters.LoginFilter.class);
@@ -40,6 +39,7 @@ public class LoginFilter implements WebFilter {
 
     /**
      * 筛选登录请求和/请求的跳转逻辑
+     *
      * @param exchange
      * @param chain
      * @return

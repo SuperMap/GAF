@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.resources;
 
 import com.supermap.gaf.authority.client.AuthUserClient;
@@ -37,8 +37,9 @@ import java.util.stream.Collectors;
 
 /**
  * 用户接口
- * @date:2021/3/25
+ *
  * @author dqc
+ * @date:2021/3/25
  */
 @Component
 @Api(value = "用户接口")
@@ -79,18 +80,19 @@ public class AuthUserResource implements AuthUserClient {
         }).collect(Collectors.toList());
         return MessageResult.data(collect).message("查询成功").build();
     }
+
     @ApiOperation(value = "分页条件查询")
     @Produces({MediaType.APPLICATION_JSON})
     @ApiImplicitParams({
             @ApiImplicitParam(name = "realName", value = "模糊查询用户真实姓名", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[1,infinity]",paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1", defaultValue = "1", allowableValues = "range[1,infinity]", paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10", allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer"),
     })
     @GET
     @Path("/tenant/list")
-    public MessageResult<Map<String, Object>>  pageListByTenantId(@QueryParam("realName") String realName,
-                                                              @DefaultValue("1")@QueryParam("pageNum") Integer pageNum,
-                                                              @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
+    public MessageResult<Map<String, Object>> pageListByTenantId(@QueryParam("realName") String realName,
+                                                                 @DefaultValue("1") @QueryParam("pageNum") Integer pageNum,
+                                                                 @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
         String tenantId = Objects.requireNonNull(shiroUser).getTenantId();
         if (pageNum == null || pageNum < 1) {
@@ -98,9 +100,10 @@ public class AuthUserResource implements AuthUserClient {
         }
         Integer offset = (pageNum - 1) * pageSize;
         Map<String, Object> result;
-        result = authUserService.pageListByTenantId(tenantId,realName,pageSize,offset);
+        result = authUserService.pageListByTenantId(tenantId, realName, pageSize, offset);
         return MessageResult.data(result).message("查询成功").build();
     }
+
     @ApiOperation(value = "查询当前用户的信息")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -115,18 +118,18 @@ public class AuthUserResource implements AuthUserClient {
             @ApiImplicitParam(name = "searchFieldName", value = "模糊查询字段名", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "searchFieldValue", value = "模糊查询字段值", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "orderFieldName", value = "排序字段值", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "orderMethod", value = "排序方式。升序为ASC,降序为DESC。默认不排序",allowableValues="ASC,DESC", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[1,infinity]",paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "orderMethod", value = "排序方式。升序为ASC,降序为DESC。默认不排序", allowableValues = "ASC,DESC", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1", defaultValue = "1", allowableValues = "range[1,infinity]", paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10", allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer"),
     })
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public MessageResult<Map<String, Object>> pageList(@StringRange(entityClass = AuthUser.class) @QueryParam("searchFieldName") String searchFieldName,
-                                       @QueryParam("searchFieldValue") String searchFieldValue,
-                                       @StringRange(entityClass = AuthUser.class) @QueryParam("orderFieldName") String orderFieldName,
-                                       @StringRange({"asc","desc"}) @QueryParam("orderMethod") String orderMethod,
-                                       @DefaultValue("1")@QueryParam("pageNum") Integer pageNum,
-                                       @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
+                                                       @QueryParam("searchFieldValue") String searchFieldValue,
+                                                       @StringRange(entityClass = AuthUser.class) @QueryParam("orderFieldName") String orderFieldName,
+                                                       @StringRange({"asc", "desc"}) @QueryParam("orderMethod") String orderMethod,
+                                                       @DefaultValue("1") @QueryParam("pageNum") Integer pageNum,
+                                                       @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
         if (pageNum == null || pageNum < 1) {
             pageNum = 1;
         }
@@ -191,7 +194,7 @@ public class AuthUserResource implements AuthUserClient {
     public MessageResult<List<AuthRole>> selectUserRoles(@PathParam("username") String username) {
         AuthUser authUser = authUserQueryService.getByUserName(username);
         List<AuthRole> data = new ArrayList<>();
-        if(authUser!=null){
+        if (authUser != null) {
             data = authAuthorizationQueryService.listAuthorizationRole(authUser.getUserId());
         }
         return MessageResult.data(data).message("查询成功").build();
@@ -199,7 +202,7 @@ public class AuthUserResource implements AuthUserClient {
 
     @ApiOperation(value = "新增用户")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "authUser", value = "用户", dataTypeClass = AuthUser.class, paramType = "body",required = true)
+            @ApiImplicitParam(name = "authUser", value = "用户", dataTypeClass = AuthUser.class, paramType = "body", required = true)
     })
     @POST
     @Produces({MediaType.APPLICATION_JSON})
@@ -240,7 +243,7 @@ public class AuthUserResource implements AuthUserClient {
     @DELETE
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/batch")
-    public MessageResult<Void> batchDelete( List<String> userIds) {
+    public MessageResult<Void> batchDelete(List<String> userIds) {
         authUserService.batchDelete(userIds);
         return MessageResult.successe(Void.class).status(200).message("批量删除操作成功").build();
     }
@@ -262,16 +265,17 @@ public class AuthUserResource implements AuthUserClient {
         AuthUser updatedAuthUser = authUserService.updateAuthUser(authUser);
         return MessageResult.data(updatedAuthUser).message("更新操作成功").build();
     }
+
     @ApiOperation(value = "变更密码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "passwordVo", value = "新旧密码", dataTypeClass = PasswordVo.class, paramType = "body",required = true)
+            @ApiImplicitParam(name = "passwordVo", value = "新旧密码", dataTypeClass = PasswordVo.class, paramType = "body", required = true)
     })
     @PUT
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/password-change")
-    public MessageResult<Void> changePassword( PasswordVo passwordVo) {
+    public MessageResult<Void> changePassword(PasswordVo passwordVo) {
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
-        authUserService.changePassword(Objects.requireNonNull(shiroUser).getAuthUser(),passwordVo.getOldPassword(),passwordVo.getNewPassword());
+        authUserService.changePassword(Objects.requireNonNull(shiroUser).getAuthUser(), passwordVo.getOldPassword(), passwordVo.getNewPassword());
         return MessageResult.successe(Void.class).status(200).message("变更密码成功").build();
     }
 
@@ -315,10 +319,6 @@ public class AuthUserResource implements AuthUserClient {
         authUserService.sendCheckCode(email);
         return MessageResult.successe(Void.class).status(200).message("发送验证码成功").build();
     }
-
-
-
-
 
 
 }

@@ -6,14 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
  * <p>
  * 组件类注解
  * </p>
+ *
  * @author ${Author}
  * @version ${Version}
  * @since 8.1.0
- *
  */
 @Target({ElementType.PARAMETER, java.lang.annotation.ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

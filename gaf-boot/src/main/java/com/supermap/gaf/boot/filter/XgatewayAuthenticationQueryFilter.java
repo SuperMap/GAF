@@ -18,11 +18,12 @@ import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 
 /**
  * 注意： 该代码对应gaf-microservice-gateway中的同名的filter,功能逻辑等应该保持一致
- *
+ * <p>
  * 此过滤器提供用户获取认证信息的逻辑
  * 1.获取认证信息
- *      1.1.index首页请求必须获取
- *      1.2.静态资源和公共资源不用获取
+ * 1.1.index首页请求必须获取
+ * 1.2.静态资源和公共资源不用获取
+ *
  * @author : wxl
  * @date 2021/4/17
  */
@@ -46,28 +47,29 @@ public class XgatewayAuthenticationQueryFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         ExchangeAuthenticationAttribute attribute = ((ExchangeAuthenticationAttribute) servletRequest.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME));
         AuthenticationParam authenticationParam = null;
-        if (attribute.getIsIndexUrl()){
+        if (attribute.getIsIndexUrl()) {
             authenticationParam = getAuthenticationParamByHttpServletRequest(((HttpServletRequest) servletRequest));
         }
-        if (authenticationParam == null && !attribute.getIsPublicUrl()){
+        if (authenticationParam == null && !attribute.getIsPublicUrl()) {
             authenticationParam = getAuthenticationParamByHttpServletRequest(((HttpServletRequest) servletRequest));
         }
 
-        if (authenticationParam != null){
+        if (authenticationParam != null) {
             MessageResult<AuthenticationResult> authenticationResultMessageResult = validateClient.authentication(authenticationParam);
-            if (authenticationResultMessageResult != null){
+            if (authenticationResultMessageResult != null) {
                 attribute.setAuthenticationResult(authenticationResultMessageResult.getData());
             }
         }
-        filterChain.doFilter(servletRequest,servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     /**
      * request中获取认证参数
+     *
      * @param request
      * @return
      */
-    public static AuthenticationParam getAuthenticationParamByHttpServletRequest(HttpServletRequest request){
+    public static AuthenticationParam getAuthenticationParamByHttpServletRequest(HttpServletRequest request) {
         String authorization = request.getHeader(AUTHORIZATION);
         Cookie[] cookies = request.getCookies();
         String cookieVal = null;

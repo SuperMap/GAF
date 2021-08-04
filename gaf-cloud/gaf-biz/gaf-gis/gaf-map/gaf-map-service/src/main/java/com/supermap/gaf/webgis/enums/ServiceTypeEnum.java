@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * 服务类型
+ *
  * @author wxl
  */
 public enum ServiceTypeEnum {
@@ -104,11 +105,11 @@ public enum ServiceTypeEnum {
         return name;
     }
 
-    public static Map<String,String> getMap() {
+    public static Map<String, String> getMap() {
         ServiceTypeEnum[] values = values();
         HashMap<String, String> map = new HashMap<>();
         for (int i = 0; i < values.length; i++) {
-            map.putIfAbsent(values[i].getCode(),values[i].getName());
+            map.putIfAbsent(values[i].getCode(), values[i].getName());
         }
         return map;
     }

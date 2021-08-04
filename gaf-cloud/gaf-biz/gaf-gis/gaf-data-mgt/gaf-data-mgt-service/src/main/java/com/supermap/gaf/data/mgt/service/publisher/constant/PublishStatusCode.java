@@ -1,8 +1,8 @@
 package com.supermap.gaf.data.mgt.service.publisher.constant;
 
 /**
-* @author:yw
-* @Date 2021-3-12
+ * @author:yw
+ * @Date 2021-3-12
  * 发布异常代码
  */
 public enum PublishStatusCode {
@@ -111,7 +111,6 @@ public enum PublishStatusCode {
 
 
     //-----------------------------iServer end
-
 
 
     private String describe;

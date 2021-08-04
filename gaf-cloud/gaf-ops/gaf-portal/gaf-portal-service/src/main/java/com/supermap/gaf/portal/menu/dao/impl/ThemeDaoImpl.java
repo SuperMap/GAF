@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.menu.dao.impl;
 
 import com.supermap.gaf.portal.menu.commontypes.ThemeInfo;
@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @Service
 public class ThemeDaoImpl implements ThemeDao {
     @Autowired
@@ -33,7 +33,7 @@ public class ThemeDaoImpl implements ThemeDao {
     }
 
     @Override
-    public ThemeInfo queryTheme(@Param("user")String user) {
+    public ThemeInfo queryTheme(@Param("user") String user) {
         return sqlSession.selectOne("queryTheme", user);
     }
 

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.resources;
 
 import com.supermap.gaf.authentication.entity.entity.AuthenticationParam;
@@ -24,8 +24,7 @@ import static com.supermap.gaf.authentication.entity.constant.LoginConstant.*;
 
 /**
  * @author dqc
- * @date:2021/3/25
- * /authentication/logout
+ * @date:2021/3/25 /authentication/logout
  */
 @Path("/")
 @Api("登出接口")
@@ -38,6 +37,7 @@ public class LogoutResource {
 
     /**
      * 清除session，退出登录状态接口
+     *
      * @param request
      * @param response
      * @throws Exception
@@ -46,10 +46,10 @@ public class LogoutResource {
     @GET
     @Path("/")
     public void logout(@Context HttpServletRequest request,
-                       @Context HttpServletResponse response) throws Exception{
+                       @Context HttpServletResponse response) throws Exception {
         AuthenticationParam authenticationParam = HttpRequestUtils.getJwtOrSession(request);
 
-        Cookie cookie = new Cookie(CUSTOM_LOGIN_SESSION_NAME,null);
+        Cookie cookie = new Cookie(CUSTOM_LOGIN_SESSION_NAME, null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
         response.addCookie(cookie);
@@ -58,11 +58,6 @@ public class LogoutResource {
 
         logoutService.logout(authenticationParam.getCustomSessionId());
     }
-
-
-
-
-
 
 
 }

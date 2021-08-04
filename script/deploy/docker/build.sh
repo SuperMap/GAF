@@ -27,6 +27,7 @@ workspace() {
 build() {
      #检查命令
     check_commands docker java mvn yarn
+    export NODE_OPTIONS=--max_old_space_size=4096
     #构建前端产出dist目录
     build_frontend
     cd $Root_Current_Dir/../../../
@@ -65,4 +66,3 @@ case "$1" in
 	container_build
 ;;
 esac
-

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.*;
@@ -36,8 +36,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author yangdong
- * @date:2021/3/25
- * 用户角色服务类
+ * @date:2021/3/25 用户角色服务类
  */
 @Service
 public class AuthUserRoleServiceImpl implements AuthUserRoleService {
@@ -52,7 +51,7 @@ public class AuthUserRoleServiceImpl implements AuthUserRoleService {
     @Autowired
     private AuthRoleService authRoleService;
     @Autowired
-    private AuthUserParttimeService  authUserParttimeService;
+    private AuthUserParttimeService authUserParttimeService;
     @Autowired
     private AuthPostRoleService authPostRoleService;
     @Autowired
@@ -193,7 +192,7 @@ public class AuthUserRoleServiceImpl implements AuthUserRoleService {
             return;
         }
         if (toRemove.size() > 0) {
-            authUserRoleMapper.deleteByUserIdAndRoleIds(userId,toRemove);
+            authUserRoleMapper.deleteByUserIdAndRoleIds(userId, toRemove);
         }
         if (toAdd.size() > 0) {
             Set<String> distinctToAdd = new HashSet<>(toAdd);
@@ -224,7 +223,7 @@ public class AuthUserRoleServiceImpl implements AuthUserRoleService {
             postIds.add(user.getPostId());
         }
         if (postIds.size() > 0) {
-            List<AuthPostRole>  authPostRoles = authPostRoleService.listByPostIds(postIds);
+            List<AuthPostRole> authPostRoles = authPostRoleService.listByPostIds(postIds);
             List<AuthPostRole> authPostRoleInAppRole = authPostRoles.stream().filter(authPostRole -> appRoleIds.contains(authPostRole.getRoleId())).collect(Collectors.toList());
             if (authPostRoleInAppRole.size() > 0) {
                 return;

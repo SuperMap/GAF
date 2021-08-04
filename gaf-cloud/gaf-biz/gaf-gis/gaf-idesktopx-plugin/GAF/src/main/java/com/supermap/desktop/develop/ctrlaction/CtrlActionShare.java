@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ctrlaction;
 
 import com.supermap.data.DatasourceConnectionInfo;
@@ -25,8 +25,8 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
- * @date:2021/3/25
  * @author SuperMap
+ * @date:2021/3/25
  */
 public class CtrlActionShare extends CtrlAction {
     private Object conn;
@@ -42,33 +42,33 @@ public class CtrlActionShare extends CtrlAction {
 
     @Override
     public boolean enable() {
-       return CommonUtils.isFileTypeSource(conn);
+        return CommonUtils.isFileTypeSource(conn);
     }
 
     public CtrlActionShare(IBaseItem caller) {
-		super(caller);
-	}
+        super(caller);
+    }
 
     @Override
-	public void run() {
-        if(enable()){
+    public void run() {
+        if (enable()) {
             Optional<String> fileName = CommonUtils.getFileName(conn);
-            if(!fileName.isPresent()){
+            if (!fileName.isPresent()) {
                 JOptionPaneUtilities.showErrorMessageDialog("无法分享该文件");
                 return;
             }
-            if(CommonUtils.tipIfNotExist("/datas/"+fileName.get())){
+            if (CommonUtils.tipIfNotExist("/datas/" + fileName.get())) {
                 return;
             }
             try {
-                String url = GafClient.instance().downloadPresignUrl("/datas/"+fileName.get());
+                String url = GafClient.instance().downloadPresignUrl("/datas/" + fileName.get());
                 ShareDialog dialog = new ShareDialog();
                 dialog.setTitle("15分钟内有效");
                 dialog.showMessageDialog(url);
             } catch (Exception e) {
-                JOptionPaneUtilities.showMessageDialog("获取分享链接失败："+e.getMessage());
+                JOptionPaneUtilities.showMessageDialog("获取分享链接失败：" + e.getMessage());
             }
         }
 
-	}
+    }
 }

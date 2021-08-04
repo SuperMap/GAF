@@ -2,11 +2,10 @@ package com.supermap.gaf.authority.constant;
 
 /**
  * 缓存分组
+ *
  * @author yd
  */
 public final class CacheGroupConstant {
-
-
 
 
     private CacheGroupConstant() {

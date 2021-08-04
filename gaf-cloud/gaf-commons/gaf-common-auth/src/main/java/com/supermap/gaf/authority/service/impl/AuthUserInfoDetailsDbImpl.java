@@ -28,7 +28,7 @@ public class AuthUserInfoDetailsDbImpl implements IauthUserInfoDetails {
         List<AuthResourceApi> authResourceApis = authAuthorizationQueryService.listAuthorizationApi(userId);
         List<AuthResourceModule> authResourceModules = authAuthorizationQueryService.listAuthorizationModule(userId);
         List<AuthRole> authRoles = authAuthorizationQueryService.listAuthorizationRole(userId);
-        return new AuthUserInfoDetails(authUser,authResourceApis,authResourceModules,authRoles);
+        return new AuthUserInfoDetails(authUser, authResourceApis, authResourceModules, authRoles);
     }
 
 }

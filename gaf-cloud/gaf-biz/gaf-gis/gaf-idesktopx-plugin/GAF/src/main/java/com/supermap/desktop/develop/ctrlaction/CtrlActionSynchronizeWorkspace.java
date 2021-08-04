@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ctrlaction;
 
 import com.supermap.data.*;
@@ -29,45 +29,47 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 /**
- * @date:2021/3/25
  * @author SuperMap
+ * @date:2021/3/25
  */
 public class CtrlActionSynchronizeWorkspace extends CtrlAction {
     public static boolean enable = false;
-	public CtrlActionSynchronizeWorkspace(IBaseItem caller) {
-		super(caller);
-	}
+
+    public CtrlActionSynchronizeWorkspace(IBaseItem caller) {
+        super(caller);
+    }
 
     @Override
     public boolean enable() {
         return enable;
     }
-    boolean checkStatus(){
+
+    boolean checkStatus() {
         return false;
     }
 
-    public static DefaultMutableTreeNode checkWorkspace(WorkspaceConnectionInfo curConn){
+    public static DefaultMutableTreeNode checkWorkspace(WorkspaceConnectionInfo curConn) {
         try {
             CommonUtils.refreshWorkspaceTree();
         } catch (Exception e) {
             e.printStackTrace();
         }
         DefaultMutableTreeNode re = CommonUtils.searchTree(GafWorkspaceManager.gafWorkspaceManagerTree.getTreeModel(), node -> {
-            if(node.getUserObject() instanceof WorkspaceConnectionInfo ){
+            if (node.getUserObject() instanceof WorkspaceConnectionInfo) {
                 WorkspaceConnectionInfo connectionInfo = (WorkspaceConnectionInfo) node.getUserObject();
 
-                if(curConn.getType()==connectionInfo.getType()){
-                    if(CommonUtils.isFileTypeSource(curConn)){
+                if (curConn.getType() == connectionInfo.getType()) {
+                    if (CommonUtils.isFileTypeSource(curConn)) {
                         // 比较文件名
                         Optional<String> fileName = CommonUtils.getFileName(connectionInfo);
-                        if(!fileName.isPresent()){
+                        if (!fileName.isPresent()) {
                             return false;
                         }
                         return Paths.get(curConn.getServer()).getFileName().toString().equals(fileName.get());
-                    }else{
+                    } else {
                         return false;
                     }
-                }else{
+                } else {
                     return false;
                 }
             }
@@ -75,27 +77,28 @@ public class CtrlActionSynchronizeWorkspace extends CtrlAction {
         });
         return re;
     }
-    public static DefaultMutableTreeNode checkDatasource(DatasourceConnectionInfo curConn){
+
+    public static DefaultMutableTreeNode checkDatasource(DatasourceConnectionInfo curConn) {
         try {
             CommonUtils.refreshDatasourceTree();
         } catch (Exception e) {
             e.printStackTrace();
         }
         DefaultMutableTreeNode re = CommonUtils.searchTree(GafDatasourceManager.gafDatasourceManagerTree.getTreeModel(), node -> {
-            if(node.getUserObject() instanceof DatasourceConnectionInfo ){
+            if (node.getUserObject() instanceof DatasourceConnectionInfo) {
                 DatasourceConnectionInfo connectionInfo = (DatasourceConnectionInfo) node.getUserObject();
-                if(curConn.getEngineType()==connectionInfo.getEngineType()){
-                    if(CommonUtils.isFileTypeSource(curConn)){
+                if (curConn.getEngineType() == connectionInfo.getEngineType()) {
+                    if (CommonUtils.isFileTypeSource(curConn)) {
                         // 比较文件名
                         Optional<String> fileName = CommonUtils.getFileName(connectionInfo);
-                        if(!fileName.isPresent()){
+                        if (!fileName.isPresent()) {
                             return false;
                         }
                         return Paths.get(curConn.getServer()).getFileName().toString().equals(fileName.get());
-                    }else{
+                    } else {
                         return false;
                     }
-                }else{
+                } else {
                     return false;
                 }
             }
@@ -106,12 +109,12 @@ public class CtrlActionSynchronizeWorkspace extends CtrlAction {
 
 
     @Override
-	public void run() {
-	    if(enable()){
+    public void run() {
+        if (enable()) {
 
             Workspace oldWorkspace = ApplicationContextUtils.getWorkspace();
             // 检查是否修改以及是否需要先保存
-            if(WorkspaceUtilities.isWorkspaceModified()) {
+            if (WorkspaceUtilities.isWorkspaceModified()) {
                 int result = JOptionPaneUtilities.showConfirmDialogWithCancel(CoreProperties.getString("String_SaveWorkspacePrompt"));
                 if (result == 1) {
                     // 不保存
@@ -126,21 +129,21 @@ public class CtrlActionSynchronizeWorkspace extends CtrlAction {
                 }
 
             }
-            if(CommonUtils.isFileTypeSource(oldWorkspace.getConnectionInfo())){
-                if(CtrlActionSynchronizeWorkspace.checkWorkspace(oldWorkspace.getConnectionInfo()) == null){
+            if (CommonUtils.isFileTypeSource(oldWorkspace.getConnectionInfo())) {
+                if (CtrlActionSynchronizeWorkspace.checkWorkspace(oldWorkspace.getConnectionInfo()) == null) {
                     JOptionPaneUtilities.showErrorMessageDialog("未找到同名工作空间，请注册，或者更改文件名！");
                     return;
                 }
             }
             CommonUtils.uploadWorkspace(oldWorkspace);
             Datasources datasources = oldWorkspace.getDatasources();
-            for(int i=0;i<datasources.getCount();++i){
+            for (int i = 0; i < datasources.getCount(); ++i) {
                 Datasource datasource = datasources.get(i);
                 DatasourceConnectionInfo dConn = datasource.getConnectionInfo();
-                if(CommonUtils.isFileTypeSource(dConn)){
+                if (CommonUtils.isFileTypeSource(dConn)) {
                     Path dPath = Paths.get(dConn.getServer());
-                    if(checkDatasource(dConn)==null){
-                        ApplicationContextUtils.getOutput().output(dPath.getFileName().toString()+"未注册");
+                    if (checkDatasource(dConn) == null) {
+                        ApplicationContextUtils.getOutput().output(dPath.getFileName().toString() + "未注册");
                         continue;
                     }
                     CommonUtils.uploadDatasource(datasource);

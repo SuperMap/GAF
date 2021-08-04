@@ -40,7 +40,7 @@ public class FileStorageResource {
 
     public FileStorageResource(S3ClientService s3ClientService, SelectModeI selectModeI) {
         this.s3ClientService = s3ClientService;
-        this.selectModeI  = selectModeI;
+        this.selectModeI = selectModeI;
     }
 
     /**
@@ -262,8 +262,8 @@ public class FileStorageResource {
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "获取挂载路径", notes = "获取挂载路径")
     @Path("/volume-path/{path:.*}")
-    public MessageResult<VolumePathReturn> getVolumePath(@PathParam("path") String path, @PathParam("configName") String configName, @DefaultValue("false")@QueryParam("returnUrl") boolean returnUrl){
-        return MessageResult.successe(VolumePathReturn.class).data(s3ClientService.getVolumePath(configName,path,returnUrl,selectModeI)).status(200).message("查询成功").build();
+    public MessageResult<VolumePathReturn> getVolumePath(@PathParam("path") String path, @PathParam("configName") String configName, @DefaultValue("false") @QueryParam("returnUrl") boolean returnUrl) {
+        return MessageResult.successe(VolumePathReturn.class).data(s3ClientService.getVolumePath(configName, path, returnUrl, selectModeI)).status(200).message("查询成功").build();
     }
 
 }

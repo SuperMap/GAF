@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.analysis.utils;
 
 import com.supermap.data.*;
@@ -13,11 +13,9 @@ import static com.supermap.data.EngineType.SQLPLUS;
 
 /**
  * @author dqc
- * @date:2021/3/25
- * 工作空间解析器工具类
+ * @date:2021/3/25 工作空间解析器工具类
  */
 public class WorkspaceParser {
-
 
 
     /**

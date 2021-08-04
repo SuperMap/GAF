@@ -29,15 +29,15 @@ public enum TJDWTypeEnum {
     public static String getValue(TJDWTypeEnum type) {
         String value = "";
         switch (type) {
-        case GQ:
-            value = TJDWTypeEnum.GQ.value;
-            break;
-        case MU:
-            value = TJDWTypeEnum.MU.value;
-            break;
-        case PM:
-            value = TJDWTypeEnum.PM.value;
-            break;
+            case GQ:
+                value = TJDWTypeEnum.GQ.value;
+                break;
+            case MU:
+                value = TJDWTypeEnum.MU.value;
+                break;
+            case PM:
+                value = TJDWTypeEnum.PM.value;
+                break;
         }
         return value;
     }

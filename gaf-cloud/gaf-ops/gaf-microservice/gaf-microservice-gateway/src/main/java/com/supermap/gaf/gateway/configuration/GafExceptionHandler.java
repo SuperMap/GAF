@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.configuration;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -31,6 +31,7 @@ import static com.supermap.gaf.commontypes.GafCommonConstant.TRUE;
 
 /**
  * 全局异常处理
+ *
  * @author : duke
  * @date:2021/3/25
  * @since 2020/4/29 4:01 PM
@@ -43,7 +44,8 @@ public class GafExceptionHandler implements ErrorWebExceptionHandler {
     private List<HttpMessageReader<?>> messageReaders;
     private List<HttpMessageWriter<?>> messageWriters;
     private ErrorAttributes errorAttributes;
-    public GafExceptionHandler(ServerCodecConfigurer serverCodecConfigurer, ErrorAttributes errorAttributes){
+
+    public GafExceptionHandler(ServerCodecConfigurer serverCodecConfigurer, ErrorAttributes errorAttributes) {
         this.messageReaders = serverCodecConfigurer.getReaders();
         this.messageWriters = serverCodecConfigurer.getWriters();
         this.errorAttributes = errorAttributes;
@@ -58,19 +60,19 @@ public class GafExceptionHandler implements ErrorWebExceptionHandler {
         messageResult.setMessage(throwable.toString());
         //如果参数里面带有DEV_ERROR = true,返回堆栈报错信息信息
         List<String> devErrors = exchange.getRequest().getQueryParams().get(DEV_ERROR);
-        if (!CollectionUtils.isEmpty(devErrors) && TRUE.equals(devErrors.get(0))){
+        if (!CollectionUtils.isEmpty(devErrors) && TRUE.equals(devErrors.get(0))) {
             messageResult.setData(throwable.getStackTrace());
         }
         //保存error对象
-        errorAttributes.storeErrorInformation(throwable,exchange);
+        errorAttributes.storeErrorInformation(throwable, exchange);
         //保存返回对象
-        exchange.getAttributes().putIfAbsent(GAF_EXCEPTION_HANDLER_KEY,messageResult);
+        exchange.getAttributes().putIfAbsent(GAF_EXCEPTION_HANDLER_KEY, messageResult);
         //处理器
         if (exchange.getResponse().isCommitted()) {
             return Mono.error(throwable);
         }
-        ServerRequest request = ServerRequest.create(exchange,messageReaders);
-        return RouterFunctions.route(RequestPredicates.all(),this::renderErrorResponse)
+        ServerRequest request = ServerRequest.create(exchange, messageReaders);
+        return RouterFunctions.route(RequestPredicates.all(), this::renderErrorResponse)
                 .route(request)
                 .switchIfEmpty(Mono.error(throwable))
                 .flatMap((handler) -> handler.handle(request))
@@ -79,12 +81,13 @@ public class GafExceptionHandler implements ErrorWebExceptionHandler {
 
     /**
      * 构造response
+     *
      * @param request
      * @return
      */
     protected Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
         //获取保存的error的属性
-        Map<String,Object> errorAttributesMap = errorAttributes.getErrorAttributes(request,false);
+        Map<String, Object> errorAttributesMap = errorAttributes.getErrorAttributes(request, false);
         //获取httpStatus
         HttpStatus httpStatus = getHttpStatus(errorAttributesMap);
         //获取保存的返回对象
@@ -97,15 +100,17 @@ public class GafExceptionHandler implements ErrorWebExceptionHandler {
 
     /**
      * 通过errorAttributes获取HttpStatus
+     *
      * @return
      */
-    protected HttpStatus getHttpStatus(Map<String,Object> errorAttributesMap) {
+    protected HttpStatus getHttpStatus(Map<String, Object> errorAttributesMap) {
         int statusCode = (int) errorAttributesMap.get("status");
         return HttpStatus.valueOf(statusCode);
     }
 
     /**
      * response 写操作
+     *
      * @param exchange
      * @param response
      * @return
@@ -124,6 +129,7 @@ public class GafExceptionHandler implements ErrorWebExceptionHandler {
         public List<HttpMessageWriter<?>> messageWriters() {
             return GafExceptionHandler.this.messageWriters;
         }
+
         @Override
         public List<ViewResolver> viewResolvers() {
             return GafExceptionHandler.this.viewResolvers;

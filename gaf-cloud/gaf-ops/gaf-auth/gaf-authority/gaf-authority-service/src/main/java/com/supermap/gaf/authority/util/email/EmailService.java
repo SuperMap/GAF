@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.util.email;
 
 import com.supermap.gaf.utils.LogUtil;
@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * @date:2021/3/25
  * @author yd
+ * @date:2021/3/25
  */
 @Component
 public class EmailService {
@@ -50,7 +50,7 @@ public class EmailService {
     }
 
     @Async
-    public void sendText(String receiver, String subject,String context) {
+    public void sendText(String receiver, String subject, String context) {
         try {
             //true表示支持复杂类型
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
@@ -60,7 +60,7 @@ public class EmailService {
             messageHelper.setText(context);
             messageHelper.setSentDate(new Date());
             mailSender.send(messageHelper.getMimeMessage());
-            logger.info(String.format("已发送邮件，主题: %s, 内容: %s",subject, context));
+            logger.info(String.format("已发送邮件，主题: %s, 内容: %s", subject, context));
         } catch (Exception e) {
             logger.error("发送邮件异常", e);
         }

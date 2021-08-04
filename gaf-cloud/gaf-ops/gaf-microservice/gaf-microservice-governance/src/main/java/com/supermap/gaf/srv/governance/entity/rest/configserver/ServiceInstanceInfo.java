@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.srv.governance.entity.rest.configserver;
 
 import java.util.Map;
@@ -34,7 +34,7 @@ public class ServiceInstanceInfo {
     /**
      * 源数据
      */
-    public Map <String, String> metadata;
+    public Map<String, String> metadata;
     /**
      * 实例状态
      */
@@ -55,7 +55,7 @@ public class ServiceInstanceInfo {
     public ServiceInstanceInfo() {
     }
 
-    public ServiceInstanceInfo(String appName, String hostName, String ipAddr, int port, Map <String, String> metadata, InstanceStatus status,
+    public ServiceInstanceInfo(String appName, String hostName, String ipAddr, int port, Map<String, String> metadata, InstanceStatus status,
                                String instanceId, String serviceId, String uri) {
         this.appName = appName;
         this.hostName = hostName;

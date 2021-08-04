@@ -10,6 +10,7 @@ public class FileDownloadException extends RuntimeException {
 
     public FileDownloadException() {
     }
+
     public FileDownloadException(String fileName) {
         super(fileName);
     }

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.listener;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -33,6 +33,7 @@ public class RoutesChangeListener implements ApplicationListener<RoutesChangeEve
 
     /**
      * 异步监听
+     *
      * @param routesChangeEvent
      */
     @Async
@@ -44,17 +45,17 @@ public class RoutesChangeListener implements ApplicationListener<RoutesChangeEve
         MessageResult result = new MessageResult();
         try {
             switch (operateType) {
-            case ADD:
-                result = dynamicRouteService.add(routeDefinition);
-                break;
-            case DELETE:
-                result = dynamicRouteService.delete(routeDefinition.getId());
-                break;
-            case UPDATE:
-                result = dynamicRouteService.update(routeDefinition);
-                break;
-            default:
-                result = result;
+                case ADD:
+                    result = dynamicRouteService.add(routeDefinition);
+                    break;
+                case DELETE:
+                    result = dynamicRouteService.delete(routeDefinition.getId());
+                    break;
+                case UPDATE:
+                    result = dynamicRouteService.update(routeDefinition);
+                    break;
+                default:
+                    result = result;
             }
             logger.info(result.getMessage());
         } catch (Exception e) {

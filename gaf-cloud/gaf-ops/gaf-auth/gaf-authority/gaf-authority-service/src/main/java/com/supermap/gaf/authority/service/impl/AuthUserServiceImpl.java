@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.*;
@@ -45,8 +45,9 @@ import static com.supermap.gaf.authority.util.TreeConvertUtil.ROOT_PARENT_ID;
 
 /**
  * 用户服务实现类
- * @date:2021/3/25
+ *
  * @author dqc
+ * @date:2021/3/25
  */
 @Service
 public class AuthUserServiceImpl implements AuthUserService {
@@ -57,28 +58,28 @@ public class AuthUserServiceImpl implements AuthUserService {
     private Boolean mailEnable;
 
     @Autowired
-    private  AuthUserMapper authUserMapper;
+    private AuthUserMapper authUserMapper;
     @Autowired
-    private  AuthDepartmentService authDepartmentService;
+    private AuthDepartmentService authDepartmentService;
     @Autowired
-    private  AuthPostService authPostService;
+    private AuthPostService authPostService;
     @Autowired
-    private  AuthRoleService authRoleService;
+    private AuthRoleService authRoleService;
     @Autowired
-    private  AuthUserRoleService authUserRoleService;
+    private AuthUserRoleService authUserRoleService;
     @Autowired
-    private  AuthPostRoleService authPostRoleService;
+    private AuthPostRoleService authPostRoleService;
 
     @Autowired
-    private  AuthUserParttimeService authUserParttimeService;
+    private AuthUserParttimeService authUserParttimeService;
     @Autowired
-    private  EmailService emailService;
+    private EmailService emailService;
 
     @Autowired
     public RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    private  BatchSortAndCodeService batchSortAndCodeService;
+    private BatchSortAndCodeService batchSortAndCodeService;
 
     /**
      * 用户密码长度
@@ -116,15 +117,15 @@ public class AuthUserServiceImpl implements AuthUserService {
 
     @Override
     public Map<String, Object> pageListByTenantId(String tenantId, String realName, Integer size, Integer offset) {
-        if(size == null || size == 0) {
+        if (size == null || size == 0) {
             size = 50;
         }
         List<AuthUser> pageList;
-        if(offset == null || offset == 0) {
+        if (offset == null || offset == 0) {
             offset = 1;
         }
-        pageList = authUserMapper.pageListByTenantId(tenantId,realName,size,offset);
-        int totalCount = authUserMapper.countGetListByTenantId(tenantId,realName);
+        pageList = authUserMapper.pageListByTenantId(tenantId, realName, size, offset);
+        int totalCount = authUserMapper.countGetListByTenantId(tenantId, realName);
         Map<String, Object> result = new HashMap<>(2);
         result.put(DbFieldNameConstant.PAGE_LIST, pageList);
         result.put(DbFieldNameConstant.TOTAL_COUNT, totalCount);
@@ -201,11 +202,11 @@ public class AuthUserServiceImpl implements AuthUserService {
         List<AuthUserParttime> authUserParttimes = null;
         try {
             authUserParttimes = (List<AuthUserParttime>) authUserParttimeService.pageList(parttimeSelectVo).get(DbFieldNameConstant.PAGE_LIST);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("查询用户挂职失败");
         }
-        if(!CollectionUtils.isEmpty(authUserParttimes)){
-            for (AuthUserParttime authUserParttime : authUserParttimes){
+        if (!CollectionUtils.isEmpty(authUserParttimes)) {
+            for (AuthUserParttime authUserParttime : authUserParttimes) {
                 AuthUser authUser = getById(authUserParttime.getUserId());
                 authUser.setBelongsParttime(true);
                 authUsers.add(authUser);
@@ -222,7 +223,7 @@ public class AuthUserServiceImpl implements AuthUserService {
             }
             for (AuthUser authUser : authUsers) {
                 authUser.setDepartmentName(departmentName);
-                if (authPost != null){
+                if (authPost != null) {
                     authUser.setPostName(authPost.getPostName());
                 }
             }
@@ -297,7 +298,7 @@ public class AuthUserServiceImpl implements AuthUserService {
         AuthUser insertedAuthUser = authUserMapper.select(userId);
 
         // 将初始密码发送至邮箱中
-        if(mailEnable){
+        if (mailEnable) {
             emailService.sendPassword(authUser.getEmail(), password);
         }
         return insertedAuthUser;
@@ -317,7 +318,7 @@ public class AuthUserServiceImpl implements AuthUserService {
             });
             checkUniqueness(authUsers);
             authUserMapper.batchInsert(authUsers);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthUser.class,parentIds);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthUser.class, parentIds);
         }
     }
 
@@ -365,7 +366,7 @@ public class AuthUserServiceImpl implements AuthUserService {
         Set<String> roleIdSet = new HashSet<>();
         if (postIds.size() > 0) {
             List<AuthPostRole> authPostRoleList = authPostRoleService.listByPostIds(postIds);
-            for (AuthPostRole authPostRole: authPostRoleList) {
+            for (AuthPostRole authPostRole : authPostRoleList) {
                 String roleId = authPostRole.getRoleId();
                 if (!StringUtils.isEmpty(roleId)) {
                     roleIdSet.add(roleId);
@@ -373,7 +374,7 @@ public class AuthUserServiceImpl implements AuthUserService {
             }
         }
         List<AuthUserRole> authUserRoles = authUserRoleService.listByUser(userId);
-        for (AuthUserRole authUserRole: authUserRoles) {
+        for (AuthUserRole authUserRole : authUserRoles) {
             if (!StringUtils.isEmpty(authUserRole.getRoleId())) {
                 roleIdSet.add(authUserRole.getRoleId());
             }
@@ -399,8 +400,8 @@ public class AuthUserServiceImpl implements AuthUserService {
 
         checkUniqueness(authUser, true);
         authUserMapper.update(authUser);
-        String parentId = authUser.getDepartmentId()!=null? authUser.getDepartmentId():authUserExist.getDepartmentId();
-        batchSortAndCodeService.revisionSortSnForUpdate(AuthUser.class,parentId,authUserExist.getSortSn(),authUser.getSortSn());
+        String parentId = authUser.getDepartmentId() != null ? authUser.getDepartmentId() : authUserExist.getDepartmentId();
+        batchSortAndCodeService.revisionSortSnForUpdate(AuthUser.class, parentId, authUserExist.getSortSn(), authUser.getSortSn());
         // 是否更新部门
         String newDepartmentId = authUser.getDepartmentId();
         String oldDepartmentId = authUserExist.getDepartmentId();
@@ -445,7 +446,7 @@ public class AuthUserServiceImpl implements AuthUserService {
         authUser.setPassword(bCryptPassword);
         authUserMapper.update(authUser);
         // 将新密码发送至邮箱中
-        if(mailEnable){
+        if (mailEnable) {
             emailService.sendPassword(authUser.getEmail(), newPassword);
         }
         return authUser;
@@ -534,10 +535,9 @@ public class AuthUserServiceImpl implements AuthUserService {
     public String changeEmail(EmailChangeVo emailChangeVo) {
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
         AuthUser authUser = Objects.requireNonNull(shiroUser).getAuthUser();
-        if(Objects.equals(authUser.getEmail(),emailChangeVo.getNewEmail())) {
+        if (Objects.equals(authUser.getEmail(), emailChangeVo.getNewEmail())) {
             return "新旧邮箱相同";
         }
-
 
 
         if (!StringUtils.isEmpty(authUser.getEmail())) {
@@ -546,8 +546,8 @@ public class AuthUserServiceImpl implements AuthUserService {
             if (Objects.isNull(oldEmailCheckCode)) {
                 return "原邮箱校验码已过时";
             }
-            if(!Objects.equals(emailChangeVo.getOldEmailCheckCode(),oldEmailCheckCode)) {
-                return "校验码:"+ emailChangeVo.getOldEmailCheckCode()+"错误";
+            if (!Objects.equals(emailChangeVo.getOldEmailCheckCode(), oldEmailCheckCode)) {
+                return "校验码:" + emailChangeVo.getOldEmailCheckCode() + "错误";
             }
         }
 
@@ -556,8 +556,8 @@ public class AuthUserServiceImpl implements AuthUserService {
         if (Objects.isNull(newEmailCheckCode)) {
             return "新邮箱校验码已过时";
         }
-        if(!Objects.equals(emailChangeVo.getNewEmailCheckCode(),newEmailCheckCode)) {
-            return "校验码:"+ emailChangeVo.getNewEmailCheckCode()+"错误";
+        if (!Objects.equals(emailChangeVo.getNewEmailCheckCode(), newEmailCheckCode)) {
+            return "校验码:" + emailChangeVo.getNewEmailCheckCode() + "错误";
         }
         AuthUser user = getById(authUser.getUserId());
         user.setPassword(null);
@@ -570,10 +570,10 @@ public class AuthUserServiceImpl implements AuthUserService {
     public void sendCheckCode(String email) {
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
         AuthUser authUser = Objects.requireNonNull(shiroUser).getAuthUser();
-        if(StringUtils.isEmpty(email)) {
+        if (StringUtils.isEmpty(email)) {
             email = authUser.getEmail();
         }
-        if(StringUtils.isEmpty(email)) {
+        if (StringUtils.isEmpty(email)) {
             throw new GafException("邮箱为空");
         }
         String checkCode = generateRandomStr(6);
@@ -581,20 +581,21 @@ public class AuthUserServiceImpl implements AuthUserService {
         LocalDateTime after10Min = now.plusMinutes(10);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String format = dtf.format(after10Min);
-        redisTemplate.opsForValue().set(CacheGroupConstant.CHECK_CODE+":"+ email,checkCode, Duration.ofMinutes(10));
-        String context = String.format(EmailConstant.CHECK_CODE_TEXT_TEMPLATE,authUser.getName(),checkCode,"10",format);
-        emailService.sendText(email, EmailConstant.CAHANGE_EMAIL,context);
+        redisTemplate.opsForValue().set(CacheGroupConstant.CHECK_CODE + ":" + email, checkCode, Duration.ofMinutes(10));
+        String context = String.format(EmailConstant.CHECK_CODE_TEXT_TEMPLATE, authUser.getName(), checkCode, "10", format);
+        emailService.sendText(email, EmailConstant.CAHANGE_EMAIL, context);
     }
 
     // 生成几位随机数字 不足以0填充
     private String generateRandomStr(int bit) {
         int randomNum = generateRandomNum(bit);
-        return String.format("%0"+bit+"d",randomNum);
+        return String.format("%0" + bit + "d", randomNum);
     }
+
     // 生成几位随机数字
     private int generateRandomNum(int bit) {
         Random random = new Random();
-        return random.nextInt((int)Math.pow(10,bit));
+        return random.nextInt((int) Math.pow(10, bit));
     }
 
 
@@ -604,7 +605,7 @@ public class AuthUserServiceImpl implements AuthUserService {
      * @return 密码
      */
     private String generatePassword() {
-        if(!StringUtils.isBlank(this.initPassword)){
+        if (!StringUtils.isBlank(this.initPassword)) {
             return this.initPassword;
         }
         return UUID.randomUUID().toString().replace("-", "").substring(0, USER_PASSWORD_LENGTH);

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.utils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -46,7 +46,7 @@ public class JsonUtils {
      * @param <T>
      * @return
      */
-    public static <T> T getValue(JSONObject jsonObject, String paramerName, Class <T> clazz) {
+    public static <T> T getValue(JSONObject jsonObject, String paramerName, Class<T> clazz) {
         return (T) jsonObject.get(paramerName);
     }
 

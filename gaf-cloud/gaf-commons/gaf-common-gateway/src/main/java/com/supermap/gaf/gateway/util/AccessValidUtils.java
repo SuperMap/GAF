@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.util;
 
 import com.supermap.gaf.authority.commontype.AuthResourceApi;
@@ -17,9 +17,8 @@ import java.util.List;
 
 /**
  * @author : duke
+ * @date:2021/3/25 权限判断工具类
  * @since 2020/4/20 9:45 AM
- * @date:2021/3/25
- * 权限判断工具类
  */
 public class AccessValidUtils {
 
@@ -33,14 +32,15 @@ public class AccessValidUtils {
 
     /**
      * 匹配uri和权限列表
+     *
      * @param uri
      * @return
      */
-    public boolean accessValid(String uri, String method,List<AuthResourceApi> authResourceApis){
+    public boolean accessValid(String uri, String method, List<AuthResourceApi> authResourceApis) {
         AntPathMatcher matcher = new AntPathMatcher();
-        for (AuthResourceApi authResourceApi : authResourceApis){
+        for (AuthResourceApi authResourceApi : authResourceApis) {
             String path = authResourceApi.getRouteUrl();
-            if (matcher.match(path,uri) && method.equalsIgnoreCase(ResourceApiMethodEnum.getByValue(authResourceApi.getMethod()).name())){
+            if (matcher.match(path, uri) && method.equalsIgnoreCase(ResourceApiMethodEnum.getByValue(authResourceApi.getMethod()).name())) {
                 return true;
             }
         }
@@ -50,23 +50,24 @@ public class AccessValidUtils {
 
     /**
      * 是否是登录请求
+     *
      * @param uri
      * @return
      */
-    public boolean isOauthLoginUrl(String uri){
+    public boolean isOauthLoginUrl(String uri) {
         return uri.contains(AUTH_LOGIN_URL) || uri.contains(FINAL_LOGIN_URL);
     }
 
 
-
     /**
      * 判断url是否是publicUrls
+     *
      * @return
      */
-    public static boolean isPublicUrls(String uri,List<String> publicUrls){
+    public static boolean isPublicUrls(String uri, List<String> publicUrls) {
         AntPathMatcher matcher = new AntPathMatcher();
-        for (String publicUrl : publicUrls){
-            if (matcher.match(publicUrl,uri)){
+        for (String publicUrl : publicUrls) {
+            if (matcher.match(publicUrl, uri)) {
                 return true;
             }
         }
@@ -88,11 +89,12 @@ public class AccessValidUtils {
 
     /**
      * 判断是否是管理员角色权限
+     *
      * @return
      */
-    public boolean isAdminAccess(List<AuthRole> authRoles){
-        for (AuthRole role : authRoles){
-            if ("ADMIN".equals(role.getNameEn())){
+    public boolean isAdminAccess(List<AuthRole> authRoles) {
+        for (AuthRole role : authRoles) {
+            if ("ADMIN".equals(role.getNameEn())) {
                 return true;
             }
         }

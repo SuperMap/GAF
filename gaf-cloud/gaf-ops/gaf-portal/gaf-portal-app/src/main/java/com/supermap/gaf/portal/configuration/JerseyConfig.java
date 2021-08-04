@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.configuration;
 
 import javax.annotation.PostConstruct;
@@ -19,10 +19,10 @@ import com.supermap.gaf.portal.resources.root.PortalRootResoure;
 import io.swagger.jaxrs.config.BeanConfig;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @Component
 public class JerseyConfig extends ResourceConfig {
 
@@ -36,14 +36,14 @@ public class JerseyConfig extends ResourceConfig {
         //跨域过滤器
         register(CorsFilter.class);
     }
-    
+
     @PostConstruct
     public void initSwagger() {
         if (swaggerEnable) {
             initBeanConfig();
         }
     }
-    
+
     public BeanConfig initBeanConfig() {
         BeanConfig config = new BeanConfig();
         config.setTitle("API");

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.common.storage.config;
 
 
@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @date:2021/3/25
  * @author heykb
+ * @date:2021/3/25
  */
 @Configuration
 public class StorageServerAutoConfiguration {
@@ -26,10 +26,11 @@ public class StorageServerAutoConfiguration {
     private TenantInfoI tenantInfoI;
 
     @Bean
-    public StorageConfig storageConfig(){
+    public StorageConfig storageConfig() {
         return new StorageConfig();
     }
-//    @Bean
+
+    //    @Bean
 //    @ConditionalOnMissingBean(MinioConfigHandlerI.class)
 //    public MinioConfigHandlerI minioConfigHandlerI(){
 //        return new DefaultMinioConfigHandler(storageConfig(),tenantInfoI,tenantConfigMaps(),globalConfigs());
@@ -47,11 +48,12 @@ public class StorageServerAutoConfiguration {
 //        return new ArrayList<>();
 //    }
     @Bean
-    public S3ClientService s3ClientService(@Autowired MinioConfigHandlerI minioConfigHandlerI){
+    public S3ClientService s3ClientService(@Autowired MinioConfigHandlerI minioConfigHandlerI) {
         return new S3ClientServiceImpl(minioConfigHandlerI);
     }
+
     @Bean
-    public VolumeConfigResource volumeConfigResource(@Autowired MinioConfigHandlerI minioConfigHandlerI){
+    public VolumeConfigResource volumeConfigResource(@Autowired MinioConfigHandlerI minioConfigHandlerI) {
         return new VolumeConfigResource(minioConfigHandlerI);
     }
 }

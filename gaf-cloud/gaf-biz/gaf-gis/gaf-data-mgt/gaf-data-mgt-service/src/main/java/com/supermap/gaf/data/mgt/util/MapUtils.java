@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.util;
 
 import com.supermap.data.Dataset;
@@ -46,7 +46,8 @@ public class MapUtils {
 
     /**
      * 保存地图
-      * @param workspace
+     *
+     * @param workspace
      * @param toSaveMap
      * @param mapName
      */
@@ -158,6 +159,7 @@ public class MapUtils {
         }
         return addResult;
     }
+
     @Deprecated
     public static Layer addLayer(Datasource datasource, Map map, String datasetName, LayerSettingImage layerSettingImage) {
         Layer resultLayer = null;
@@ -184,6 +186,7 @@ public class MapUtils {
         }
         return resultLayer;
     }
+
     @Deprecated
     public static boolean deleteLayer(Map dataMap, Layer layer) {
         boolean delResult = false;
@@ -269,7 +272,7 @@ public class MapUtils {
     public static boolean removeLayer(Map dataMap, String dsName) {
         boolean result = false;
         if (dataMap != null && dsName != null) {
-            List <Layer> layers = new ArrayList <>();
+            List<Layer> layers = new ArrayList<>();
             for (int j = 0; j < dataMap.getLayers().getCount(); j++) {
                 Layer toRemove = dataMap.getLayers().get(j);
                 String layerName = toRemove.getName();

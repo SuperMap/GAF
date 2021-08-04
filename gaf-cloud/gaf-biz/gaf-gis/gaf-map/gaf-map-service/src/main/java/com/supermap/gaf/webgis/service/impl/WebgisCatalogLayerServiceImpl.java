@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.service.impl;
 
 import com.github.pagehelper.PageHelper;
@@ -27,11 +27,12 @@ import java.util.stream.Collectors;
 
 /**
  * 图层服务实现类
- * @author wangxiaolong 
+ *
+ * @author wangxiaolong
  * @date 2020-12-05
  */
 @Service
-public class WebgisCatalogLayerServiceImpl implements WebgisCatalogLayerService{
+public class WebgisCatalogLayerServiceImpl implements WebgisCatalogLayerService {
     @Autowired
     private WebgisCatalogLayerMapper webgisCatalogLayerMapper;
 
@@ -40,25 +41,25 @@ public class WebgisCatalogLayerServiceImpl implements WebgisCatalogLayerService{
 
     @Autowired
     private BatchSortAndCodeService batchSortAndCodeService;
-	
-	@Override
-    public WebgisCatalogLayer getById(String catalogLayerId){
-        if(catalogLayerId == null){
+
+    @Override
+    public WebgisCatalogLayer getById(String catalogLayerId) {
+        if (catalogLayerId == null) {
             throw new IllegalArgumentException("catalogLayerId不能为空");
         }
         WebgisCatalogLayer layer = webgisCatalogLayerMapper.select(catalogLayerId);
         WebgisService service = webgisServiceService.getById(layer.getGisServiceId());
-        if(service != null) {
+        if (service != null) {
             layer.setServiceName(service.getName());
             layer.setServiceNameEn(service.getNameEn());
             layer.setAddress(service.getAddress());
             layer.setTypeCode(service.getTypeCode());
             layer.setMoreProperties(service.getMoreProperties());
         }
-        return  webgisCatalogLayerMapper.select(catalogLayerId);
+        return webgisCatalogLayerMapper.select(catalogLayerId);
     }
-	
-	@Override
+
+    @Override
     public Page<WebgisCatalogLayer> listByPageCondition(WebgisCatalogLayerSelectVo webgisCatalogLayerSelectVo, int pageNum, int pageSize) {
         PageInfo<WebgisCatalogLayer> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             webgisCatalogLayerMapper.selectByCondition(webgisCatalogLayerSelectVo);
@@ -80,53 +81,54 @@ public class WebgisCatalogLayerServiceImpl implements WebgisCatalogLayerService{
                     }
                 });
             }
-        };
-        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(), list);
+        }
+        ;
+        return Page.create(pageInfo.getPageNum(), pageInfo.getPageSize(), (int) pageInfo.getTotal(), pageInfo.getPages(), list);
     }
 
     @Transactional(rollbackFor = Exception.class)
-	@Override
-    public WebgisCatalogLayer insertWebgisCatalogLayer(WebgisCatalogLayer webgisCatalogLayer){
-		webgisCatalogLayer.setCatalogLayerId(UUID.randomUUID().toString());
-		ShiroUser shiroUser = SecurityUtilsExt.getUser();
-		webgisCatalogLayer.setCreatedBy(shiroUser.getAuthUser().getName());
-		webgisCatalogLayer.setUpdatedBy(shiroUser.getAuthUser().getName());
+    @Override
+    public WebgisCatalogLayer insertWebgisCatalogLayer(WebgisCatalogLayer webgisCatalogLayer) {
+        webgisCatalogLayer.setCatalogLayerId(UUID.randomUUID().toString());
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        webgisCatalogLayer.setCreatedBy(shiroUser.getAuthUser().getName());
+        webgisCatalogLayer.setUpdatedBy(shiroUser.getAuthUser().getName());
         webgisCatalogLayerMapper.insert(webgisCatalogLayer);
-        batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisCatalogLayer.class,Collections.singletonList(webgisCatalogLayer.getLayerCatalogId()));
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisCatalogLayer.class, Collections.singletonList(webgisCatalogLayer.getLayerCatalogId()));
         return webgisCatalogLayer;
     }
 
 
     @Transactional(rollbackFor = Exception.class)
-	@Override
-    public void batchInsert(List<WebgisCatalogLayer> webgisCatalogLayers){
-		if (webgisCatalogLayers != null && webgisCatalogLayers.size() > 0) {
-	        webgisCatalogLayers.forEach(webgisCatalogLayer -> {
-				webgisCatalogLayer.setCatalogLayerId(UUID.randomUUID().toString());
-				ShiroUser shiroUser = SecurityUtilsExt.getUser();
-				webgisCatalogLayer.setCreatedBy(shiroUser.getAuthUser().getName());
-				webgisCatalogLayer.setUpdatedBy(shiroUser.getAuthUser().getName());
+    @Override
+    public void batchInsert(List<WebgisCatalogLayer> webgisCatalogLayers) {
+        if (webgisCatalogLayers != null && webgisCatalogLayers.size() > 0) {
+            webgisCatalogLayers.forEach(webgisCatalogLayer -> {
+                webgisCatalogLayer.setCatalogLayerId(UUID.randomUUID().toString());
+                ShiroUser shiroUser = SecurityUtilsExt.getUser();
+                webgisCatalogLayer.setCreatedBy(shiroUser.getAuthUser().getName());
+                webgisCatalogLayer.setUpdatedBy(shiroUser.getAuthUser().getName());
             });
             webgisCatalogLayerMapper.batchInsert(webgisCatalogLayers);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisCatalogLayer.class,Collections.singletonList(webgisCatalogLayers.get(0).getLayerCatalogId()));
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisCatalogLayer.class, Collections.singletonList(webgisCatalogLayers.get(0).getLayerCatalogId()));
         }
-        
+
     }
 
     @Transactional(rollbackFor = Exception.class)
-	@Override
-    public void deleteWebgisCatalogLayer(String catalogLayerId){
+    @Override
+    public void deleteWebgisCatalogLayer(String catalogLayerId) {
         WebgisCatalogLayer layer = getById(catalogLayerId);
         if (layer != null) {
             webgisCatalogLayerMapper.delete(catalogLayerId);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisCatalogLayer.class,Collections.singletonList(layer.getLayerCatalogId()));
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(WebgisCatalogLayer.class, Collections.singletonList(layer.getLayerCatalogId()));
         }
     }
 
 
     @Transactional(rollbackFor = Exception.class)
-	@Override
-    public void batchDelete(List<String> catalogLayerIds){
+    @Override
+    public void batchDelete(List<String> catalogLayerIds) {
         List<WebgisCatalogLayer> layers = webgisCatalogLayerMapper.selectByIds(catalogLayerIds);
         if (layers != null && layers.size() > 0) {
             Set<String> catalogIds = layers.stream().map(WebgisCatalogLayer::getLayerCatalogId).collect(Collectors.toSet());
@@ -137,14 +139,14 @@ public class WebgisCatalogLayerServiceImpl implements WebgisCatalogLayerService{
 
 
     @Transactional(rollbackFor = Exception.class)
-	@Override
-    public WebgisCatalogLayer updateWebgisCatalogLayer(WebgisCatalogLayer webgisCatalogLayer){
-		ShiroUser shiroUser = SecurityUtilsExt.getUser();
-		webgisCatalogLayer.setUpdatedBy(shiroUser.getAuthUser().getName());
+    @Override
+    public WebgisCatalogLayer updateWebgisCatalogLayer(WebgisCatalogLayer webgisCatalogLayer) {
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        webgisCatalogLayer.setUpdatedBy(shiroUser.getAuthUser().getName());
         WebgisCatalogLayer oldLayer = getById(webgisCatalogLayer.getCatalogLayerId());
         webgisCatalogLayerMapper.update(webgisCatalogLayer);
-        if (!Objects.equals(oldLayer.getSortSn(),webgisCatalogLayer.getSortSn())) {
-            batchSortAndCodeService.revisionSortSnForUpdate(WebgisCatalogLayer.class,webgisCatalogLayer.getLayerCatalogId(),oldLayer.getSortSn(),webgisCatalogLayer.getSortSn());
+        if (!Objects.equals(oldLayer.getSortSn(), webgisCatalogLayer.getSortSn())) {
+            batchSortAndCodeService.revisionSortSnForUpdate(WebgisCatalogLayer.class, webgisCatalogLayer.getLayerCatalogId(), oldLayer.getSortSn(), webgisCatalogLayer.getSortSn());
         }
         return webgisCatalogLayer;
     }
@@ -171,7 +173,7 @@ public class WebgisCatalogLayerServiceImpl implements WebgisCatalogLayerService{
             webgisCatalogLayer.setName(vo.getName());
             webgisCatalogLayer.setLayerCatalogId(vo.getLayerCatalogId());
             webgisCatalogLayer.setGisServiceId(vo.getGisServiceId());
-            webgisCatalogLayer.setSortSn((int) (i+1+count));
+            webgisCatalogLayer.setSortSn((int) (i + 1 + count));
             webgisCatalogLayer.setInitLoad(false);
             webgisCatalogLayer.setCatalogLayerId(UUID.randomUUID().toString());
             webgisCatalogLayer.setCreatedBy(name);
@@ -191,7 +193,7 @@ public class WebgisCatalogLayerServiceImpl implements WebgisCatalogLayerService{
         WebgisCatalogLayerSelectVo webgisCatalogLayerSelectVo = new WebgisCatalogLayerSelectVo();
         webgisCatalogLayerSelectVo.setLayerCatalogId(layerCatalogId);
         long count = PageHelper.count(() -> webgisCatalogLayerMapper.selectByCondition(webgisCatalogLayerSelectVo));
-	    return (int)count;
+        return (int) count;
     }
 
 }

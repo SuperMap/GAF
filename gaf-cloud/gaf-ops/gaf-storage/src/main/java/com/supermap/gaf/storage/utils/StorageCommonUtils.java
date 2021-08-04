@@ -11,30 +11,32 @@ import java.util.function.Function;
 
 public class StorageCommonUtils {
 
-    public static Set<String> split(String source, boolean trim, boolean ignoreEmpty){
-        return splitAndConvert(source,item->item,trim,ignoreEmpty);
+    public static Set<String> split(String source, boolean trim, boolean ignoreEmpty) {
+        return splitAndConvert(source, item -> item, trim, ignoreEmpty);
     }
-    public  static <T> Set<T> splitAndConvert(String source, Function<String,T> convert, boolean trim, boolean ignoreEmpty){
+
+    public static <T> Set<T> splitAndConvert(String source, Function<String, T> convert, boolean trim, boolean ignoreEmpty) {
         Set<T> owers = new HashSet<>();
-        for(String item:source.split(",")){
-            if(trim){
+        for (String item : source.split(",")) {
+            if (trim) {
                 item = item.trim();
 
             }
-            if(ignoreEmpty && item.equals("")){
+            if (ignoreEmpty && item.equals("")) {
                 continue;
             }
             owers.add(convert.apply(item));
         }
         return owers;
     }
+
     /**
      * 获取url
      *
      * @param dataSource
      * @return
      */
-    public static  String getUrl(DataSource dataSource) {
+    public static String getUrl(DataSource dataSource) {
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
@@ -51,7 +53,8 @@ public class StorageCommonUtils {
             }
         }
     }
-    public static  String getDriverName(DataSource dataSource) {
+
+    public static String getDriverName(DataSource dataSource) {
         Connection conn = null;
         try {
             conn = dataSource.getConnection();

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.config.authc.oauth2;
 
 import com.supermap.gaf.authentication.config.authc.jwtorsession.JwtOrSessionAuthentication;
@@ -31,23 +31,24 @@ import static com.supermap.gaf.authentication.entity.constant.LoginConstant.OAUT
 /**
  * 拦截/oauth/authorize
  * 对GET和POST请求进行拦截处理
- * @see org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint
+ *
  * @author : duke
  * @date:2021/6/4
+ * @see org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint
  */
 public class Oauth2AuthorizeFilter extends OncePerRequestFilter {
 
-    private RequestMatcher requestMatcher =  new AntPathRequestMatcher(OAUTH2_AUTHORIZE);
+    private RequestMatcher requestMatcher = new AntPathRequestMatcher(OAUTH2_AUTHORIZE);
     private AuthenticationManager authenticationManager;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (!requestMatcher.matches(request)){
+        if (!requestMatcher.matches(request)) {
             filterChain.doFilter(request, response);
             return;
         }
         AuthenticationParam authenticationParam = HttpRequestUtils.getJwtOrSession(request);
-        JwtOrSessionAuthentication authentication = new JwtOrSessionAuthentication(Collections.emptyList(),authenticationParam);
+        JwtOrSessionAuthentication authentication = new JwtOrSessionAuthentication(Collections.emptyList(), authenticationParam);
         //判断是否登陆
         boolean authFlag = false;
         Authentication authResult = null;
@@ -56,15 +57,15 @@ public class Oauth2AuthorizeFilter extends OncePerRequestFilter {
             authResult = this.getAuthenticationManager().authenticate(authentication);
             authFlag = true;
             SecurityContextHolder.getContext().setAuthentication(authResult);
-        }catch (Exception e){
+        } catch (Exception e) {
             failed = e;
         }
         //对GET请求和POST请求进行不同处理，(GET请求跳转登陆页带上参数，POST请求发生在用户Approval后，跳转到client的redirecturl)
-        if (request.getMethod().equalsIgnoreCase(HttpMethod.GET.name())){
-            if (authFlag){
+        if (request.getMethod().equalsIgnoreCase(HttpMethod.GET.name())) {
+            if (authFlag) {
                 filterChain.doFilter(request, response);
                 return;
-            }else {
+            } else {
                 String queryString = request.getQueryString();
                 response.sendRedirect(LoginConstant.LOGIN_URL + "?" + queryString);
                 return;

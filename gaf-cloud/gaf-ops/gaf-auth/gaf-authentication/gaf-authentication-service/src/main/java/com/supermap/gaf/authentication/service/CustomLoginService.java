@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.service;
 
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -19,14 +19,16 @@ import java.util.Map;
 public interface CustomLoginService {
     /**
      * 使用username手动创建oauth2 token
+     *
      * @param username
      * @return
      */
-    OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username,String clientId);
+    OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username, String clientId);
 
     /**
      * 使用username手动创建oauth2 token
      * 默认clientId为CUSTOM_CLIENT
+     *
      * @param username
      * @return
      */
@@ -34,6 +36,7 @@ public interface CustomLoginService {
 
     /**
      * sessionId为主键，存储用户信息
+     *
      * @param sessionId
      * @param username
      * @param token
@@ -45,6 +48,7 @@ public interface CustomLoginService {
 
     /**
      * 保存刷新token后的redis存储用户信息
+     *
      * @param sessionId
      * @param token
      */
@@ -52,21 +56,24 @@ public interface CustomLoginService {
 
     /**
      * redis获取 login session
+     *
      * @param sessionId
      * @return
      */
-    Map<String,Object> getLoginSessionById(String sessionId);
+    Map<String, Object> getLoginSessionById(String sessionId);
 
     /**
      * 通过code获取第三方token
+     *
      * @param code
      * @param enabledThirdParty
      * @return
      */
-    Map<String,String> getThirdPartyTokenByCode(String code, String enabledThirdParty);
+    Map<String, String> getThirdPartyTokenByCode(String code, String enabledThirdParty);
 
     /**
      * 刷新token
+     *
      * @param refreshToken
      * @return
      */
@@ -74,9 +81,10 @@ public interface CustomLoginService {
 
     /**
      * checkToken
+     *
      * @param token
      * @return
      */
-    Map<String,?> checkJwtToken(String token);
+    Map<String, ?> checkJwtToken(String token);
 
 }

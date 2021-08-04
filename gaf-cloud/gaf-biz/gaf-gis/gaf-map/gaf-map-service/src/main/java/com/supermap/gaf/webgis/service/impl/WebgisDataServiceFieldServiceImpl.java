@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.service.impl;
 
 import cn.hutool.core.util.URLUtil;
@@ -35,11 +35,12 @@ import java.util.stream.Collectors;
 
 /**
  * GIS数据服务字段服务实现类
- * @author wangxiaolong 
+ *
+ * @author wangxiaolong
  * @date yyyy-mm-dd
  */
 @Service
-public class WebgisDataServiceFieldServiceImpl implements WebgisDataServiceFieldService{
+public class WebgisDataServiceFieldServiceImpl implements WebgisDataServiceFieldService {
     @Autowired
     private WebgisDataServiceFieldMapper webgisDataServiceFieldMapper;
 
@@ -49,62 +50,62 @@ public class WebgisDataServiceFieldServiceImpl implements WebgisDataServiceField
     @Autowired
     RestTemplate restTemplate;
 
-	@Override
-    public WebgisDataServiceField getById(String gisServiceFieldId){
-        if(gisServiceFieldId == null){
+    @Override
+    public WebgisDataServiceField getById(String gisServiceFieldId) {
+        if (gisServiceFieldId == null) {
             throw new IllegalArgumentException("gisServiceFieldId不能为空");
         }
-        return  webgisDataServiceFieldMapper.select(gisServiceFieldId);
+        return webgisDataServiceFieldMapper.select(gisServiceFieldId);
     }
-	
-	@Override
+
+    @Override
     public Page<WebgisDataServiceField> listByPageCondition(WebgisDataServiceFieldSelectVo webgisDataServiceFieldSelectVo, int pageNum, int pageSize) {
         PageInfo<WebgisDataServiceField> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             webgisDataServiceFieldMapper.selectByOneField(webgisDataServiceFieldSelectVo);
         });
-        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
+        return Page.create(pageInfo.getPageNum(), pageInfo.getPageSize(), (int) pageInfo.getTotal(), pageInfo.getPages(), pageInfo.getList());
     }
 
-	@Override
-    public WebgisDataServiceField insertWebgisDataServiceField(WebgisDataServiceField webgisDataServiceField){
-		webgisDataServiceField.setGisServiceFieldId(UUID.randomUUID().toString());
-		
-		ShiroUser shiroUser = SecurityUtilsExt.getUser();
-		webgisDataServiceField.setCreatedBy(shiroUser.getAuthUser().getName());
-		webgisDataServiceField.setUpdatedBy(shiroUser.getAuthUser().getName());
+    @Override
+    public WebgisDataServiceField insertWebgisDataServiceField(WebgisDataServiceField webgisDataServiceField) {
+        webgisDataServiceField.setGisServiceFieldId(UUID.randomUUID().toString());
+
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        webgisDataServiceField.setCreatedBy(shiroUser.getAuthUser().getName());
+        webgisDataServiceField.setUpdatedBy(shiroUser.getAuthUser().getName());
         webgisDataServiceFieldMapper.insert(webgisDataServiceField);
         return webgisDataServiceField;
     }
-	
-	@Override
-    public void batchInsert(List<WebgisDataServiceField> webgisDataServiceFields){
-		if (webgisDataServiceFields != null && webgisDataServiceFields.size() > 0) {
-	        webgisDataServiceFields.forEach(webgisDataServiceField -> {
-				webgisDataServiceField.setGisServiceFieldId(UUID.randomUUID().toString());
-				ShiroUser shiroUser = SecurityUtilsExt.getUser();
-				webgisDataServiceField.setCreatedBy(shiroUser.getAuthUser().getName());
-				webgisDataServiceField.setUpdatedBy(shiroUser.getAuthUser().getName());
+
+    @Override
+    public void batchInsert(List<WebgisDataServiceField> webgisDataServiceFields) {
+        if (webgisDataServiceFields != null && webgisDataServiceFields.size() > 0) {
+            webgisDataServiceFields.forEach(webgisDataServiceField -> {
+                webgisDataServiceField.setGisServiceFieldId(UUID.randomUUID().toString());
+                ShiroUser shiroUser = SecurityUtilsExt.getUser();
+                webgisDataServiceField.setCreatedBy(shiroUser.getAuthUser().getName());
+                webgisDataServiceField.setUpdatedBy(shiroUser.getAuthUser().getName());
             });
             webgisDataServiceFieldMapper.batchInsert(webgisDataServiceFields);
         }
-        
+
     }
-	
-	@Override
-    public void deleteWebgisDataServiceField(String gisServiceFieldId){
+
+    @Override
+    public void deleteWebgisDataServiceField(String gisServiceFieldId) {
         webgisDataServiceFieldMapper.delete(gisServiceFieldId);
     }
 
-	@Override
-    public void batchDelete(List<String> gisServiceFieldIds){
+    @Override
+    public void batchDelete(List<String> gisServiceFieldIds) {
         webgisDataServiceFieldMapper.batchDelete(gisServiceFieldIds);
     }
-	
-	@Override
-    public WebgisDataServiceField updateWebgisDataServiceField(WebgisDataServiceField webgisDataServiceField){
-		ShiroUser shiroUser = SecurityUtilsExt.getUser();
-		webgisDataServiceField.setUpdatedBy(shiroUser.getAuthUser().getName());
-		webgisDataServiceFieldMapper.update(webgisDataServiceField);
+
+    @Override
+    public WebgisDataServiceField updateWebgisDataServiceField(WebgisDataServiceField webgisDataServiceField) {
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        webgisDataServiceField.setUpdatedBy(shiroUser.getAuthUser().getName());
+        webgisDataServiceFieldMapper.update(webgisDataServiceField);
         return webgisDataServiceField;
     }
 
@@ -112,12 +113,12 @@ public class WebgisDataServiceFieldServiceImpl implements WebgisDataServiceField
     public DataServiceFieldsVo listFieldsAndSelectFieldNames(String webgisServiceId) {
         WebgisService webgisService = webgisServiceService.getById(webgisServiceId);
         RestTemplate rt = new RestTemplate();
-        if(!ServiceTypeEnum.RESTDATA.getCode().equals(webgisService.getTypeCode())) {
+        if (!ServiceTypeEnum.RESTDATA.getCode().equals(webgisService.getTypeCode())) {
             throw new GafException("服务类型错误，应为数据服务");
         }
         String normalizeUrl = URLUtil.normalize(webgisService.getAddress() + "/fields.json");
         FieldsContent fieldsContent = rt.getForObject(normalizeUrl, FieldsContent.class);
-        if(fieldsContent == null) {
+        if (fieldsContent == null) {
             return null;
         }
         WebgisDataServiceField query = WebgisDataServiceField.builder().status(true).gisDataServiceId(webgisServiceId).build();
@@ -129,7 +130,7 @@ public class WebgisDataServiceFieldServiceImpl implements WebgisDataServiceField
             WebgisDataServiceField webgisDataServiceField = new WebgisDataServiceField();
             webgisDataServiceField.setFieldName(fieldInfo.name);
             WebgisDataServiceField webgisFiled = nameAndFieldMap.get(fieldInfo.name);
-            if (webgisFiled!=null) {
+            if (webgisFiled != null) {
                 webgisDataServiceField.setFieldAlias(webgisFiled.getFieldAlias());
             } else {
                 webgisDataServiceField.setFieldAlias(fieldInfo.caption);
@@ -145,7 +146,7 @@ public class WebgisDataServiceFieldServiceImpl implements WebgisDataServiceField
         systemFieldSet.add("SmUserID");
         systemFieldSet.add("SmGeometrySize");
         List<WebgisDataServiceField> filterFields = allFields.stream().filter(field ->
-            !systemFieldSet.contains(field.getFieldName())
+                !systemFieldSet.contains(field.getFieldName())
         ).collect(Collectors.toList());
         return new DataServiceFieldsVo(filterFields, new ArrayList<>(nameAndFieldMap.keySet()));
     }
@@ -154,7 +155,7 @@ public class WebgisDataServiceFieldServiceImpl implements WebgisDataServiceField
     @Override
     public void configFields(List<WebgisDataServiceField> fields, String webgisServiceId) {
         WebgisService webgisService = webgisServiceService.getById(webgisServiceId);
-        if(!ServiceTypeEnum.RESTDATA.getCode().equals(webgisService.getTypeCode())) {
+        if (!ServiceTypeEnum.RESTDATA.getCode().equals(webgisService.getTypeCode())) {
             throw new GafException("服务类型错误，应为数据服务");
         }
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
@@ -168,14 +169,14 @@ public class WebgisDataServiceFieldServiceImpl implements WebgisDataServiceField
             for (WebgisDataServiceField field : fields) {
                 if (old.getFieldName().equals(field.getFieldName())) {
                     WebgisDataServiceField serviceField = new WebgisDataServiceField();
-                    BeanUtils.copyProperties(old,serviceField);
+                    BeanUtils.copyProperties(old, serviceField);
                     serviceField.setFieldAlias(field.getFieldAlias());
                     toUpdate.add(serviceField);
                     isInFields = true;
                     break;
                 }
             }
-            if(!isInFields) {
+            if (!isInFields) {
                 toDelete.add(old.getGisServiceFieldId());
             }
         });
@@ -188,20 +189,20 @@ public class WebgisDataServiceFieldServiceImpl implements WebgisDataServiceField
             return true;
         }).collect(Collectors.toList());
 
-        toUpdate.forEach(updateField-> {
+        toUpdate.forEach(updateField -> {
             updateField.setUpdatedBy(shiroUser.getAuthUser().getName());
         });
         toAdd.forEach(addField -> {
             addField.setGisDataServiceId(webgisServiceId);
         });
-        if(toDelete.size() > 0) {
+        if (toDelete.size() > 0) {
             this.batchDelete(toDelete);
         }
-        if(toAdd.size() > 0) {
+        if (toAdd.size() > 0) {
             this.batchInsert(toAdd);
         }
-        if(toUpdate.size() > 0) {
-            MybatisBatchUtil.insertOrUpdateBatch(WebgisDataServiceFieldMapper.class,toUpdate, WebgisDataServiceFieldMapper::update);
+        if (toUpdate.size() > 0) {
+            MybatisBatchUtil.insertOrUpdateBatch(WebgisDataServiceFieldMapper.class, toUpdate, WebgisDataServiceFieldMapper::update);
         }
     }
 

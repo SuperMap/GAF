@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.sys.mgt.service.impl;
 
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 
 /**
  * 数据源服实现务类
+ *
  * @author wangxiaolong
  * @date:2021/3/25
- *
  */
 @Service
 public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceService {
-    private static final Map<String,String> SDX_MAP  = new HashMap<>();
+    private static final Map<String, String> SDX_MAP = new HashMap<>();
     /**
      * 密钥长度
      */
@@ -46,12 +46,12 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
     public static final int LENGTH_32 = 32;
 
     static {
-        SDX_MAP.put("UDB","UDB");
-        SDX_MAP.put("UDBX","UDBX");
-        SDX_MAP.put("POSTGRESQL","POSTGRESQL");
-        SDX_MAP.put("MYSQL","MYSQL");
-        SDX_MAP.put("MONGODB","MONGODB");
-        SDX_MAP.put("ORACLE","ORACLEPLUS");
+        SDX_MAP.put("UDB", "UDB");
+        SDX_MAP.put("UDBX", "UDBX");
+        SDX_MAP.put("POSTGRESQL", "POSTGRESQL");
+        SDX_MAP.put("MYSQL", "MYSQL");
+        SDX_MAP.put("MONGODB", "MONGODB");
+        SDX_MAP.put("ORACLE", "ORACLEPLUS");
     }
 
     private final SysResourceDatasourceMapper sysResourceDatasourceMapper;
@@ -69,7 +69,7 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         if (StringUtils.isEmpty(secretKey)) {
             throw new GafException("未配置数据库密码秘钥");
         }
-        if(StringUtils.isEmpty(text)) {
+        if (StringUtils.isEmpty(text)) {
             return text;
         }
         byte[] key = secretKey.getBytes(StandardCharsets.UTF_8);
@@ -91,11 +91,12 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         }
         return sysResourceDatasource;
     }
+
     private String decrypt(String text, String secretKey) {
         if (StringUtils.isEmpty(secretKey)) {
             throw new GafException("未配置数据库密码秘钥");
         }
-        if(StringUtils.isEmpty(text)) {
+        if (StringUtils.isEmpty(text)) {
             return text;
         }
         byte[] key = secretKey.getBytes(StandardCharsets.UTF_8);
@@ -106,14 +107,14 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         return aes.decryptStr(text);
     }
 
-	
-	@Override
+
+    @Override
     public Page<SysResourceDatasource> listByPageCondition(SysResourceDatasourceSelectVo sysResourceDatasourceSelectVo, int pageNum, int pageSize) {
         PageInfo<SysResourceDatasource> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> sysResourceDatasourceMapper.selectList(sysResourceDatasourceSelectVo));
         Page<SysResourceDatasource> page = new Page<>();
         page.setPageIndex(pageInfo.getPageNum());
         page.setPageSize(pageInfo.getPageSize());
-        page.setTotal((int)pageInfo.getTotal());
+        page.setTotal((int) pageInfo.getTotal());
         List<SysResourceDatasource> pagelist = pageInfo.getList();
         if (pagelist != null && pagelist.size() > 0) {
             pagelist.forEach(sysResourceDatasource -> {
@@ -127,7 +128,7 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         return page;
     }
 
-	@Override
+    @Override
     public SysResourceDatasource insertSysResourceDatasource(SysResourceDatasource sysResourceDatasource) {
         sysResourceDatasource.setDatasourceId(UUID.randomUUID().toString());
         String notEncryptPassword = sysResourceDatasource.getPassword();
@@ -138,35 +139,35 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         sysResourceDatasource.setPassword(notEncryptPassword);
         return sysResourceDatasource;
     }
-	
-	@Override
-    public void batchInsert(List<SysResourceDatasource> sysResourceDatasources){
-		if (sysResourceDatasources != null && sysResourceDatasources.size() > 0) {
-	        sysResourceDatasources.forEach(sysResourceDatasource -> {
-				sysResourceDatasource.setDatasourceId(UUID.randomUUID().toString());
-				if(!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
+
+    @Override
+    public void batchInsert(List<SysResourceDatasource> sysResourceDatasources) {
+        if (sysResourceDatasources != null && sysResourceDatasources.size() > 0) {
+            sysResourceDatasources.forEach(sysResourceDatasource -> {
+                sysResourceDatasource.setDatasourceId(UUID.randomUUID().toString());
+                if (!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
                     sysResourceDatasource.setPassword(encrypt(sysResourceDatasource.getPassword(), secretKey));
                 }
             });
             sysResourceDatasourceMapper.batchInsert(sysResourceDatasources);
         }
-        
+
     }
-	
-	@Override
-    public void deleteSysResourceDatasource(String datasourceId){
+
+    @Override
+    public void deleteSysResourceDatasource(String datasourceId) {
         sysResourceDatasourceMapper.delete(datasourceId);
     }
 
-	@Override
-    public void batchDelete(List<String> datasourceIds){
+    @Override
+    public void batchDelete(List<String> datasourceIds) {
         sysResourceDatasourceMapper.batchDelete(datasourceIds);
     }
-	
-	@Override
-    public SysResourceDatasource updateSysResourceDatasource(SysResourceDatasource sysResourceDatasource){
-        if(!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
-            sysResourceDatasource.setPassword(encrypt(sysResourceDatasource.getPassword(), secretKey) );
+
+    @Override
+    public SysResourceDatasource updateSysResourceDatasource(SysResourceDatasource sysResourceDatasource) {
+        if (!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
+            sysResourceDatasource.setPassword(encrypt(sysResourceDatasource.getPassword(), secretKey));
         }
         sysResourceDatasourceMapper.update(sysResourceDatasource);
         return sysResourceDatasource;
@@ -178,7 +179,7 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         selectVo.setTypeCodes(typeCodes);
         List<SysResourceDatasource> datasources = sysResourceDatasourceMapper.selectList(selectVo);
         datasources.forEach(sysResourceDatasource -> {
-            if(!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
+            if (!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
                 sysResourceDatasource.setPassword(decrypt(sysResourceDatasource.getPassword(), secretKey));
             }
         });
@@ -187,14 +188,14 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
 
     @Override
     public List<DefaultTreeNode> getTree() {
-        List<DictDataNode> dataSourceTypeTree = sysDictService.getDictDataTree("NR_DATA_CATEGORY",null,3,false);
-        if(dataSourceTypeTree == null || dataSourceTypeTree.size() == 0) {
+        List<DictDataNode> dataSourceTypeTree = sysDictService.getDictDataTree("NR_DATA_CATEGORY", null, 3, false);
+        if (dataSourceTypeTree == null || dataSourceTypeTree.size() == 0) {
             return null;
         }
 
         List<DefaultTreeNode> allNodes = new LinkedList<>();
         Map<String, DictDataNode> codeMap = new HashMap<>(16);
-        TreeUtil.deepFirstTraverseTree(dataSourceTypeTree,(dictDataNode, iterator) -> {
+        TreeUtil.deepFirstTraverseTree(dataSourceTypeTree, (dictDataNode, iterator) -> {
             DefaultTreeNode node = new DefaultTreeNode();
             node.setKey(dictDataNode.getKey());
             node.setParentId(dictDataNode.getParentId());
@@ -204,27 +205,27 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
             BeanUtils.copyProperties(dictDataNode, dictData);
             node.setUserObject(dictData);
             allNodes.add(node);
-            codeMap.putIfAbsent(dictDataNode.getValue(),dictDataNode);
+            codeMap.putIfAbsent(dictDataNode.getValue(), dictDataNode);
             return TreeUtil.VisitResult.CONTINUE;
         });
         SysResourceDatasourceSelectVo selectVo = new SysResourceDatasourceSelectVo();
         selectVo.setSdx(true);
         List<SysResourceDatasource> datasources = sysResourceDatasourceMapper.selectList(selectVo);
-        if(datasources == null || datasources.size() == 0) {
+        if (datasources == null || datasources.size() == 0) {
             return null;
         }
         Map<String, List<SysResourceDatasource>> groups = datasources.stream().filter(sysResourceDatasource -> SDX_MAP.get(sysResourceDatasource.getTypeCode()) != null).peek(sysResourceDatasource -> sysResourceDatasource.setPassword(decrypt(sysResourceDatasource.getPassword(), secretKey))).collect(Collectors.groupingBy(SysResourceDatasource::getCatalogCode));
         groups.forEach((catalogCode, sysResourceDatasources) -> {
-            if(sysResourceDatasources!=null && sysResourceDatasources.size() > 0) {
+            if (sysResourceDatasources != null && sysResourceDatasources.size() > 0) {
                 DictDataNode dictDataNode = codeMap.get(catalogCode);
-                if(dictDataNode != null) {
+                if (dictDataNode != null) {
                     int i = 0;
                     for (SysResourceDatasource datasource : sysResourceDatasources) {
                         datasource.setPassword(datasource.getPassword());
                         DefaultTreeNode node = new DefaultTreeNode();
                         node.setKey(datasource.getDatasourceId());
                         node.setParentId(dictDataNode.getKey());
-                        node.setSortSn(i+1);
+                        node.setSortSn(i + 1);
                         node.setTitle(datasource.getDsName());
                         DatasourceConnectionInfo datasourceConnectionInfo = new DatasourceConnectionInfo();
                         BeanUtils.copyProperties(datasource, datasourceConnectionInfo);
@@ -244,7 +245,7 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
 
     @Override
     public List<SysResourceDatasource> getByName(String dsName, Boolean isSdx) {
-        return sysResourceDatasourceMapper.getByName(dsName,isSdx);
+        return sysResourceDatasourceMapper.getByName(dsName, isSdx);
     }
 
 }

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.commontypes;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -18,11 +18,11 @@ import java.io.Serializable;
  * <p>
  * 统一返回结果类型
  * </p>
- * 
+ *
  * @author t450
  * @version ${Version}
- * @since 1.0.0
  * @date 2018年5月15日
+ * @since 1.0.0
  */
 @ApiModel("REST返回数据对象")
 public class MessageResult<T> implements Serializable {
@@ -62,7 +62,7 @@ public class MessageResult<T> implements Serializable {
      * <p>
      * 获取 是否成功
      * </p>
-     * 
+     *
      * @return 属性 isSuccessed 的值。
      * @since 1.0.0
      */
@@ -76,9 +76,8 @@ public class MessageResult<T> implements Serializable {
      * <p>
      * 设置 是否成功
      * </p>
-     * 
-     * @param isSuccessed
-     *            the isSuccessed to set
+     *
+     * @param isSuccessed the isSuccessed to set
      * @since 1.0.0
      */
     @JSONField(name = "isSuccessed")
@@ -87,7 +86,6 @@ public class MessageResult<T> implements Serializable {
     }
 
     /**
-     * 
      * @return 属性 message 的值。
      * @since 1.0.0
      */
@@ -102,9 +100,8 @@ public class MessageResult<T> implements Serializable {
      * <p>
      * 设置信息 备注：记录错误信息保持简洁 例如 XXXX执行成功，XXXX执行错误，XXXX访问数据库异常
      * </p>
-     * 
-     * @param message
-     *            the message to set
+     *
+     * @param message the message to set
      * @since 1.0.0
      */
     public void setMessage(String message) {
@@ -115,7 +112,7 @@ public class MessageResult<T> implements Serializable {
      * <p>
      * 获取返回参数信息
      * </p>
-     * 
+     *
      * @return 属性 data 的值。
      * @since 1.0.0
      */
@@ -127,9 +124,8 @@ public class MessageResult<T> implements Serializable {
      * <p>
      * 设置
      * </p>
-     * 
-     * @param data
-     *            the data to set
+     *
+     * @param data the data to set
      * @since 1.0.0
      */
     public void setData(T data) {
@@ -140,7 +136,7 @@ public class MessageResult<T> implements Serializable {
      * <p>
      * 获取获取资源id
      * </p>
-     * 
+     *
      * @return 属性 resourceId 的值。
      * @since 1.0.0
      */
@@ -152,9 +148,8 @@ public class MessageResult<T> implements Serializable {
      * <p>
      * 设置资源的id
      * </p>
-     * 
-     * @param resourceId
-     *            the resourceId to set
+     *
+     * @param resourceId the resourceId to set
      * @since 1.0.0
      */
     public void setResourceId(String resourceId) {
@@ -179,19 +174,19 @@ public class MessageResult<T> implements Serializable {
     }
 
     public int getStatus() {
-		return status;
-	}
+        return status;
+    }
 
-	public void setStatus(int status) {
-		this.status = status;
-	}
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-	public boolean isSuccessed() {
-		return isSuccessed;
-	}
+    public boolean isSuccessed() {
+        return isSuccessed;
+    }
 
 
-	public static class MessageResultBuilder<T> {
+    public static class MessageResultBuilder<T> {
         private boolean isSuccessed;
         private String message;
         private int status;
@@ -206,11 +201,11 @@ public class MessageResult<T> implements Serializable {
             this.message = message;
             return this;
         }
-        
+
         public MessageResultBuilder<T> status(int status) {
             this.status = status;
             return this;
-        } 
+        }
 
         public MessageResultBuilder<T> data(T data) {
             this.data = data;

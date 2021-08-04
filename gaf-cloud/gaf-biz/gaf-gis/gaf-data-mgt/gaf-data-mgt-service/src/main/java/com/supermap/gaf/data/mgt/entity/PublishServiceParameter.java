@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.entity;
 
 import io.swagger.annotations.ApiModel;
@@ -13,10 +13,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
-* @author:yw
-* @Date 2021-3-12
- * @date:2021/3/25
- * 每个数据源可以发布多种服务
+ * @author:yw
+ * @Date 2021-3-12
+ * @date:2021/3/25 每个数据源可以发布多种服务
  */
 @Data
 @Builder

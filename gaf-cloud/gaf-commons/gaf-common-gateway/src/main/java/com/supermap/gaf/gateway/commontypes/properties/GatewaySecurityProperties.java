@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.commontypes.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,13 +13,13 @@ import java.util.List;
 
 /**
  * <p>
- * 网关安全设置  
+ * 网关安全设置
  * </p>
+ *
  * @author ${Author}
  * @version ${Version}
- * @since 1.0.0
  * @date:2021/3/25
- *
+ * @since 1.0.0
  */
 @Component
 @ConfigurationProperties(prefix = "gateway.security")
@@ -40,7 +40,7 @@ public class GatewaySecurityProperties {
 
     private String indexUrl = DEFAULT_INDEX_URL;
 
-    private boolean  apiAuthzEnable = false;
+    private boolean apiAuthzEnable = false;
 
     private List<String> publicUrls = Arrays.asList(DEFAULT_PUBLIC_URLS);
 

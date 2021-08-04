@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.analysis.spi.overlay;
 
 import com.alibaba.fastjson.JSON;
@@ -148,7 +148,7 @@ public class SpatialOverlayIobjectProvider implements IspatialOverlay {
         }
         //获取result的vector
         Dataset resultDataSet = resultDatasource.getDatasets().get(resultDataSetName);
-        DatasetVector resultDataSetVector = getResultVector(resultDataSet,resultDatasource,resultDataSetName);
+        DatasetVector resultDataSetVector = getResultVector(resultDataSet, resultDatasource, resultDataSetName);
         //获取source的vector
         Dataset sourceDataSet = sourceDatasource.getDatasets().get(sourceDataSetName);
         DatasetVector sourceDataSetVector = (DatasetVector) sourceDataSet;
@@ -157,7 +157,7 @@ public class SpatialOverlayIobjectProvider implements IspatialOverlay {
             //过滤数据
             filterRecordset(sourceDatasetFilter, targetDatasetFilter, sourceDataSetVector, targetDataSetVector);
             //执行iobject分析
-            spatialAnalysisResult = executeOverlayByIobject(resultId,retainedFields,operator,resultDataSetName,sourceDataSetVector,targetDataSetVector,resultDataSetVector,resultDataConnInfo);
+            spatialAnalysisResult = executeOverlayByIobject(resultId, retainedFields, operator, resultDataSetName, sourceDataSetVector, targetDataSetVector, resultDataSetVector, resultDataConnInfo);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
@@ -177,7 +177,7 @@ public class SpatialOverlayIobjectProvider implements IspatialOverlay {
                                                           DatasetVector sourceDataSetVector,
                                                           DatasetVector targetDataSetVector,
                                                           DatasetVector resultDataSetVector,
-                                                          SpatialAnalysisDataConnInfo resultDataConnInfo) throws Exception{
+                                                          SpatialAnalysisDataConnInfo resultDataConnInfo) throws Exception {
         //设置条件
         OverlayAnalystParameter overlayAnalystParameter = buildOverlayAnalystParameter(retainedFields);
 
@@ -202,7 +202,7 @@ public class SpatialOverlayIobjectProvider implements IspatialOverlay {
     /**
      * 构建分析参数
      */
-    private OverlayAnalystParameter buildOverlayAnalystParameter(List<String> retainedFields){
+    private OverlayAnalystParameter buildOverlayAnalystParameter(List<String> retainedFields) {
         OverlayAnalystParameter overlayAnalystParameter = new OverlayAnalystParameter();
         if (CollectionUtils.isNotEmpty(retainedFields)) {
             overlayAnalystParameter.setOperationRetainedFields(retainedFields.toArray(new String[retainedFields.size()]));
@@ -213,22 +213,23 @@ public class SpatialOverlayIobjectProvider implements IspatialOverlay {
 
     /**
      * 获取结果数据集的DatasetVector
+     *
      * @param resultDataSet
      * @param resultDatasource
      * @param resultDataSetName
      * @return
      */
-    private DatasetVector getResultVector(Dataset resultDataSet,Datasource resultDatasource,String resultDataSetName){
-       DatasetVector resultDataSetVector = null;
-       if (null == resultDataSet) {
-          resultDataSetName = resultDatasource.getDatasets().getAvailableDatasetName(resultDataSetName);
-          DatasetVectorInfo datasetVectorInfo = new DatasetVectorInfo(resultDataSetName, DatasetType.REGION);
-          datasetVectorInfo.setEncodeType(EncodeType.NONE);
-          resultDataSetVector = resultDatasource.getDatasets().create(datasetVectorInfo);
-       } else {
-          resultDataSetVector = (DatasetVector) resultDataSet;
-       }
-       return resultDataSetVector;
+    private DatasetVector getResultVector(Dataset resultDataSet, Datasource resultDatasource, String resultDataSetName) {
+        DatasetVector resultDataSetVector = null;
+        if (null == resultDataSet) {
+            resultDataSetName = resultDatasource.getDatasets().getAvailableDatasetName(resultDataSetName);
+            DatasetVectorInfo datasetVectorInfo = new DatasetVectorInfo(resultDataSetName, DatasetType.REGION);
+            datasetVectorInfo.setEncodeType(EncodeType.NONE);
+            resultDataSetVector = resultDatasource.getDatasets().create(datasetVectorInfo);
+        } else {
+            resultDataSetVector = (DatasetVector) resultDataSet;
+        }
+        return resultDataSetVector;
     }
 
     @Override

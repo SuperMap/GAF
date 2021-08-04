@@ -7,9 +7,9 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class StorageTenantExceptionMapper implements ExceptionMapper<StorageTenantException>{
+public class StorageTenantExceptionMapper implements ExceptionMapper<StorageTenantException> {
     @Override
-    public Response toResponse(StorageTenantException e){
+    public Response toResponse(StorageTenantException e) {
         return Response.status(Response.Status.UNAUTHORIZED).entity("获取租户id失败").build();
 
     }

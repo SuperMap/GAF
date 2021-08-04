@@ -7,10 +7,10 @@ import java.io.Serializable;
 
 
 /**
-* @author:yw
-* @Date 2021-3-12
- *   工作流用户
-**/
+ * @author:yw
+ * @Date 2021-3-12
+ * 工作流用户
+ **/
 
 public final class WorkFlowUser implements Serializable {
 

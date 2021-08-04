@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.config.authc;
 
 import com.supermap.gaf.authority.commontype.AuthRole;
@@ -35,19 +35,19 @@ public class CustomUserDetailsServiceImpl implements org.springframework.securit
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AuthUser user = authUserQueryService.getByUserName(username);
-        if (null == user){
+        if (null == user) {
             throw new UsernameNotFoundException(username);
         }
         AuthTenant authTenant = authTenantQueryService.getById(user.getTenantId());
-        if (null == authTenant){
+        if (null == authTenant) {
             throw new UsernameNotFoundException(username);
         }
-        List<AuthRole>  authRoles = authAuthorizationQueryService.listAuthorizationRole(user.getUserId());
+        List<AuthRole> authRoles = authAuthorizationQueryService.listAuthorizationRole(user.getUserId());
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (AuthRole role : authRoles){
+        for (AuthRole role : authRoles) {
             authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
         }
-        return new org.springframework.security.core.userdetails.User(username,user.getPassword(),authorities);
+        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
     }
 }
 

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.util;
 
 import com.alibaba.fastjson.JSON;
@@ -34,10 +34,11 @@ public class GafFluxUtils {
 
     /**
      * 得到无访问权限响应体
+     *
      * @param exchange
      * @return
      */
-    public static Mono<Void> unAuth(ServerWebExchange exchange,String message){
+    public static Mono<Void> unAuth(ServerWebExchange exchange, String message) {
         MessageResult<String> result = MessageResult.failed(String.class).status(HttpStatus.UNAUTHORIZED.value()).message(message).build();
         ServerHttpResponse response = exchange.getResponse();
         byte[] bits = JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8);
@@ -50,6 +51,7 @@ public class GafFluxUtils {
 
     /**
      * 重定向
+     *
      * @param exchange
      * @param url
      * @return
@@ -62,22 +64,21 @@ public class GafFluxUtils {
     }
 
 
-
-
     /**
      * request中获取认证参数
+     *
      * @param request
      * @return
      */
-    public static AuthenticationParam getAuthenticationParamByServerHttpRequest(ServerHttpRequest request){
+    public static AuthenticationParam getAuthenticationParamByServerHttpRequest(ServerHttpRequest request) {
         AuthenticationParam param = null;
 
         String authorization = request.getHeaders().getFirst(AUTHORIZATION);
         HttpCookie cookie = request.getCookies().getFirst(CUSTOM_LOGIN_SESSION_NAME);
 
-        String cookieVal = cookie == null ? null:cookie.getValue();
+        String cookieVal = cookie == null ? null : cookie.getValue();
 
-        if (!StringUtils.isEmpty(cookieVal) || !StringUtils.isEmpty(authorization)){
+        if (!StringUtils.isEmpty(cookieVal) || !StringUtils.isEmpty(authorization)) {
             param = new AuthenticationParam();
             param.setCustomSessionId(cookieVal);
             param.setAuthorization(authorization);
@@ -85,8 +86,8 @@ public class GafFluxUtils {
         return param;
     }
 
-    public static String removeTokenBeareHead(String token){
-        if (token != null && token.startsWith(BEARER)){
+    public static String removeTokenBeareHead(String token) {
+        if (token != null && token.startsWith(BEARER)) {
             token = token.substring(BEARER.length()).trim();
         }
         return token;

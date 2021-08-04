@@ -9,9 +9,9 @@ import java.util.List;
 
 /**
  * 同步数据抽象方法，pull\push
+ *
  * @author yd
  * @since : 2020-11-26
- *
  */
 public abstract class AbstractSync {
 

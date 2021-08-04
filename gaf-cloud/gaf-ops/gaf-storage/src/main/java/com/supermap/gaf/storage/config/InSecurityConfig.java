@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@ConditionalOnProperty(value = "GAF_STORAGE_AUTHENTICATION_ENABLE",havingValue = "false")
+@ConditionalOnProperty(value = "GAF_STORAGE_AUTHENTICATION_ENABLE", havingValue = "false")
 public class InSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -24,6 +24,7 @@ public class InSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().anyRequest().permitAll().and().logout().permitAll();
     }
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/**");

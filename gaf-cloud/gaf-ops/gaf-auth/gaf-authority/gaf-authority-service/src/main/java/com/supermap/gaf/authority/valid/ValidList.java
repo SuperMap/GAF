@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.valid;
 
 import javax.validation.Valid;
@@ -11,9 +11,9 @@ import java.util.*;
 /**
  * list校验类
  *
+ * @param <E>
  * @author yd
  * @date:2021/3/25
- * @param <E>
  */
 public class ValidList<E> implements List<E> {
     @Valid

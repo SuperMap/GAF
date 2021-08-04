@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.config.authc.usernamepassword;
 
 import com.supermap.gaf.authentication.config.authc.CustomUserDetailsServiceImpl;
@@ -43,11 +43,11 @@ public class UsernamePasswordUserAuthenticationProvider implements Authenticatio
             throw new BadCredentialsException("password can not be empty");
         }
         UserDetails userDetails = customUserDetailsServiceImpl.loadUserByUsername(username);
-        if (!passwordEncoder.matches(password,userDetails.getPassword())){
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("password is incorrect");
         }
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-        UsernamePasswordAuthenticationToken result =  new UsernamePasswordAuthenticationToken(userDetails,password,authorities);
+        UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(userDetails, password, authorities);
         return result;
     }
 

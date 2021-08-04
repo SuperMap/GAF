@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.resources;
 
 import com.supermap.gaf.authority.commontype.AuthUserParttime;
@@ -23,9 +23,9 @@ import java.util.Map;
 
 /**
  * 用户挂职接口
+ *
  * @author c
  * @date:2021/3/25
- *
  */
 @Component
 @Api(value = "用户挂职接口")
@@ -52,19 +52,19 @@ public class AuthUserParttimeResource {
             @ApiImplicitParam(name = "searchFieldName", value = "模糊查询字段名", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "searchFieldValue", value = "模糊查询字段值", paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "orderFieldName", value = "排序字段值", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "orderMethod", value = "排序方式。升序为ASC,降序为DESC。默认不排序",allowableValues="ASC,DESC", paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[1,infinity]",paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "orderMethod", value = "排序方式。升序为ASC,降序为DESC。默认不排序", allowableValues = "ASC,DESC", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1", defaultValue = "1", allowableValues = "range[1,infinity]", paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10", allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer"),
     })
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public MessageResult<Map<String, Object>> pageList(@StringRange(entityClass = AuthUserParttime.class) @QueryParam("searchFieldName") String searchFieldName,
-                                       @QueryParam("searchFieldValue") String searchFieldValue,
-                                       @StringRange(entityClass = AuthUserParttime.class) @QueryParam("orderFieldName") String orderFieldName,
-                                       @StringRange({"asc","desc"}) @QueryParam("orderMethod") String orderMethod,
-                                       @DefaultValue("1")@QueryParam("pageNum") Integer pageNum,
-                                       @DefaultValue("10") @QueryParam("pageSize") Integer pageSize,
-                                        @QueryParam("departmentName") String departmentName) {
+                                                       @QueryParam("searchFieldValue") String searchFieldValue,
+                                                       @StringRange(entityClass = AuthUserParttime.class) @QueryParam("orderFieldName") String orderFieldName,
+                                                       @StringRange({"asc", "desc"}) @QueryParam("orderMethod") String orderMethod,
+                                                       @DefaultValue("1") @QueryParam("pageNum") Integer pageNum,
+                                                       @DefaultValue("10") @QueryParam("pageSize") Integer pageSize,
+                                                       @QueryParam("departmentName") String departmentName) {
         if (pageNum == null || pageNum < 1) {
             pageNum = 1;
         }
@@ -85,7 +85,7 @@ public class AuthUserParttimeResource {
 
     @ApiOperation(value = "新增用户挂职")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "authUserParttime", value = "用户挂职", dataTypeClass = AuthUserParttime.class, paramType = "body",required = true)
+            @ApiImplicitParam(name = "authUserParttime", value = "用户挂职", dataTypeClass = AuthUserParttime.class, paramType = "body", required = true)
     })
     @POST
     @Produces({MediaType.APPLICATION_JSON})
@@ -108,7 +108,7 @@ public class AuthUserParttimeResource {
 
     @ApiOperation(value = "更新用户挂职")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "authUserParttime", value = "用户挂职", dataTypeClass = AuthUserParttime.class, paramType = "body",required = true),
+            @ApiImplicitParam(name = "authUserParttime", value = "用户挂职", dataTypeClass = AuthUserParttime.class, paramType = "body", required = true),
             @ApiImplicitParam(name = "userParttimeId", value = "用户挂职id", paramType = "path", dataType = "string", required = true)
     })
     @PUT

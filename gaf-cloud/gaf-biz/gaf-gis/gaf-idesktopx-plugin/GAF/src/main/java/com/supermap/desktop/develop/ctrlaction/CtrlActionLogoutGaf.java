@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ctrlaction;
 
 import com.supermap.desktop.controls.ui.controls.DockbarManager;
@@ -16,14 +16,15 @@ import com.supermap.desktop.develop.utils.ApplicationContextUtils;
 import com.supermap.desktop.develop.utils.CommonUtils;
 
 /**
- * @date:2021/3/25
  * @author SuperMap
+ * @date:2021/3/25
  */
 public class CtrlActionLogoutGaf extends CtrlAction {
     public static boolean enable = false;
-	public CtrlActionLogoutGaf(IBaseItem caller) {
-		super(caller);
-	}
+
+    public CtrlActionLogoutGaf(IBaseItem caller) {
+        super(caller);
+    }
 
     @Override
     public boolean enable() {
@@ -31,18 +32,18 @@ public class CtrlActionLogoutGaf extends CtrlAction {
     }
 
     @Override
-	public void run() {
-	    if(enable()){
+    public void run() {
+        if (enable()) {
             CommonUtils.checkGafStatus(false);
             DockbarManager dockbarManager = ApplicationContextUtils.getDockbarManager();
             IDockbar datasource = dockbarManager.get(GafDatasourceManager.class);
             datasource.setVisible(false);
             // 删除树数据
-            ((GafDatasourceManager)datasource.getInnerComponent()).updateTree(new GafTree());
+            ((GafDatasourceManager) datasource.getInnerComponent()).updateTree(new GafTree());
             IDockbar workspace = dockbarManager.get(GafWorkspaceManager.class);
             workspace.setVisible(false);
             // 删除树数据
-            ((GafWorkspaceManager)workspace.getInnerComponent()).updateTree(new GafTree());
+            ((GafWorkspaceManager) workspace.getInnerComponent()).updateTree(new GafTree());
         }
-	}
+    }
 }

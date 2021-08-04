@@ -4,7 +4,7 @@ public class ReaderAnnotationEvaluator extends AbstractAnnotationEvaluator<Reade
     public ReaderAnnotationEvaluator() {
         super(Reader.class);
     }
-    
+
 
     @Override
     protected boolean isAbleToByAnnotation(Reader annotation, Class<?> clz) {

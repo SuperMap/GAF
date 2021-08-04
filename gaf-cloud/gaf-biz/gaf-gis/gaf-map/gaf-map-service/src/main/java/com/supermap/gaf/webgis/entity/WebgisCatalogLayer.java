@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -21,7 +21,8 @@ import java.util.Date;
 
 /**
  * 图层
- * @author wangxiaolong 
+ *
+ * @author wangxiaolong
  * @date 2020-12-05
  */
 @Data
@@ -29,7 +30,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("图层")
-public class WebgisCatalogLayer implements Serializable{
+public class WebgisCatalogLayer implements Serializable {
     @Id
     @NotNull
     @ApiModelProperty("图层目录id")
@@ -54,10 +55,10 @@ public class WebgisCatalogLayer implements Serializable{
     @ConfigName("resourceLocation")
     private String address;
     @ApiModelProperty("服务类型")
-    @ConfigName({"resourceTag","sourceType"})
+    @ConfigName({"resourceTag", "sourceType"})
     private String typeCode;
     @ApiModelProperty(value = "扩展属性", notes = "自定义属性,json,数据只加一层而不加多层，接口读出转为json时平铺放到服务属性中去")
-    @ConfigName(value = "moreProperties",expand = true)
+    @ConfigName(value = "moreProperties", expand = true)
     private String moreProperties;
 
     @SortSnField
@@ -66,13 +67,13 @@ public class WebgisCatalogLayer implements Serializable{
     private Integer sortSn;
     @ApiModelProperty("初始加载")
     @ConfigName("initLoad")
-    @JSONField(name="isInitLoad")
+    @JSONField(name = "isInitLoad")
     private Boolean initLoad;
     @ApiModelProperty("描述")
     private String description;
     @LogicDeleteField
     @ApiModelProperty("状态")
-    @JSONField(name="isStatus")
+    @JSONField(name = "isStatus")
     private Boolean status;
     @ApiModelProperty("创建时间")
     private Date createdTime;
@@ -85,7 +86,7 @@ public class WebgisCatalogLayer implements Serializable{
     private String updatedBy;
 
 
-    @ApiModelProperty(value = "有效性",notes = "计算属性，无效表示关联的webgis服务已被删除，有效表是关联的webgis服务")
+    @ApiModelProperty(value = "有效性", notes = "计算属性，无效表示关联的webgis服务已被删除，有效表是关联的webgis服务")
     public boolean isValid() {
         return serviceName != null && !"".equals(serviceName);
     }

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.filters;
 
 import brave.Tracer;
@@ -22,6 +22,7 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.GATEWAY
 
 /**
  * 此拦截器主要是链路追踪追加信息的过滤器
+ *
  * @author : duke
  * @date:2021/3/25
  * @since 2020/12/3 10:29 AM
@@ -36,9 +37,9 @@ public class XgatewayTraceFilter implements GlobalFilter, Ordered {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
 
-        if (null != authenticationResult && !StringUtils.isEmpty(authenticationResult.getUsername())){
+        if (null != authenticationResult && !StringUtils.isEmpty(authenticationResult.getUsername())) {
             tracer.currentSpan().tag("username", authenticationResult.getUsername());
-        }else {
+        } else {
             tracer.currentSpan().tag("username", "Anonymous");
         }
 

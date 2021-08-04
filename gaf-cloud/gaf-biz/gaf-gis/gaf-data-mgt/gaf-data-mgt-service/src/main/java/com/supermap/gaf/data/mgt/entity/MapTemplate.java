@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.entity;
 
 
@@ -60,19 +60,19 @@ public class MapTemplate {
 
     public enum Type {
         /**
-         *矢量单面
+         * 矢量单面
          **/
         VECTOR_SINGLE,
         /**
-         *矢量多面
+         * 矢量多面
          **/
         VECTOR_MULTIPLE,
         /**
-         *影像
+         * 影像
          **/
         IMAGE,
         /**
-         *自定义
+         * 自定义
          **/
         CUSTOM
     }

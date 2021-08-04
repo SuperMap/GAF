@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.p3sync.impl.sinfcloud.util;
 
 import org.apache.commons.codec.binary.Base64;
@@ -23,7 +23,7 @@ public class SinfCloudEncryptedUtil {
     /**
      * base加密数据
      *
-     * @param data 数据
+     * @param data      数据
      * @param publicKey 公钥
      * @return 加密后的数据
      */

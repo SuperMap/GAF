@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.AuthResourceMenu;
@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 
 /**
  * 角色菜单服务实现类
+ *
  * @author yangdong
  * @date:2021/3/25
- * 
  */
 @Service
 public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
@@ -66,44 +66,44 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void handleRoleMenu(RoleMenuVo roleMenuVo){
+    public void handleRoleMenu(RoleMenuVo roleMenuVo) {
         String roleId = roleMenuVo.getRoleId();
-        if(roleId == null || StringUtils.isEmpty(roleId)){
+        if (roleId == null || StringUtils.isEmpty(roleId)) {
             throw new GafException("角色id为空");
         }
         logger.info(roleId);
 
-        if(authRoleService.getById(roleId)==null){
+        if (authRoleService.getById(roleId) == null) {
             throw new GafException("角色不存在：" + roleId);
         }
-        List<String>  newList = roleMenuVo.getMenuList();
-        List<String> oldList = getByRoleId(roleId,true).stream().map(AuthRoleMenu ::getResourceMenuId).collect(Collectors.toList());
+        List<String> newList = roleMenuVo.getMenuList();
+        List<String> oldList = getByRoleId(roleId, true).stream().map(AuthRoleMenu::getResourceMenuId).collect(Collectors.toList());
         List<String> addList = new ArrayList<>();
         List<String> removeList = new ArrayList<>();
 
-        newList.forEach(item ->{
-            if(!oldList.contains(item)){
+        newList.forEach(item -> {
+            if (!oldList.contains(item)) {
                 addList.add(item);
             }
         });
         logger.info("toadd:");
-        oldList.forEach(item ->{
-            if(!newList.contains(item)){
+        oldList.forEach(item -> {
+            if (!newList.contains(item)) {
                 removeList.add(item);
             }
         });
         logger.info("toremove:");
 
         //新增或修改
-        if(!CollectionUtils.isEmpty(addList)){
+        if (!CollectionUtils.isEmpty(addList)) {
             List<AuthRoleMenu> addRoleMenuList = new ArrayList<>();
             List<String> addMenuIdList = new LinkedList<>();
             List<String> updateList = new ArrayList<>();
-            addList.forEach(item->{
-                AuthRoleMenu oldRoleMenu = getByRoleAndMenu(roleId,item,false);
-                if(oldRoleMenu!=null){
+            addList.forEach(item -> {
+                AuthRoleMenu oldRoleMenu = getByRoleAndMenu(roleId, item, false);
+                if (oldRoleMenu != null) {
                     updateList.add(oldRoleMenu.getRoleMenuId());
-                }else{
+                } else {
                     AuthRoleMenu authRoleMenu = AuthRoleMenu.builder()
                             .resourceMenuId(item)
                             .roleId(roleId)
@@ -115,14 +115,14 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
                 }
             });
             //批量修改
-            if(!CollectionUtils.isEmpty(updateList)){
+            if (!CollectionUtils.isEmpty(updateList)) {
                 batchUpdate(updateList);
             }
             //批量新增
-            if(!CollectionUtils.isEmpty(addRoleMenuList)){
+            if (!CollectionUtils.isEmpty(addRoleMenuList)) {
                 List<AuthResourceMenu> menus = authResourceMenuService.getByIds(addMenuIdList);
                 if (menus != null && menus.size() > 0) {
-                    Map< String, String> menuIdAndModule = menus.stream().collect(Collectors.toMap(AuthResourceMenu::getResourceMenuId, AuthResourceMenu::getResourceModuleId));
+                    Map<String, String> menuIdAndModule = menus.stream().collect(Collectors.toMap(AuthResourceMenu::getResourceMenuId, AuthResourceMenu::getResourceModuleId));
                     addRoleMenuList.forEach(authRoleMenu -> authRoleMenu.setResourceModuleId(menuIdAndModule.get(authRoleMenu.getResourceMenuId())));
                 }
                 batchInsertRoleMenu(addRoleMenuList);
@@ -130,12 +130,12 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
         }
 
         //禁用
-        if(!CollectionUtils.isEmpty(removeList)){
+        if (!CollectionUtils.isEmpty(removeList)) {
             //根据角色id和接口id获取角色接口关联id
             List<String> roleMenuIds = new ArrayList<>();
-            removeList.forEach(item->{
-                AuthRoleMenu  authRoleMenu = getByRoleAndMenu(roleId,item,true);
-                if(authRoleMenu!=null){
+            removeList.forEach(item -> {
+                AuthRoleMenu authRoleMenu = getByRoleAndMenu(roleId, item, true);
+                if (authRoleMenu != null) {
                     roleMenuIds.add(authRoleMenu.getRoleMenuId());
                 }
             });
@@ -144,18 +144,18 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
     }
 
     @Override
-    public List<AuthRoleMenu> getByRoleId(String roleId, Boolean status){
-        if(StringUtils.isEmpty(roleId)){
+    public List<AuthRoleMenu> getByRoleId(String roleId, Boolean status) {
+        if (StringUtils.isEmpty(roleId)) {
             return new ArrayList<>();
         }
-        return authRoleMenuMapper.getByRoleId(roleId,status);
+        return authRoleMenuMapper.getByRoleId(roleId, status);
     }
 
-    public AuthRoleMenu getByRoleAndMenu(String roleId, String menuId,Boolean status){
-        if(StringUtils.isEmpty(roleId) || StringUtils.isEmpty(menuId)){
+    public AuthRoleMenu getByRoleAndMenu(String roleId, String menuId, Boolean status) {
+        if (StringUtils.isEmpty(roleId) || StringUtils.isEmpty(menuId)) {
             return null;
         }
-        return authRoleMenuMapper.getByRoleAndMenu(roleId, menuId,status);
+        return authRoleMenuMapper.getByRoleAndMenu(roleId, menuId, status);
     }
 
     @Override
@@ -204,10 +204,11 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
 
     /**
      * 批量插入
+     *
      * @author zhm
      **/
     @Override
-    public void batchInsertRoleMenu(List<AuthRoleMenu> authRoleMenus){
+    public void batchInsertRoleMenu(List<AuthRoleMenu> authRoleMenus) {
         if (authRoleMenus != null && !CollectionUtils.isEmpty(authRoleMenus)) {
             authRoleMenus.forEach(authRoleMenu -> authRoleMenu.setRoleMenuId(UUID.randomUUID().toString()));
             authRoleMenuMapper.batchInsert(authRoleMenus);
@@ -216,9 +217,10 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
 
     /**
      * 批量逻辑删除
+     *
      * @author zhm
      **/
-    public void batchUpdate(List<String> authRoleMenuIds){
+    public void batchUpdate(List<String> authRoleMenuIds) {
         authRoleMenuMapper.batchUpdate(authRoleMenuIds);
     }
 
@@ -241,7 +243,7 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
     /**
      * 唯一性校验，每个角色与菜单的关系只能出现一次
      *
-     * @param authRoleMenu  角色菜单
+     * @param authRoleMenu 角色菜单
      */
     private void checkUniqueness(AuthRoleMenu authRoleMenu) {
         List<AuthRoleMenu> authRoleMenus = authRoleMenuMapper.listRoleMenu(authRoleMenu.getRoleId(), authRoleMenu.getResourceMenuId());

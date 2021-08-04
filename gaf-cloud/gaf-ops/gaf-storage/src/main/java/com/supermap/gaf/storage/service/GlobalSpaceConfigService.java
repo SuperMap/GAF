@@ -8,47 +8,51 @@ import java.util.List;
 
 /**
  * 服务类
- * @author zrc 
+ *
+ * @author zrc
  * @date yyyy-mm-dd
  */
 public interface GlobalSpaceConfigService {
-	
-	/**
-    * 根据id查询
-    * @return
-    */
+
+    /**
+     * 根据id查询
+     *
+     * @return
+     */
     SpaceConfig getById(String id);
-	
-	/**
+
+    /**
      * 分页条件查询
-     * @param pageNum 当前页码
+     *
+     * @param pageNum  当前页码
      * @param pageSize 每页数量
      * @return 分页对象
      */
     Page<SpaceConfig> listByPageCondition(SpaceConfigSelectVo spaceConfigSelectVo, int pageNum, int pageSize);
-	
-	
+
+
     /**
-    * 新增
-    * @return 新增的globalServerConfig
-    */
+     * 新增
+     *
+     * @return 新增的globalServerConfig
+     */
     void insertGlobalServerConfig(SpaceConfig spaceConfig);
 
     /**
-    * 删除
-    * 
-    */
+     * 删除
+     */
     void deleteGlobalServerConfig(String id);
 
     /**
-    * 批量删除
-    * 
-    **/
+     * 批量删除
+     **/
     void batchDelete(List<String> ids);
+
     /**
-    * 更新
-    * @return 更新后的globalServerConfig
-    */
+     * 更新
+     *
+     * @return 更新后的globalServerConfig
+     */
     void updateGlobalServerConfig(SpaceConfig spaceConfig);
-    
+
 }

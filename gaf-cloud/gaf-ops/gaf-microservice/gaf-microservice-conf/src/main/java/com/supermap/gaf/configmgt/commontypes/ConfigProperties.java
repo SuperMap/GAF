@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.commontypes;
 
 import java.io.Serializable;
@@ -13,10 +13,10 @@ import java.io.Serializable;
  * @date:2021/3/25
  * @description 配置对象
  */
-public class ConfigProperties implements Serializable{
+public class ConfigProperties implements Serializable {
 
     /**
-     *  应用名称
+     * 应用名称
      */
     private String application;
     /**
@@ -29,23 +29,23 @@ public class ConfigProperties implements Serializable{
     private String label;
 
     /**
-    * 主键
-    */
+     * 主键
+     */
     private String id;
 
     /**
-    * 租户id
-    */
+     * 租户id
+     */
     private String tenantId;
 
     /**
-    * 配置键
-    */
+     * 配置键
+     */
     private String propertyKey;
 
     /**
-    * 配置值
-    */
+     * 配置值
+     */
     private String propertyValue;
 
 

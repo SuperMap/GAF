@@ -10,7 +10,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class CorsConfig {
     @Bean
-    public FilterRegistrationBean corsFilter() {
+    public FilterRegistrationBean beanCorsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);

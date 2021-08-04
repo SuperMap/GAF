@@ -35,7 +35,7 @@ public class XgatewayAuthenticationValidateFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         ExchangeAuthenticationAttribute attribute = ((ExchangeAuthenticationAttribute) request.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME));
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
-        if (attribute.getIsPublicUrl() && !attribute.getIsIndexUrl()){
+        if (attribute.getIsPublicUrl()){
             chain.doFilter(request,response);
         }else if (authenticationResult == null
                 || StringUtils.isEmpty(authenticationResult.getUsername())

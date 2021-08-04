@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.utils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -43,16 +43,17 @@ import java.security.MessageDigest;
 import java.util.*;
 
 /**
- * @date:2021/3/25
  * @author heykb
+ * @date:2021/3/25
  */
 public class CommonUtils {
     public static boolean online = false;
-    public static void checkGafPopMenuStatus(){
+
+    public static void checkGafPopMenuStatus() {
         Workspace workspace = ApplicationContextUtils.getWorkspace();
-        IContextMenuManager manager =ApplicationContextUtils.getContextMenuManager();
-        for(IBaseItem iBaseItem: manager.get("SuperMap.Desktop.UI.WorkspaceControlManager.ContextMenuWorkspace").items()){
-            if(iBaseItem!=null && "gafWorkspaceUpload".equals(iBaseItem.getID())){
+        IContextMenuManager manager = ApplicationContextUtils.getContextMenuManager();
+        for (IBaseItem iBaseItem : manager.get("SuperMap.Desktop.UI.WorkspaceControlManager.ContextMenuWorkspace").items()) {
+            if (iBaseItem != null && "gafWorkspaceUpload".equals(iBaseItem.getID())) {
                 boolean enable = online; /*&& (workspace.getType().equals(WorkspaceType.SMWU)||workspace.getType().equals(WorkspaceType.SXWU));*/
                 iBaseItem.setEnabled(enable);
                 iBaseItem.setVisible(true);
@@ -69,42 +70,45 @@ public class CommonUtils {
 //        }
 
     }
-    public static void checkGafStatus(boolean online){
+
+    public static void checkGafStatus(boolean online) {
         CommonUtils.online = online;
-        if(!online){
+        if (!online) {
             // 注销
             checkGafPopMenuStatus();
             CtrlActionLogoutGaf.enable = false;
             CtrlActionLoginGaf.enable = true;
-            CtrlActionRegistryWorkspace.enable= false;
+            CtrlActionRegistryWorkspace.enable = false;
             CtrlActionSynchronizeWorkspace.enable = false;
             GafClient.logout();
-        }else{
+        } else {
             //登录
             checkGafPopMenuStatus();
             CtrlActionLogoutGaf.enable = true;
             CtrlActionLoginGaf.enable = false;
-            CtrlActionRegistryWorkspace.enable= true;
+            CtrlActionRegistryWorkspace.enable = true;
             CtrlActionSynchronizeWorkspace.enable = true;
         }
 
     }
-    public static boolean isFileTypeSource(Object source){
-        if(source == null) return false;
-        if(source instanceof WorkspaceConnectionInfo){
-            WorkspaceConnectionInfo connectionInfo = (WorkspaceConnectionInfo)source;
+
+    public static boolean isFileTypeSource(Object source) {
+        if (source == null) return false;
+        if (source instanceof WorkspaceConnectionInfo) {
+            WorkspaceConnectionInfo connectionInfo = (WorkspaceConnectionInfo) source;
             return WorkspaceType.SMWU.equals(connectionInfo.getType())
                     || WorkspaceType.SXWU.equals(connectionInfo.getType())
                     || WorkspaceType.SMW.equals(connectionInfo.getType())
                     || WorkspaceType.SXW.equals(connectionInfo.getType());
         }
-        if(source instanceof DatasourceConnectionInfo){
-            DatasourceConnectionInfo connectionInfo = (DatasourceConnectionInfo)source;
+        if (source instanceof DatasourceConnectionInfo) {
+            DatasourceConnectionInfo connectionInfo = (DatasourceConnectionInfo) source;
             return EngineType.UDB.equals(connectionInfo.getEngineType()) || EngineType.UDBX.equals(connectionInfo.getEngineType());
         }
         return false;
     }
-    public static WorkspaceConnectionInfo copyWorkspaceConn(WorkspaceConnectionInfo source){
+
+    public static WorkspaceConnectionInfo copyWorkspaceConn(WorkspaceConnectionInfo source) {
         WorkspaceConnectionInfo wConn = new WorkspaceConnectionInfo();
         wConn.setType(source.getType());
         wConn.setUser(source.getUser());
@@ -115,15 +119,16 @@ public class CommonUtils {
         wConn.setName(source.getName());
         return wConn;
     }
+
     public static String getBase64Md5(Path path) throws Exception {
 
         MessageDigest md5 = MessageDigest.getInstance("MD5");
-        try(InputStream in  = Files.newInputStream(path)){
+        try (InputStream in = Files.newInputStream(path)) {
             byte[] buffer = new byte[8192];
             int length;
-            while((length=in.read(buffer))!=-1){
+            while ((length = in.read(buffer)) != -1) {
                 //md5计算
-                md5.update(buffer,0,length);
+                md5.update(buffer, 0, length);
             }
 
         }
@@ -131,56 +136,57 @@ public class CommonUtils {
         return base64Md5;
     }
 
-    public static void uploadAsync(String targetPath, Path source, PropertyChangeListener listener)throws FileUploadException{
-        ApplicationContextUtils.getOutput().output("开始上传"+source.getFileName().toString());
-        uploadAsync(targetPath,source,true,listener);
+    public static void uploadAsync(String targetPath, Path source, PropertyChangeListener listener) throws FileUploadException {
+        ApplicationContextUtils.getOutput().output("开始上传" + source.getFileName().toString());
+        uploadAsync(targetPath, source, true, listener);
     }
+
     public static void uploadAsync(String targetPath, Path source, boolean quickUploadEnable, PropertyChangeListener listener) throws FileUploadException {
-        try{
-            String base64Md5=null;
-            if(quickUploadEnable){
-                try{
-                    base64Md5 =  getBase64Md5(source);
+        try {
+            String base64Md5 = null;
+            if (quickUploadEnable) {
+                try {
+                    base64Md5 = getBase64Md5(source);
                     JSONObject re = GafClient.instance().objectMetadata(targetPath);
                     JSONObject data = re.getJSONObject("data");
-                    if(404!=re.getInteger("status") && data!=null){
+                    if (404 != re.getInteger("status") && data != null) {
                         String md5 = data.getJSONObject("userMetadata").getString("base64md5");
-                        if(base64Md5.equals(md5)){
-                            ApplicationContextUtils.getOutput().output(source.getFileName().toString()+"快速上传");
+                        if (base64Md5.equals(md5)) {
+                            ApplicationContextUtils.getOutput().output(source.getFileName().toString() + "快速上传");
                             return;
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                 }
             }
-            PresignUploadRequest uploadRequest = GafClient.instance().uploadPresignUrl(targetPath,base64Md5);
-            FileUploadWork workspaceUpload = new FileUploadWork(uploadRequest,source);
+            PresignUploadRequest uploadRequest = GafClient.instance().uploadPresignUrl(targetPath, base64Md5);
+            FileUploadWork workspaceUpload = new FileUploadWork(uploadRequest, source);
             workspaceUpload.addPropertyChangeListener(listener);
             workspaceUpload.execute();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new FileUploadException(source.getFileName().toString());
         }
     }
 
 
-    public static void uploadByPreSignedUrl(PresignUploadRequest uploadRequest, Path path) throws FileUploadException  {
-        uploadByPreSignedUrl(uploadRequest,path,null);
+    public static void uploadByPreSignedUrl(PresignUploadRequest uploadRequest, Path path) throws FileUploadException {
+        uploadByPreSignedUrl(uploadRequest, path, null);
     }
 
     public static void uploadByPreSignedUrl(PresignUploadRequest uploadRequest, Path path, ProgressListener listener) throws FileUploadException {
         HttpURLConnection connection = null;
         OutputStream out = null;
         BufferedReader reader = null;
-        try{
+        try {
             String preSignedUrl = uploadRequest.getPresignUrl();
             String base64Md5 = uploadRequest.getContentMd5();
             URL url = new URL(preSignedUrl);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("connection", "Keep-Alive");
-            connection.setRequestProperty("Content-Type","application/octet-stream");
-            if(!StringUtils.isEmpty(base64Md5)){
-                connection.setRequestProperty("Content-MD5",base64Md5);
-                connection.setRequestProperty("x-amz-meta-base64md5",base64Md5);
+            connection.setRequestProperty("Content-Type", "application/octet-stream");
+            if (!StringUtils.isEmpty(base64Md5)) {
+                connection.setRequestProperty("Content-MD5", base64Md5);
+                connection.setRequestProperty("x-amz-meta-base64md5", base64Md5);
             }
             connection.setDoOutput(true);
             connection.setDoInput(true);
@@ -189,31 +195,31 @@ public class CommonUtils {
             out = new DataOutputStream(connection.getOutputStream());
             long fileSize = path.toFile().length();
 
-            try(InputStream in = Files.newInputStream(path)){
+            try (InputStream in = Files.newInputStream(path)) {
                 long nread = 0L;
                 byte[] buf = new byte[8192];
                 int n;
                 while ((n = in.read(buf)) > 0) {
                     out.write(buf, 0, n);
                     nread += n;
-                    if(listener!=null){
+                    if (listener != null) {
                         int progress = (int) Math.round(((double) nread / (double) fileSize) * 100d);
-                        progress = progress==100?99:progress;
-                        listener.progress(progress,connection);
+                        progress = progress == 100 ? 99 : progress;
+                        listener.progress(progress, connection);
                     }
                 }
             }
             int code = connection.getResponseCode();
-            if(code!=200){
-                throw new RuntimeException(code+" 检查MD5");
+            if (code != 200) {
+                throw new RuntimeException(code + " 检查MD5");
             }
-            if(listener!=null){
-                listener.progress(100,connection);
+            if (listener != null) {
+                listener.progress(100, connection);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new FileUploadException(path.getFileName().toString());
-        }finally {
+        } finally {
             try {
                 reader.close();
                 out.flush();
@@ -223,17 +229,20 @@ public class CommonUtils {
             }
         }
     }
-    public static void downloadAsync(String serverPath, Path localPath,PropertyChangeListener listener) throws FileDownloadException,FileNotFoundException {
+
+    public static void downloadAsync(String serverPath, Path localPath, PropertyChangeListener listener) throws FileDownloadException, FileNotFoundException {
         String preSignedUrl = GafClient.instance().downloadPresignUrl(serverPath);
-        FileDownloadWork downloadWork = new FileDownloadWork(preSignedUrl,localPath);
+        FileDownloadWork downloadWork = new FileDownloadWork(preSignedUrl, localPath);
         downloadWork.addPropertyChangeListener(listener);
-        ApplicationContextUtils.getOutput().output("开始下载"+localPath.getFileName().toString());
+        ApplicationContextUtils.getOutput().output("开始下载" + localPath.getFileName().toString());
         downloadWork.execute();
     }
-    public static void downloadByPreSignedUrl(String preSignedUrl, Path path) throws FileDownloadException,FileNotFoundException{
-        downloadByPreSignedUrl(preSignedUrl,path,null);
+
+    public static void downloadByPreSignedUrl(String preSignedUrl, Path path) throws FileDownloadException, FileNotFoundException {
+        downloadByPreSignedUrl(preSignedUrl, path, null);
     }
-    public static void downloadByPreSignedUrl(String preSignedUrl, Path path, ProgressListener listener) throws FileDownloadException,FileNotFoundException {
+
+    public static void downloadByPreSignedUrl(String preSignedUrl, Path path, ProgressListener listener) throws FileDownloadException, FileNotFoundException {
         HttpURLConnection connection = null;
         try {
             URL url = new URL(preSignedUrl);
@@ -246,7 +255,7 @@ public class CommonUtils {
 //        connection.getContentLength();
             DataInputStream in = new DataInputStream(connection.getInputStream());
             long fileSize = connection.getContentLength();
-            try(OutputStream out = Files.newOutputStream(path)){
+            try (OutputStream out = Files.newOutputStream(path)) {
                 long nread = 0L;
                 byte[] buf = new byte[8192];
                 int n;
@@ -268,38 +277,39 @@ public class CommonUtils {
             if (listener != null) {
                 listener.progress(100, connection);
             }
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             JOptionPaneUtilities.showErrorMessageDialog("文件不存在");
             throw e;
-        }catch (Exception e){
-            ApplicationContextUtils.getOutput().output(path.getFileName().toString()+"下载失败");
+        } catch (Exception e) {
+            ApplicationContextUtils.getOutput().output(path.getFileName().toString() + "下载失败");
             throw new FileDownloadException(path.getFileName().toString());
-        }finally {
+        } finally {
             connection.disconnect();
 
         }
     }
 
     public static void deletePath(Path path) throws IOException {
-        if(!Files.isDirectory(path)){
+        if (!Files.isDirectory(path)) {
             Files.deleteIfExists(path);
-        }else{
+        } else {
             Files.walkFileTree(path,
-                new SimpleFileVisitor<Path>() {
-                    @Override
-                    public FileVisitResult visitFile(Path file,
-                                                     BasicFileAttributes attrs) throws IOException {
-                        Files.deleteIfExists(file);
-                        return FileVisitResult.CONTINUE;
-                    }
-                    @Override
-                    public FileVisitResult postVisitDirectory(Path dir,
-                                                              IOException exc) throws IOException {
-                        Files.deleteIfExists(dir);
-                        return FileVisitResult.CONTINUE;
-                    }
+                    new SimpleFileVisitor<Path>() {
+                        @Override
+                        public FileVisitResult visitFile(Path file,
+                                                         BasicFileAttributes attrs) throws IOException {
+                            Files.deleteIfExists(file);
+                            return FileVisitResult.CONTINUE;
+                        }
 
-                }
+                        @Override
+                        public FileVisitResult postVisitDirectory(Path dir,
+                                                                  IOException exc) throws IOException {
+                            Files.deleteIfExists(dir);
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                    }
             );
         }
     }
@@ -308,29 +318,30 @@ public class CommonUtils {
         DockbarManager dockbarManager = ApplicationContextUtils.getDockbarManager();
         IDockbar workspace = dockbarManager.get(GafWorkspaceManager.class);
         workspace.setVisible(true);
-        ((GafWorkspaceManager)workspace.getInnerComponent()).updateTree(new GafTree(GafClient.instance().workspaceList(), GafTree.GafTreeType.WORKSPACE_TREE));
+        ((GafWorkspaceManager) workspace.getInnerComponent()).updateTree(new GafTree(GafClient.instance().workspaceList(), GafTree.GafTreeType.WORKSPACE_TREE));
     }
+
     public static void refreshDatasourceTree() throws Exception {
         DockbarManager dockbarManager = ApplicationContextUtils.getDockbarManager();
         IDockbar datasource = dockbarManager.get(GafDatasourceManager.class);
         datasource.setVisible(true);
-        ((GafDatasourceManager)datasource.getInnerComponent()).updateTree(new GafTree(GafClient.instance().datasourceTree(), GafTree.GafTreeType.DATASOURCE_TREE));
+        ((GafDatasourceManager) datasource.getInnerComponent()).updateTree(new GafTree(GafClient.instance().datasourceTree(), GafTree.GafTreeType.DATASOURCE_TREE));
     }
 
-    public static DefaultMutableTreeNode searchTree(TreeModel treeModel,TreeSearchVisitor visitor){
+    public static DefaultMutableTreeNode searchTree(TreeModel treeModel, TreeSearchVisitor visitor) {
         DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) treeModel.getRoot();
         List<DefaultMutableTreeNode> needFind = new ArrayList<>();
         needFind.add(treeNode);
-        while(true){
-            if(needFind.isEmpty()){
+        while (true) {
+            if (needFind.isEmpty()) {
                 return null;
             }
             List<DefaultMutableTreeNode> tmp = new ArrayList<>();
-            for(DefaultMutableTreeNode parent:needFind){
-                if(visitor.search(parent)){
+            for (DefaultMutableTreeNode parent : needFind) {
+                if (visitor.search(parent)) {
                     return parent;
                 }
-                for(int i=0;i<parent.getChildCount();++i){
+                for (int i = 0; i < parent.getChildCount(); ++i) {
                     DefaultMutableTreeNode node = (DefaultMutableTreeNode) parent.getChildAt(i);
                     tmp.add(node);
                 }
@@ -339,70 +350,72 @@ public class CommonUtils {
         }
     }
 
-    public static ResizableIcon getICon(WorkspaceType workspaceType){
+    public static ResizableIcon getICon(WorkspaceType workspaceType) {
         String iconPath = "";
         iconPath = "/coreresources/WorkspaceManager/Image_RecentUseWorkspace.png";
         return CoreResources.getIcon(iconPath);
     }
-    public static ResizableIcon getICon(EngineType engineType){
+
+    public static ResizableIcon getICon(EngineType engineType) {
         return DatasourceImageUtilities.getEngineIcon(engineType);
     }
 
-    public static int dirChoose(SmFileChoose smFileChoose,String conflictFileName){
-        if(smFileChoose.showOpenDialog(null)!=0){
+    public static int dirChoose(SmFileChoose smFileChoose, String conflictFileName) {
+        if (smFileChoose.showOpenDialog(null) != 0) {
             return -1;
         }
         Path downloadPath = null;
-        if(conflictFileName!=null){
-            downloadPath = Paths.get(smFileChoose.getFilePath()+"/"+conflictFileName);
-            if(Files.exists(downloadPath)){
-                if(UICommonToolkit.showConfirmDialogYesNo("目录下已存在同名文件，是否覆盖？")!=0){
+        if (conflictFileName != null) {
+            downloadPath = Paths.get(smFileChoose.getFilePath() + "/" + conflictFileName);
+            if (Files.exists(downloadPath)) {
+                if (UICommonToolkit.showConfirmDialogYesNo("目录下已存在同名文件，是否覆盖？") != 0) {
                     return 1;
                 }
             }
         }
         return 0;
     }
-    public static Optional<String> getFileName(Object source){
-        if(source == null){
+
+    public static Optional<String> getFileName(Object source) {
+        if (source == null) {
             return Optional.empty();
         }
-        try{
-            if(isFileTypeSource(source)){
-                if(source instanceof WorkspaceConnectionInfo){
-                    WorkspaceConnectionInfo connectionInfo = (WorkspaceConnectionInfo)source;
+        try {
+            if (isFileTypeSource(source)) {
+                if (source instanceof WorkspaceConnectionInfo) {
+                    WorkspaceConnectionInfo connectionInfo = (WorkspaceConnectionInfo) source;
                     return Optional.of(Paths.get(connectionInfo.getServer()).getFileName().toString());
-                }else if(source instanceof DatasourceConnectionInfo){
-                    DatasourceConnectionInfo connectionInfo = (DatasourceConnectionInfo)source;
+                } else if (source instanceof DatasourceConnectionInfo) {
+                    DatasourceConnectionInfo connectionInfo = (DatasourceConnectionInfo) source;
                     return Optional.of(Paths.get(connectionInfo.getServer()).getFileName().toString());
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return Optional.empty();
     }
 
-    public static interface TreeSearchVisitor{
+    public static interface TreeSearchVisitor {
         boolean search(DefaultMutableTreeNode node);
     }
 
-    public static void uploadWorkspace(Workspace oldWorkspace){
-        try{
+    public static void uploadWorkspace(Workspace oldWorkspace) {
+        try {
             WorkspaceConnectionInfo connectionInfo = oldWorkspace.getConnectionInfo();
-            if(CommonUtils.isFileTypeSource(connectionInfo)){
+            if (CommonUtils.isFileTypeSource(connectionInfo)) {
                 Path wPath = CommonUtils.handlerWorkspaceForUpload(oldWorkspace);
                 // todo: 上传工作空间
                 final Path tmp = wPath;
-                CommonUtils.uploadAsync("/datas/"+wPath.getFileName().toString(),wPath,false,evt -> {
+                CommonUtils.uploadAsync("/datas/" + wPath.getFileName().toString(), wPath, false, evt -> {
                     if (evt.getPropertyName().equals("progress")) {
                         Integer progress = (Integer) evt.getNewValue();
-                        if(progress%10==0){
-                            ApplicationContextUtils.getOutput().output("已上传"+tmp.getFileName().toString()+":"+progress+"%");
+                        if (progress % 10 == 0) {
+                            ApplicationContextUtils.getOutput().output("已上传" + tmp.getFileName().toString() + ":" + progress + "%");
                         }
-                        if(progress==100){
+                        if (progress == 100) {
                             try {
-                                ApplicationContextUtils.getOutput().output(tmp.getFileName().toString()+"上传完成");
+                                ApplicationContextUtils.getOutput().output(tmp.getFileName().toString() + "上传完成");
                                 CommonUtils.deletePath(tmp.getParent());
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -412,7 +425,7 @@ public class CommonUtils {
                 });
             }
         } catch (FileUploadException e) {
-            ApplicationContextUtils.getOutput().output(e.getMessage()+"上传失败");
+            ApplicationContextUtils.getOutput().output(e.getMessage() + "上传失败");
         } catch (Exception e) {
             ApplicationContextUtils.getOutput().output(e.getMessage());
         }
@@ -426,25 +439,25 @@ public class CommonUtils {
         WorkspaceConnectionInfo wOldConn = oldWorkspace.getConnectionInfo();
         Path wOldPath = Paths.get(wOldConn.getServer());
         Path tmpPath = Files.createTempDirectory("gaf_");
-        Path wPath= tmpPath.resolve(wOldPath.getFileName().toString());
+        Path wPath = tmpPath.resolve(wOldPath.getFileName().toString());
         Files.createDirectories(wPath.getParent());
-        Files.copy(wOldPath,wPath,StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(wOldPath, wPath, StandardCopyOption.REPLACE_EXISTING);
         WorkspaceConnectionInfo wConn = CommonUtils.copyWorkspaceConn(wOldConn);
         wConn.setServer(wPath.toString());
         workspace.open(wConn);
         Datasources datasources = workspace.getDatasources();
-        Map<Integer,Datasource> fileSources = new HashMap<>();
-        for(int i=0;i<oldDatasources.getCount();++i){
+        Map<Integer, Datasource> fileSources = new HashMap<>();
+        for (int i = 0; i < oldDatasources.getCount(); ++i) {
             Datasource datasource = oldDatasources.get(i);
             DatasourceConnectionInfo dConn = datasource.getConnectionInfo();
-            if(CommonUtils.isFileTypeSource(dConn)){
-                fileSources.put(i,datasources.get(i));
+            if (CommonUtils.isFileTypeSource(dConn)) {
+                fileSources.put(i, datasources.get(i));
             }
         }
         // 关闭文件型数据源
-        fileSources.values().stream().forEach(datasource->datasource.close());
+        fileSources.values().stream().forEach(datasource -> datasource.close());
         // 重新指定路径打开
-        for(Integer i:fileSources.keySet()){
+        for (Integer i : fileSources.keySet()) {
             Datasource datasource = oldDatasources.get(i);
             DatasourceConnectionInfo dConn = datasource.getConnectionInfo();
             Path dPath = Paths.get(dConn.getServer());
@@ -460,26 +473,26 @@ public class CommonUtils {
         return wPath;
     }
 
-    public static void uploadDatasource(Datasource datasource){
+    public static void uploadDatasource(Datasource datasource) {
         DatasourceConnectionInfo connectionInfo = datasource.getConnectionInfo();
-        if(isFileTypeSource(connectionInfo)){
+        if (isFileTypeSource(connectionInfo)) {
             Path path = Paths.get(connectionInfo.getServer());
-            if (!Files.exists(path)){
+            if (!Files.exists(path)) {
                 return;
             }
 
-            CommonUtils.uploadAsync("/datas/"+path.getFileName().toString(),path,evt -> {
+            CommonUtils.uploadAsync("/datas/" + path.getFileName().toString(), path, evt -> {
                 if (evt.getPropertyName().equals("progress")) {
                     Integer progress = (Integer) evt.getNewValue();
-                    if(progress%10==0){
-                        ApplicationContextUtils.getOutput().output("已上传"+path.getFileName().toString()+":"+progress+"%");
+                    if (progress % 10 == 0) {
+                        ApplicationContextUtils.getOutput().output("已上传" + path.getFileName().toString() + ":" + progress + "%");
                     }
-                    if(progress==100){
-                        ApplicationContextUtils.getOutput().output(path.getFileName().toString()+"上传完成");
+                    if (progress == 100) {
+                        ApplicationContextUtils.getOutput().output(path.getFileName().toString() + "上传完成");
                     }
                 }
             });
-            if(connectionInfo.getServer().endsWith(".udb")) {
+            if (connectionInfo.getServer().endsWith(".udb")) {
                 String uddPathStr = connectionInfo.getServer();
                 uddPathStr = uddPathStr.substring(0, uddPathStr.length() - 1) + "d";
                 Path uddPath = Paths.get(uddPathStr);
@@ -487,8 +500,8 @@ public class CommonUtils {
                     CommonUtils.uploadAsync("/datas/" + uddPath.getFileName().toString(), uddPath, evt -> {
                         if (evt.getPropertyName().equals("progress")) {
                             Integer progress = (Integer) evt.getNewValue();
-                            if(progress%10==0){
-                                ApplicationContextUtils.getOutput().output("已上传"+uddPath.getFileName().toString()+":"+progress+"%");
+                            if (progress % 10 == 0) {
+                                ApplicationContextUtils.getOutput().output("已上传" + uddPath.getFileName().toString() + ":" + progress + "%");
                             }
                             if (progress == 100) {
                                 ApplicationContextUtils.getOutput().output(uddPath.getFileName().toString() + "上传完成");
@@ -501,15 +514,16 @@ public class CommonUtils {
     }
 
 
-    public static boolean tipIfNotExist(String path){
-        try{
+    public static boolean tipIfNotExist(String path) {
+        try {
             JSONObject reJson = GafClient.instance().objectMetadata(path);
             JSONObject data = reJson.getJSONObject("data");
-            if(404==reJson.getInteger("status")){
+            if (404 == reJson.getInteger("status")) {
                 JOptionPaneUtilities.showErrorMessageDialog("文件不存在");
                 return true;
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         return false;
     }
 

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.menu.commontypes;
 
 import io.swagger.annotations.ApiModel;
@@ -13,36 +13,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @ApiModel("菜单数据对象")
 @EqualsAndHashCode
 public class MenuInfo {
-    @ApiModelProperty(value = "菜单唯一标识",notes = "菜单唯一标识")
+    @ApiModelProperty(value = "菜单唯一标识", notes = "菜单唯一标识")
     private String id;
-    @ApiModelProperty(value = "父菜单标识"  ,notes = "可以为空")
+    @ApiModelProperty(value = "父菜单标识", notes = "可以为空")
     private String pid;
-    @ApiModelProperty(value = "菜单资源路径"  )
+    @ApiModelProperty(value = "菜单资源路径")
     private String path;
-    @ApiModelProperty(value = "菜单名称"  )
+    @ApiModelProperty(value = "菜单名称")
     private String name;
-    @ApiModelProperty(value = "菜单打开方式"  )
+    @ApiModelProperty(value = "菜单打开方式")
     private String target;
     @ApiModelProperty(value = "菜单图标")
     private String icon;
-    @ApiModelProperty(value = "在父菜单下的索引位置"  )
+    @ApiModelProperty(value = "在父菜单下的索引位置")
     private Integer order;
-    @ApiModelProperty(value = "是否可见"  )
+    @ApiModelProperty(value = "是否可见")
     private boolean visible = true;
-    @ApiModelProperty(value = "是否外链"  )
+    @ApiModelProperty(value = "是否外链")
     private boolean isEmbed = false;
-    @ApiModelProperty(value = "外链地址"  )
+    @ApiModelProperty(value = "外链地址")
     private String embedUrl;
-    @ApiModelProperty(value = "子菜单"  )
-    private List<MenuInfo> children= new ArrayList<>();
-    @ApiModelProperty(value = ""  )
+    @ApiModelProperty(value = "子菜单")
+    private List<MenuInfo> children = new ArrayList<>();
+    @ApiModelProperty(value = "")
     /** eg: ppid.pid.id... select...like flag */
     private String flag;
 
@@ -142,7 +142,7 @@ public class MenuInfo {
         this.children = children;
     }
 
-    public void setNull2Default(){
+    public void setNull2Default() {
         if (pid == null) {
             pid = "";
         }

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.AuthResourceApi;
@@ -19,12 +19,12 @@ import java.util.*;
 
 /**
  * 接口(api)服务实现类
+ *
  * @author zhm
  * @date:2021/3/25
- *
  */
 @Service
-public class AuthResourceApiServiceImpl implements AuthResourceApiService{
+public class AuthResourceApiServiceImpl implements AuthResourceApiService {
     private final AuthResourceApiMapper authResourceApiMapper;
     private final BatchSortAndCodeService batchSortAndCodeService;
 
@@ -34,86 +34,86 @@ public class AuthResourceApiServiceImpl implements AuthResourceApiService{
     }
 
     @Override
-    public AuthResourceApi getById(String resourceApiId){
-        if(resourceApiId == null){
+    public AuthResourceApi getById(String resourceApiId) {
+        if (resourceApiId == null) {
             throw new IllegalArgumentException("resourceApiId不能为空");
         }
         return authResourceApiMapper.select(resourceApiId);
     }
-	
-	@Override
-    public Map<String,Object> pageList(AuthResourceApiSelectVo authResourceApiSelectVo){
-        if(authResourceApiSelectVo.getPageSize()==null || authResourceApiSelectVo.getPageSize()==0){
-           authResourceApiSelectVo.setPageSize(50);
-       }
+
+    @Override
+    public Map<String, Object> pageList(AuthResourceApiSelectVo authResourceApiSelectVo) {
+        if (authResourceApiSelectVo.getPageSize() == null || authResourceApiSelectVo.getPageSize() == 0) {
+            authResourceApiSelectVo.setPageSize(50);
+        }
         List<AuthResourceApi> pageList;
-        if(authResourceApiSelectVo.getOffset() == null || authResourceApiSelectVo.getOffset() < CommonConstant.OFFSET_MAX_FOR_SQL_BETTER){
+        if (authResourceApiSelectVo.getOffset() == null || authResourceApiSelectVo.getOffset() < CommonConstant.OFFSET_MAX_FOR_SQL_BETTER) {
             pageList = authResourceApiMapper.pageList(authResourceApiSelectVo);
-        }else{
+        } else {
             pageList = authResourceApiMapper.bigOffsetPageList(authResourceApiSelectVo);
         }
-		int totalCount=authResourceApiMapper.pageListCount();
+        int totalCount = authResourceApiMapper.pageListCount();
         Map<String, Object> result = new HashMap<>(2);
-		result.put(DbFieldNameConstant.PAGE_LIST, pageList);
-		result.put(DbFieldNameConstant.TOTAL_COUNT, totalCount);
-        return result;
-    }
-	
-	@Override
-    public Map<String,Object> searchList(AuthResourceApiSelectVo authResourceApiSelectVo){
-        if(authResourceApiSelectVo.getPageSize()==null || authResourceApiSelectVo.getPageSize()==0){
-           authResourceApiSelectVo.setPageSize(50);
-       }
-        List<AuthResourceApi> pageList;
-		pageList = authResourceApiMapper.searchList(authResourceApiSelectVo);
-		Integer totalCount = authResourceApiMapper.countOneField(authResourceApiSelectVo.getSearchFieldName(),authResourceApiSelectVo.getSearchFieldValue());
-        Map<String, Object> result = new HashMap<>(2);
-		result.put(DbFieldNameConstant.PAGE_LIST, pageList);
-		result.put(DbFieldNameConstant.TOTAL_COUNT, totalCount);
+        result.put(DbFieldNameConstant.PAGE_LIST, pageList);
+        result.put(DbFieldNameConstant.TOTAL_COUNT, totalCount);
         return result;
     }
 
-	@Override
+    @Override
+    public Map<String, Object> searchList(AuthResourceApiSelectVo authResourceApiSelectVo) {
+        if (authResourceApiSelectVo.getPageSize() == null || authResourceApiSelectVo.getPageSize() == 0) {
+            authResourceApiSelectVo.setPageSize(50);
+        }
+        List<AuthResourceApi> pageList;
+        pageList = authResourceApiMapper.searchList(authResourceApiSelectVo);
+        Integer totalCount = authResourceApiMapper.countOneField(authResourceApiSelectVo.getSearchFieldName(), authResourceApiSelectVo.getSearchFieldValue());
+        Map<String, Object> result = new HashMap<>(2);
+        result.put(DbFieldNameConstant.PAGE_LIST, pageList);
+        result.put(DbFieldNameConstant.TOTAL_COUNT, totalCount);
+        return result;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public AuthResourceApi insertAuthResourceApi(AuthResourceApi authResourceApi){
-		authResourceApi.setResourceApiId(UUID.randomUUID().toString());
+    public AuthResourceApi insertAuthResourceApi(AuthResourceApi authResourceApi) {
+        authResourceApi.setResourceApiId(UUID.randomUUID().toString());
         authResourceApiMapper.insert(authResourceApi);
         batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceApi.class, Collections.singletonList(authResourceApi.getApiCatalogId()));
         return authResourceApi;
     }
-	
-	@Override
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public void batchInsert(List<AuthResourceApi> authResourceApis){
-		if (authResourceApis != null && authResourceApis.size() > 0) {
+    public void batchInsert(List<AuthResourceApi> authResourceApis) {
+        if (authResourceApis != null && authResourceApis.size() > 0) {
             Set<String> parentIds = new HashSet<>();
-	        authResourceApis.forEach(authResourceApi -> {
-				authResourceApi.setResourceApiId(UUID.randomUUID().toString());
+            authResourceApis.forEach(authResourceApi -> {
+                authResourceApi.setResourceApiId(UUID.randomUUID().toString());
                 parentIds.add(authResourceApi.getApiCatalogId());
             });
             authResourceApiMapper.batchInsert(authResourceApis);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceApi.class,parentIds);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceApi.class, parentIds);
         }
-        
+
     }
 
-	@Override
-    public void deleteAuthResourceApi(String resourceApiId){
+    @Override
+    public void deleteAuthResourceApi(String resourceApiId) {
         authResourceApiMapper.delete(resourceApiId);
     }
 
-	@Override
-    public void batchDelete(List<String> resourceApiIds){
+    @Override
+    public void batchDelete(List<String> resourceApiIds) {
         authResourceApiMapper.batchDelete(resourceApiIds);
     }
-	
-	@Override
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public AuthResourceApi updateAuthResourceApi(AuthResourceApi authResourceApi){
+    public AuthResourceApi updateAuthResourceApi(AuthResourceApi authResourceApi) {
         AuthResourceApi oldAuthResourceApi = getById(authResourceApi.getResourceApiId());
         authResourceApiMapper.update(authResourceApi);
-        String parentId = authResourceApi.getApiCatalogId()!=null?  authResourceApi.getApiCatalogId():oldAuthResourceApi.getApiCatalogId();
-        batchSortAndCodeService.revisionSortSnForUpdate(AuthResourceApi.class,parentId,oldAuthResourceApi.getSortSn(),authResourceApi.getSortSn());
+        String parentId = authResourceApi.getApiCatalogId() != null ? authResourceApi.getApiCatalogId() : oldAuthResourceApi.getApiCatalogId();
+        batchSortAndCodeService.revisionSortSnForUpdate(AuthResourceApi.class, parentId, oldAuthResourceApi.getSortSn(), authResourceApi.getSortSn());
         return authResourceApi;
     }
 
@@ -130,7 +130,7 @@ public class AuthResourceApiServiceImpl implements AuthResourceApiService{
 
     @Override
     public List<AuthResourceApi> list(AuthResourceApi query) {
-	    return authResourceApiMapper.selectByCombination(query);
+        return authResourceApiMapper.selectByCombination(query);
     }
 
 }

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro.handler;
 
 import com.supermap.gaf.shiro.SecurityUtilsExt;
@@ -11,8 +11,9 @@ import com.supermap.gaf.common.storage.spi.exceptions.StorageTenantException;
 
 /**
  * The type Tenant info.
- * @date:2021/3/25
+ *
  * @author heykb
+ * @date:2021/3/25
  */
 public class TenantInfoImpl implements TenantInfoI {
 
@@ -24,9 +25,9 @@ public class TenantInfoImpl implements TenantInfoI {
      */
     @Override
     public String getTenantId() throws StorageTenantException {
-        try{
-            return SecurityUtilsExt.getUser().getAuthUser().getTenantId().replace("_","-");
-        }catch (Exception e){
+        try {
+            return SecurityUtilsExt.getUser().getAuthUser().getTenantId().replace("_", "-");
+        } catch (Exception e) {
             throw new StorageTenantException();
         }
     }

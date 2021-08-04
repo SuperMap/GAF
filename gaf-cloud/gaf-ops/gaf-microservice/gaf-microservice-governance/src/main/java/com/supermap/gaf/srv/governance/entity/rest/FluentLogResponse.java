@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.srv.governance.entity.rest;
 
 import io.swagger.annotations.ApiModel;
@@ -34,7 +34,7 @@ public class FluentLogResponse implements Serializable {
     private List<FluentLog> fluentLogs;
 
 
-    public static FluentLogResponse buildFromSearchResponse(SearchResponse searchResponse){
+    public static FluentLogResponse buildFromSearchResponse(SearchResponse searchResponse) {
         FluentLogResponse result = new FluentLogResponse();
 
         Long hitsTotal = searchResponse.getHits().getTotalHits().value;
@@ -45,7 +45,7 @@ public class FluentLogResponse implements Serializable {
         result.setFluentLogs(fluentLogs);
 
         SearchHits searchHits = searchResponse.getHits();
-        for (SearchHit searchHit : searchHits){
+        for (SearchHit searchHit : searchHits) {
             fluentLogs.add(FluentLog.buildFromSearchHit(searchHit));
         }
         return result;

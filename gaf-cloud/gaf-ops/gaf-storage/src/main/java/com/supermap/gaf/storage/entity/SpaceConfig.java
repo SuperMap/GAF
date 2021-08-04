@@ -8,26 +8,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("")
 @Data
-public class SpaceConfig{
+public class SpaceConfig {
     private static final long serialVersionUID = 1L;
-    
+
     private String serviceEndpoint;
-    
+
     private String accessKey;
-    
+
     private String secretKey;
-    
+
     private String bucketName;
-    
+
     private String name;
 
     private String id;
-    
+
     private Long totalSize;
 
     private String description;

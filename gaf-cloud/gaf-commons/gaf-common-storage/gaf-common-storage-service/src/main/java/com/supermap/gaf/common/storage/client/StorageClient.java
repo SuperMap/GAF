@@ -17,8 +17,8 @@ import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Nullable;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.File;
+import java.nio.file.Path;
 
 @Setter
 public class StorageClient {
@@ -51,13 +51,13 @@ public class StorageClient {
         this.preUrl = normalizePreUrl(preUrl);
     }
 
-    public void uploadFlie(String path, @Nullable String tenantId, InputStream in) {
+    public void uploadFlie(String path, @Nullable String tenantId, File file) {
         String signUrl = getUploadSignUrl(path, tenantId, null);
-        CommonStorageUtils.uploadByPreSignedUrl(new PresignUploadRequest(signUrl), in);
+        CommonStorageUtils.uploadByPreSignedUrl(new PresignUploadRequest(signUrl), file);
     }
 
-    public void quickUploadFlie(String path, @Nullable String tenantId, InputStream in) throws Exception {
-        String md5 = CommonStorageUtils.getBase64Md5(in);
+    public void quickUploadFlie(String path, @Nullable String tenantId, File file) throws Exception {
+        String md5 = CommonStorageUtils.getBase64Md5(file.toPath());
         boolean needUpload = true;
         try {
             ObjectMetadata objectMetadata = getObjectMetadata(path, tenantId);
@@ -67,25 +67,26 @@ public class StorageClient {
         }
         if (needUpload) {
             String signUrl = getUploadSignUrl(path, tenantId, md5);
-            CommonStorageUtils.uploadByPreSignedUrl(new PresignUploadRequest(signUrl, md5), in);
+            CommonStorageUtils.uploadByPreSignedUrl(new PresignUploadRequest(signUrl, md5), file);
         }
     }
 
-    public void downloadFile(String path, @Nullable String tenantId, OutputStream outputStream) {
+    public void downloadFile(String path, @Nullable String tenantId, Path file) {
         String downloadUrl = getDownloadSignUrl(path, tenantId);
-        CommonStorageUtils.downloadByPreSignedUrl(downloadUrl, outputStream);
+        CommonStorageUtils.downloadByPreSignedUrl(downloadUrl, file);
     }
 
     public VolumePathReturn getVolumePath(String path, @Nullable String tenantId, boolean returnUrl) {
         HttpHeaders headers = new HttpHeaders();
-        if(tenantId!=null){
+        if (tenantId != null) {
             headers.set(tenantIdHeaderName, tenantId);
         }
         headers.set(permissionHeaderName, superOwer);
         HttpEntity httpEntity = new HttpEntity(headers);
-        ParameterizedTypeReference<MessageResult<VolumePathReturn>> typeRef = new ParameterizedTypeReference<MessageResult<VolumePathReturn>>() {};
-        MessageResult<VolumePathReturn> body = restTemplate.exchange(String.format(VOLUME_PATH_URL, preUrl, configName, normalizePath(path),returnUrl), HttpMethod.GET,
-                httpEntity,typeRef).getBody();
+        ParameterizedTypeReference<MessageResult<VolumePathReturn>> typeRef = new ParameterizedTypeReference<MessageResult<VolumePathReturn>>() {
+        };
+        MessageResult<VolumePathReturn> body = restTemplate.exchange(String.format(VOLUME_PATH_URL, preUrl, configName, normalizePath(path), returnUrl), HttpMethod.GET,
+                httpEntity, typeRef).getBody();
         if (!body.isSuccessed()) {
             throw new RestClientResponseException(body.getMessage(), body.getStatus(), body.getMessage(), null, null, null);
         }
@@ -94,7 +95,7 @@ public class StorageClient {
 
     public Integer delete(String path, @Nullable String tenantId) {
         HttpHeaders headers = new HttpHeaders();
-        if(tenantId!=null){
+        if (tenantId != null) {
             headers.set(tenantIdHeaderName, tenantId);
         }
         headers.set(permissionHeaderName, superOwer);
@@ -109,7 +110,7 @@ public class StorageClient {
 
     public String getDownloadSignUrl(String path, @Nullable String tenantId) {
         HttpHeaders headers = new HttpHeaders();
-        if(tenantId!=null){
+        if (tenantId != null) {
             headers.set(tenantIdHeaderName, tenantId);
         }
         headers.set(permissionHeaderName, superOwer);
@@ -124,7 +125,7 @@ public class StorageClient {
 
     private String getUploadSignUrl(String path, @Nullable String tenantId, @Nullable String md5) {
         HttpHeaders headers = new HttpHeaders();
-        if(tenantId!=null){
+        if (tenantId != null) {
             headers.set(tenantIdHeaderName, tenantId);
         }
         if (md5 != null) {
@@ -132,7 +133,7 @@ public class StorageClient {
         }
         headers.set(permissionHeaderName, superOwer);
         HttpEntity httpEntity = new HttpEntity(headers);
-        MessageResult<String> body = restTemplate.exchange(String.format(UPLOAD_SIGN_URL, preUrl, configName, normalizePath(path)), HttpMethod.GET,
+        MessageResult<String> body = restTemplate.exchange(String.format(UPLOAD_SIGN_URL, preUrl, configName, normalizePath(path)), HttpMethod.PUT,
                 httpEntity, MessageResult.class).getBody();
         if (!body.isSuccessed()) {
             throw new RestClientResponseException(body.getMessage(), body.getStatus(), body.getMessage(), null, null, null);
@@ -142,7 +143,7 @@ public class StorageClient {
 
     private ObjectMetadata getObjectMetadata(String path, @Nullable String tenantId) {
         HttpHeaders headers = new HttpHeaders();
-        if(tenantId!=null){
+        if (tenantId != null) {
             headers.set(tenantIdHeaderName, tenantId);
         }
         headers.set(permissionHeaderName, superOwer);
@@ -155,18 +156,12 @@ public class StorageClient {
         return body.getData();
     }
 
-    String normalizePath(String path){
-        return path.replaceFirst("^/*","");
-    }
-    String normalizePreUrl(String preUrl){
-        return preUrl.endsWith("/")? preUrl.replaceAll("/+$","/"):preUrl+"/";
+    String normalizePath(String path) {
+        return path.replaceFirst("^/*", "");
     }
 
-    public static void main(String[] args) {
-        StorageClient client = new StorageClient("http://localhost:8888/storage/api/platform/","yctest123");
-//        VolumePathReturn path = client.getVolumePath("test/",null,true);
-//        System.out.println(path);
-        String path = client.normalizePreUrl("////fdfds/fdfdsf/ss/////");
-        System.out.println(path);
+    String normalizePreUrl(String preUrl) {
+        return preUrl.endsWith("/") ? preUrl.replaceAll("/+$", "") : preUrl;
     }
+
 }

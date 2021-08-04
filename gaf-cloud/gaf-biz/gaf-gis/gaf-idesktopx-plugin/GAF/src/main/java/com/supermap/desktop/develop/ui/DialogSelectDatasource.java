@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ui;
 
 import com.supermap.data.Datasource;
@@ -38,8 +38,8 @@ import java.util.Optional;
 import static java.awt.GridBagConstraints.BOTH;
 
 /**
- * @date:2021/3/25
  * @author heykb
+ * @date:2021/3/25
  */
 public class DialogSelectDatasource extends SmDialog {
     // 面板
@@ -50,11 +50,12 @@ public class DialogSelectDatasource extends SmDialog {
     private Catalog catalog;
     private JTable table;
     private JScrollPane scrollPane;
+
     public DialogSelectDatasource(java.util.List<SelectableDatasource> datasources, Catalog catalog) {
 //        DialogServerReleaseWorkspace
         super();
         this.datasources = datasources;
-        this.catalog =catalog;
+        this.catalog = catalog;
         // 设置对话框大小
         this.setSize(new Dimension(500, 250));
         // 新建各个组件
@@ -81,9 +82,9 @@ public class DialogSelectDatasource extends SmDialog {
         this.buttonCancel = ComponentFactory.createButtonCancel();
         this.table = new JTable();
         this.table.setModel(new DatasourceSelectTableModel());
-        DefaultTableCellRenderer r=new DefaultTableCellRenderer();
+        DefaultTableCellRenderer r = new DefaultTableCellRenderer();
         r.setHorizontalAlignment(JLabel.CENTER);
-        table.setDefaultRenderer(Object.class,r);
+        table.setDefaultRenderer(Object.class, r);
 
         table.getColumnModel().getColumn(0).setMaxWidth(30);
         MyCheckBoxRenderer check = new MyCheckBoxRenderer();
@@ -91,13 +92,13 @@ public class DialogSelectDatasource extends SmDialog {
         table.getColumn("select").setHeaderRenderer(check);
         table.getTableHeader().addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e){
-                if(table.getColumnModel().getColumnIndexAtX(e.getX())==0){//如果点击的是第0列，即checkbox这一列
-                    JCheckBox Checkbox = (JCheckBox)check;
+            public void mouseClicked(MouseEvent e) {
+                if (table.getColumnModel().getColumnIndexAtX(e.getX()) == 0) {//如果点击的是第0列，即checkbox这一列
+                    JCheckBox Checkbox = (JCheckBox) check;
                     boolean b = !check.isSelected();
                     check.setSelected(b);
                     table.getTableHeader().repaint();
-                    for(int i=0;i<table.getRowCount();i++){
+                    for (int i = 0; i < table.getRowCount(); i++) {
                         table.getModel().setValueAt(b, i, 0);//把这一列都设成和表头一样
                     }
                 }
@@ -137,7 +138,6 @@ public class DialogSelectDatasource extends SmDialog {
     }
 
 
-
     private final ActionListener actionListenerOK = e -> {
         run();
         setDialogResult(DialogResult.CANCEL);
@@ -147,34 +147,34 @@ public class DialogSelectDatasource extends SmDialog {
     private final ActionListener actionListenerCancel = e -> dispose();
 
 
-    private void run(){
+    private void run() {
         try {
             CommonUtils.refreshDatasourceTree();
         } catch (Exception e) {
             e.printStackTrace();
         }
         DefaultMutableTreeNode re = CommonUtils.searchTree(GafDatasourceManager.gafDatasourceManagerTree.getTreeModel(), node -> {
-            if(node.getUserObject() instanceof DatasourceConnectionInfo){
+            if (node.getUserObject() instanceof DatasourceConnectionInfo) {
                 DatasourceConnectionInfo connectionInfo = (DatasourceConnectionInfo) node.getUserObject();
-                for(SelectableDatasource selectableDatasource:datasources){
-                    if(selectableDatasource.isSelect()){
+                for (SelectableDatasource selectableDatasource : datasources) {
+                    if (selectableDatasource.isSelect()) {
                         DatasourceConnectionInfo curConn = selectableDatasource.getDatasource().getConnectionInfo();
-                        if(curConn.getEngineType()==connectionInfo.getEngineType()){
-                            if(CommonUtils.isFileTypeSource(curConn)){
+                        if (curConn.getEngineType() == connectionInfo.getEngineType()) {
+                            if (CommonUtils.isFileTypeSource(curConn)) {
                                 // 比较文件名
                                 Optional<String> fileName = CommonUtils.getFileName(connectionInfo);
-                                if(!fileName.isPresent()){
+                                if (!fileName.isPresent()) {
                                     return false;
                                 }
                                 boolean result = Paths.get(curConn.getServer()).getFileName().toString().equals(fileName.get());
-                                if(result){
-                                    ApplicationContextUtils.getOutput().output(selectableDatasource.getDatasource().getAlias()+"注册失败：文件已存在");
+                                if (result) {
+                                    ApplicationContextUtils.getOutput().output(selectableDatasource.getDatasource().getAlias() + "注册失败：文件已存在");
                                     selectableDatasource.setSelect(false);
                                 }
-                            }else{
+                            } else {
                                 return false;
                             }
-                        }else{
+                        } else {
                             return false;
                         }
                     }
@@ -183,16 +183,16 @@ public class DialogSelectDatasource extends SmDialog {
             }
             return false;
         });
-        for(SelectableDatasource selectableDatasource:datasources){
-            if(selectableDatasource.isSelect()){
+        for (SelectableDatasource selectableDatasource : datasources) {
+            if (selectableDatasource.isSelect()) {
                 Datasource datasource = selectableDatasource.getDatasource();
                 DatasourceConnectionInfo connectionInfo = datasource.getConnectionInfo();
                 try {
-                    GafClient.instance().registryDatasource(connectionInfo,catalog.getCatalogCode(),"datas/");
+                    GafClient.instance().registryDatasource(connectionInfo, catalog.getCatalogCode(), "datas/");
                     CommonUtils.uploadDatasource(datasource);
-                    ApplicationContextUtils.getOutput().output(datasource.getAlias()+"数据源注册成功");
+                    ApplicationContextUtils.getOutput().output(datasource.getAlias() + "数据源注册成功");
                 } catch (Exception e) {
-                    ApplicationContextUtils.getOutput().output(datasource.getAlias()+"数据源注册失败");
+                    ApplicationContextUtils.getOutput().output(datasource.getAlias() + "数据源注册失败");
                 }
 
             }
@@ -204,20 +204,20 @@ public class DialogSelectDatasource extends SmDialog {
         }
 
     }
+
     private class DatasourceSelectTableModel extends DefaultTableModel {
 
 
         @Override
         public String getColumnName(int column) {
-            if(column==0){
+            if (column == 0) {
                 return "select";
-            }else if(column==1){
+            } else if (column == 1) {
                 return " 数据源";
-            }else{
+            } else {
                 return "  类型";
             }
         }
-
 
 
         @Override
@@ -234,31 +234,34 @@ public class DialogSelectDatasource extends SmDialog {
         public Object getValueAt(int row, int column) {
             SelectableDatasource selectableDatasource = DialogSelectDatasource.this.datasources.get(row);
             Datasource datasource = selectableDatasource.getDatasource();
-            if(column==0){
+            if (column == 0) {
                 return selectableDatasource.isSelect();
-            }else if(column == 1){
-                return "  "+datasource.getAlias();
-            }else{
-                return "  "+datasource.getEngineType().name();
+            } else if (column == 1) {
+                return "  " + datasource.getAlias();
+            } else {
+                return "  " + datasource.getEngineType().name();
             }
 
 
         }
+
         @Override
         public Class<?> getColumnClass(int columnIndex) {
-            if(columnIndex==0){
+            if (columnIndex == 0) {
                 return Boolean.class;
-            }else {
+            } else {
                 return String.class;
             }
         }
+
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return columnIndex==0;
+            return columnIndex == 0;
         }
+
         @Override
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-            if(columnIndex==0){
+            if (columnIndex == 0) {
                 SelectableDatasource selectableDatasource = DialogSelectDatasource.this.datasources.get(rowIndex);
                 selectableDatasource.setSelect((Boolean) aValue);
                 fireTableCellUpdated(rowIndex, columnIndex);
@@ -266,14 +269,15 @@ public class DialogSelectDatasource extends SmDialog {
         }
     }
 
-    static class MyCheckBoxRenderer extends JCheckBox implements TableCellRenderer{
+    static class MyCheckBoxRenderer extends JCheckBox implements TableCellRenderer {
 
-        public MyCheckBoxRenderer () {
-                this.setBorderPainted(true);
+        public MyCheckBoxRenderer() {
+            this.setBorderPainted(true);
         }
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column) {
+                                                       boolean isSelected, boolean hasFocus, int row, int column) {
             return this;
         }
     }

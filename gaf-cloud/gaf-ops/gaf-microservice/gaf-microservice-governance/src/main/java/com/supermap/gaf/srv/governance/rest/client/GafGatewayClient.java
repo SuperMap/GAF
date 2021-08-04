@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.srv.governance.rest.client;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -25,6 +25,7 @@ public interface GafGatewayClient {
 
     /**
      * 查询自定义网关路由
+     *
      * @param routeSearchParam
      * @return
      */
@@ -33,6 +34,7 @@ public interface GafGatewayClient {
 
     /**
      * Id为参数查询自定义网关路由
+     *
      * @param id
      * @return
      */
@@ -41,6 +43,7 @@ public interface GafGatewayClient {
 
     /**
      * 新增自定义网关路由
+     *
      * @param route
      * @return
      */
@@ -49,6 +52,7 @@ public interface GafGatewayClient {
 
     /**
      * 批量删除路由
+     *
      * @param idsJsonStr
      * @return
      */
@@ -57,6 +61,7 @@ public interface GafGatewayClient {
 
     /**
      * ID删除路由
+     *
      * @param id
      * @return
      */
@@ -65,6 +70,7 @@ public interface GafGatewayClient {
 
     /**
      * 编辑路由
+     *
      * @param route
      * @return
      */

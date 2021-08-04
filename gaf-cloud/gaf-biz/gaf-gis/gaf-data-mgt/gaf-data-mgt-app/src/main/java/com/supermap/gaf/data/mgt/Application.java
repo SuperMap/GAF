@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt;
 
 
@@ -18,10 +18,10 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.web.client.RestTemplate;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.supermap.gaf"}, excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.supermap.gaf.common.storage.*"))
 @EnableDiscoveryClient

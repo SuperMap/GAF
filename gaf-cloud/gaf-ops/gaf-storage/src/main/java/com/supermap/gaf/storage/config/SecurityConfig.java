@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@ConditionalOnProperty(value = "GAF_STORAGE_AUTHENTICATION_ENABLE",havingValue = "true",matchIfMissing = true)
+@ConditionalOnProperty(value = "GAF_STORAGE_AUTHENTICATION_ENABLE", havingValue = "true", matchIfMissing = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -24,22 +24,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("admin").password(passwordEncoder().encode("123456"))
-        .roles("admin");
+                .roles("admin");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
-                .defaultSuccessUrl("/",false)
+                .defaultSuccessUrl("/", false)
                 .loginPage("/login")
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login*","/static/**","/favicon.ico")
+                .antMatchers("/login*", "/static/**", "/favicon.ico")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().logout()
                 .and()
                 .csrf()
-                .ignoringAntMatchers( "/logout","/storage/**");
+                .ignoringAntMatchers("/logout", "/storage/**");
     }
 }

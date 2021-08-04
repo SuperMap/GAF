@@ -3,22 +3,24 @@
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
  */
-package com.supermap.gaf.authority.configuration;
+package com.supermap.gaf.webgis.configuration;
 
-import com.supermap.gaf.shiro.spring.JWTTokenClientFeignInterceptor;
-import feign.RequestInterceptor;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
+
 
 /**
- * @author wxl
+ * @author:yj
  * @date:2021/3/25
  */
 @Configuration
-public class FeignConfig {
+public class RestTemplateConfig {
 
-    @Bean
-    public RequestInterceptor headerInterceptor() {
-        return new JWTTokenClientFeignInterceptor();
+    @Bean("storageRestTemplate")
+    @LoadBalanced
+    public RestTemplate storageRestTemplate() {
+        return new RestTemplate();
     }
 }
