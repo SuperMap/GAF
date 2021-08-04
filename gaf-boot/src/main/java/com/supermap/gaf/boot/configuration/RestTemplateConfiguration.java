@@ -41,6 +41,10 @@ public class RestTemplateConfiguration {
         restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));// 设置utf-8编码格式
         return restTemplate;
     }
+    @Bean("storageRestTemplate")
+    public RestTemplate storageRestTemplate() {
+        return new RestTemplate();
+    }
 
     /**
      * 客户端请求链接策略
