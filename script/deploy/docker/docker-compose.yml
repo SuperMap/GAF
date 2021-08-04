@@ -140,6 +140,20 @@ services:
     - gaf-net
     restart: always
     container_name: gaf-mapapp
+  gaf-boot:
+    image: ${GAF_REGISTRY}gaf-boot:${GAF_REGISTRY_TAG}
+    networks:
+    - gaf-net
+    ports:
+    - 1947
+    - 80:7777
+    volumes:
+    - ${GAF_VOL_DIR}/License:/opt/SuperMap/License
+    - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs:shared
+    env_file:
+    - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    container_name: gaf-boot
+    restart: always
 
 
   gaf-postgres:
@@ -186,6 +200,19 @@ services:
       GAF_PASSWORD: 123456
       GAF_TOKEN_URL: http://gaf-authentication:8080/authentication/token
       GAF_CONFIG_URL: http://gaf-authority:8080/authority/auth-tenants/s3-config
+    volumes:
+    - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs:shared
+    container_name: gaf-s3fs-mount
+  gaf-s3fs-mount-forboot:
+    image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/gaf-s3fs-mount:v2.0
+    networks:
+    - gaf-net
+    privileged: true
+    environment:
+      GAF_USERNAME: sys_admin
+      GAF_PASSWORD: 123456
+      GAF_TOKEN_URL: http://gaf-boot:8080/authentication/token
+      GAF_CONFIG_URL: http://gaf-boot:8080/authority/auth-tenants/s3-config
     volumes:
     - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs:shared
     container_name: gaf-s3fs-mount

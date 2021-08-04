@@ -122,6 +122,8 @@ port_gaf() {
 
 #构建打包所有GAF应用
 build_frontend() {
+    export NODE_OPTIONS=--max_old_space_size=4096
+
     cd $Root_Current_Dir/../../../
 
     cd gaf-web
@@ -173,9 +175,6 @@ build_images() {
     mvn clean package dockerfile:build -Ddockerfile.build.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY} -DCUSTOM_TAG=${GAF_REGISTRY_TAG}
 }
 
-build_push_images() {
-    mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY} -DCUSTOM_TAG=${GAF_REGISTRY_TAG}
-}
 
 #修改某些挂载卷的权限
 edit_vol_permission() {

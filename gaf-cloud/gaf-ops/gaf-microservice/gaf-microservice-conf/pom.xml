@@ -70,7 +70,7 @@
 				<artifactId>dockerfile-maven-plugin</artifactId>
 				<configuration>
 					<dockerfile>${project.basedir}/src/main/k8s/Dockerfile</dockerfile>
-					<repository>${CUSTOM_REGISTRY}gaf-microservice-conf</repository>
+					<repository>${CUSTOM_REGISTRY}${project.artifactId}</repository>
 					<tag>${CUSTOM_TAG}</tag>
 					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
 					<skipDockerInfo>true</skipDockerInfo>

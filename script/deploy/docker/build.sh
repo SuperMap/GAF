@@ -2,15 +2,22 @@
 
 
 #使用说明
-usage() {
-	echo "Usage:	./deploy COMMAND"
-	echo ""
-	echo "【GAF应用部署程序】"
-	echo ""
-	echo "Commands:"
-	echo "  help          --查看帮助"
-	echo "  push          --构建镜像并推送镜像到镜像仓库(需要在Maven配置文件设置仓库账号信息)"
+usage()
+{
+    cat << USAGE >&2
+Usage:
+	GAF应用构建脚本 build [COMMANDS]
+
+	COMMANDS:
+
+	build                       --调用容器执行构建命令(需要docker环境)
+	build_in_container          --执行构建命令(需要构建环境)
+	boot                        --调用容器执行GAF-BOOT构建命令(需要docker环境)
+	boot_in_container           --执行GAF-BOOT构建命令(需要构建环境)
+USAGE
+    exit 1
 }
+
 
 workspace() {
     #设置工作目录
@@ -24,10 +31,9 @@ workspace() {
     source $Root_Current_Dir/.env
 }
 
-build() {
-     #检查命令
+build_in_container() {
+    #检查命令
     check_commands docker java mvn yarn
-    export NODE_OPTIONS=--max_old_space_size=4096
     #构建前端产出dist目录
     build_frontend
     cd $Root_Current_Dir/../../../
@@ -35,22 +41,39 @@ build() {
     build_images
 }
 
-container_build() {
+build() {
     #检查命令
     check_commands docker
     #寻找项目路径，挂载点
     export Gaf_Project_Path=`readlink -f $Root_Current_Dir/../../../`
     check_gaf_project_exist
     #创建docker容器，容器内进行编译打包镜像
-    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $Gaf_Project_Path:/opt/GAF registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 bash /opt/GAF/script/deploy/docker/build.sh build
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $Gaf_Project_Path:/opt/GAF registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 bash /opt/GAF/script/deploy/docker/build.sh build_in_container
 }
 
-
-push() {
+boot_in_container() {
+    #检查命令
+    check_commands docker java mvn yarn
+    #构建前端产出dist目录
     build_frontend
+    #移动dist目录
     cd $Root_Current_Dir/../../../
-    build_push_images
+    cp -r gaf-web/gaf-webapp/dist gaf-boot/dist_gaf-webapp
+    cp -r gaf-web/gaf-mapapp/dist gaf-boot/dist_gaf-mapapp
+    #构建gaf-boot镜像
+    mvn clean package dockerfile:build -Ddockerfile.build.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-boot -am
 }
+
+boot() {
+    #检查命令
+    check_commands docker
+    #寻找项目路径，挂载点
+    export Gaf_Project_Path=`readlink -f $Root_Current_Dir/../../../`
+    check_gaf_project_exist
+    #创建docker容器，容器内进行编译打包镜像
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $Gaf_Project_Path:/opt/GAF registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 bash /opt/GAF/script/deploy/docker/build.sh boot_in_container
+}
+
 
 #命令判断
 case "$1" in
@@ -61,8 +84,20 @@ case "$1" in
     workspace
     build
 ;;
+"build_in_container")
+    workspace
+    build_in_container
+;;
+"boot")
+    workspace
+    boot
+;;
+"boot_in_container")
+    workspace
+    boot_in_container
+;;
 *)
 	workspace
-	container_build
+	build
 ;;
 esac

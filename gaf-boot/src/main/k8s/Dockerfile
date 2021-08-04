@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/supermap-gaf/ugo-base:2.0
+FROM registry.cn-hangzhou.aliyuncs.com/supermap-gaf/boot-base:2.0
 MAINTAINER user "user@supermap.com"
 # 需要配置数据库
 ENV GAF_ENV_DATASOURCE_URL 'jdbc:postgresql://localhost:5432/postgres'
@@ -19,9 +19,14 @@ VOLUME /tmp
 VOLUME /usr/local/supermap/Bin/supermap_any_2020.lic9d
 # 需要minio挂载
 VOLUME /data-s3fs
-ADD target/*.jar app.jar
+
+ADD target/*.jar /app.jar
 COPY src/main/k8s/docker-entrypoint.sh /
+COPY src/main/k8s/default.conf /etc/nginx/conf.d
+COPY *_gaf-webapp /usr/share/nginx/html/dist_gaf-webapp
+COPY *_gaf-mapapp /usr/share/nginx/html/dist_gaf-mapapp
+
+RUN chmod -R 755 /usr/share/nginx/html
 RUN chmod +x /docker-entrypoint.sh
 EXPOSE 8080
-HEALTHCHECK --interval=30s --timeout=5s CMD curl -fs http://localhost:8080/actuator/health || exit 1
 ENTRYPOINT ["/docker-entrypoint.sh"]
