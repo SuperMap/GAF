@@ -246,7 +246,7 @@ h1 {
     padding-left: 30px;
     border-radius: 0px;
 }
-/deep/ [data-v-1c231103] .ant-input-affix-wrapper .ant-input:not(:first-child) {
+/deep/ .ant-input-affix-wrapper .ant-input:not(:first-child) {
     border: 1px solid #434343;
     box-shadow: 0px 3px 27px 0px rgb(4 0 0 / 33%);
     opacity: 0.9;
