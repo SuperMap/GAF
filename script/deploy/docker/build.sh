@@ -36,7 +36,10 @@ build_in_container() {
     check_commands docker java mvn yarn
     #构建前端产出dist目录
     build_frontend
+    #移动dist目录
     cd $Root_Current_Dir/../../../
+    cp -r gaf-web/gaf-webapp/dist gaf-boot/dist_gaf-webapp
+    cp -r gaf-web/gaf-mapapp/dist gaf-boot/dist_gaf-mapapp
     #构建前端、后端镜像
     build_images
 }

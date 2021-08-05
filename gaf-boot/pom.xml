@@ -155,8 +155,8 @@
                     <tag>${CUSTOM_TAG}</tag>
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                     <skipDockerInfo>true</skipDockerInfo>
-                    <skipBuild>true</skipBuild>
-                    <skipPush>true</skipPush>
+                    <skipBuild>false</skipBuild>
+                    <skipPush>false</skipPush>
                 </configuration>
             </plugin>
         </plugins>
