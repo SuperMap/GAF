@@ -23,8 +23,8 @@ VOLUME /data-s3fs
 ADD target/*.jar /app.jar
 COPY src/main/k8s/docker-entrypoint.sh /
 COPY src/main/k8s/default.conf /etc/nginx/conf.d
-COPY *_gaf-webapp /usr/share/nginx/html/dist_gaf-webapp
-COPY *_gaf-mapapp /usr/share/nginx/html/dist_gaf-mapapp
+COPY pom.xml dist_gaf-webap[p]/* /usr/share/nginx/html/dist_gaf-webapp
+COPY pom.xml dist_gaf-mapap[p]/* /usr/share/nginx/html/dist_gaf-mapapp
 
 RUN chmod -R 755 /usr/share/nginx/html
 RUN chmod +x /docker-entrypoint.sh
