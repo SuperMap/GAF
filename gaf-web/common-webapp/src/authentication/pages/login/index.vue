@@ -238,15 +238,12 @@ h1 {
 /deep/ .ant-form-item label {
     color: #FFFFFF;
 }
-/deep/ .ant-form-item-required::before {
-  color: #FFFFFF;
-}
 /deep/ .ant-input-affix-wrapper .ant-input:not(:first-child) {
     background: #222222;
     padding-left: 30px;
     border-radius: 0px;
 }
-/deep/ [data-v-1c231103] .ant-input-affix-wrapper .ant-input:not(:first-child) {
+/deep/ .ant-input-affix-wrapper .ant-input:not(:first-child) {
     border: 1px solid #434343;
     box-shadow: 0px 3px 27px 0px rgb(4 0 0 / 33%);
     opacity: 0.9;
@@ -254,5 +251,19 @@ h1 {
     padding-left: 30px;
     border-radius: 0px;
     color: #FFFFFF
+}
+/deep/ .ant-form-item-required::before {
+  color: #FFFFFF;
+}
+/deep/ .ant-form-item-required:before {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 14px;
+    font-family: SimSun,sans-serif;
+    line-height: 1;
+    content: " ";
+    height: 12px;
+    width: 5px;
+    background-color: #329DFF;
 }
 </style>
