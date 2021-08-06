@@ -5,17 +5,12 @@
  */
 package com.supermap.gaf.data.mgt.resource.root;
 
-import com.supermap.gaf.data.mgt.resource.DataSourceResource;
-import com.supermap.gaf.data.mgt.resource.DataWorkspaceResource;
-import com.supermap.gaf.data.mgt.resource.IServerResource;
-import com.supermap.gaf.data.mgt.resource.ServiceResource;
+import com.supermap.gaf.data.mgt.resource.*;
 import com.supermap.gaf.rest.jersey.JaxrsStaticViewResource;
 import io.swagger.annotations.Api;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
-
-//import com.supermap.gaf.storage.resources.MinioServiceResource;
 
 /**
  * @author heykb
@@ -43,8 +38,8 @@ public class RootResource {
     }
 
     @Path("/datasource")
-    public Class<DataSourceResource> dataSourceResource() {
-        return DataSourceResource.class;
+    public Class<SpaceDatasourceResource> dataSourceResource() {
+        return SpaceDatasourceResource.class;
     }
 
     @Path("/services")
@@ -52,8 +47,8 @@ public class RootResource {
         return ServiceResource.class;
     }
 
-//    @Path("/minio-service")
-//    public Class<MinioServiceResource> minioServiceResource() {
-//        return MinioServiceResource.class;
-//    }
+    @Path("/sys-resource-datasources")
+    public Class<SysResourceDatasourceResource> sysResourceDatasourceResource() {
+        return SysResourceDatasourceResource.class;
+    }
 }

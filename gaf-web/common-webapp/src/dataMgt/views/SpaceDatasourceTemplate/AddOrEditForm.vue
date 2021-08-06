@@ -14,11 +14,11 @@
           <div class="page-container-box">
             <a-form
               :form="addOrEditForm"
-              :label-col="{ span: 5 }"
-              :wrapper-col="{ span: 18 }"
+              :label-col="{ span: 7 }"
+              :wrapper-col="{ span: 16 }"
               layout="horizontal"
             >
-              <a-form-item label="数据源分类">
+              <a-form-item label="数据源模板分类">
                 <a-cascader
                   :disabled="operation === 1"
                   v-decorator="[
@@ -27,7 +27,7 @@
                       rules: [
                         {
                           required: true,
-                          message: '数据源分类不能为空'
+                          message: '数据源模板分类不能为空'
                         }
                       ]
                     }
@@ -35,11 +35,11 @@
                   ]"
                   :options="option3"
                   :load-data="loadData"
-                  placeholder="请选择数据源分类"
+                  placeholder="请选择数据源模板分类"
                   change-on-select
                 />
               </a-form-item>
-              <a-form-item label="数据源类型">
+              <a-form-item label="数据源模板类型">
                 <a-cascader
                   :disabled="operation === 1"
                   v-decorator="[
@@ -48,19 +48,19 @@
                       rules: [
                         {
                           required: true,
-                          message: '数据源类型不能为空'
+                          message: '数据源模板类型不能为空'
                         }
                       ]
                     }
                   ]"
                   :options="option4"
                   :load-data="loadData"
-                  placeholder="请选择数据源类型"
+                  placeholder="请选择数据源模板类型"
                   change-on-select
                   @change="typeCodeChange"
                 />
               </a-form-item>
-              <a-form-item label="数据源别名">
+              <a-form-item label="数据源模板别名">
                 <a-input
                   v-decorator="[
                     'dsName',
@@ -68,7 +68,7 @@
                       rules: [
                         {
                           required: true,
-                          message: '数据源名称不能为空'
+                          message: '数据源模板名称不能为空'
                         },
                         {
                           max: 255,
@@ -77,7 +77,7 @@
                       ]
                     }
                   ]"
-                  placeholder="请输入数据源名称"
+                  placeholder="请输入数据源模板名称"
                   allow-clear
                 />
               </a-form-item>
@@ -313,13 +313,13 @@ export default {
   },
   data() {
     return {
-      //回显时数据源分类级联选择器数据
+      //回显时数据源模板分类级联选择器数据
       option3catalogCode: [],
-      //回显时数据源类型级联选择器数据
+      //回显时数据源模板类型级联选择器数据
       option4typeCode:[],
-      //数据源类型级联选择器数据
+      //数据源模板类型级联选择器数据
       option4: [],
-      //数据源分类级联选择器数据
+      //数据源模板分类级联选择器数据
       option3: this.dataOfTree,
       //判断是更新还是新增
       dataId: '',
@@ -402,12 +402,13 @@ export default {
         }
       })
     },
-    //保存时校验数据源别名是否重复
+    //保存时校验数据源模板别名是否重复
     async getDatasourceInfo(dsName) {
       const url = '/data-mgt/sys-resource-datasources/getDsName'
       const params = {
         isSdx: true,
         dsName,
+        isTemplate: true,
       }
       const res = await this.$axios.$get(url, { params })
       if(res.successed) {
@@ -431,7 +432,7 @@ export default {
         if(!_this.editData.dsName || _this.editData.dsName !== data.dsName) {
           const isRepeat = await _this.getDatasourceInfo(data.dsName)
           if(isRepeat) {
-            _this.$message.error('数据源别名重复')
+            _this.$message.error('数据源模板别名重复')
             return false
           }
         }
@@ -443,7 +444,7 @@ export default {
         data.catalogCode = data.catalogCode.slice(-1).join()
         data.typeCode = data.typeCode.slice(-1).join()
         data.isSdx = true
-        data.isTemplate = false
+        data.isTemplate = true
         if (_this.dataId) {
           url = url + _this.dataId
           const rst = await _this.$axios.put(url, data)
@@ -510,7 +511,7 @@ export default {
         this.$message.error('加载数据失败,原因：' + res.message)
       }
     },
-    //获取数据源类型级联数据
+    //获取数据源模板类型级联数据
     async getOptions4() {
       const url = `/sys-mgt/sys-dicts/DataSourceType/tree`
       const res = await this.$axios.$get(url)
@@ -521,7 +522,7 @@ export default {
         this.$message.error('加载API分组树失败,原因：' + res.message)
       }
     },
-    //回显时获取数据源分类级联路径
+    //回显时获取数据源模板分类级联路径
     async getPath1(dictTypeCode, value) {
       const url = `/sys-mgt/sys-dicts/${dictTypeCode}/${value}/path`
       const res = await this.$axios.$get(url)
@@ -538,7 +539,7 @@ export default {
         this.$message.error('加载路径失败,原因：' + res.message)
       }
     },
-    //回显时获取数据源类型级联路径
+    //回显时获取数据源模板类型级联路径
     async getPath2(dictTypeCode, value) {
       const url = `/sys-mgt/sys-dicts/${dictTypeCode}/${value}/path`
       const res = await this.$axios.$get(url)
@@ -556,7 +557,8 @@ export default {
         this.$message.error('加载路径失败,原因：' + res.message)
       }
     },
-    //根据数据源类型级联change事件判断是否为文件类型
+    
+    //根据数据源模板类型级联change事件判断是否为文件类型
     typeCodeChange(value) {
       if (value[0] === "file") {
         this.isDatabaseType = false

@@ -116,7 +116,7 @@
     import DicTypeForm from '../../views/dics/DicTypeForm'
     import '~/assets/css/common.css'
     import DicList from '../../views/dics/DicList.vue'
-    import treeUtil from '../../utils/tree/TreeUtil.js'
+    import treeUtil from '../../../common/utils/TreeUtil'
     import addType from './addType'
     import addCatalog from './addCatalog'
 
