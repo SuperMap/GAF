@@ -56,21 +56,7 @@
         </div>
       </template>
       <template #default>
-        <div class="choose-box">
-          <a-icon type="exclamation-circle" class="exclamation" /><span
-            >已选择</span
-          >
-          <b>{{ selectRowLength }}</b>
-          <span>项</span>
-          <a-popconfirm
-            @confirm="() => clearOptions(record)"
-            title="是否清除勾选?"
-            ok-text="确认"
-            cancel-text="取消"
-          >
-            <a href="javascript:;"><u>清空</u></a>
-          </a-popconfirm>
-        </div>
+        <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
         <gaf-table-with-page
           :scroll="{ y: 508 , x: 1440}"
           :showXH="false"
@@ -403,6 +389,9 @@ export default {
         if (this.pagination.current !== 1 && this.sysDictList.length === 1) {
           this.pagination.current--;
         }
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== row.key
+        })
         this.getList();
       });
     },
@@ -425,6 +414,7 @@ export default {
             this.pagination.current--;
           }
           this.getList();
+          this.selectedRowKeys = []
         });
       } else {
         this.$message.warn("请选择您要删除的内容");

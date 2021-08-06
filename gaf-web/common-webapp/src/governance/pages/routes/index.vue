@@ -32,21 +32,7 @@
           </div>
         </template>
         <!--表格数据-->
-        <div class="choose-box">
-          <a-icon type="exclamation-circle" class="exclamation" /><span
-            >已选择</span
-          >
-          <b>{{ selectRowLength }}</b>
-          <span>项</span>
-          <a-popconfirm
-            @confirm="() => clearOptions(record)"
-            title="是否清除勾选?"
-            ok-text="确认"
-            cancel-text="取消"
-          >
-            <a href="javascript:;"><u>清空</u></a>
-          </a-popconfirm>
-        </div>
+        <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
         <a-table
           :loading="loading"
           :scroll="{ y: 508 ,x: 1440}"
@@ -281,6 +267,11 @@ export default {
       } else {
         this.$message.error(message);
       }
+      this.$nextTick(() => {
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== v
+        })
+      });
     },
     // 清空
     clearOptions() {

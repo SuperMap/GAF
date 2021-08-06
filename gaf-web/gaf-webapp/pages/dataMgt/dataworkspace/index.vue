@@ -4,6 +4,7 @@
 <script>
 import { DataWorkspace } from 'common-webbase'
 export default {
+  middleware: 'auth',
   components: {
     DataWorkspace,
   },

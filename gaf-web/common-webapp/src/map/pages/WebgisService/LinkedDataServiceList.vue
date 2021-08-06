@@ -12,21 +12,7 @@
         <span>批量删除</span>
       </button>
     </a-popconfirm>
-    <div class="choose-box" style="margin-top: 10px">
-      <a-icon type="exclamation-circle" class="exclamation" /><span
-        >已选择</span
-      >
-      <b>{{ selectRowLength }}</b>
-      <span>项</span>
-      <a-popconfirm
-        @confirm="() => clearOptions(record)"
-        title="是否清除勾选?"
-        ok-text="确认"
-        cancel-text="取消"
-      >
-        <a href="javascript:;"><u>清空</u></a>
-      </a-popconfirm>
-    </div>
+    <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
     <gaf-table-with-page
       :scroll="{ y: 508, x: 800 }"
       :show-x-h="false"
@@ -145,6 +131,7 @@ export default {
         }
         this.$nextTick(() => {
           this.getLinkedServiceList();
+          this.selectedRowKeys = []
         });
       } else {
         this.$message.warn("请选择您要删除的内容");
@@ -177,6 +164,17 @@ export default {
       } else {
         this.$message.error(`删除失败,原因:${res.message}`);
       }
+      this.$nextTick(() => {
+        if (
+          this.pagination.current !== 1 &&
+          this.webgisServiceList.length === 1
+        ) {
+          this.pagination.current--;
+        }
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== record.gisServiceAssocId
+        })
+      });
     },
     // 获取已关联的服务列表
     async getLinkedServiceList() {

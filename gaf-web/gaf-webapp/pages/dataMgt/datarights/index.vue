@@ -4,6 +4,7 @@
 <script>
 import { DataRights } from 'common-webbase'
 export default {
+  middleware: 'auth',
   components: {
     DataRights,
   },

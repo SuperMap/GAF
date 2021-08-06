@@ -30,21 +30,7 @@
         </template>
 
         <template #default>
-          <div class="choose-box">
-            <a-icon type="exclamation-circle" class="exclamation" /><span
-              >已选择</span
-            >
-            <b>{{ selectedRowKeys.length }}</b>
-            <span>项</span>
-            <a-popconfirm
-              @confirm="() => clearOptions()"
-              title="是否清除勾选?"
-              ok-text="确认"
-              cancel-text="取消"
-            >
-              <a href="javascript:;"><u>清空</u></a>
-            </a-popconfirm>
-          </div>
+          <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
           <gaf-table-with-page
             :scroll="{ y: 508, x: 1440 }"
             :pagination="pagination"
@@ -400,6 +386,9 @@ export default {
         ) {
           this.pagination.current--;
         }
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== row.sysComponentId
+        })
         this.getList();
       });
     },
@@ -412,7 +401,6 @@ export default {
       // }
     },
     async getList() {
-      this.selectedRowKeys = [];
       this.loading = true;
       let url = `/authority/sys-components?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`;
       if (this.searchText.trim() && this.searchedColumn) {

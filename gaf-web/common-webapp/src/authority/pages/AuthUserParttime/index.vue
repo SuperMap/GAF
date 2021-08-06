@@ -397,6 +397,9 @@ export default {
         ) {
           this.pagination.current--;
         }
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== row.userParttimeId
+        })
         this.getList();
       });
     },
