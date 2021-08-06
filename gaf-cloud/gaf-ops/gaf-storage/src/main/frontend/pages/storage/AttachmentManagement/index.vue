@@ -32,16 +32,6 @@
             </a-input-search>
           </div>
         </template>
-        <template #filter>
-          <div class="search-position">
-            <a-input-search
-              placeholder="请输入名称查询"
-              size="large"
-              @search="onSearch"
-            >
-            </a-input-search>
-          </div>
-        </template>
         <!-- <template #filter>
         <div style="margin-top: 5px">
           <a-input-search

@@ -26,13 +26,34 @@
         <a-form-item label="过期时间">
           <a-row type="flex" justify="space-between">
             <a-col :span="7">
-              <a-input-number v-model="days" class="inputNumber" :formatter="value => `${value} days`" :min="0" :max="7" @change="onChange" />
+              <a-input-number
+                v-model="days"
+                class="inputNumber"
+                :formatter="(value) => `${value} days`"
+                :min="0"
+                :max="7"
+                @change="onChange"
+              />
             </a-col>
             <a-col :span="7">
-              <a-input-number v-model="hours" class="inputNumber" :formatter="value => `${value} hours`" :min="0" :max="23" @change="onChange" />
+              <a-input-number
+                v-model="hours"
+                class="inputNumber"
+                :formatter="(value) => `${value} hours`"
+                :min="0"
+                :max="23"
+                @change="onChange"
+              />
             </a-col>
             <a-col :span="7">
-              <a-input-number v-model="minutes" class="inputNumber" :formatter="value => `${value} minutes`" :min="0" :max="59" @change="onChange" />
+              <a-input-number
+                v-model="minutes"
+                class="inputNumber"
+                :formatter="(value) => `${value} minutes`"
+                :min="0"
+                :max="59"
+                @change="onChange"
+              />
             </a-col>
           </a-row>
         </a-form-item>
@@ -161,25 +182,25 @@
 </template>
 
 <script>
-  import moment from 'moment'
+import moment from 'moment'
 
-  export default {
+export default {
   props: {
     title: {
       type: String,
-      default: ''
+      default: '',
     },
     editData: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     operation: {
       type: Number,
-      default: 0
+      default: 0,
     },
     name: {
       type: String,
-      dafault: ''
+      dafault: '',
     },
     configName: {
       type: String,
@@ -188,7 +209,7 @@
     fileData: {
       type: Object,
       default: null,
-    }
+    },
   },
   data() {
     return {
@@ -196,34 +217,34 @@
       dataNode: {
         name: '',
         children: [],
-        type: "commonPrefix"
+        type: 'commonPrefix',
       },
       days: 7,
       hours: 0,
       minutes: 0,
-      linkValue: ''
+      linkValue: '',
     }
   },
   created() {
-    this.onChange();
+    this.onChange()
   },
   beforeMount() {
     this.addOrEditForm = this.$form.createForm(this, { name: 'addOrEditForm' })
   },
   mounted() {
-	const copyData = { ...this.editData }
+    const copyData = { ...this.editData }
     this.dataId = copyData.dataDictId
     delete copyData.dataDictId
     delete copyData.status
     delete copyData.tenantId
-    if(this.operation !== 1) {
+    if (this.operation !== 1) {
       delete copyData.createdTime
       delete copyData.updatedTime
       delete copyData.createdBy
       delete copyData.updatedBy
     }
     if (copyData.createdTime)
-        copyData.createdTime = moment(new Date(copyData.createdTime))
+      copyData.createdTime = moment(new Date(copyData.createdTime))
     if (copyData.updatedTime)
       copyData.updatedTime = moment(new Date(copyData.updatedTime))
     this.addOrEditForm.setFieldsValue({ ...copyData })
@@ -231,12 +252,12 @@
   methods: {
     moment,
     submitForm() {
-      let newInput = document.createElement("input");
-      newInput.value = this.linkValue;
-      document.body.appendChild(newInput);
-      newInput.select();
-      document.execCommand("Copy");
-      newInput.remove();
+      const newInput = document.createElement('input')
+      newInput.value = this.linkValue
+      document.body.appendChild(newInput)
+      newInput.select()
+      document.execCommand('Copy')
+      newInput.remove()
       this.$message.success('复制成功')
       // this.addOrEditForm.validateFields(async (err) => {
       //   if (err) {
@@ -259,21 +280,20 @@
       if (this.days === 7) {
         this.hours = 0
         this.minutes = 0
-      } 
+      }
       if (this.days === 0 && this.hours === 0 && this.minutes === 0) {
         this.days = 7
       }
-      let allMinutes = this.days * 1440 + this.hours * 60 + this.minutes
-      let url = `/storage/api/${this.configName}/share/${this.fileData.name}?expiration=${allMinutes}`
-      const res = await this.$axios.$get(url);
+      const allMinutes = this.days * 1440 + this.hours * 60 + this.minutes
+      const url = `/storage/api/platform/${this.configName}/share/${this.fileData.name}?expiration=${allMinutes}`
+      const res = await this.$axios.$get(url)
       if (res.isSuccessed) {
         this.linkValue = res.data.download
       } else {
         this.$message.error(`设置失败,原因:${res.message}`)
       }
-      
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -298,6 +318,6 @@ button {
   margin: 15px 0;
 }
 .inputNumber {
-  width: 100%
+  width: 100%;
 }
 </style>
