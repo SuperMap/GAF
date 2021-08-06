@@ -105,14 +105,14 @@ public interface WebgisRoamRouteService {
      */
     void addRouteStops(WebgisRouteInfo webgisRouteInfo) throws IOException;
 
-    /**
-     * 根据路线id获取路径信息
-     * 与getById不同，若没有生成对应的fpf文件则会先生成
-     *
-     * @param routeId
-     * @return
-     */
-    WebgisRoamRoute getRoamRoute(String routeId) throws IOException;
+    ///**
+    // * 根据路线id获取路径信息
+    // * 与getById不同，若没有生成对应的fpf文件则会先生成
+    // *
+    // * @param routeId
+    // * @return
+    // */
+    //WebgisRoamRoute getRoamRoute(String routeId) throws IOException;
 
     /**
      * 获取用户下的所有
@@ -129,11 +129,11 @@ public interface WebgisRoamRouteService {
      */
     String getRouteFileUrl(String routeId) throws URISyntaxException, AuthenticationException;
 
-    /**
-     * 根据路径id获取绝对路径
-     *
-     * @param routeId 路径id
-     * @return
-     */
-    String getAbsolutePath(String routeId) throws AuthenticationException;
+    ///**
+    // * 根据路径id获取绝对路径
+    // *
+    // * @param routeId 路径id
+    // * @return
+    // */
+    //String getAbsolutePath(String routeId) throws AuthenticationException;
 }

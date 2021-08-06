@@ -10,7 +10,6 @@ import com.supermap.gaf.authority.service.SysComponentService;
 import com.supermap.gaf.authority.vo.SelectOptionVo;
 import com.supermap.gaf.authority.vo.SysComponentSelectVo;
 import com.supermap.gaf.commontypes.MessageResult;
-import com.supermap.gaf.sys.mgt.commontype.SysResourceDatasource;
 import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -136,7 +135,7 @@ public class SysComponentResource {
 
     @ApiOperation(value = "更新组件")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "sysComponent", value = "组件", dataTypeClass = SysResourceDatasource.class, paramType = "body", required = true),
+            @ApiImplicitParam(name = "sysComponent", value = "组件", dataTypeClass = SysComponent.class, paramType = "body", required = true),
             @ApiImplicitParam(name = "sysComponentId", value = "组件id", paramType = "path", dataType = "string", required = true)
     })
     @PUT

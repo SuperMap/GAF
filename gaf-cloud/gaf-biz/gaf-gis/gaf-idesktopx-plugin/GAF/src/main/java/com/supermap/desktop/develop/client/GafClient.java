@@ -36,7 +36,7 @@ public class GafClient {
     private static final String token_endpoint = "%s/authentication/token";
     private static final String refresh_token_endpoint = "%s/authentication/token/refresh";
     private static final String workspace_endpoint = "%s/data-mgt/data-workspaces";
-    private static final String datasource_endpoint = "%s/sys-mgt/sys-resource-datasources";
+    private static final String datasource_endpoint = "%s/data-mgt/sys-resource-datasources";
     private static final String file_upload_endpoint = "%s/storage/api/tenant-created-first/default/upload%s";
     private static final String file_download_endpoint = "%s/storage/api/tenant-created-first/default/download%s";
     private static final String file_metadata_endpoint = "%s/storage/api/tenant-created-first/default/metadata%s";

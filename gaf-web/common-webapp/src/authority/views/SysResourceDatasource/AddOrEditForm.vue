@@ -270,10 +270,10 @@
     return {
       dataId: '',
       options: [
-        { value: 'POSTGRESQL', label: 'POSTGRESQL' },
-        { value: 'MYSQL', label: 'MYSQL' },
-        { value: 'ORACLE', label: 'ORACLE' },
-        { value: 'SQLSERVER', label: 'SQLSERVER' }
+        { value: '1', label: 'POSTGRESQL' },
+        { value: '3', label: 'MYSQL' },
+        { value: '2', label: 'ORACLE' },
+        { value: '4', label: 'SQL_SERVER' }
       ],
       loading1: false,
       loading2: false,
@@ -307,7 +307,7 @@
       this.addOrEditForm.validateFields(async err => {
         if (!err) {
           const url =
-            '/sys-mgt/sys-resource-datasources/connection-param/check'
+            '/data-mgt/sys-resource-datasources/connection-param/check'
           const data = this.addOrEditForm.getFieldsValue()
           this.loading1 = true
           const res = await this.$axios.$post(url, {
@@ -333,7 +333,7 @@
           event.preventDefault()
           return false
         }
-        let url = `/sys-mgt/sys-resource-datasources/`
+        let url = `/data-mgt/sys-resource-datasources/`
         const data = this.addOrEditForm.getFieldsValue()
         this.loading2 = true
         if (this.dataId) {

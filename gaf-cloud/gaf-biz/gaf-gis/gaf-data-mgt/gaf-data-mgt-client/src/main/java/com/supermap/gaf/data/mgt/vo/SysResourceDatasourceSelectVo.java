@@ -5,7 +5,7 @@
 */
 package com.supermap.gaf.data.mgt.vo;
 
-import com.supermap.gaf.sys.mgt.commontype.SysResourceDatasource;
+import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
 import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -5,6 +5,8 @@
  */
 package com.supermap.gaf.data.mgt.conversion.result;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -15,7 +17,10 @@ import java.util.List;
  * @since 2021/8/4
  */
 @Data
+@ApiModel("数据导出结果")
 public class DataExportResult {
+    @ApiModelProperty("成功结果")
     List<ExportMapping> successed;
+    @ApiModelProperty("失败结果")
     List<ExportMapping> failed;
 }

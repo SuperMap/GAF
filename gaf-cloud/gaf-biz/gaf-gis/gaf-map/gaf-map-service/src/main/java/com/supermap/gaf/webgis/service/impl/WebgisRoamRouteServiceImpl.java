@@ -54,6 +54,13 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
     private static final Logger log = LoggerFactory.getLogger(WebgisRoamRouteServiceImpl.class);
     private static final String FPF_TEMPLATE_PATH = "template/fpf/default_template.fpf";
 
+
+    /**
+     * 表示系统临时文件夹
+     */
+    public static String SYSTEM_TEMP_DIRECTORY="java.io.tmpdir";
+
+
     private final WebgisRoamRouteMapper webgisRoamRouteMapper;
 
     private final WebgisRoamStopService webgisRoamStopService;
@@ -170,10 +177,6 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
         return Paths.get(routeFilePath, userId, fileName + ".fpf");
     }
 
-    private Path getFpfFileAblolutePath(String fpfFilePath) {
-        return Paths.get(storageClient.getVolumePath(fpfFilePath, SecurityUtilsExt.getUser().getAuthUser().getTenantId(), false).getPath());
-    }
-
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WebgisRouteInfo createRoute(WebgisRouteInfo webgisRouteInfo) throws IOException {
@@ -186,8 +189,7 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
         fillRoute(webgisRouteInfo, flyManager.getRoutes().get(0));
         ShiroUser user = SecurityUtilsExt.getUser();
         Path fpfFilePath = getFpfFilePath(user.getAuthUser().getUserId(), webgisRouteInfo.getName());
-        Path fpfFileAblolutePath = getFpfFileAblolutePath(fpfFilePath.toString());
-        generateFpfFile(flyManager, fpfFileAblolutePath);
+        generateFpfFile(flyManager, fpfFilePath);
         WebgisRoamRoute roamRoute = new WebgisRoamRoute();
         roamRoute.setGisRoamRouteId(UUID.randomUUID().toString());
         roamRoute.setUserId(user.getAuthUser().getUserId());
@@ -201,6 +203,8 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
         return webgisRouteInfo;
     }
 
+
+
     /**
      * 生成fpf文件
      *
@@ -208,11 +212,13 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
      * @param path       路径
      */
     private synchronized void generateFpfFile(FlyManager flyManager, Path path) throws IOException {
-        if (!Files.exists(path.getParent())) {
-            Files.createDirectories(path.getParent());
-        }
-        Files.deleteIfExists(path);
-        flyManager.getRoutes().toFile(path.toString());
+        String systemTempDir = System.getProperties().getProperty(SYSTEM_TEMP_DIRECTORY);
+        Path tmp = Paths.get(systemTempDir,UUID.randomUUID().toString(),path.getFileName().toString());
+        flyManager.getRoutes().toFile(tmp.toString());
+        String tenantId = SecurityUtilsExt.getUser().getAuthUser().getTenantId();
+        storageClient.delete(removeStartedBackslash(path.toString()), tenantId);
+        storageClient.uploadFlie(removeStartedBackslash(path.toString()), tenantId,tmp.toFile());
+        Files.deleteIfExists(tmp);
     }
 
     /**
@@ -295,7 +301,7 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
         if (webgisRoamRoute == null) {
             throw new GafException("路线不存在");
         }
-        Files.deleteIfExists(getFpfFileAblolutePath(webgisRoamRoute.getFpfPath()));
+        storageClient.delete(removeStartedBackslash(webgisRoamRoute.getFpfPath()),SecurityUtilsExt.getUser().getAuthUser().getTenantId());
         webgisRoamRouteMapper.delete(webgisRoamRoute.getGisRoamRouteId());
         webgisRoamStopService.removeByRouteId(webgisRoamRoute.getGisRoamRouteId());
     }
@@ -366,20 +372,6 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public WebgisRoamRoute getRoamRoute(String routeId) throws IOException {
-        WebgisRoamRoute webgisRoamRoute = getById(routeId);
-        if (webgisRoamRoute == null) {
-            throw new GafException("路线不存在");
-        }
-        Path fileAbsolutePath = getFpfFileAblolutePath(webgisRoamRoute.getFpfPath());
-        if (!Files.exists(fileAbsolutePath)) {
-            return generateFpfFile(webgisRoamRoute);
-        }
-        return webgisRoamRoute;
-    }
-
     @Override
     public List<WebgisRouteInfo> listRoutes() {
         ShiroUser user = SecurityUtilsExt.getUser();
@@ -402,21 +394,16 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
             return null;
         }
         String fpfPath = roamRoute.getFpfPath();
-        if (fpfPath.startsWith("/")) {
-            fpfPath = fpfPath.replaceFirst("/", "");
-        }
-        return storageClient.getVolumePath(fpfPath, SecurityUtilsExt.getUser().getAuthUser().getTenantId(), true).getPublicUrl();
+        return storageClient.getVolumePath(removeStartedBackslash(fpfPath), SecurityUtilsExt.getUser().getAuthUser().getTenantId(), true).getPublicUrl();
     }
 
-    @Override
-    public String getAbsolutePath(String routeId) throws AuthenticationException {
-        WebgisRoamRoute roamRoute = getById(routeId);
-        if (roamRoute == null) {
-            return null;
+    // 移除路径开头的反斜杠
+    private String removeStartedBackslash(String path) {
+        if (path.startsWith("/")) {
+            return path.replaceFirst("/","");
         }
-        return getFpfFileAblolutePath(roamRoute.getFpfPath()).toString();
+        return path;
     }
-
 
     private WebgisRoamRoute generateFpfFile(WebgisRoamRoute roamRoute) throws IOException {
         if (roamRoute == null) {
@@ -434,7 +421,7 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
             fillRouteStop(roamStop, routeStop);
             stops.add(routeStop);
         }
-        generateFpfFile(flyManager, getFpfFileAblolutePath(roamRoute.getFpfPath()));
+        generateFpfFile(flyManager, Paths.get(roamRoute.getFpfPath()));
         return roamRoute;
     }
 

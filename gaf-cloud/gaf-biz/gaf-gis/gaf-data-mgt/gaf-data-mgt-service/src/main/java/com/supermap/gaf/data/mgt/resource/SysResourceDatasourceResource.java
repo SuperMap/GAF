@@ -8,6 +8,7 @@ package com.supermap.gaf.data.mgt.resource;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.commontypes.Page;
 import com.supermap.gaf.commontypes.tree.DefaultTreeNode;
+import com.supermap.gaf.data.mgt.client.SysResourceDatasourceClient;
 import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
 import com.supermap.gaf.data.mgt.service.SysResourceDatasourceService;
 import com.supermap.gaf.data.mgt.support.CheckHelper;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @Api(value = "数据源接口")
-public class SysResourceDatasourceResource {
+public class SysResourceDatasourceResource  implements SysResourceDatasourceClient {
     @Autowired
     private SysResourceDatasourceService sysResourceDatasourceService;
 
@@ -68,7 +69,7 @@ public class SysResourceDatasourceResource {
     }
 
 
-    @ApiOperation(value = "查询所数据源可选项", notes = "按数据源类型查询所有空间数据源可选项, 参数typeCodes是数据源类型字典值，可从字典中查询空间数据源类型和普通数据源类型")
+    @ApiOperation(value = "查询所数据源可选项", notes = "按数据源类型查询所有数据源可选项, 参数typeCodes是数据源类型字典值，可从字典中查询空间数据源类型和普通数据源类型")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "typeCodes", value = "空间数据源类型字典值集合", paramType = "query", allowMultiple = true, dataType = "string", required = true),
             @ApiImplicitParam(name = "isTemplate", value = "是否为空间数据源模板",  paramType = "query", dataType = "Boolean",defaultValue = "false")
@@ -194,7 +195,7 @@ public class SysResourceDatasourceResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/getDsName")
-    public MessageResult<List<SysResourceDatasource>> pageList(
+    public MessageResult<List<SysResourceDatasource>> checkRepeat(
             @QueryParam("dsName")String dsName,
             @QueryParam("isSdx")@DefaultValue("true")Boolean isSdx,
             @QueryParam("isTemplate") @DefaultValue("false") Boolean isTemplate){

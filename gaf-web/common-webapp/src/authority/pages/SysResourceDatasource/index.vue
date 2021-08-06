@@ -196,9 +196,9 @@ export default {
 
       databaseTypeMap: new Map([
         ["1", "POSTGRESQL"],
-        ["4", "MYSQL"],
-        ["5", "ORACLE"],
-        ["6", "SQLSERVER"],
+        ["3", "MYSQL"],
+        ["2", "ORACLE"],
+        ["4", "SQL_SERVER"],
       ]),
     };
   },
@@ -303,7 +303,7 @@ export default {
       await this.getList();
     },
     async batchDel() {
-      const url = "/sys-mgt/sys-resource-datasources/";
+      const url = "/data-mgt/sys-resource-datasources/";
       const selectedRowKeys = this.selectedRowKeys;
       if (selectedRowKeys.length !== 0) {
         const rst = await this.$axios.delete(url, { data: selectedRowKeys });
@@ -409,7 +409,7 @@ export default {
     },
     // 删除数据
     async handleDelete(row) {
-      const url = `/sys-mgt/sys-resource-datasources/` + row.datasourceId;
+      const url = `/data-mgt/sys-resource-datasources/` + row.datasourceId;
       const rst = await this.$axios.delete(url);
       if (rst.data.isSuccessed) {
         this.$message.success("删除成功");
@@ -442,7 +442,7 @@ export default {
     },
     async getList() {
       this.loading = true;
-      let url = `/sys-mgt/sys-resource-datasources?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&isSdx=false`;
+      let url = `/data-mgt/sys-resource-datasources?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&isSdx=false`;
       if (this.searchText.trim() && this.searchedColumn) {
         url =
           url +

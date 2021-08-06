@@ -18,32 +18,25 @@ import com.supermap.data.conversion.ImportSetting;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+/**
+ * 导入设置解析器
+ *
+ * @author wxl
+ * @since 2021-8-3
+ */
 public interface ImportSettingParser{
 
-
+    /**
+     * 将JSONObject对象里的导入设置信息解析为ExportSetting类对象,用于后续iobjects数据导入
+     * @param importSettingJO 导出设置信息
+     * @param consumer 回调函数 参数是ImportSetting的子类对象
+     * @return ImportSetting对象
+     */
     ImportSetting parseImportSetting(JSONObject importSettingJO, Consumer<ImportSetting> consumer);
 
-    //ImportDataInfo parseImportDataInfo(String jsonStr, ImportDataInfo importDataInfo);
-
-    //default  void disposeImportDataInfos(ImportDataInfos importDataInfos) {
-    //}
-    //
-    //default  void disposeImportSetting(ImportSetting importSetting) {
-    //    importSetting.dispose();
-    //}
-
-    //default <D extends ImportDataInfo> void dispose(Class<D> dataInfoClazz,D importDataInfo) {
-    //}
-
-    //default <D extends ImportDataInfo> void a (D importDataInfo, JSONObject jsonObject) {
-    //    JSONObject jo = jsonObject.getJSONObject("changeFieldName");
-    //    String oldFieldName = jo.getString("oldFieldName");
-    //    String newFeildName = jo.getString("newFeildName");
-    //    importDataInfo.changeFieldName(oldFieldName,newFeildName);
-    //}
-
-    default void parseTargetFieldInfos(JSONObject jsonObject, Consumer<FieldInfos> consumer) {
-        JSONArray targetFieldInfos = jsonObject.getJSONArray("targetFieldInfos");
+    // 解析importDataInfo中的targetFieldInfos
+    default void parseTargetFieldInfos(JSONObject importDataInfoJO, Consumer<FieldInfos> consumer) {
+        JSONArray targetFieldInfos = importDataInfoJO.getJSONArray("targetFieldInfos");
         if (null != targetFieldInfos && !targetFieldInfos.isEmpty()) {
             FieldInfos fieldInfos = new FieldInfos();
             for (int i = 0; i < targetFieldInfos.size(); i++) {
@@ -56,8 +49,9 @@ public interface ImportSettingParser{
         }
     }
 
-    default void parseChangeFieldName(JSONObject jsonObject, BiConsumer<String,String> biConsumer) {
-        JSONObject jo = jsonObject.getJSONObject("changeFieldName");
+    // 解析importDataInfo中的changeFieldName
+    default void parseChangeFieldName(JSONObject importDataInfoJO, BiConsumer<String,String> biConsumer) {
+        JSONObject jo = importDataInfoJO.getJSONObject("changeFieldName");
         if (jo != null && !jo.isEmpty()) {
             String oldFieldName = jo.getString("oldFieldName");
             String newFeildName = jo.getString("newFieldName");
@@ -67,9 +61,9 @@ public interface ImportSettingParser{
         }
     }
 
-
-    default void parseExchangeFieldOrder(JSONObject jsonObject, BiConsumer<String,String> biConsumer) {
-        JSONObject exchangeFieldOrderJO = jsonObject.getJSONObject("exchangeFieldOrder");
+    // 解析importDataInfo中的exchangeFieldOrder
+    default void parseExchangeFieldOrder(JSONObject importDataInfoJO, BiConsumer<String,String> biConsumer) {
+        JSONObject exchangeFieldOrderJO = importDataInfoJO.getJSONObject("exchangeFieldOrder");
         if (exchangeFieldOrderJO != null && !exchangeFieldOrderJO.isEmpty()) {
             String fieldName1 = exchangeFieldOrderJO.getString("fieldName1");
             String fieldName2 = exchangeFieldOrderJO.getString("fieldName2");
@@ -77,8 +71,9 @@ public interface ImportSettingParser{
         }
     }
 
-    default void parseImportFieldState(JSONObject jsonObject,BiConsumer<String,Boolean> biConsumer) {
-        JSONObject importFieldStateJO = jsonObject.getJSONObject("importFieldState");
+    // 解析importDataInfo中的importFieldState
+    default void parseImportFieldState(JSONObject importDataInfoJO,BiConsumer<String,Boolean> biConsumer) {
+        JSONObject importFieldStateJO = importDataInfoJO.getJSONObject("importFieldState");
         if (importFieldStateJO != null && !importFieldStateJO.isEmpty()) {
             String old = importFieldStateJO.getString("oldFieldName");
             boolean isExclude = importFieldStateJO.getBooleanValue("excludeField");

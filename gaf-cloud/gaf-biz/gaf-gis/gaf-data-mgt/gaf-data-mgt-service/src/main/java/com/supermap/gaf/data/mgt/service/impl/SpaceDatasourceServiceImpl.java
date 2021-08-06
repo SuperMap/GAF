@@ -244,7 +244,8 @@ public class SpaceDatasourceServiceImpl implements SpaceDatasourceService {
                 String sourceDataset = commonPartJO.getString("sourceDataset");
                 Assert.notNull(exportSettingType,"需要导出的数据集不能为null");
                 String sourceDatasourceId = commonPartJO.getString("sourceDatasourceId");
-                DatasourceConnectionInfo datasourceConnectionInfo = commonPartJO.getObject("sourceDatasourceConnectionInfo", DatasourceConnectionInfo.class);
+                JSONObject connectiongJO = commonPartJO.getJSONObject("sourceDatasourceConnectionInfo");
+                DatasourceConnectionInfo datasourceConnectionInfo = connectiongJO == null ? null : JSON.parseObject(connectiongJO.toJSONString(),DatasourceConnectionInfo.class, ConversionConfig.getParseConfig());
                 SysResourceDatasource sysResourceDatasource = commonPartJO.getObject("sourceSysResourceDatasource", SysResourceDatasource.class);
 
                 DatasourceConnectionInfo connectionInfo;
@@ -261,6 +262,9 @@ public class SpaceDatasourceServiceImpl implements SpaceDatasourceService {
                     connectionInfo = convertHelper.conver2DatasourceConnectionInfo(sysResourceDatasource);
                 } else {
                     throw new IllegalArgumentException("设置需要导出的源数据源信息为空");
+                }
+                if (EngineType.SQLPLUS.equals(connectionInfo.getEngineType())) {
+                    connectionInfo.setDriver("SQL SERVER");
                 }
 
                 JSONObject basePartJO = exportSettingJO.getJSONObject("basePart");
