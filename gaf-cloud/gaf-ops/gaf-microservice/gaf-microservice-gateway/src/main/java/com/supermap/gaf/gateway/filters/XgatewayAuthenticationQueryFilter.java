@@ -28,8 +28,7 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.GATEWAY
  * <p>
  * 此过滤器提供用户获取认证信息的逻辑
  * 1.获取认证信息
- * 1.1.index首页请求必须获取
- * 1.2.静态资源和公共资源不用获取
+ *     静态资源和公共资源不用获取
  *
  * @author : duke
  * @date:2021/3/25
@@ -46,15 +45,11 @@ public class XgatewayAuthenticationQueryFilter implements GlobalFilter, Ordered 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
-
         AuthenticationParam authenticationParam = null;
-        if (attribute.getIsIndexUrl()) {
-            authenticationParam = GafFluxUtils.getAuthenticationParamByServerHttpRequest(exchange.getRequest());
+        if (attribute.getIsPublicUrl()) {
+            return chain.filter(exchange);
         }
-        if (authenticationParam == null && !attribute.getIsPublicUrl()) {
-            authenticationParam = GafFluxUtils.getAuthenticationParamByServerHttpRequest(exchange.getRequest());
-        }
-
+        authenticationParam = GafFluxUtils.getAuthenticationParamByServerHttpRequest(exchange.getRequest());
         if (authenticationParam != null) {
             MessageResult<AuthenticationResult> authenticationResultMessageResult = validateClient.authentication(authenticationParam);
             if (authenticationResultMessageResult != null) {

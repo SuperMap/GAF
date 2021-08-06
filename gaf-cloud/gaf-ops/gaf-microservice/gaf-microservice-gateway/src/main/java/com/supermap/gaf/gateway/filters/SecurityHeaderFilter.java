@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 
 /**
  * 注意： 该代码对应gaf-boot中的同名的filter,功能逻辑等应该保持一致
- *
+ * 此类用于添加安全响应头
  * @author dqc
  * @date:2021/3/25
  */

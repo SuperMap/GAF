@@ -15,13 +15,6 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.EXCHANG
 
 /**
  *  该代码对应gaf-microservice-gateway中的同名的filter,功能逻辑等应该保持一致
- *
- *   此过滤器提供用户验证认证信息的逻辑
- *  验证认证信息
- *       1.1.静态资源和公共资源不用验证(index页面必须验证)
- *        1.2.其他都需要验证
- *           1.2.1验证失败需要清除cookie
- *           1.2.2验证失败,返回401
  * @author wxl
  * @date 2021/4/17
  */
@@ -37,15 +30,15 @@ public class XgatewayAuthenticationValidateFilter implements Filter {
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
         if (attribute.getIsPublicUrl()){
             chain.doFilter(request,response);
-        }else if (authenticationResult == null
+        }
+        if (authenticationResult == null
                 || StringUtils.isEmpty(authenticationResult.getUsername())
                 || StringUtils.isEmpty(authenticationResult.getJwtToken())){
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             removeCookie(httpServletResponse);
             ResponseUtils.unAuth((HttpServletResponse) response,"未获取到资源访问的认证身份");
-        }else {
-            chain.doFilter(request,response);
         }
+        chain.doFilter(request,response);
     }
 
     /**

@@ -55,7 +55,7 @@ public class XgatewayAuthorizationValidateFilter implements GlobalFilter, Ordere
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
         boolean apiAuthzEnabled = attribute.getGatewaySecurityProperties().isApiAuthzEnable();
-        if (attribute.getIsPublicUrl() || attribute.getIsIndexUrl() || !apiAuthzEnabled) {
+        if (attribute.getIsPublicUrl() || !apiAuthzEnabled) {
             return chain.filter(exchange);
         }
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();

@@ -36,6 +36,9 @@ public class XgatewayTraceFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
+        if (attribute.getIsPublicUrl()) {
+            return chain.filter(exchange);
+        }
 
         if (null != authenticationResult && !StringUtils.isEmpty(authenticationResult.getUsername())) {
             tracer.currentSpan().tag("username", authenticationResult.getUsername());

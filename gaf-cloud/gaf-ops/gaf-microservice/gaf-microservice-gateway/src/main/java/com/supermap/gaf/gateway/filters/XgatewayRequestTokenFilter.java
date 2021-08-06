@@ -38,15 +38,16 @@ public class XgatewayRequestTokenFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
-
+        if (attribute.getIsPublicUrl()) {
+            return chain.filter(exchange);
+        }
         if (null != authenticationResult && !StringUtils.isEmpty(authenticationResult.getJwtToken())) {
             String token = authenticationResult.getJwtToken();
             token = GafFluxUtils.removeTokenBeareHead(token);
             ServerHttpRequest newRequest = exchange.getRequest().mutate().headers(addHttpHeadersAuth(token)).build();
             return chain.filter(exchange.mutate().request(newRequest).build());
-        } else {
-            return chain.filter(exchange);
         }
+        return chain.filter(exchange);
     }
 
     private Consumer<HttpHeaders> addHttpHeadersAuth(String token) {

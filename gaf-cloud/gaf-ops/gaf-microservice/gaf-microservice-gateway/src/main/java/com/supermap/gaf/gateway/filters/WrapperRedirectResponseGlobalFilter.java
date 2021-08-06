@@ -29,6 +29,7 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.SEPARAT
 /**
  * 注意： 该代码对应gaf-boot中的同名的filter,功能逻辑等应该保持一致
  *
+ * 此类用于改写redirect返回的location头的host(因为微服务直接返回302的话host是容器内部ip，浏览器无法访问)
  * @author : duke
  * @date:2021/3/25
  * @since 2020/11/22 11:28 PM

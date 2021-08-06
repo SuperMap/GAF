@@ -44,15 +44,7 @@ public class GatewayConfigration {
     }
 
 
-    @Bean
-    public JwtTokenFilter tokenFilter() {
-        return new JwtTokenFilter();
-    }
 
-    @Bean
-    public AccessValidFilter permissionAccessFilter() {
-        return new AccessValidFilter();
-    }
 //
 //    @Bean
 //    public ReactiveOAuth2UserService<OidcUserRequest, OidcUser> userService() {
