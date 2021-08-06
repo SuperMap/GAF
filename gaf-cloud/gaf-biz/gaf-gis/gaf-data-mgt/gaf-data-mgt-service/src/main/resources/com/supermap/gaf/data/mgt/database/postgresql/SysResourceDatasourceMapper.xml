@@ -83,7 +83,7 @@
         </if>
         <if test='null != orderFieldName and null != orderMethod'>order by ${orderFieldName} ${orderMethod}</if>
     </select>
-    <insert id="insert" useGeneratedKeys="true" keyColumn="datasource_id" keyProperty="datasourceId" parameterType="com.supermap.gaf.sys.mgt.commontype.SysResourceDatasource">
+    <insert id="insert" useGeneratedKeys="true" keyColumn="datasource_id" keyProperty="datasourceId" parameterType="com.supermap.gaf.data.mgt.commontype.SysResourceDatasource">
         INSERT INTO "sys_resource_datasource"
         <trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test ='null != datasourceId'>datasource_id,</if>
@@ -154,7 +154,7 @@
         UPDATE sys_resource_datasource SET status = false
         WHERE datasource_id = #{datasourceId}
     </update>
-    <update id="update" parameterType="com.supermap.gaf.sys.mgt.commontype.SysResourceDatasource">
+    <update id="update" parameterType="com.supermap.gaf.data.mgt.commontype.SysResourceDatasource">
         UPDATE "sys_resource_datasource"
         <set>
 			<if test ='null != dsName'>ds_name = #{dsName},</if>

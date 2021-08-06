@@ -1554,6 +1554,11 @@
             </dependency>
             <dependency>
                 <groupId>com.supermap.gaf</groupId>
+                <artifactId>gaf-common-base-data</artifactId>
+                <version>${gaf.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.supermap.gaf</groupId>
                 <artifactId>gaf-common-rest</artifactId>
                 <version>${gaf.common.version}</version>
             </dependency>

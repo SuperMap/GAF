@@ -110,6 +110,13 @@ services:
     - gaf-net
     env_file:
     - ${GAF_VOL_DIR}/GAF_ENV_CONFIG.env
+    environment:
+      GAF_STORAGE_EUREKA_ENABLE: 'true'
+      GAF_STORAGE_EUREKA_ADDR: http://gaf-microservice-rigister:8080/eureka/
+      GAF_STORAGE_DB_USERNAME: admin
+      GAF_STORAGE_DB_URL: jdbc:postgresql://gaf-postgres:5432/gaf-storage
+      GAF_STORAGE_DB_PASSWORD: 123456
+      GAF_STORAGE_AUTHENTICATION_ENABLE: 'false'
     container_name: gaf-storage
     restart: always
   gaf-monitor:

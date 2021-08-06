@@ -62,6 +62,8 @@ base() {
           --password=$GAF_ENV_DATASOURCE_PASSWORD \
           --changeLogFile=liquibase-data/entry/gaf-cloud-base.xml \
           update
+    #为gaf-storage单独创建gaf-storage数据库
+    docker run --rm --net=gaf-net -e PGPASSWORD=$GAF_ENV_DATASOURCE_PASSWORD registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 createdb -h gaf-postgres -p 5432 -U $GAF_ENV_DATASOURCE_USERNAME gaf-storage
     #启动GAF优先启动应用
     LOAD_SERVICE="gaf-microservice-rigister gaf-microservice-conf"
     docker-compose up -d gaf-microservice-rigister gaf-microservice-conf
