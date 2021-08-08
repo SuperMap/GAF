@@ -14,6 +14,7 @@ import com.supermap.gaf.shiro.SecurityUtilsExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -52,6 +53,9 @@ public class ConvertHelper {
         String tns = sysResourceDatasource.getAddr();
         String database = sysResourceDatasource.getDbName();
         String alias = sysResourceDatasource.getDsName();
+        if (StringUtils.isEmpty(alias)) {
+            alias = tns+"_"+database;
+        }
         String user = sysResourceDatasource.getUserName();
         String password = sysResourceDatasource.getPassword();
         DatasourceConnectionInfo datasourceConnectionInfo = new DatasourceConnectionInfo(tns, database, alias, user, password);

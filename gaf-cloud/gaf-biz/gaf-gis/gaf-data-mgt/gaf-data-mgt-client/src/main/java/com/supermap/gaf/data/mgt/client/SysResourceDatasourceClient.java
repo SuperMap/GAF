@@ -16,6 +16,8 @@ import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.DefaultValue;
 import java.util.List;
 
@@ -41,11 +43,11 @@ public interface SysResourceDatasourceClient {
                                                        @RequestParam("isTemplate") @DefaultValue("false") Boolean isTemplate);
 
     @GetMapping("/data-mgt/sys-resource-datasources")
-    MessageResult<Page<SysResourceDatasource>> pageList( @SpringQueryMap SysResourceDatasourceSelectVo sysResourceDatasourceSelectVo,
+    MessageResult<Page<SysResourceDatasource>> pageList(@Valid @SpringQueryMap SysResourceDatasourceSelectVo sysResourceDatasourceSelectVo,
                                                                @DefaultValue("1")@RequestParam("pageNum")Integer pageNum,
                                                                @DefaultValue("10")@RequestParam("pageSize")Integer pageSize);
     @PostMapping("/data-mgt/sys-resource-datasources/connection-param/check")
-    MessageResult<Void> checkConnection(@RequestBody SysResourceDatasource sysResourceDatasource);
+    MessageResult<Void> checkConnection(@NotNull @RequestBody SysResourceDatasource sysResourceDatasource);
 
     @PostMapping("/data-mgt/sys-resource-datasources")
     MessageResult<SysResourceDatasource> insertSysResourceDatasource(@RequestBody SysResourceDatasource sysResourceDatasource);
