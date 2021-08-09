@@ -102,6 +102,11 @@
                 map.get(record.catalogCode) ? map.get(record.catalogCode) : ""
               }}
             </template>
+            <template slot="typeCode" slot-scope="text">
+              {{
+                dataSourceTypeMap.get(text) ? dataSourceTypeMap.get(text) : ""
+              }}
+            </template>
             <template
               slot="operation"
               slot-scope="text, record"
@@ -159,6 +164,7 @@
 
 <script>
 import AddEditForm from "../../views/SpaceDatasource/AddOrEditForm";
+import dictUtil from "../../../common/utils/DictUtil"
 import moment from "moment";
 import "~/assets/css/common.css";
 
@@ -175,6 +181,8 @@ export default {
       dataOfTree1: [],
       dataOfTree: [],
       map: new Map(),
+      // 数据源类型编码值和名字的映射
+      dataSourceTypeMap: new Map(),
       //搜索框Placeholder
       searchPlaceholder2: "请输入分类名称搜索",
       expandedNodeKeys2: [],
@@ -238,6 +246,7 @@ export default {
           title: "数据源类型",
           dataIndex: "typeCode",
           key: "type_code",
+          scopedSlots: { customRender: "typeCode" },
           width: '10%',
         },
         {
@@ -297,6 +306,7 @@ export default {
   created() {
     this.getDataOfTree();
     // this.defaultPicker() //设置默认时间
+    this.getDataSourceTypeMap();
     this.getList();
   },
   methods: {
@@ -499,6 +509,16 @@ export default {
         this.getList()
       } else {
         this.$message.error("加载API分组树失败,原因：" + res.message);
+      }
+    },
+    //获取数据源类型编码值和名字的映射
+    async getDataSourceTypeMap() {
+      const url = `/sys-mgt/sys-dicts/DataSourceType/tree`
+      const res = await this.$axios.$get(url)
+      if (res.isSuccessed) {
+        this.dataSourceTypeMap = dictUtil.toMap(res.data)
+      } else {
+        this.$message.error('获取数据源类型字典失败,原因：' + res.message)
       }
     },
     getMap(data) {

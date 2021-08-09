@@ -8,7 +8,7 @@
  *   sortSn: 'sortSn',
  *   children: 'children'
  * }
- * 
+ *
  */
 // // 暂时不对外导出，需要时可对外导出，也可独立打包发布。
 // 1 内部直接导入
@@ -210,8 +210,8 @@ function deepFirstTraverseTree(parentNode, treeList, callback, config = {childre
 }
 
 /**
- * 遍历树 
- * @param {*} treeList 父节点下的树结构的子节点列表
+ * 遍历树
+ * @param {array} treeList 树结构的节点列表
  * @param {function} callback 回调函数，参数是node(当前正在遍历的节点)
  */
  function forEach(treeList, callback, config = {children:'children'}) {

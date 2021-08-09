@@ -7,9 +7,15 @@
 
 import treeUtil from './TreeUtil'
 
+/**
+ * 遍历字典数据树每个节点
+ * @param {array}} dictTreeList 字典数据树
+ * @param {function} callback 回调函数
+ */
 function forEach(dictTreeList, callback) {
   treeUtil.forEach(dictTreeList, callback)
 }
+
 /**
  * 删除树节点为Children属性值空的Children属性
  * @param {array} dictTreeList 字典数据树
@@ -22,6 +28,33 @@ function deleteEmptyChildrenAttr(dictTreeList) {
   })
 }
 
+/**
+ * 将字典数据树转换为 字典值(value)到字典标签(label)的映射,即Map
+ * @param {array} dictTreeList  字典数据树
+ * @returns Map 字典数据树所有节点value到label的映射
+ */
+function toMap(dictTreeList) {
+  const map = new Map()
+  treeUtil.forEach(dictTreeList, node => {
+    map.set(node.value,node.label)
+  })
+  return map
+}
+
+/**
+ * 将字典数据转换为 字典值(value)到字典标签(label)的映射,即Map
+ * @param {array} dictList 字典数据列表
+ * @returns Map 字典数据所有项 value到label的映射
+ */
+function listToMap(dictList) {
+  const map = new Map()
+  if(dictList) {
+    dictList.forEach(e=>{
+      map.set(e.value,e.label)
+    })
+  }
+  return map
+}
 
 /**
  * 删除dictTreeList中节点属性
@@ -59,6 +92,8 @@ function copy (dictTreeList) {
 export default {
   forEach,
   deleteEmptyChildrenAttr,
+  toMap,
+  listToMap,
   adjustAttrForCascader,
   retainAttr,
   copy

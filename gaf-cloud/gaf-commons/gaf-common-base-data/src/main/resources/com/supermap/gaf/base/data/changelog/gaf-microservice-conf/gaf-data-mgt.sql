@@ -41,3 +41,6 @@ INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "pr
 INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('8e912c', 'spring.datasource.url', '${GAF_ENV_DATASOURCE_URL:jdbc:postgresql://localhost:5432/postgres}', 'gaf-data-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
 INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('1acd68', 'supermap.gaf.s3m-threads-num', '4', 'gaf-data-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
 
+
+-- changeset SYS:20210809-0
+INSERT INTO "config_properties" ("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('yu2yea', 'gaf.database.secretKey', '1q2w3e4r5t6y7u8i', 'gaf-data-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
