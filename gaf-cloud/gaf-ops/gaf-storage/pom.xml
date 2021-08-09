@@ -111,8 +111,8 @@
                             <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
-                            <nodeDownloadRoot>http://nodejs.org/dist/</nodeDownloadRoot>
-                            <yarnDownloadRoot>https://registry.npm.taobao.org/yarn/-/</yarnDownloadRoot>
+                            <nodeDownloadRoot>http://npm.taobao.org/dist/</nodeDownloadRoot>
+                            <yarnDownloadRoot>http://npm.taobao.org/mirrors/yarn/</yarnDownloadRoot>
                             <nodeVersion>v12.16.1</nodeVersion>
                             <yarnVersion>v1.22.10</yarnVersion>
                             <workingDirectory>src/main/frontend/</workingDirectory>
