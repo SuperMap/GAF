@@ -28,10 +28,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -188,16 +185,25 @@ public class AuthUserResource implements AuthUserClient {
         return MessageResult.data(data).message("查询成功").build();
     }
 
+    /**
+     * 该接口返回网关对接gaf-storage时需要的一些信息
+     * @param username
+     * @return
+     */
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("/{username}/roles")
-    public MessageResult<List<AuthRole>> selectUserRoles(@PathParam("username") String username) {
+    @Path("/{username}/some-info")
+    public MessageResult<Map<String,Object>> someInfo(@PathParam("username") String username) {
         AuthUser authUser = authUserQueryService.getByUserName(username);
+        Map<String,Object>  re = new HashMap<>();
+        re.put(SOME_INFO_TENANT_ID_KEY,authUser.getTenantId());
         List<AuthRole> data = new ArrayList<>();
         if (authUser != null) {
             data = authAuthorizationQueryService.listAuthorizationRole(authUser.getUserId());
+            re.put(SOME_INFO_ROLE_IDS_KEY,data.stream().map(item -> item.getRoleId()).collect(Collectors.joining(",")));
+
         }
-        return MessageResult.data(data).message("查询成功").build();
+        return MessageResult.data(re).message("查询成功").build();
     }
 
     @ApiOperation(value = "新增用户")

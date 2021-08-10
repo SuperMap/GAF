@@ -64,8 +64,8 @@ public class DbMinioConfigHandler extends AbstractMinioConfigHandler {
                 re.setTarget(space.getTarget());
                 re.setTotalSize(space.getTotalSize());
                 re.setBucketName(space.getStorageName());
-                List<String> storageNameChain = new ArrayList<>();
-                storageNameChain.add(space.getStorageName());
+                StringBuilder storageNameChain = new StringBuilder();
+                storageNameChain.append(space.getStorageName());
                 while (!space.getCreatedType().equals(CreatedType.CREATED.getValue())) {
                     List<Space> list = spaceMapper.selectList(SpaceSelectVo.builder().id(space.getParentSpaceId()).build());
                     if (CollectionUtils.isEmpty(list)) {
@@ -73,16 +73,16 @@ public class DbMinioConfigHandler extends AbstractMinioConfigHandler {
                         break ROOT;
                     }
                     space = list.get(0);
-                    storageNameChain.add(space.getStorageName());
+                    storageNameChain.append(space.getStorageName());
                 }
-                StringBuilder dir = new StringBuilder();
-                re.setBucketName(storageNameChain.get(storageNameChain.size() - 1));
-                if (storageNameChain.size() > 1) {
-                    for (int i = storageNameChain.size() - 2; i >= 0; --i) {
-                        dir.append(storageNameChain.get(i)).append("/");
-                    }
+                int separatorIndex = storageNameChain.indexOf("/");
+                if(separatorIndex==-1){
+                    re.setBucketName(storageNameChain.toString());
+                    re.setDir("");
+                }else{
+                    re.setBucketName(storageNameChain.substring(0,separatorIndex));
+                    re.setDir(storageNameChain.substring(separatorIndex+1));
                 }
-                re.setDir(dir.toString());
                 re.setRootId(space.getId());
                 S3Server s3Server = s3ServerMapper.select(space.getParentSpaceId());
                 re.setAccessKey(s3Server.getAccessKey());
@@ -92,7 +92,7 @@ public class DbMinioConfigHandler extends AbstractMinioConfigHandler {
             }
         } while (false);
         if (re == null) {
-            throw new StorageNotFoundException(String.format("配置为%s的存储不存在，请先创建或联系平台管理员分配", name));
+            throw new StorageNotFoundException(String.format("配置为%s的存储不存在，请到【存储配置管理菜单】先创建或联系平台管理员分配", name));
         }
         return re;
     }

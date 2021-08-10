@@ -12,10 +12,9 @@ public class CustomTenantInfoI implements TenantInfoI {
     @Override
     public String getTenantId() throws StorageTenantException {
         String tenantId = RequestFilter.requestContextHolder.get().getHeaderString(StorageCustomConfig.TENANTID_HEADER);
-        if (tenantId == null) {
-            tenantId = "default";
-//            throw new StorageTenantException();
+        if(tenantId==null){
+            throw new StorageTenantException();
         }
-        return tenantId.replace("Bearer ", "");
+        return tenantId;
     }
 }
