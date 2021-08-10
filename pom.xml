@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.supermap.gaf</groupId>
     <artifactId>gaf</artifactId>
-    <version>2.1.1.RELEASE</version>
+    <version>2.1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <inceptionYear>2021</inceptionYear>
