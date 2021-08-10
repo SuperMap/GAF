@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.supermap.gaf</groupId>
         <artifactId>gaf</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.1.1.RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>gaf-cloud</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.1.1.RELEASE</version>
     <packaging>pom</packaging>
 
 
