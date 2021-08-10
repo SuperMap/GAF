@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.menu.service.impl;
 
 import com.alibaba.fastjson.JSON;
@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @Service
 @Slf4j
 public class UserProfileServiceImpl implements UserProfileService {

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ui;
 
 import com.supermap.desktop.controls.ui.controls.SmDialog;
@@ -21,8 +21,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * @date:2021/3/25
  * @author heykb
+ * @date:2021/3/25
  */
 public class ShareDialog extends SmDialog {
     private JPanel panelButton;
@@ -33,7 +33,7 @@ public class ShareDialog extends SmDialog {
     private JTextArea textAreaMessage;
     private int result = -1;
     private String defaultTitle = GlobalParameters.getDesktopTitle();
-    private static final Dimension size = new Dimension((int)(600.0D * SystemPropertyUtilities.getSystemSizeRate()), (int)(160.0D * SystemPropertyUtilities.getSystemSizeRate()));
+    private static final Dimension size = new Dimension((int) (600.0D * SystemPropertyUtilities.getSystemSizeRate()), (int) (160.0D * SystemPropertyUtilities.getSystemSizeRate()));
 
     public ShareDialog() {
         this.init();
@@ -74,7 +74,7 @@ public class ShareDialog extends SmDialog {
         this.textAreaMessage.setOpaque(false);
         this.setSize(size);
         this.setMinimumSize(size);
-        this.setLocationRelativeTo((Component)null);
+        this.setLocationRelativeTo((Component) null);
         this.setTitle(this.defaultTitle);
         this.getRootPane().setDefaultButton(this.buttonYes);
     }
@@ -100,7 +100,7 @@ public class ShareDialog extends SmDialog {
                 Clipboard systemClipboard = defaultToolkit.getSystemClipboard();
                 String url = ShareDialog.this.textAreaMessage.getText();
                 StringSelection stringSelection = new StringSelection(url);
-                systemClipboard.setContents(stringSelection,null);
+                systemClipboard.setContents(stringSelection, null);
                 ShareDialog.this.result = 0;
                 ShareDialog.this.setVisible(false);
             }

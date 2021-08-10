@@ -1,14 +1,14 @@
 package com.supermap.gaf.data.mgt.service.publisher.core.registry;
 
 /**
-* @author:yw
-* @Date 2021-3-12
+ * @author:yw
+ * @Date 2021-3-12
  * 服务发布者类型
  */
 public enum PublisherType {
     /**
-    * workspace
-    **/
+     * workspace
+     **/
     WORKSPACE("workspace"),
     /**
      * hbase

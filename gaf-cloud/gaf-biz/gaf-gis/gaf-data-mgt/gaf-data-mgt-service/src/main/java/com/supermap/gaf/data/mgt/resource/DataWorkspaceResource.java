@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.resource;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -29,23 +29,24 @@ import java.util.List;
 
 /**
  * 工作空间接口
- * @author zrc 
+ *
+ * @author zrc
  * @date yyyy-mm-dd
  */
 @Component
 @Api(value = "工作空间接口")
-public class DataWorkspaceResource{
+public class DataWorkspaceResource {
     @Autowired
     private DataWorkspaceService dataWorkspaceService;
 
     @ApiOperation(value = "服务发布", notes = "根据工作空间id和服务类型集合做服务发布", response = MessageResult.class)
-    @ApiImplicitParam(name = "workspaceIdServiceTypes",value = "工作空间id服务类型集合对象",paramType = "body")
+    @ApiImplicitParam(name = "workspaceIdServiceTypes", value = "工作空间id服务类型集合对象", paramType = "body")
 
     @Path("/publish-service")
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     public MessageResult<List<MessageResult<Object>>> publishService(List<WorkspaceIdServiceType> workspaceIdServiceTypes) throws IOException {
-        if (workspaceIdServiceTypes == null || workspaceIdServiceTypes.isEmpty()){
+        if (workspaceIdServiceTypes == null || workspaceIdServiceTypes.isEmpty()) {
             throw new GafException("工作空间id服务类型集合不能为空");
         }
         List<MessageResult<Object>> resultList = dataWorkspaceService.publishService(workspaceIdServiceTypes);
@@ -54,42 +55,43 @@ public class DataWorkspaceResource{
 
 
     @ApiOperation(value = "根据工作空间id查询工作空间", notes = "根据工作空间id查询工作空间")
-    @ApiImplicitParam(name = "workspaceId",value = "工作空间id",paramType = "path",dataType = "String",example = "xxxxxx")
+    @ApiImplicitParam(name = "workspaceId", value = "工作空间id", paramType = "path", dataType = "String", example = "xxxxxx")
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-	@Path("/{workspaceId}")
-    public MessageResult<DataWorkspace> getById(@PathParam("workspaceId")String workspaceId){
+    @Path("/{workspaceId}")
+    public MessageResult<DataWorkspace> getById(@PathParam("workspaceId") String workspaceId) {
         DataWorkspace dataWorkspace = dataWorkspaceService.getById(workspaceId);
-		return MessageResult.successe(DataWorkspace.class).data(dataWorkspace).status(200).message("查询成功").build();
+        return MessageResult.successe(DataWorkspace.class).data(dataWorkspace).status(200).message("查询成功").build();
     }
+
     @ApiOperation(value = "按条件分页查询工作空间", notes = "按条件分页查询工作空间")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "dataWorkspaceSelectVo",value = "工作控件实体类",paramType = "body",dataTypeClass = DataWorkspaceSelectVo.class),
-            @ApiImplicitParam(name = "pageNum",value = "当前页数",paramType = "query",dataType = "Integer",example = "1"),
-            @ApiImplicitParam(name = "pageSize",value = "每页展示多少条",paramType = "query",dataType = "Integer",example = "10")
+            @ApiImplicitParam(name = "dataWorkspaceSelectVo", value = "工作控件实体类", paramType = "body", dataTypeClass = DataWorkspaceSelectVo.class),
+            @ApiImplicitParam(name = "pageNum", value = "当前页数", paramType = "query", dataType = "Integer", example = "1"),
+            @ApiImplicitParam(name = "pageSize", value = "每页展示多少条", paramType = "query", dataType = "Integer", example = "10")
     })
 
-	@GET
+    @GET
     @Produces({MediaType.APPLICATION_JSON})
     public MessageResult<Page> pageList(@Valid @BeanParam DataWorkspaceSelectVo dataWorkspaceSelectVo,
-										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
-										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
-        if(StringUtils.isEmpty(dataWorkspaceSelectVo.getOrderFieldName())){
+                                        @DefaultValue("1") @QueryParam("pageNum") Integer pageNum,
+                                        @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
+        if (StringUtils.isEmpty(dataWorkspaceSelectVo.getOrderFieldName())) {
             dataWorkspaceSelectVo.setOrderFieldName("updated_time");
             dataWorkspaceSelectVo.setOrderMethod("desc");
         }
         Page<DataWorkspace> page = dataWorkspaceService.listByPageCondition(dataWorkspaceSelectVo, pageNum, pageSize);
-		return MessageResult.successe(Page.class).data(page).status(200).message("查询成功").build();
+        return MessageResult.successe(Page.class).data(page).status(200).message("查询成功").build();
     }
 
     @ApiOperation(value = "新增工作空间", notes = "新增工作空间")
-    @ApiImplicitParam(name = "dataWorkspace",value = "工作空间实体类",paramType = "body",dataTypeClass = DataWorkspace.class)
-	@POST
+    @ApiImplicitParam(name = "dataWorkspace", value = "工作空间实体类", paramType = "body", dataTypeClass = DataWorkspace.class)
+    @POST
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult<Void> insertDataWorkspace(@Valid DataWorkspace dataWorkspace){
+    public MessageResult<Void> insertDataWorkspace(@Valid DataWorkspace dataWorkspace) {
         dataWorkspaceService.insertDataWorkspace(dataWorkspace);
-		return MessageResult.successe(Void.class).status(200).message("新增操作成功").build();
+        return MessageResult.successe(Void.class).status(200).message("新增操作成功").build();
     }
 
 
@@ -103,46 +105,47 @@ public class DataWorkspaceResource{
     }
 
     @ApiOperation(value = "批量新增工作空间", notes = "批量新增工作空间")
-    @ApiImplicitParam(name = "dataWorkspace",value = "工作空间实体类列表",paramType = "body",allowMultiple = true,dataTypeClass = DataWorkspace.class,example = "[{},{}]")
+    @ApiImplicitParam(name = "dataWorkspace", value = "工作空间实体类列表", paramType = "body", allowMultiple = true, dataTypeClass = DataWorkspace.class, example = "[{},{}]")
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/batch")
-    public MessageResult<Void> batchInsert(List<DataWorkspace> dataWorkspaces){
+    public MessageResult<Void> batchInsert(List<DataWorkspace> dataWorkspaces) {
         dataWorkspaceService.batchInsert(dataWorkspaces);
-		return MessageResult.successe(Void.class).status(200).message("批量新增操作成功").build();
+        return MessageResult.successe(Void.class).status(200).message("批量新增操作成功").build();
     }
+
     @ApiOperation(value = "批量新增工作空间", notes = "批量新增工作空间")
-    @ApiImplicitParam(name = "dataWorkspace",value = "工作空间实体类列表",paramType = "body",allowMultiple = true,dataTypeClass = DataWorkspace.class,example = "[{},{}]")
+    @ApiImplicitParam(name = "dataWorkspace", value = "工作空间实体类列表", paramType = "body", allowMultiple = true, dataTypeClass = DataWorkspace.class, example = "[{},{}]")
 
     @DELETE
     @Produces({MediaType.APPLICATION_JSON})
-	@Path("/{workspaceId}")
-    public MessageResult<Void> deleteDataWorkspace(@PathParam("workspaceId")String workspaceId) throws AuthenticationException {
+    @Path("/{workspaceId}")
+    public MessageResult<Void> deleteDataWorkspace(@PathParam("workspaceId") String workspaceId) throws AuthenticationException {
         dataWorkspaceService.deleteDataWorkspace(workspaceId);
-		return MessageResult.successe(Void.class).status(200).message("删除操作成功").build();
+        return MessageResult.successe(Void.class).status(200).message("删除操作成功").build();
     }
 
     @ApiOperation(value = "批量删除工作空间", notes = "批量删除工作空间")
-    @ApiImplicitParam(name = "workspaceIds",value = "工作空间id数组",paramType = "query",dataType = "String",allowMultiple = true,example = "[xxx,xxx]")
-	@DELETE
+    @ApiImplicitParam(name = "workspaceIds", value = "工作空间id数组", paramType = "query", dataType = "String", allowMultiple = true, example = "[xxx,xxx]")
+    @DELETE
     @Produces({MediaType.APPLICATION_JSON})
     public MessageResult<Void> batchDelete(List<String> workspaceIds) throws AuthenticationException {
         dataWorkspaceService.batchDelete(workspaceIds);
-		return MessageResult.successe(Void.class).status(200).message("批量删除操作成功").build();
+        return MessageResult.successe(Void.class).status(200).message("批量删除操作成功").build();
     }
 
     @ApiOperation(value = "根据工作空间id更新工作空间", notes = "根据工作空间id更新工作空间")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "dataWorkspace",value = "工作空间实体类",paramType = "body",dataTypeClass = DataWorkspace.class),
-            @ApiImplicitParam(name = "workspaceId",value = "工作空间id",paramType = "path",dataType = "String",example = "xxxx")
+            @ApiImplicitParam(name = "dataWorkspace", value = "工作空间实体类", paramType = "body", dataTypeClass = DataWorkspace.class),
+            @ApiImplicitParam(name = "workspaceId", value = "工作空间id", paramType = "path", dataType = "String", example = "xxxx")
     })
     @PUT
     @Produces({MediaType.APPLICATION_JSON})
-	@Path("/{workspaceId}")
-    public MessageResult<Void> updateDataWorkspace(DataWorkspace dataWorkspace,@PathParam("workspaceId")String workspaceId){
+    @Path("/{workspaceId}")
+    public MessageResult<Void> updateDataWorkspace(DataWorkspace dataWorkspace, @PathParam("workspaceId") String workspaceId) {
         dataWorkspace.setWorkspaceId(workspaceId);
         dataWorkspaceService.updateDataWorkspace(dataWorkspace);
-		return MessageResult.successe(Void.class).status(200).message("更新操作成功").build();
+        return MessageResult.successe(Void.class).status(200).message("更新操作成功").build();
     }
 
 //

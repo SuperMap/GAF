@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.config.authc.usernamepassword;
 
 import org.springframework.http.HttpMethod;
@@ -33,7 +33,7 @@ public class UsernamePasswordAuthenticationFilter extends AbstractAuthentication
     }
 
     @Override
-        public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         String username = httpServletRequest.getParameter("username");
         String password = httpServletRequest.getParameter("password");
 

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+.gaf-login-slide {
+  background-color: #ffffff;
+  bottom: 320px;
+  right: 150px;
+  position: absolute;
+}
+
+h1 {
+  text-align: center;
+  padding-top: 60px;
+  /* color: ; */
+}
+.gaf-login-bg {
+  /* z-index: -1; */
+  /* width: 100%;
+  height: 150%;
+  top: -200px; */
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  /* background-image: url(~assets/img/bg.p/z/ng); */
+  background: no-repeat center top;
+  background-size: cover;
+}
+.gaf-login-box {
+  background-color: #ffffff;
+  width: 400px;
+  /* margin: 180px auto; */
+  /* margin-right: 150px; */
+  padding: 35px 35px 15px 35px;
+  /* margin-top: 80px; */
+
+  position: absolute;
+  right: 180px;
+  top: 200px;
+
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  box-shadow: 0 0 10px #d7d8db;
+  border: 1px solid #dcdfe6;
+}
+.gaf-img {
+  position: absolute;
+  right: 180px;
+  top: 80px;
+  bottom: 0;
+  width: 400px;
+}
+#components-form-demo-normal-login .login-form {
+  max-width: 300px;
+}
+#components-form-demo-normal-login .login-form-button {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  width: 100%;
+}
+.gaf-login-bg{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: no-repeat top;
+    background-size: cover;
+    background-image: url("../static/img/bg2.jpeg");
+}
+</style>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Please sign in</title>
+
+    <link href="../static/css/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+      <link rel="stylesheet" href="../static/css/animate.min.css">
+</head>
+<body>
+<div class="gaf-login-bg">
+    <img src="../static/img/GAF.png" class="gaf-img" />
+    <div class="gaf-login-box">
+        <form class="form-signin" method="post" action="/login" onsubmit="return check()" id="loginForm">
+            <p>
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+            </p>
+            <p>
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+            </p>
+            <input type="hidden"
+                  th:if="${_csrf}"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"/>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
+
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width:342px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">滑动验证</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- JS code -->
+<script src="../static/js/jquery-3.1.1.min.js">
+</script>
+<script src="../static/js/tether.min.js">
+</script>
+<script src="../static/js/bootstrap.min.js">
+</script>
+<script src="../static/js/slideVerify.js"></script>
+
+
+
+</body>
+<script>
+let  slideValidated = false
+ let Slide = new SlideVerify({
+   elementId: "root",
+   onSuccess: () => {
+       slideValidated = true
+       $("#myModal").modal('hide');
+       document.getElementById("loginForm").submit();
+   },
+   onFail: () => {
+       slideValidated = false
+   },
+   onRefresh: () => {
+       slideValidated = false
+   },
+ })
+ function check(){
+    if(slideValidated === true && $('#myModal').css('display')==="block"){
+        return true
+    }else{
+        slideValidated = false
+        Slide.reset()
+        $("#myModal").modal('show');
+        return false
+    }
+ }
+</script>
+</html>

@@ -42,7 +42,6 @@ public enum CatalogTypeEnum {
 
     /**
      * 字典分组 暂时平台级，与租户无关
-     *
      */
     DICTIONARY_GROUP_TYPE("7");
 

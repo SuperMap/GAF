@@ -19,6 +19,7 @@ import java.util.Map;
 /**
  * sinfcloud token管理服务
  * 单例
+ *
  * @author yd
  */
 public final class SinfCloudTokenManager {
@@ -132,10 +133,10 @@ public final class SinfCloudTokenManager {
     /**
      * 校验sinfcloud token有效性
      *
-     * @param hostUrl 地址
+     * @param hostUrl     地址
      * @param accessToken token
      * @return true 成功 false 实现
-     * @throws JsonProcessingException  josn处理异常
+     * @throws JsonProcessingException josn处理异常
      */
     private boolean verifyToken(String hostUrl, String accessToken) {
         if (StringUtils.isEmpty(accessToken)) {

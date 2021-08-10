@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.commontype;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -25,8 +25,8 @@ import java.util.Date;
 /**
  * 部门
  *
- * @date:2021/3/25
  * @author zhm
+ * @date:2021/3/25
  */
 @Data
 @Builder
@@ -50,7 +50,7 @@ public class AuthDepartment implements Serializable {
     @NotNull
     @ApiModelProperty(value = "名称", example = "开发部")
     private String departmentName;
-    @ApiModelProperty(value ="英文名称", example = "development")
+    @ApiModelProperty(value = "英文名称", example = "development")
     private String nameEn;
     @ApiModelProperty(value = "简称", example = "dept")
     private String briefName;

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro.config;
 
 import java.util.Map;
@@ -16,7 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 @ConfigurationProperties(prefix = "shiro.keycloak")
 public class KeycloakConfig extends KeycloakOidcConfiguration {
 
@@ -28,12 +28,12 @@ public class KeycloakConfig extends KeycloakOidcConfiguration {
      * 角色属性
      */
     private String roleAttribute = "roles";
-    
+
     /**
      * 角色映射
      */
-    private Map<String,String> roleMapping;
-    
+    private Map<String, String> roleMapping;
+
     /**
      * 部门属性
      */
@@ -42,17 +42,17 @@ public class KeycloakConfig extends KeycloakOidcConfiguration {
     /**
      * 部门映射
      */
-    private Map<String,String> groupMapping;
-    
-    
+    private Map<String, String> groupMapping;
+
+
     private String tokenHeader;
-    
+
     private String tokenPrefix;
-    
+
     public KeycloakConfig() {
         this.setPreferredJwsAlgorithm(JWSAlgorithm.RS256);
     }
-    
+
     public boolean isEnable() {
         return enable;
     }
@@ -69,11 +69,11 @@ public class KeycloakConfig extends KeycloakOidcConfiguration {
         this.roleAttribute = roleAttribute;
     }
 
-    public Map<String,String> getRoleMapping() {
+    public Map<String, String> getRoleMapping() {
         return roleMapping;
     }
 
-    public void setRoleMapping(Map<String,String> roleMapping) {
+    public void setRoleMapping(Map<String, String> roleMapping) {
         this.roleMapping = roleMapping;
     }
 
@@ -85,11 +85,11 @@ public class KeycloakConfig extends KeycloakOidcConfiguration {
         this.groupAttributes = groupAttributes;
     }
 
-    public Map<String,String> getGroupMapping() {
+    public Map<String, String> getGroupMapping() {
         return groupMapping;
     }
 
-    public void setGroupMapping(Map<String,String> groupMapping) {
+    public void setGroupMapping(Map<String, String> groupMapping) {
         this.groupMapping = groupMapping;
     }
 

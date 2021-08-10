@@ -2,16 +2,20 @@
 
 
 #使用说明
-usage() {
-	echo "Usage:	./deploy COMMAND"
-	echo ""
-	echo "【GAF应用部署程序】"
-	echo ""
-	echo "Commands:"
-	echo "  help          --查看帮助"
-	echo "  base          一键部署基础GAF应用"
-	echo "  monitor       一键部署GAF的监控相关应用"
-	echo "  delete-all    一键删除所有GAF应用以及挂载卷"
+usage()
+{
+    cat << USAGE >&2
+Usage:
+	GAF应用部署脚本 deploy [COMMANDS]
+
+	COMMANDS:
+
+	base          一键部署基础GAF应用
+	monitor       一键部署GAF的监控相关应用
+	delete-all    一键删除所有GAF应用以及挂载卷
+	boot          一键部署基础GAF-BOOT应用
+USAGE
+    exit 1
 }
 
 workspace() {
@@ -26,6 +30,7 @@ workspace() {
     source $Root_Current_Dir/.env
     export GAF_BASE_DATA_PATH=`readlink -f $GAF_BASE_DATA_PATH`
 }
+
 
 base() {
     #设置工作目录
@@ -57,6 +62,8 @@ base() {
           --password=$GAF_ENV_DATASOURCE_PASSWORD \
           --changeLogFile=liquibase-data/entry/gaf-cloud-base.xml \
           update
+    #为gaf-storage单独创建gaf-storage数据库
+    docker run --rm --net=gaf-net -e PGPASSWORD=$GAF_ENV_DATASOURCE_PASSWORD registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 createdb -h gaf-postgres -p 5432 -U $GAF_ENV_DATASOURCE_USERNAME gaf-storage
     #启动GAF优先启动应用
     LOAD_SERVICE="gaf-microservice-rigister gaf-microservice-conf"
     docker-compose up -d gaf-microservice-rigister gaf-microservice-conf
@@ -94,6 +101,7 @@ monitor() {
           --changeLogFile=liquibase-data/entry/gaf-monitor.xml \
           update
     docker run --rm --net=gaf-net -e PGPASSWORD=$GAF_ENV_DATASOURCE_PASSWORD registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 createdb -h gaf-postgres -p 5432 -U $GAF_ENV_DATASOURCE_USERNAME grafana
+    #TODO 使用api异步导入grafana的基础数据
     #启动GAF基础环境监控应用
     LOAD_SERVICE="gaf-elasticsearch gaf-fluentd-es gaf-zipkin"
     docker-compose up -d $LOAD_SERVICE
@@ -103,6 +111,41 @@ monitor() {
     edit_vol_permission
 }
 
+boot() {
+    #设置工作目录
+    workspace
+    #检查命令
+    check_commands docker docker-compose
+    #开启防火墙规则
+    port_gaf
+    #创建docker网络
+    create_docker_network gaf-net
+    #创建挂载卷
+    mkdir -p ${GAF_VOL_DIR}
+    #拷贝挂载数据
+    cp -rf $Root_Current_Dir/conf/GAF_ENV_CONFIG.env ${GAF_VOL_DIR}
+    #替换GAF_ENV_CONFIG.env里的变量
+    sed_config_env
+    #启动GAF基础环境数据存储应用
+    LOAD_SERVICE="gaf-postgres gaf-redis gaf-minio gaf-s3fs-mount-forboot"
+    docker-compose up -d $LOAD_SERVICE
+    #向postgres数据库导入基础数据
+    wait_gaf_db
+    source $Root_Current_Dir/conf/GAF_ENV_CONFIG.env
+    docker run --rm --net=gaf-net -v $GAF_BASE_DATA_PATH:/opt/liquibase-data registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v1.0 \
+        liquibase \
+          --driver=$GAF_ENV_DATASOURCE_DRIVER \
+          --classpath=/usr/local/liquibase/liquibase-classpath/postgresql-42.2.23.jar \
+          --url=$GAF_ENV_DATASOURCE_URL \
+          --username=$GAF_ENV_DATASOURCE_USERNAME \
+          --password=$GAF_ENV_DATASOURCE_PASSWORD \
+          --changeLogFile=liquibase-data/entry/gaf-boot.xml \
+          update
+    #启动GAF-BOOT应用
+    docker-compose up -d gaf-boot
+    #提示
+    echo "启动GAF成功！！！GAF地址：http://${HOSTIP}"
+}
 
 
 #一键删除所有GAF应用及挂载
@@ -126,12 +169,14 @@ case "$1" in
 "monitor")
     monitor
 ;;
+"boot")
+    boot
+;;
 "delete-all")
     delete-all
 ;;
 *)
 	usage
-	exit 1
 ;;
 esac
 

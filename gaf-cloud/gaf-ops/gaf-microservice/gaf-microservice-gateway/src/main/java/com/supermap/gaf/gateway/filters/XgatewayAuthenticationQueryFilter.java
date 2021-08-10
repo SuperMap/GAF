@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.filters;
 
 import com.supermap.gaf.authentication.client.ValidateClient;
@@ -25,11 +25,11 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.GATEWAY
 
 /**
  * 注意： 该代码对应gaf-boot中的同名的filter,功能逻辑等应该保持一致
- *
+ * <p>
  * 此过滤器提供用户获取认证信息的逻辑
  * 1.获取认证信息
- *      1.1.index首页请求必须获取
- *      1.2.静态资源和公共资源不用获取
+ *     静态资源和公共资源不用获取
+ *
  * @author : duke
  * @date:2021/3/25
  * @since 2020/11/23 3:44 PM
@@ -45,18 +45,14 @@ public class XgatewayAuthenticationQueryFilter implements GlobalFilter, Ordered 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
-
         AuthenticationParam authenticationParam = null;
-        if (attribute.getIsIndexUrl()){
-            authenticationParam = GafFluxUtils.getAuthenticationParamByServerHttpRequest(exchange.getRequest());
+        if (attribute.getIsPublicUrl()) {
+            return chain.filter(exchange);
         }
-        if (authenticationParam == null && !attribute.getIsPublicUrl()){
-            authenticationParam = GafFluxUtils.getAuthenticationParamByServerHttpRequest(exchange.getRequest());
-        }
-
-        if (authenticationParam != null){
+        authenticationParam = GafFluxUtils.getAuthenticationParamByServerHttpRequest(exchange.getRequest());
+        if (authenticationParam != null) {
             MessageResult<AuthenticationResult> authenticationResultMessageResult = validateClient.authentication(authenticationParam);
-            if (authenticationResultMessageResult != null){
+            if (authenticationResultMessageResult != null) {
                 attribute.setAuthenticationResult(authenticationResultMessageResult.getData());
             }
         }

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.rest.config;
 
 import com.supermap.gaf.rest.exceptions.handler.*;
@@ -17,13 +17,13 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 
 @Configuration
 @ConditionalOnBean(ResourceConfig.class)
-@ConditionalOnProperty(name="gaf.jersey.exception.enable", havingValue="true", matchIfMissing = true)
+@ConditionalOnProperty(name = "gaf.jersey.exception.enable", havingValue = "true", matchIfMissing = true)
 public class ExceptionMapperConfig {
-    
+
     @Bean
     public ExceptionMapperConfig configExceptionMapper(@Autowired ResourceConfig resouceConfig) {
         resouceConfig.register(IllegalArgumentExceptionMapper.class);
@@ -34,6 +34,6 @@ public class ExceptionMapperConfig {
         resouceConfig.register(ShiroExceptionMapper.class);
         return new ExceptionMapperConfig();
     }
-    
+
 
 }

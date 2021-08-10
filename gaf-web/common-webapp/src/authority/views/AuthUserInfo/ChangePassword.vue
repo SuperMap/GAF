@@ -106,7 +106,7 @@ export default {
         value &&
         !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d$@$!%*#?&]{8,25}$/.test(value)
       ) {
-        callback('8-25个字符，至少1个字母和1个数字')
+        callback('请输入8-25位字母+数字组合')
       } else {
         callback()
       }

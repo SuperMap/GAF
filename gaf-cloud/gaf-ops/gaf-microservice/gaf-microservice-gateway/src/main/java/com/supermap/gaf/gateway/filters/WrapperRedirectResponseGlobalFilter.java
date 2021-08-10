@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.filters;
 
 import org.reactivestreams.Publisher;
@@ -28,6 +28,8 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.SEPARAT
 
 /**
  * 注意： 该代码对应gaf-boot中的同名的filter,功能逻辑等应该保持一致
+ *
+ * 此类用于改写redirect返回的location头的host(因为微服务直接返回302的话host是容器内部ip，浏览器无法访问)
  * @author : duke
  * @date:2021/3/25
  * @since 2020/11/22 11:28 PM
@@ -35,7 +37,7 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.SEPARAT
 @Component
 public class WrapperRedirectResponseGlobalFilter implements GlobalFilter, Ordered {
 
-    private static final int LOCATION_CHAR_NUMBER =  8;
+    private static final int LOCATION_CHAR_NUMBER = 8;
 
     @Override
     public int getOrder() {
@@ -56,7 +58,7 @@ public class WrapperRedirectResponseGlobalFilter implements GlobalFilter, Ordere
                         HttpHeaders headers = getDelegate().getHeaders();
                         String location = headers.getFirst(HttpHeaders.LOCATION);
                         //可能是oauth的302跳转，直接忽略
-                        if (uri.getPath().startsWith("/oauth/authorize") && location.contains("code=")){
+                        if (uri.getPath().startsWith("/oauth/authorize") && location.contains("code=")) {
                             break;
                         }
                         int i = -1;

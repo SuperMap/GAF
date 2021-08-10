@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.utils;
 
 import static org.junit.Assert.assertEquals;
@@ -18,25 +18,25 @@ import org.junit.Test;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class FileUtilTest {
 
-	@Test
-	public void testCombine() {
-	    if(System.getProperty("os.name").toLowerCase().contains("linux")) {
-	      assertEquals("/myfile/test", FileUtil.combine("/myfile/", "test"));
-	      assertEquals("/myfile/test", FileUtil.combine("/myfile/", "/test"));
-	      assertEquals("/myfile/test", FileUtil.combine("/myfile", "test"));
-	    }
-	    if(System.getProperty("os.name").toLowerCase().contains("windows")) {
-	      //windows
-	        assertEquals("C:\\myfile\\test", FileUtil.combine("C://myfile/", "test"));
-	        assertEquals("C:\\myfile\\test", FileUtil.combine("C://myfile/", "/test"));
-	        assertEquals("C:\\myfile\\test", FileUtil.combine("C://myfile", "test"));
+    @Test
+    public void testCombine() {
+        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+            assertEquals("/myfile/test", FileUtil.combine("/myfile/", "test"));
+            assertEquals("/myfile/test", FileUtil.combine("/myfile/", "/test"));
+            assertEquals("/myfile/test", FileUtil.combine("/myfile", "test"));
         }
-	}
-	
-	@Test
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            //windows
+            assertEquals("C:\\myfile\\test", FileUtil.combine("C://myfile/", "test"));
+            assertEquals("C:\\myfile\\test", FileUtil.combine("C://myfile/", "/test"));
+            assertEquals("C:\\myfile\\test", FileUtil.combine("C://myfile", "test"));
+        }
+    }
+
+    @Test
     public void copyFileTest() {
         System.out.println("== copy文件测试 ==");
         String oldPath = "src/test/resources/copyTest.txt";

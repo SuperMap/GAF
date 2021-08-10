@@ -18,14 +18,15 @@ public class HeaderRequestWrapper extends HttpServletRequestWrapper {
     private final Map<String, String> customHeaders = new HashMap<>();
 
     /**
-     *  put a header with given name and value
-     *  note:
-     *  The header name is case sensitive.
-     *  this is not same with  "HttpServletRequest.getHeader"
+     * put a header with given name and value
+     * note:
+     * The header name is case sensitive.
+     * this is not same with  "HttpServletRequest.getHeader"
+     *
      * @param name
      * @param value
      */
-    void putHeader(String name, String value){
+    void putHeader(String name, String value) {
         this.customHeaders.put(name, value);
     }
 
@@ -33,7 +34,7 @@ public class HeaderRequestWrapper extends HttpServletRequestWrapper {
     public String getHeader(String name) {
         // check the custom headers first
         String headerValue = customHeaders.get(name);
-        if (headerValue != null){
+        if (headerValue != null) {
             return headerValue;
         }
         return super.getHeader(name);

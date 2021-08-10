@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.config;
 
 import com.supermap.gaf.authentication.config.authc.CustomUserDetailsServiceImpl;
@@ -33,29 +33,30 @@ import java.util.Arrays;
 import static com.supermap.gaf.authentication.entity.constant.LoginConstant.LOGIN_URL;
 
 /**
- * @date:2021/3/25
  * @author dqc
+ * @date:2021/3/25
  */
 @Configuration
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
-    public UsernamePasswordUserAuthenticationProvider customUserAuthenticationProvider(){
+    public UsernamePasswordUserAuthenticationProvider customUserAuthenticationProvider() {
         return new UsernamePasswordUserAuthenticationProvider();
     }
 
     @Bean
-    public JwtOrSessionAuthenticationProvider jwtOrSessionAuthenticationProvider(){
+    public JwtOrSessionAuthenticationProvider jwtOrSessionAuthenticationProvider() {
         JwtOrSessionAuthenticationProvider provider = new JwtOrSessionAuthenticationProvider();
         provider.setCustomUserDetailsServiceImpl(customUserDetailsService());
         return provider;
     }
 
     @Bean
-    public UsernamePasswordAuthenticationSuccessHandler customAuthenticationSuccessHandler(){
+    public UsernamePasswordAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return new UsernamePasswordAuthenticationSuccessHandler();
     }
+
     @Bean
-    public UsernamePasswordAuthenticationFailureHandler customAuthenticationFailureHandler(){
+    public UsernamePasswordAuthenticationFailureHandler customAuthenticationFailureHandler() {
         return new UsernamePasswordAuthenticationFailureHandler();
     }
 
@@ -67,7 +68,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public CustomUserDetailsServiceImpl customUserDetailsService(){
+    public CustomUserDetailsServiceImpl customUserDetailsService() {
         return new CustomUserDetailsServiceImpl();
     }
 
@@ -91,23 +92,23 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-            http
+        http
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .and()
                 .headers().addHeaderWriter(new StaticHeadersWriter(Arrays.asList(
-                    new Header("Access-control-Allow-Origin","*"),
-                    new Header("Access-Control-Expose-Headers","Authorization"))))
+                new Header("Access-control-Allow-Origin", "*"),
+                new Header("Access-Control-Expose-Headers", "Authorization"))))
                 .and()
                 //用户名密码登录逻辑
                 .apply(new UsernamePasswordLoginConfiguration<>())
-                            .loginSuccessHandler(customAuthenticationSuccessHandler())
-                            .loginFailureHandler(customAuthenticationFailureHandler())
+                .loginSuccessHandler(customAuthenticationSuccessHandler())
+                .loginFailureHandler(customAuthenticationFailureHandler())
                 .and()
                 //jwt或session登录逻辑
                 .apply(new JwtOrSessionLoginConfiguration<>())
-                            .loginSuccessHandler(new JwtOrSessionAuthenticationSuccessHandler())
-                            .loginFailureHandler(new JwtOrSessionAuthenticationFailureHandler())
+                .loginSuccessHandler(new JwtOrSessionAuthenticationSuccessHandler())
+                .loginFailureHandler(new JwtOrSessionAuthenticationFailureHandler())
                 .and()
                 //auth异常跳转到login
                 //配置第三方oauth2登录地址

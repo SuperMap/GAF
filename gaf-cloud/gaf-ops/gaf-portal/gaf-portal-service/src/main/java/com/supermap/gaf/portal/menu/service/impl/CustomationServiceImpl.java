@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.menu.service.impl;
 
 import com.alibaba.fastjson.JSON;
@@ -22,10 +22,10 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @Service
 public class CustomationServiceImpl implements CustomationService {
     private static Logger logger = LogUtil.getLocLogger(CustomationServiceImpl.class);
@@ -54,7 +54,7 @@ public class CustomationServiceImpl implements CustomationService {
         customation.setNull2Default();
 
         String tenantId = customation.getTenantId();
-        if(StringUtils.isBlank(tenantId)) {
+        if (StringUtils.isBlank(tenantId)) {
             res.put("success", success);
             res.put("msg", "租户信息为空，操作失败");
             return JSON.toJSONString(res);
@@ -78,7 +78,7 @@ public class CustomationServiceImpl implements CustomationService {
     public MessageResult<Boolean> updateCustomation(CustomationInfo customationInfo) {
         MessageResult<Boolean> messageResult = new MessageResult<>();
         String tenantId = customationInfo.getTenantId();
-        if(StringUtils.isBlank(tenantId)) {
+        if (StringUtils.isBlank(tenantId)) {
             messageResult.setSuccessed(false);
             messageResult.setMessage("租户信息为空，操作失败");
             return messageResult;
@@ -109,7 +109,7 @@ public class CustomationServiceImpl implements CustomationService {
     @Override
     public MessageResult<Boolean> updateConfigInfo(CustomationInfo customationInfo) {
         MessageResult<Boolean> messageResult = new MessageResult<>();
-        if(StringUtils.isBlank(customationInfo.getTenantId())) {
+        if (StringUtils.isBlank(customationInfo.getTenantId())) {
             messageResult.setSuccessed(false);
             messageResult.setMessage("租户信息为空，操作失败");
             return messageResult;
@@ -126,7 +126,7 @@ public class CustomationServiceImpl implements CustomationService {
     @Override
     public MessageResult<Boolean> updateDefault2ConfigInfo(CustomationInfo customationInfo) {
         MessageResult<Boolean> messageResult = new MessageResult<>();
-        if(StringUtils.isBlank(customationInfo.getTenantId())) {
+        if (StringUtils.isBlank(customationInfo.getTenantId())) {
             messageResult.setSuccessed(false);
             messageResult.setMessage("租户信息为空，操作失败");
             return messageResult;
@@ -142,7 +142,7 @@ public class CustomationServiceImpl implements CustomationService {
     @Override
     public MessageResult<Boolean> updateConfigInfo2Default(CustomationInfo customationInfo) {
         MessageResult<Boolean> messageResult = new MessageResult<>();
-        if(StringUtils.isBlank(customationInfo.getTenantId())) {
+        if (StringUtils.isBlank(customationInfo.getTenantId())) {
             messageResult.setSuccessed(false);
             messageResult.setMessage("租户信息为空，操作失败");
             return messageResult;
@@ -158,18 +158,18 @@ public class CustomationServiceImpl implements CustomationService {
 
     private CustomationInfo getCustomizedPortalConfig(String tenantId) {
         CustomationInfo customation = null;
-        if(StringUtils.isBlank(tenantId)) {
+        if (StringUtils.isBlank(tenantId)) {
             tenantId = CustomationInfo.DEFUALT_TENANT_ID;
         }
         customation = customationDao.queryCustomation(tenantId);
-        if(customation == null) {
+        if (customation == null) {
             customation = customationDao.queryCustomation(CustomationInfo.DEFUALT_TENANT_ID);
         }
 
-        if(StringUtils.isBlank(customation.getConfigInfo())) {
-            if(StringUtils.isBlank(customation.getDefaultConfigInfo())) {
+        if (StringUtils.isBlank(customation.getConfigInfo())) {
+            if (StringUtils.isBlank(customation.getDefaultConfigInfo())) {
                 CustomationInfo defaultCustomation = customationDao.queryCustomation(CustomationInfo.DEFUALT_TENANT_ID);
-                String defaultConfigInfo = defaultCustomation.getConfigInfo() == null? defaultCustomation.getDefaultConfigInfo() : defaultCustomation.getConfigInfo();
+                String defaultConfigInfo = defaultCustomation.getConfigInfo() == null ? defaultCustomation.getDefaultConfigInfo() : defaultCustomation.getConfigInfo();
 
                 customation.setDefaultConfigInfo(defaultConfigInfo);
             }

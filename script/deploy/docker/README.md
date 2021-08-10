@@ -25,11 +25,11 @@
 
 #### 3.3.构建GAF应用镜像
 
-`chmod +x build.sh && ./build.sh`
+`./build.sh`
 
 #### 3.4.部署GAF基础应用
 
-`chmod +x deploy.sh && ./deploy.sh base`
+`./deploy.sh base`
 
 - GAF监控相关应用部署（可选）[[帮助]](#GAF-MONITOR) 
 
@@ -39,25 +39,9 @@
 
 ## 其它方式构建部署
 
-### 1.通过线上镜像部署GAF基础应用(安装包方式部署)
+### 通过线上镜像部署GAF基础应用(安装包方式部署)
 - 1.配置文件修改：对配置文件`.env` 进行修改，配置`GAF_REGISTRY`镜像仓库地址，配置`GAF_REGISTRY_TAG`GAF镜像TAG
 - 2.部署GAF基础应用，执行`./deploy.sh base`
-
-### 2.源码构建镜像并推送镜像到镜像仓库--->从线上镜像仓库拉取镜像部署GAF基础应用
-- 1.配置文件修改：对配置文件`.env` 进行修改，配置`GAF_REGISTRY`镜像仓库地址，配置`GAF_REGISTRY_TAG`GAF镜像TAG
-- 2.Maven的配置文件`settings.xml`文件加上
-```xml
-<server>
-  <id><镜像库地址></id>
-  <username><镜像库账号></username>
-  <password><镜像库密码></password>
-  <configuration>
-    <email><邮件地址></email>
-  </configuration>
-</server>
-```
-- 3.构建推送镜像到镜像仓库，执行`./build.sh push`
-- 4.部署GAF基础应用，执行`./deploy.sh base`
 
 ## 环境帮助
 ### docker
@@ -90,3 +74,9 @@ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
 ./script/deploy/docker/deploy.sh monitor
 ```
+### GAF-BOOT
+>GAF-BOOT是将springcloud微服务体系去除，只保留业务代码的GAF单体架构版
+- GAF-BOOT单体应用构建
+`./script/deploy/docker/build.sh boot`
+- GAF-BOOT单体应用部署
+`./script/deploy/docker/deploy.sh boot`

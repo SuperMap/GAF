@@ -12,6 +12,7 @@
         >
           <a-form-item :label-col="{ span: 5 }" label="用户名">
             <a-input
+              autocomplete="off"
               v-decorator="[
                 'username',
                 {
@@ -25,7 +26,7 @@
               <a-icon
                 slot="prefix"
                 type="user"
-                style="color: rgba(0,0,0,.25)"
+                style="color: rgba(242, 241, 241, 1)"
               />
             </a-input>
           </a-form-item>
@@ -46,7 +47,7 @@
               <a-icon
                 slot="prefix"
                 type="lock"
-                style="color: rgba(0,0,0,.25)"
+                style="color: rgba(242, 241, 241, 1)"
               />
             </a-input>
           </a-form-item>
@@ -62,7 +63,6 @@
         </a-form>
       </div>
     </div>
-    <div class="gaf-login-slide">
       <a-modal :width="360" :footer="null" v-model="visible" title="滑动验证">
         <slide-verify
           ref="slideblock"
@@ -78,7 +78,6 @@
         ></slide-verify>
       </a-modal>
     </div>
-  </div>
 </template>
 
 
@@ -201,29 +200,29 @@ h1 {
   background-size: cover;
 }
 .gaf-login-box {
-  background-color: #ffffff;
+  background-color: #212121;
   width: 400px;
   /* margin: 180px auto; */
   /* margin-right: 150px; */
-  padding: 35px 35px 15px 35px;
+  padding: 100px 50px 50px 50px;
   /* margin-top: 80px; */
 
   position: absolute;
   right: 180px;
   top: 200px;
 
-  border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  box-shadow: 0 0 10px #d7d8db;
-  border: 1px solid #dcdfe6;
+  border-radius: 0px;
+  height: 420px;
+
+  opacity: 0.7;
 }
 .gaf-img {
   position: absolute;
-  right: 180px;
-  top: 80px;
+  right: 220px;
+  top: 230px;
   bottom: 0;
-  width: 400px;
+  width: 320px;
+  z-index: 1;
 }
 #components-form-demo-normal-login .login-form {
   max-width: 300px;
@@ -232,5 +231,39 @@ h1 {
   margin-top: 40px;
   margin-bottom: 40px;
   width: 100%;
+  background: #329DFF;
+  height: 40px;
+  border-radius: 0px;
+}
+/deep/ .ant-form-item label {
+    color: #FFFFFF;
+}
+/deep/ .ant-input-affix-wrapper .ant-input:not(:first-child) {
+    background: #222222;
+    padding-left: 30px;
+    border-radius: 0px;
+}
+/deep/ .ant-input-affix-wrapper .ant-input:not(:first-child) {
+    border: 1px solid #434343;
+    box-shadow: 0px 3px 27px 0px rgb(4 0 0 / 33%);
+    opacity: 0.9;
+    background: #222222;
+    padding-left: 30px;
+    border-radius: 0px;
+    color: #FFFFFF
+}
+/deep/ .ant-form-item-required::before {
+  color: #FFFFFF;
+}
+/deep/ .ant-form-item-required:before {
+    display: inline-block;
+    margin-right: 5px;
+    font-size: 14px;
+    font-family: SimSun,sans-serif;
+    line-height: 1;
+    content: " ";
+    height: 12px;
+    width: 5px;
+    background-color: #329DFF;
 }
 </style>

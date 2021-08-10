@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.service.publisher.core.publisher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,12 +37,11 @@ import static com.supermap.services.rest.management.ServiceType.RESTMAP;
 
 
 /**
-* @author:yw
-* @Date 2021-3-12
+ * @author:yw
+ * @Date 2021-3-12
  * hbase服务发布
  * 通过发布服务提供者和服务组件实现
- * @date:2021/3/25
- * 【注意】hbase不存在工作空间概念，且每个数据及都要发布成一个服务
+ * @date:2021/3/25 【注意】hbase不存在工作空间概念，且每个数据及都要发布成一个服务
  */
 
 @Service
@@ -58,7 +57,9 @@ public class HBasePublisher extends AbstractPublisher {
     @Autowired
     private IServerManager iServerManager;
 
-    /**---------------------以下变量为一次操作中的缓存，会在init()中赋值，在dispose()中销毁**/
+    /**
+     * ---------------------以下变量为一次操作中的缓存，会在init()中赋值，在dispose()中销毁
+     **/
     private List<Setting> settings = new ArrayList<>();
 
     @Override
@@ -195,7 +196,7 @@ public class HBasePublisher extends AbstractPublisher {
             providerName = String.format("%s-%s", providerName, datasetNames.get(0));
         } else if (
             // 数据服务
-             RESTDATA.name().equalsIgnoreCase(serviceType)) {
+                RESTDATA.name().equalsIgnoreCase(serviceType)) {
             HBaseDataProviderSetting hBaseDataProviderSetting = new HBaseDataProviderSetting();
             hBaseDataProviderSetting.zookeepers = zookeeper;
             hBaseDataProviderSetting.catalog = catalog;

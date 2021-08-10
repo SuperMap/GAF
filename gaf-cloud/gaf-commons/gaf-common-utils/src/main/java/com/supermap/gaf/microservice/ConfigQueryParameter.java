@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.microservice;
 
 import com.supermap.gaf.commontypes.SearchParameter;
@@ -13,12 +13,13 @@ import com.supermap.gaf.commontypes.SearchParameter;
  * @date:2021/3/25
  * @description
  */
-public class ConfigQueryParameter extends SearchParameter{
+public class ConfigQueryParameter extends SearchParameter {
 
     /**
      * <p>
-     * 
+     *
      * </p>
+     *
      * @since 1.0.0
      */
     private static final long serialVersionUID = 850419391874875369L;

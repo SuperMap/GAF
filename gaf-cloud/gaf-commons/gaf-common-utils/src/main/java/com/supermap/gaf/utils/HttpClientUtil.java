@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.utils;
 
 import com.alibaba.fastjson.JSONException;
@@ -90,7 +90,7 @@ public class HttpClientUtil {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public HttpPost getHttpPost(Map <String, String> formData, String url, Map <String, String> headers) throws UnsupportedEncodingException {
+    public HttpPost getHttpPost(Map<String, String> formData, String url, Map<String, String> headers) throws UnsupportedEncodingException {
         HttpPost httpPost = null;
         try {
             RequestConfig requestConfig = getRequestConfig();
@@ -117,7 +117,7 @@ public class HttpClientUtil {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public HttpPost getHttpPost(JSONObject json, String url, Map <String, String> headers) throws UnsupportedEncodingException {
+    public HttpPost getHttpPost(JSONObject json, String url, Map<String, String> headers) throws UnsupportedEncodingException {
         HttpPost httpPost = null;
         try {
             RequestConfig requestConfig = getRequestConfig();
@@ -144,7 +144,7 @@ public class HttpClientUtil {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public HttpPost getHttpPost(String paramStr, String url, Map <String, String> headers) throws UnsupportedEncodingException {
+    public HttpPost getHttpPost(String paramStr, String url, Map<String, String> headers) throws UnsupportedEncodingException {
         HttpPost httpPost = null;
         try {
             RequestConfig requestConfig = getRequestConfig();
@@ -169,7 +169,7 @@ public class HttpClientUtil {
      * @return
      * @throws Exception
      */
-    public HttpGet getHttpGet(String url, Map <String, String> headers) throws Exception {
+    public HttpGet getHttpGet(String url, Map<String, String> headers) throws Exception {
         HttpGet httpGet = null;
         try {
             RequestConfig requestConfig = getRequestConfig();
@@ -193,7 +193,7 @@ public class HttpClientUtil {
      * @return
      * @throws Exception
      */
-    public HttpDelete getHttpDelete(String url, Map <String, String> headers) throws Exception {
+    public HttpDelete getHttpDelete(String url, Map<String, String> headers) throws Exception {
         HttpDelete httpDelete = null;
         try {
             RequestConfig requestConfig = getRequestConfig();
@@ -217,7 +217,7 @@ public class HttpClientUtil {
      * @return
      * @throws Exception
      */
-    public HttpPut getHttpPut(JSONObject json, String url, Map <String, String> headers) throws Exception {
+    public HttpPut getHttpPut(JSONObject json, String url, Map<String, String> headers) throws Exception {
         HttpPut httpPut = null;
         try {
             RequestConfig requestConfig = getRequestConfig();
@@ -242,7 +242,7 @@ public class HttpClientUtil {
      * @return
      * @throws Exception
      */
-    public HttpPut getHttpPut(Map <String, String> formData, String url, Map <String, String> headers) throws Exception {
+    public HttpPut getHttpPut(Map<String, String> formData, String url, Map<String, String> headers) throws Exception {
         HttpPut httpPut = null;
         try {
             RequestConfig requestConfig = getRequestConfig();
@@ -267,7 +267,7 @@ public class HttpClientUtil {
      * @return
      * @throws Exception
      */
-    public HttpPut getHttpPut(String paramStr, String url, Map <String, String> headers) throws Exception {
+    public HttpPut getHttpPut(String paramStr, String url, Map<String, String> headers) throws Exception {
         HttpPut httpPut = null;
         try {
             RequestConfig requestConfig = getRequestConfig();
@@ -304,9 +304,9 @@ public class HttpClientUtil {
      * @param httpRequest
      * @param headers
      */
-    protected void setHeaders(HttpRequestBase httpRequest, Map <String, String> headers) {
+    protected void setHeaders(HttpRequestBase httpRequest, Map<String, String> headers) {
         if (!MapUtils.isEmpty(headers)) {
-            for (Map.Entry <String, String> entry : headers.entrySet()) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
                 httpRequest.setHeader(entry.getKey(), entry.getValue());
             }
         } else {
@@ -320,11 +320,11 @@ public class HttpClientUtil {
      * @param httpRequest
      * @param formData
      */
-    protected void setFormData(HttpEntityEnclosingRequestBase httpRequest, Map <String, String> formData) throws UnsupportedEncodingException {
+    protected void setFormData(HttpEntityEnclosingRequestBase httpRequest, Map<String, String> formData) throws UnsupportedEncodingException {
         if (!MapUtils.isEmpty(formData)) {
-            List <NameValuePair> paramList = new ArrayList <>();
-            List <String> list = new ArrayList <>();
-            Set <String> keySet = formData.keySet();
+            List<NameValuePair> paramList = new ArrayList<>();
+            List<String> list = new ArrayList<>();
+            Set<String> keySet = formData.keySet();
             for (String key : keySet) {
                 paramList.add(new BasicNameValuePair(key, formData.get(key)));
                 list.add(formData.get(key));

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.service.impl;
 
 import cn.hutool.core.util.URLUtil;
@@ -46,11 +46,12 @@ import java.util.*;
 
 /**
  * GIS服务服务实现类
- * @author wangxiaolong 
+ *
+ * @author wangxiaolong
  * @date 2020-12-05
  */
 @Service
-public class WebgisServiceServiceImpl implements WebgisServiceService{
+public class WebgisServiceServiceImpl implements WebgisServiceService {
 
     public static final String WEBGIS_DEFAULT_COMPONENT_ID = "webgisDefaultComponentId";
     public static final String REGISTRY_TYPE_SERVER = "server";
@@ -83,19 +84,19 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
 
     @Autowired
     private WebgisConfigService webgisConfigService;
-	
-	@Override
-    public WebgisService getById(String gisServiceId){
-        if(gisServiceId == null){
+
+    @Override
+    public WebgisService getById(String gisServiceId) {
+        if (gisServiceId == null) {
             throw new IllegalArgumentException("gisServiceId不能为空");
         }
-        return  webgisServiceMapper.select(gisServiceId);
+        return webgisServiceMapper.select(gisServiceId);
     }
 
     @Override
     public BatchRegistryServiceResult getRegistryServiceResult(String resultCode) {
         BatchRegistryServiceResult registryServiceResult = registryResultCacheI.get(resultCode);
-        if(registryServiceResult==null){
+        if (registryServiceResult == null) {
             throw new GafException("指定requestCode不存在");
         }
         return registryServiceResult;
@@ -106,15 +107,15 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
         PageInfo<WebgisService> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             webgisServiceMapper.selectList(webgisServiceSelectVo);
         });
-        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
+        return Page.create(pageInfo.getPageNum(), pageInfo.getPageSize(), (int) pageInfo.getTotal(), pageInfo.getPages(), pageInfo.getList());
     }
 
-	@Override
-    public void insertWebgisService(WebgisService webgisService,String type){
-	    if(!REGISTRY_TYPE_SINGLE.equals(type)){
-	        throw new GafException("未知注册类型");
+    @Override
+    public void insertWebgisService(WebgisService webgisService, String type) {
+        if (!REGISTRY_TYPE_SINGLE.equals(type)) {
+            throw new GafException("未知注册类型");
         }
-	    ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
         webgisService.setCreatedBy(shiroUser.getAuthUser().getName());
         webgisService.setUpdatedBy(shiroUser.getAuthUser().getName());
         webgisConfigService.parseConfig(webgisService);
@@ -122,15 +123,14 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
     }
 
 
-
     @Override
     @Transactional
-    public void registryWebgis(WebgisService webgisService){
-	    if(!"MAPWORLD".equals(webgisService.getTypeCode())){
+    public void registryWebgis(WebgisService webgisService) {
+        if (!"MAPWORLD".equals(webgisService.getTypeCode())) {
             List<WebgisService> webgisServices = webgisServiceMapper.selectList(WebgisServiceSelectVo.builder().address(webgisService.getAddress()).build());
-	        if(!CollectionUtils.isEmpty(webgisServices)){
+            if (!CollectionUtils.isEmpty(webgisServices)) {
 
-	            throw new GafException("服务地址重复",409);
+                throw new GafException("服务地址重复", 409);
             }
         }
         webgisService.setGisServiceId(UUID.randomUUID().toString());
@@ -221,27 +221,26 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
     }
 
 
-
     // todo: 若要使用该方法 需要远程调用api资源服务去批量新增api
-	@Override
-    public void batchInsert(List<WebgisService> webgisServices){
-		if (webgisServices != null && webgisServices.size() > 0) {
-	        webgisServices.forEach(webgisService -> {
+    @Override
+    public void batchInsert(List<WebgisService> webgisServices) {
+        if (webgisServices != null && webgisServices.size() > 0) {
+            webgisServices.forEach(webgisService -> {
                 // 尝试解析配置，提前告知格式问题，特别是json串
                 webgisConfigService.parseConfig(webgisService);
-				webgisService.setGisServiceId(UUID.randomUUID().toString());
-				ShiroUser shiroUser = SecurityUtilsExt.getUser();
-				webgisService.setCreatedBy(shiroUser.getAuthUser().getName());
-				webgisService.setUpdatedBy(shiroUser.getAuthUser().getName());
+                webgisService.setGisServiceId(UUID.randomUUID().toString());
+                ShiroUser shiroUser = SecurityUtilsExt.getUser();
+                webgisService.setCreatedBy(shiroUser.getAuthUser().getName());
+                webgisService.setUpdatedBy(shiroUser.getAuthUser().getName());
             });
             webgisServiceMapper.batchInsert(webgisServices);
         }
-        
+
     }
 
     @Transactional
-	@Override
-    public void deleteWebgisService(String gisServiceId){
+    @Override
+    public void deleteWebgisService(String gisServiceId) {
         WebgisService webgisService = this.getById(gisServiceId);
         if (webgisService == null) {
             throw new GafException("未找到该webgis服务");
@@ -254,20 +253,20 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
     }
 
     // 不要使用。若要使用需要远程调用api资源服务去批量删除api
-	@Override
-    public void batchDelete(List<String> gisServiceIds){
+    @Override
+    public void batchDelete(List<String> gisServiceIds) {
         webgisServiceMapper.batchDelete(gisServiceIds);
     }
-	
-	@Override
-    public WebgisService updateWebgisService(WebgisService webgisService){
+
+    @Override
+    public WebgisService updateWebgisService(WebgisService webgisService) {
         // 尝试解析配置，提前告知格式问题，特别是json串
         webgisConfigService.parseConfig(webgisService);
-		ShiroUser shiroUser = SecurityUtilsExt.getUser();
-		webgisService.setUpdatedBy(shiroUser.getAuthUser().getName());
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        webgisService.setUpdatedBy(shiroUser.getAuthUser().getName());
         WebgisService oldWebgisService = this.getById(webgisService.getGisServiceId());
         if (!Objects.equals(oldWebgisService.getAddress(), webgisService.getAddress())
-            || !Objects.equals(oldWebgisService.getName(), webgisService.getName())
+                || !Objects.equals(oldWebgisService.getName(), webgisService.getName())
         ) {
             AuthResourceApi authResourceApi = new AuthResourceApi();
             authResourceApi.setResourceApiId(oldWebgisService.getResourceApiId());
@@ -296,7 +295,7 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
             treeNode.setParentId("0");
             treeNode.setKey(values[i].getCode());
             treeNode.setTitle(values[i].getName());
-            treeNode.setSortSn(i+1);
+            treeNode.setSortSn(i + 1);
             treeNode.setType(0);
             res.add(treeNode);
         }
@@ -315,40 +314,40 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
         PageInfo<WebgisService> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             webgisServiceMapper.selectNotInSet(webgisServiceConditonVo, serviceIdSet);
         });
-        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
+        return Page.create(pageInfo.getPageNum(), pageInfo.getPageSize(), (int) pageInfo.getTotal(), pageInfo.getPages(), pageInfo.getList());
     }
 
     // [{url: '',title: '', fields: [], alias: []}]
     @Override
     public List selectAssociationDataServices(String gisServiceId) {
         WebgisService webgisService = getById(gisServiceId);
-        if(webgisService== null) {
+        if (webgisService == null) {
             return new ArrayList();
         }
-        List<WebgisServiceDo> serviceDos  = new ArrayList<>();
+        List<WebgisServiceDo> serviceDos = new ArrayList<>();
         // 本身就是数据服务
-        if(ServiceTypeEnum.RESTDATA.getCode().equals(webgisService.getTypeCode())){
+        if (ServiceTypeEnum.RESTDATA.getCode().equals(webgisService.getTypeCode())) {
             WebgisServiceDo webgisServiceDo = new WebgisServiceDo();
-            BeanUtils.copyProperties(webgisService,webgisServiceDo);
+            BeanUtils.copyProperties(webgisService, webgisServiceDo);
             serviceDos.add(webgisServiceDo);
-        }else{
+        } else {
             serviceDos = webgisServiceAssociationMapper.selectAssociationServices(gisServiceId, WebgisServiceSelectVo.builder().typeCode(ServiceTypeEnum.RESTDATA.getCode()).build());
         }
 
         List re = (List) AppConfigParser.parse(serviceDos);
-        for(Object item:re){
-            Map<String,Object> itemMap = (Map<String, Object>) item;
+        for (Object item : re) {
+            Map<String, Object> itemMap = (Map<String, Object>) item;
             List<WebgisDataServiceField> selectedFields = webgisDataServiceFieldMapper.selectByCombination(WebgisDataServiceField.builder()
                     .gisDataServiceId((String) itemMap.get("resourceId")).build());
-            if(!CollectionUtils.isEmpty(selectedFields)){
+            if (!CollectionUtils.isEmpty(selectedFields)) {
                 List<String> fields = new ArrayList<>();
                 List<String> alias = new ArrayList<>();
-                for(WebgisDataServiceField serviceField:selectedFields){
+                for (WebgisDataServiceField serviceField : selectedFields) {
                     fields.add(serviceField.getFieldName());
                     alias.add(serviceField.getFieldAlias());
                 }
-                itemMap.put("fields",fields);
-                itemMap.put("alias",alias);
+                itemMap.put("fields", fields);
+                itemMap.put("alias", alias);
             }
         }
 
@@ -358,11 +357,11 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
     @Override
     public Page<WebgisService> listByTypeCodes(String typeCodes, int pageNum, int pageSize) {
         String[] typeCodeArr = typeCodes.split(",");
-        List<String>arr = Arrays.asList(typeCodeArr);
+        List<String> arr = Arrays.asList(typeCodeArr);
         PageInfo<WebgisService> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             webgisServiceMapper.selectByTypeCodes(arr);
         });
-        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
+        return Page.create(pageInfo.getPageNum(), pageInfo.getPageSize(), (int) pageInfo.getTotal(), pageInfo.getPages(), pageInfo.getList());
     }
 
 
@@ -387,7 +386,6 @@ public class WebgisServiceServiceImpl implements WebgisServiceService{
 //        System.out.println(JSON.toJSONString(re));
 //
 //    }
-
 
 
 }

@@ -132,14 +132,14 @@ public final class HttpClientUtil {
      */
     protected static void setJsonObjectParam(JSONObject json, HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
         if (json != null) {
-            HttpEntity entity = new StringEntity(json.toString(), ContentType.create(mimeType,StandardCharsets.UTF_8));
+            HttpEntity entity = new StringEntity(json.toString(), ContentType.create(mimeType, StandardCharsets.UTF_8));
             httpRequest.setEntity(entity);
         }
     }
 
     protected static void setStringParam(String str, HttpEntityEnclosingRequestBase httpRequest) throws UnsupportedEncodingException {
         if (StringUtils.isNotEmpty(str)) {
-            HttpEntity entity = new StringEntity(str, ContentType.create(mimeType,StandardCharsets.UTF_8));
+            HttpEntity entity = new StringEntity(str, ContentType.create(mimeType, StandardCharsets.UTF_8));
             httpRequest.setEntity(entity);
         }
 

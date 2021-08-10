@@ -26,9 +26,8 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.*;
  * 验证认证信息
  *      1.1.静态资源和公共资源不用验证
  *      1.2.其他都需要验证
- *          1.2.1验证失败需要清除cookie
- *          1.2.2验证失败如果是index首页，跳转index首页
- *          1.2.3验证失败如果不是index首页，跳转到登录页
+ *           1.2.1验证失败需要清除cookie
+ *           1.2.2验证失败,返回401
  * @author : duke
  * @date:2021/3/25
  * @since 2020/11/23 3:44 PM
@@ -40,20 +39,16 @@ public class XgatewayAuthenticationValidateFilter implements GlobalFilter, Order
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ExchangeAuthenticationAttribute attribute = exchange.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME);
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
-        if (attribute.getIsPublicUrl() && !attribute.getIsIndexUrl()){
+        if (attribute.getIsPublicUrl()){
             return chain.filter(exchange);
-        }else if (authenticationResult == null
+        }
+        if (authenticationResult == null
                 || StringUtils.isEmpty(authenticationResult.getUsername())
                 || StringUtils.isEmpty(authenticationResult.getJwtToken())){
             removeCookie(exchange);
-            if (attribute.getIsIndexUrl()){
-                return chain.filter(exchange);
-            }else {
-                return GafFluxUtils.unAuth(exchange,"未获取到资源访问的认证身份");
-            }
-        }else {
-            return chain.filter(exchange);
+            return GafFluxUtils.unAuth(exchange,"未获取到资源访问的认证身份");
         }
+        return chain.filter(exchange);
     }
 
     /**

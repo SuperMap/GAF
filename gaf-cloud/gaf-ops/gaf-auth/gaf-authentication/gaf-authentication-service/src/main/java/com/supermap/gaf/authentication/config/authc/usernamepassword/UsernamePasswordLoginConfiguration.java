@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.config.authc.usernamepassword;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,10 +39,11 @@ public class UsernamePasswordLoginConfiguration<T extends UsernamePasswordLoginC
 
     /**
      * 设置成功的Handler，这个handler定义成Bean，所以从外面set进来
+     *
      * @param successHandler
      * @return
      */
-    public UsernamePasswordLoginConfiguration<T,B> loginSuccessHandler(AuthenticationSuccessHandler successHandler){
+    public UsernamePasswordLoginConfiguration<T, B> loginSuccessHandler(AuthenticationSuccessHandler successHandler) {
         usernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(successHandler);
         return this;
     }
@@ -50,10 +51,11 @@ public class UsernamePasswordLoginConfiguration<T extends UsernamePasswordLoginC
 
     /**
      * 设置失败的Handler，这个handler定义成Bean，所以从外面set进来
+     *
      * @param failureHandler
      * @return
      */
-    public UsernamePasswordLoginConfiguration<T,B> loginFailureHandler(AuthenticationFailureHandler failureHandler){
+    public UsernamePasswordLoginConfiguration<T, B> loginFailureHandler(AuthenticationFailureHandler failureHandler) {
         usernamePasswordAuthenticationFilter.setAuthenticationFailureHandler(failureHandler);
         return this;
     }

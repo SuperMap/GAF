@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.rest.jersey;
 
 import com.supermap.gaf.rest.utils.HttpUtil;
@@ -26,10 +26,10 @@ import java.nio.charset.StandardCharsets;
  * 文件可以是存放在 Jar 包中，也可以是存放在 文件系统中。如果是在 Jar 包中，则放在“staticFiles”目录下，
  * 也可以在static目录下，即兼容springboot的默认设置
  * </p>
+ *
  * @author ${Author}
  * @version ${Version}
  * @date:2021/3/25
- *
  */
 //@Path("/static/{path:.*}")
 public class JaxrsStaticResource {
@@ -51,12 +51,13 @@ public class JaxrsStaticResource {
      * <p>
      * 返回资源的内容。
      * </p>
-     * @param path 静态文件的路径。
+     *
+     * @param path    静态文件的路径。
      * @param requset HTTP 请求信息。
      * @return 资源内容的字节流。
      */
     @GET
-    @Produces( { "text/html", "text/javascript", "application/javascript", "text/css", "image/png", "image/gif", "image/bmp", "image/jpeg", "application/x-woff", "application/vnd.ms-fontobject", "image/svg+xml", "application/x-font-ttf","application/octet-stream" })
+    @Produces({"text/html", "text/javascript", "application/javascript", "text/css", "image/png", "image/gif", "image/bmp", "image/jpeg", "application/x-woff", "application/vnd.ms-fontobject", "image/svg+xml", "application/x-font-ttf", "application/octet-stream"})
     public Response get(@PathParam("path") String path, @Context HttpServletRequest requset, @Context HttpServletResponse response) {
         String relativelyPath = STATIC_FILES_PATH + "/" + path;
 //缓存逻辑需要重新调整
@@ -64,28 +65,29 @@ public class JaxrsStaticResource {
 //             ResponseBuilder rBuilder = Response.ok().header("Content-Type", HttpUtil.getAcceptMediaType(requset)).status(HttpStatus.NOT_MODIFIED.value());
 //             rBuilder.build();
 //        }
-        
+
 //        response.setContentType(HttpUtil.getAcceptMediaType(requset).toString());
 //        response.addHeader("Content-Type", HttpUtil.getAcceptMediaType(requset).toString());
         InputStream ins = getFileInputStream(relativelyPath);
-        if(ins == null) {
+        if (ins == null) {
             throw new NotFoundException();
         }
         return Response.ok(ins, HttpUtil.getAcceptMediaType(requset)).build();
     }
+
     @GET
-    @Produces( { "text/html", "text/javascript", "application/javascript", "text/css", "image/png", "image/gif", "image/bmp", "image/jpeg", "application/x-woff", "application/vnd.ms-fontobject", "image/svg+xml", "application/x-font-ttf","application/octet-stream" })
-    public Response getSwagger(@PathParam("path") String path,@Context HttpServletRequest requset, @Context HttpServletResponse response) {
-        String relativelyPath = STATIC_FILES_PATH + "/swagger/"+path;
-        InputStream ins = getFileInputStream(relativelyPath,JaxrsStaticResource.class.getClassLoader());
-        if(ins == null) {
+    @Produces({"text/html", "text/javascript", "application/javascript", "text/css", "image/png", "image/gif", "image/bmp", "image/jpeg", "application/x-woff", "application/vnd.ms-fontobject", "image/svg+xml", "application/x-font-ttf", "application/octet-stream"})
+    public Response getSwagger(@PathParam("path") String path, @Context HttpServletRequest requset, @Context HttpServletResponse response) {
+        String relativelyPath = STATIC_FILES_PATH + "/swagger/" + path;
+        InputStream ins = getFileInputStream(relativelyPath, JaxrsStaticResource.class.getClassLoader());
+        if (ins == null) {
             throw new NotFoundException();
         }
         Object re = ins;
         try {
-            if(path.equals("index.html")){
+            if (path.equals("index.html")) {
                 re = StreamUtils.copyToString(ins, StandardCharsets.UTF_8);
-                re = ((String)re).replaceAll("swaggerUrl",requset.getServletPath()+"/swagger.json");
+                re = ((String) re).replaceAll("swaggerUrl", requset.getServletPath() + "/swagger.json");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -93,11 +95,12 @@ public class JaxrsStaticResource {
         return Response.ok(re, HttpUtil.getAcceptMediaType(requset)).build();
     }
 
-    private InputStream getFileInputStream(String relativelyPath){
+    private InputStream getFileInputStream(String relativelyPath) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        return getFileInputStream(relativelyPath,loader);
+        return getFileInputStream(relativelyPath, loader);
     }
-    private InputStream getFileInputStream(String relativelyPath,ClassLoader loader){
+
+    private InputStream getFileInputStream(String relativelyPath, ClassLoader loader) {
         InputStream inputStream = loader.getResourceAsStream(relativelyPath);
         if (inputStream == null) {
             File file = new File(STATIC_FILES_PATH);

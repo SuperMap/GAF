@@ -28,21 +28,7 @@
         </div>
       </template>
       <template #default>
-        <div class="choose-box">
-          <a-icon type="exclamation-circle" class="exclamation" /><span
-            >已选择</span
-          >
-          <b>{{ selectRowLength }}</b>
-          <span>项</span>
-          <a-popconfirm
-            @confirm="() => clearOptions(record)"
-            title="清空后无法恢复，确认是否继续?"
-            ok-text="确认"
-            cancel-text="取消"
-          >
-            <a href="javascript:;"><u>清空</u></a>
-          </a-popconfirm>
-        </div>
+        <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
         <gaf-table-with-page
           :scroll="{ y: 508, x: 1400 }"
           :pagination="pagination"
@@ -466,6 +452,9 @@ export default {
         ) {
           this.pagination.current--;
         }
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== row.roleId
+        })
         this.getList();
       });
     },

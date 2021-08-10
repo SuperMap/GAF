@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -42,13 +42,14 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
      * 判断redis服务是否可用，否则重新请求
      */
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         lettuceConnectionFactory.setValidateConnection(true);
         lettuceConnectionFactory.afterPropertiesSet();
     }
 
     /**
      * RedisTemplate<String, Object>构造类
+     *
      * @param stringRedisTemplate
      * @return
      */
@@ -75,6 +76,7 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
 
     /**
      * 默认配置， 默认超时时间为10M
+     *
      * @return
      */
     @Bean
@@ -91,6 +93,7 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
 
     /**
      * 自动缓存异常处理
+     *
      * @return
      */
     @Bean

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.commontype;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -22,10 +22,11 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
-* 模块
+ * 模块
+ *
+ * @author zhm
  * @date:2021/3/25
-* @author zhm
-*/
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -57,7 +58,7 @@ public class AuthResourceModule {
     @ApiModelProperty("图标")
     private String iconUrl;
     @ApiModelProperty("状态。逻辑删除字段")
-    @JSONField(name="isStatus")
+    @JSONField(name = "isStatus")
     @LogicDeleteField
     private Boolean status = true;
     @ApiModelProperty(value = "排序序号", example = "1", allowableValues = "range[1,infinity]")

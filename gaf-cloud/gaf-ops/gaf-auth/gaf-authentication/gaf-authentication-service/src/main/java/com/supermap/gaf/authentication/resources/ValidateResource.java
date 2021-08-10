@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.resources;
 
 
@@ -28,8 +28,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * @author dqc
- * @date:2021/3/25
- * /authentication/validate
+ * @date:2021/3/25 /authentication/validate
  */
 @Component
 @Api(value = "认证校验接口")
@@ -40,7 +39,7 @@ public class ValidateResource implements ValidateClient {
 
     @ApiOperation(value = "token认证", notes = "接收session或token对登录状态进行校验")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "authenticationParam",value = "请求校验认证状态的请求参数对象",paramType = "body",dataTypeClass = AuthenticationParam.class)
+            @ApiImplicitParam(name = "authenticationParam", value = "请求校验认证状态的请求参数对象", paramType = "body", dataTypeClass = AuthenticationParam.class)
     })
     @POST
     @Produces(APPLICATION_JSON)
@@ -53,7 +52,7 @@ public class ValidateResource implements ValidateClient {
 
     @ApiOperation(value = "api鉴权", notes = "对用户是否拥有api资源访问权限进行鉴权")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "authenticationResult",value = "鉴权请求参数对象",paramType = "body",dataTypeClass = AuthenticationResult.class)
+            @ApiImplicitParam(name = "authenticationResult", value = "鉴权请求参数对象", paramType = "body", dataTypeClass = AuthenticationResult.class)
     })
     @POST
     @Produces(APPLICATION_JSON)

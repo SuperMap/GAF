@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.listener;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -30,7 +30,7 @@ import java.util.List;
  * @date:2021/3/25
  * @create: 2019/07/15
  */
-public class DynamicRouteLoadListener implements ApplicationListener <ApplicationReadyEvent> {
+public class DynamicRouteLoadListener implements ApplicationListener<ApplicationReadyEvent> {
     private static Logger logger = LogUtil.getLocLogger(AbstractDynamicRouteServiceImpl.class);
 
     @Autowired(required = false)
@@ -48,9 +48,9 @@ public class DynamicRouteLoadListener implements ApplicationListener <Applicatio
         RouteSearchParam param = new RouteSearchParam();
         param.setType(GatewayRouteType.TENANT);
         param.setTenantId(tenantId);
-        MessageResult<List <GatewayRouteDefinition>> result = routeService.queryRoutes(param);
+        MessageResult<List<GatewayRouteDefinition>> result = routeService.queryRoutes(param);
         if (result.IsSuccessed() && CollectionUtils.isNotEmpty(result.getData())) {
-            List <GatewayRouteDefinition> gatewayRouteDefinitions = result.getData();
+            List<GatewayRouteDefinition> gatewayRouteDefinitions = result.getData();
             for (GatewayRouteDefinition gatewayRouteDefinition : gatewayRouteDefinitions) {
                 RouteDefinition routeDefinition = RouteConvertUtil
                         .assembleRouteDefinition(RouteConvertUtil.assembleTenantGatewayRouteEntity(gatewayRouteDefinition));

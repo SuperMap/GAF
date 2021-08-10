@@ -33,21 +33,7 @@
         </div>
       </template>
       <template #default>
-        <div class="choose-box">
-          <a-icon type="exclamation-circle" class="exclamation" /><span
-            >已选择</span
-          >
-          <b>{{ selectRowLength }}</b>
-          <span>项</span>
-          <a-popconfirm
-            @confirm="() => clearOptions(record)"
-            title="清空后无法恢复，确认是否继续?"
-            ok-text="确认"
-            cancel-text="取消"
-          >
-            <a href="javascript:;"><u>清空</u></a>
-          </a-popconfirm>
-        </div>
+        <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
         <gaf-table-with-page
           :scroll="{ y: 508, x : 1440}"
           :pagination="pagination"
@@ -196,9 +182,9 @@ export default {
 
       databaseTypeMap: new Map([
         ["1", "POSTGRESQL"],
-        ["4", "MYSQL"],
-        ["5", "ORACLE"],
-        ["6", "SQLSERVER"],
+        ["3", "MYSQL"],
+        ["2", "ORACLE"],
+        ["4", "SQL_SERVER"],
       ]),
     };
   },
@@ -303,7 +289,7 @@ export default {
       await this.getList();
     },
     async batchDel() {
-      const url = "/sys-mgt/sys-resource-datasources/";
+      const url = "/data-mgt/sys-resource-datasources/";
       const selectedRowKeys = this.selectedRowKeys;
       if (selectedRowKeys.length !== 0) {
         const rst = await this.$axios.delete(url, { data: selectedRowKeys });
@@ -319,6 +305,7 @@ export default {
           ) {
             this.pagination.current--;
           }
+          this.selectedRowKeys = []
           this.getList();
         });
       } else {
@@ -409,7 +396,7 @@ export default {
     },
     // 删除数据
     async handleDelete(row) {
-      const url = `/sys-mgt/sys-resource-datasources/` + row.datasourceId;
+      const url = `/data-mgt/sys-resource-datasources/` + row.datasourceId;
       const rst = await this.$axios.delete(url);
       if (rst.data.isSuccessed) {
         this.$message.success("删除成功");
@@ -423,6 +410,9 @@ export default {
         ) {
           this.pagination.current--;
         }
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== row.datasourceId
+        })
         this.getList();
       });
     },
@@ -442,7 +432,7 @@ export default {
     },
     async getList() {
       this.loading = true;
-      let url = `/sys-mgt/sys-resource-datasources?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&isSdx=false`;
+      let url = `/data-mgt/sys-resource-datasources?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&isSdx=false`;
       if (this.searchText.trim() && this.searchedColumn) {
         url =
           url +

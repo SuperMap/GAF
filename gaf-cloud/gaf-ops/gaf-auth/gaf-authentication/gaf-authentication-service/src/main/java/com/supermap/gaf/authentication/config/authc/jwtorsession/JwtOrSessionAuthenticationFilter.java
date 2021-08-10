@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.config.authc.jwtorsession;
 
 import com.supermap.gaf.authentication.entity.entity.AuthenticationParam;
@@ -36,7 +36,7 @@ import static com.supermap.gaf.authentication.entity.constant.LoginConstant.LOGI
  */
 public class JwtOrSessionAuthenticationFilter extends OncePerRequestFilter {
 
-    private RequestMatcher requestMatcher =  new AntPathRequestMatcher(LOGIN_WITH_JWT_SEESION, HttpMethod.GET.name());
+    private RequestMatcher requestMatcher = new AntPathRequestMatcher(LOGIN_WITH_JWT_SEESION, HttpMethod.GET.name());
 
     private AuthenticationManager authenticationManager;
     private AuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
@@ -71,24 +71,24 @@ public class JwtOrSessionAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (!requestMatcher.matches(request)){
+        if (!requestMatcher.matches(request)) {
             filterChain.doFilter(request, response);
             return;
         }
         AuthenticationParam authenticationParam = HttpRequestUtils.getJwtOrSession(request);
-        JwtOrSessionAuthentication authentication = new JwtOrSessionAuthentication(Collections.emptyList(),authenticationParam);
+        JwtOrSessionAuthentication authentication = new JwtOrSessionAuthentication(Collections.emptyList(), authenticationParam);
 
         Authentication authResult = null;
         AuthenticationException failed = null;
 
         try {
             authResult = this.getAuthenticationManager().authenticate(authentication);
-        }catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             failed = e;
         }
-        if(authResult != null) {
+        if (authResult != null) {
             successAuthentication(request, response, filterChain, authResult);
-        } else{
+        } else {
             failureAuthentication(request, response, failed);
         }
     }

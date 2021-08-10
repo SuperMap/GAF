@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.config.authc.jwtorsession;
 
 import com.supermap.gaf.authentication.config.authc.CustomUserDetailsServiceImpl;
@@ -15,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
-
 
 
 /**
@@ -34,11 +33,11 @@ public class JwtOrSessionAuthenticationProvider implements AuthenticationProvide
 
         AuthenticationResult authenticationResult = validateAuthenticationService.authentication(jwtOrSessionAuthentication.getAuthenticationParam());
 
-        if (StringUtils.isEmpty(authenticationResult.getUsername())){
+        if (StringUtils.isEmpty(authenticationResult.getUsername())) {
             throw new BadCredentialsException("");
         }
         UserDetails userDetails = customUserDetailsServiceImpl.loadUserByUsername(authenticationResult.getUsername());
-        JwtOrSessionAuthentication result = new JwtOrSessionAuthentication(userDetails.getAuthorities(),authenticationResult.getUsername(),authenticationResult.getJwtToken());
+        JwtOrSessionAuthentication result = new JwtOrSessionAuthentication(userDetails.getAuthorities(), authenticationResult.getUsername(), authenticationResult.getJwtToken());
         result.setAuthenticated(true);
         return result;
     }

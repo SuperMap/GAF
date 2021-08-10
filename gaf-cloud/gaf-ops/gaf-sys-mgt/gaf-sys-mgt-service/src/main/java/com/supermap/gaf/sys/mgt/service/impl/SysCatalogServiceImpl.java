@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.sys.mgt.service.impl;
 
 import com.github.pagehelper.PageHelper;
@@ -35,9 +35,9 @@ import static com.supermap.gaf.authority.util.TreeConvertUtil.ROOT_PARENT_ID;
 
 /**
  * 目录服务实现类
+ *
  * @author wangxiaolong
  * @date:2021/3/25
- *
  */
 @Service
 public class SysCatalogServiceImpl implements SysCatalogService {
@@ -58,7 +58,6 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         }
         return sysCatalogMapper.select(catalogId);
     }
-
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -85,7 +84,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         sysCatalog.setCatalogId(UUID.randomUUID().toString());
 
         SysCatalog.SysCatalogBuilder queryBuilder = SysCatalog.builder().type(sysCatalog.getType()).parentId(sysCatalog.getParentId()).status(true);
-        if ( CatalogTypeEnum.ROLE_GROUP_TYPE.getValue().equals(sysCatalog.getType()) ) {
+        if (CatalogTypeEnum.ROLE_GROUP_TYPE.getValue().equals(sysCatalog.getType())) {
             ShiroUser shiroUser = SecurityUtilsExt.getUser();
             String tenantId = Objects.requireNonNull(shiroUser).getTenantId();
             queryBuilder.tenantId(tenantId);
@@ -93,7 +92,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         Integer sameLevelCount = sysCatalogMapper.countByCombination(queryBuilder.build());
         if (sameLevelCount <= 0) {
             sysCatalog.setSortSn(1);
-        } else if(sysCatalog.getSortSn() == null || sysCatalog.getSortSn() > sameLevelCount + 1) {
+        } else if (sysCatalog.getSortSn() == null || sysCatalog.getSortSn() > sameLevelCount + 1) {
             sysCatalog.setSortSn(sameLevelCount + 1);
         }
         if (!ROOT_PARENT_ID.equalsIgnoreCase(sysCatalog.getParentId())) {
@@ -129,10 +128,10 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         extendSortSnParam.setSortSnFieldName(DbFieldNameConstant.SORT_SN);
         extendSortSnParam.setUpdatedTimeFieldName(DbFieldNameConstant.UPDATED_TIME);
         extendSortSnParam.setParentId(sysCatalog.getParentId());
-        if(ROOT_PARENT_ID.equalsIgnoreCase(sysCatalog.getParentId())) {
+        if (ROOT_PARENT_ID.equalsIgnoreCase(sysCatalog.getParentId())) {
             List<String> conditions = new LinkedList<>();
-            conditions.add(DbFieldNameConstant.TYPE + " = '" + sysCatalog.getType()+"'");
-            if(CatalogTypeEnum.ROLE_GROUP_TYPE.getValue().equals(sysCatalog.getType())) {
+            conditions.add(DbFieldNameConstant.TYPE + " = '" + sysCatalog.getType() + "'");
+            if (CatalogTypeEnum.ROLE_GROUP_TYPE.getValue().equals(sysCatalog.getType())) {
                 ShiroUser shiroUser = SecurityUtilsExt.getUser();
                 String tenantId = Objects.requireNonNull(shiroUser).getTenantId();
                 conditions.add(DbFieldNameConstant.TENANT_ID + " = '" + tenantId + "'");
@@ -150,7 +149,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
             List<ExtendSortSnParam> extendSortSnParamList = new LinkedList<>();
             sysCatalogs.forEach(sysCatalog -> {
                 sysCatalog.setCatalogId(UUID.randomUUID().toString());
-                if(!parentIds.contains(sysCatalog.getParentId())) {
+                if (!parentIds.contains(sysCatalog.getParentId())) {
                     parentIds.add(sysCatalog.getParentId());
                     extendSortSnParamList.add(getBaseSortSnParam(sysCatalog));
                     // 暂时支持同一种类型 同一租户的目录批量添加后的修复排序
@@ -167,7 +166,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean deleteSysCatalog(SysComponent sysComponent,CatalogTypeEnum catalogType) {
+    public boolean deleteSysCatalog(SysComponent sysComponent, CatalogTypeEnum catalogType) {
         SysCatalog queryCatalog = SysCatalog.builder().parentId(ROOT_PARENT_ID).sysComponentId(sysComponent.getSysComponentId()).type(catalogType.getValue()).status(true).build();
         List<SysCatalog> sysCatalogs = this.sysCatalogMapper.selectByCombination(queryCatalog);
         if (sysCatalogs.size() != 1) {
@@ -182,14 +181,14 @@ public class SysCatalogServiceImpl implements SysCatalogService {
     @Override
     public SysCatalog deleteSysCatalog(String catalogId) {
         SysCatalog needLogicDelete = sysCatalogMapper.selectByIdAndStatus(catalogId, true);
-        if ( needLogicDelete == null) {
+        if (needLogicDelete == null) {
             throw new GafException("找不到该目录");
         }
         Set<String> all = new HashSet<>();
         all.add(catalogId);
         Set<String> parentIds = all;
         do {
-            List<SysCatalog> sysCatalogs = sysCatalogMapper.selectByParentIdsAndStatus(parentIds,true);
+            List<SysCatalog> sysCatalogs = sysCatalogMapper.selectByParentIdsAndStatus(parentIds, true);
             if (sysCatalogs != null && sysCatalogs.size() > 0) {
                 Set<@NotNull String> collect = sysCatalogs.stream().map(SysCatalog::getCatalogId).collect(Collectors.toSet());
                 all.addAll(collect);
@@ -215,7 +214,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean updateSysCatalog(SysComponent sysComponent,CatalogTypeEnum catalogType) {
+    public boolean updateSysCatalog(SysComponent sysComponent, CatalogTypeEnum catalogType) {
         SysCatalog queryCatalog = SysCatalog.builder().parentId(ROOT_PARENT_ID).sysComponentId(sysComponent.getSysComponentId()).type(catalogType.getValue()).status(true).build();
         List<SysCatalog> sysCatalogs = this.sysCatalogMapper.selectByCombination(queryCatalog);
         if (sysCatalogs.size() != 1) {
@@ -238,21 +237,19 @@ public class SysCatalogServiceImpl implements SysCatalogService {
             throw new GafException("找不到目录");
         }
         sysCatalogMapper.update(sysCatalog);
-        if(!Objects.equals(current.getParentId(), sysCatalog.getParentId())) {
+        if (!Objects.equals(current.getParentId(), sysCatalog.getParentId())) {
             ExtendSortSnParam baseSortSnParam = getBaseSortSnParam(current);
             batchSortAndCodeMapper.revisionSortSnMutiCondition(baseSortSnParam);
             ExtendSortSnParam extendSortSnParam = getBaseSortSnParam(sysCatalog);
             batchSortAndCodeMapper.revisionSortSnMutiCondition(extendSortSnParam);
-        } else if(!Objects.equals(sysCatalog.getSortSn(), current.getSortSn()) ) {
+        } else if (!Objects.equals(sysCatalog.getSortSn(), current.getSortSn())) {
             ExtendSortSnParam baseSortSnParam = getBaseSortSnParam(current);
             baseSortSnParam.setOldSortSn(current.getSortSn());
             baseSortSnParam.setCurSortSn(sysCatalog.getSortSn());
             batchSortAndCodeMapper.revisionSortSnMutiCondition(baseSortSnParam);
         }
-        return sysCatalogMapper.selectByIdAndStatus(sysCatalog.getCatalogId(),true);
+        return sysCatalogMapper.selectByIdAndStatus(sysCatalog.getCatalogId(), true);
     }
-
-
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -279,6 +276,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         }
         return parentPath;
     }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public List<TreeNode> getNodes(CatalogTypeEnum type, String tenantId) {
@@ -317,11 +315,12 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         }
         return nodeList;
     }
+
     @Override
     public List<TreeNode> getNodesByType(String type) {
         // 若没查到或者判断为平台管理员 则认为是平台级 若有租户则查询租户的所有分类目录
         SysCatalog querySysCatalog;
-        if ( CatalogTypeEnum.ROLE_GROUP_TYPE.getValue().equals(type) ) {
+        if (CatalogTypeEnum.ROLE_GROUP_TYPE.getValue().equals(type)) {
             ShiroUser shiroUser = SecurityUtilsExt.getUser();
             String tenantId = Objects.requireNonNull(shiroUser).getTenantId();
             querySysCatalog = SysCatalog.builder().type(type).tenantId(tenantId).status(true).build();
@@ -348,7 +347,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
     @Override
     public List<SysCatalog> getByType(String type) {
         SysCatalog querySysCatalog;
-        if ( CatalogTypeEnum.ROLE_GROUP_TYPE.getValue().equals(type) ) {
+        if (CatalogTypeEnum.ROLE_GROUP_TYPE.getValue().equals(type)) {
             // 若没查到或者判断为平台管理员 则认为是平台级 若有租户则查询租户的所有分类目录
             ShiroUser shiroUser = SecurityUtilsExt.getUser();
             String tenantId = Objects.requireNonNull(shiroUser).getTenantId();
@@ -361,7 +360,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
 
     @Override
     public List<SysCatalog> getByComponentAndType(String componentId, String type) {
-        return sysCatalogMapper.getByComponentAndType(componentId,type);
+        return sysCatalogMapper.getByComponentAndType(componentId, type);
     }
 
     @Override
@@ -370,11 +369,11 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         if (CatalogTypeEnum.ROLE_GROUP_TYPE.equals(catalogType)) {
             builder.tenantId(Objects.requireNonNull(SecurityUtilsExt.getUser()).getTenantId());
         }
-        PageInfo<SysCatalog> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> sysCatalogMapper.selectByCondition(searchFieldName, searchFieldValue ,orderFieldName, orderMethod,builder.build()));
+        PageInfo<SysCatalog> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> sysCatalogMapper.selectByCondition(searchFieldName, searchFieldValue, orderFieldName, orderMethod, builder.build()));
         Page<SysCatalog> page = new Page<>();
         page.setPageIndex(pageInfo.getPageNum());
         page.setPageSize(pageInfo.getPageSize());
-        page.setTotal((int)pageInfo.getTotal());
+        page.setTotal((int) pageInfo.getTotal());
         page.setContent(pageInfo.getList());
         page.calculateTotalPage();
         return page;
@@ -420,7 +419,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
     public List<SelectOptionVo> getBizTypes() {
         BizTypeEnum[] values = BizTypeEnum.values();
         List<SelectOptionVo> optionVos = new LinkedList<>();
-        for (BizTypeEnum value: values) {
+        for (BizTypeEnum value : values) {
             SelectOptionVo selectOptionVo = new SelectOptionVo();
             selectOptionVo.setKey(value.getValue());
             selectOptionVo.setValue(value.getValue());
@@ -431,7 +430,7 @@ public class SysCatalogServiceImpl implements SysCatalogService {
     }
 
     @Override
-    public List<SysCatalog> getCatalogTreeListByRootId(String rootCatalogId){
+    public List<SysCatalog> getCatalogTreeListByRootId(String rootCatalogId) {
         return sysCatalogMapper.getCatalogTreeListByRootId(rootCatalogId);
     }
 

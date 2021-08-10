@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.resources;
 
 import com.alibaba.fastjson.JSON;
@@ -43,14 +43,14 @@ public class RouteMgtResource {
 
     @ApiOperation(value = "查询自定义网关路由", notes = "查询自定义网关路由")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "routeSearchParam",value = "路由搜索参数json字符串",paramType = "query",dataType = "string")
+            @ApiImplicitParam(name = "routeSearchParam", value = "路由搜索参数json字符串", paramType = "query", dataType = "string")
     })
     @GetMapping
-    public MessageResult<List <GatewayRouteDefinition>> queryTenantGatewayRoutes(@RequestParam(name = "routeSearchParam", required = false) String routeSearchParam) {
-        MessageResult<List <GatewayRouteDefinition>> result = new MessageResult<>();
+    public MessageResult<List<GatewayRouteDefinition>> queryTenantGatewayRoutes(@RequestParam(name = "routeSearchParam", required = false) String routeSearchParam) {
+        MessageResult<List<GatewayRouteDefinition>> result = new MessageResult<>();
         try {
             RouteSearchParam param = buildRouteSearchParam(routeSearchParam);
-            MessageResult<List <GatewayRouteDefinition>> result1 = routeService.queryRoutes(param);
+            MessageResult<List<GatewayRouteDefinition>> result1 = routeService.queryRoutes(param);
             result.setData(result1.getData());
             result.setSuccessed(result1.IsSuccessed());
             result.setMessage(result1.getMessage());
@@ -63,7 +63,7 @@ public class RouteMgtResource {
 
     @ApiOperation(value = "Id为参数查询自定义网关路由", notes = "Id为参数查询自定义网关路由")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "自定义路由id",paramType = "path",dataType = "string")
+            @ApiImplicitParam(name = "id", value = "自定义路由id", paramType = "path", dataType = "string")
     })
     @GetMapping(value = "/{id}", produces = "application/json")
     public MessageResult<GatewayRouteDefinition> queryTenantGatewayRoute(@PathVariable("id") String id) {
@@ -79,7 +79,7 @@ public class RouteMgtResource {
 
     @ApiOperation(value = "新增自定义网关路由", notes = "添加动态网关路由")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "route",value = "动态网关路由对象",paramType = "body",dataTypeClass = GatewayRouteDefinition.class)
+            @ApiImplicitParam(name = "route", value = "动态网关路由对象", paramType = "body", dataTypeClass = GatewayRouteDefinition.class)
     })
     @PostMapping(produces = "application/json;charset=UTF-8")
     public MessageResult<String> addTenantRoute(@RequestBody GatewayRouteDefinition route) {
@@ -91,7 +91,7 @@ public class RouteMgtResource {
             if (CollectionUtils.isEmpty(route.getFilters())) {
                 throw new Exception("路由Filters不能为空");
             }
-            if (StringUtils.isBlank(route.getUri()) || route.getUri().endsWith("//")){
+            if (StringUtils.isBlank(route.getUri()) || route.getUri().endsWith("//")) {
                 throw new Exception("uri参数填写有误");
             }
             if (StringUtils.isEmpty(route.getTenantId())) {
@@ -107,7 +107,7 @@ public class RouteMgtResource {
 
     @ApiOperation(value = "批量删除路由", notes = "传入json字符串参数，批量删除路由")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "idsJsonStr",value = "json字符串参数",paramType = "body")
+            @ApiImplicitParam(name = "idsJsonStr", value = "json字符串参数", paramType = "body")
     })
     @DeleteMapping(produces = "application/json")
     public MessageResult<String> batchDeleteTenantRoute(@RequestBody String idsJsonStr) {
@@ -116,7 +116,7 @@ public class RouteMgtResource {
             if (StringUtils.isEmpty(idsJsonStr)) {
                 throw new IllegalArgumentException("请传入正确的id集合");
             }
-            List <String> ids = JSON.parseArray(idsJsonStr, String.class);
+            List<String> ids = JSON.parseArray(idsJsonStr, String.class);
             result = routeService.batchDeleteRoute(ids);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -127,7 +127,7 @@ public class RouteMgtResource {
 
     @ApiOperation(value = "ID删除路由", notes = "传入ID参数，删除路由")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "路由id",paramType = "path",dataType = "string")
+            @ApiImplicitParam(name = "id", value = "路由id", paramType = "path", dataType = "string")
     })
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public MessageResult<String> deleteTenantRoute(@PathVariable("id") String id) {
@@ -143,7 +143,7 @@ public class RouteMgtResource {
 
     @ApiOperation(value = "编辑路由", notes = "编辑路由信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "route",value = "路由对象",paramType = "body",dataTypeClass = GatewayRouteDefinition.class)
+            @ApiImplicitParam(name = "route", value = "路由对象", paramType = "body", dataTypeClass = GatewayRouteDefinition.class)
     })
     @PutMapping(produces = "application/json")
     public MessageResult<String> updateTenantRoute(@RequestBody GatewayRouteDefinition route) {

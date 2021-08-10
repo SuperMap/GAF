@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.resources;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -25,8 +25,7 @@ import java.util.List;
 
 /**
  * @author dqc
- * @date:2021/3/25
- * /configcenter/manager/servicenames
+ * @date:2021/3/25 /configcenter/manager/servicenames
  */
 @Component
 @Api("微服务治理资源API")
@@ -41,17 +40,17 @@ public class MicroServiceMgtResoure {
 
     @ApiOperation(value = "获取注册中心全部服务实例信息", notes = "通过注册中心地址，获取注册中心全部服务实例信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "eurekaIp",value = "注册中心ip",paramType = "query",dataType = "string",required = true,example = "192.168.1.1"),
-            @ApiImplicitParam(name = "eurekaPort",value = "注册中心端口",paramType = "query",dataType = "string",required = true,example = "8761")
+            @ApiImplicitParam(name = "eurekaIp", value = "注册中心ip", paramType = "query", dataType = "string", required = true, example = "192.168.1.1"),
+            @ApiImplicitParam(name = "eurekaPort", value = "注册中心端口", paramType = "query", dataType = "string", required = true, example = "8761")
     })
     @GET
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult <List <MicroServiceInfo>> getServiceInstanceInfos(@QueryParam("eurekaIp") String eurekaIp,
-                                                                           @QueryParam("eurekaPort") String eurekaPort) {
-        MessageResult <List <MicroServiceInfo>> result = new MessageResult <>();
+    public MessageResult<List<MicroServiceInfo>> getServiceInstanceInfos(@QueryParam("eurekaIp") String eurekaIp,
+                                                                         @QueryParam("eurekaPort") String eurekaPort) {
+        MessageResult<List<MicroServiceInfo>> result = new MessageResult<>();
         try {
-            List <MicroServiceInfo> serviceInstanceInfos;
+            List<MicroServiceInfo> serviceInstanceInfos;
             if (StringUtils.isEmpty(eurekaIp) || StringUtils.isEmpty(eurekaPort)) {
                 serviceInstanceInfos = microServiceMgtService.getAllMicroServices();
             } else {
@@ -74,12 +73,12 @@ public class MicroServiceMgtResoure {
 
     @ApiOperation(value = "获取注册中心服务实例信息", notes = "通过服务名，获取对应注册服务实例的信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "serviceName",value = "微服务应用名称",paramType = "path",dataType = "string",required = true,example = "GAF-XX")
+            @ApiImplicitParam(name = "serviceName", value = "微服务应用名称", paramType = "path", dataType = "string", required = true, example = "GAF-XX")
     })
     @GET
     @Path("/{serviceName}")
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult <MicroServiceInfo> getServiceInstanceInfo(@PathParam("serviceName") String serviceName) {
+    public MessageResult<MicroServiceInfo> getServiceInstanceInfo(@PathParam("serviceName") String serviceName) {
         try {
             MicroServiceInfo microServiceInfo = microServiceMgtService.getMicroService(serviceName);
             if (microServiceInfo != null) {

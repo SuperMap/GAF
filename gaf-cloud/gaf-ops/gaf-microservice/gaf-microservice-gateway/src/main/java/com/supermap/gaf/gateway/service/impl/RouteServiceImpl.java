@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.service.impl;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -75,10 +75,10 @@ public class RouteServiceImpl implements RouteService {
      * @return
      */
     @Override
-    public MessageResult<List <GatewayRouteDefinition>> queryRoutes(RouteSearchParam param) {
-        MessageResult<List <GatewayRouteDefinition>> result = new MessageResult<>();
-        List <GatewayRouteDefinition> gatewayRouteDefinitions = new ArrayList <>();
-        List <GatewayRouteEntity> list = routeDao.queryRoutes(param);
+    public MessageResult<List<GatewayRouteDefinition>> queryRoutes(RouteSearchParam param) {
+        MessageResult<List<GatewayRouteDefinition>> result = new MessageResult<>();
+        List<GatewayRouteDefinition> gatewayRouteDefinitions = new ArrayList<>();
+        List<GatewayRouteEntity> list = routeDao.queryRoutes(param);
         for (GatewayRouteEntity gatewayRouteEntity : list) {
             gatewayRouteDefinitions.add(RouteConvertUtil.assembleGatewayRouteDefinition(gatewayRouteEntity));
         }
@@ -156,15 +156,15 @@ public class RouteServiceImpl implements RouteService {
      * @return
      */
     @Override
-    public MessageResult<String> batchDeleteRoute(List <String> ids) throws Exception {
+    public MessageResult<String> batchDeleteRoute(List<String> ids) throws Exception {
         MessageResult<String> result = new MessageResult<>();
         RouteSearchParam param = new RouteSearchParam();
         param.setIds(ids);
-        MessageResult<List <GatewayRouteDefinition>> queryRst = queryRoutes(param);
+        MessageResult<List<GatewayRouteDefinition>> queryRst = queryRoutes(param);
         if (!queryRst.IsSuccessed() || CollectionUtils.isEmpty(queryRst.getData())) {
             throw new Exception("未能获取到路由信息");
         }
-        List <GatewayRouteDefinition> tenantGatewayRouteEntities = queryRst.getData();
+        List<GatewayRouteDefinition> tenantGatewayRouteEntities = queryRst.getData();
         boolean deleteRst = routeDao.batchDeleteRoute(ids);
         if (deleteRst) {
             for (GatewayRouteDefinition routeDefinition : tenantGatewayRouteEntities) {

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro;
 
 import org.keycloak.authorization.client.AuthzClient;
@@ -18,7 +18,7 @@ import com.supermap.gaf.utils.LogUtil;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class GAFAuthzClientService {
 
     @Autowired
@@ -26,15 +26,17 @@ public class GAFAuthzClientService {
 
     @Autowired
     private AuthzClient authzClient;
-    
+
     private static Logger logger = LogUtil.getLocLogger(GAFAuthzClientService.class);
 
-    public OAuth20Profile parseOauthJWTToken(String token) throws Exception{
+    public OAuth20Profile parseOauthJWTToken(String token) throws Exception {
         return getJwtTokenParser().parseOauthJWTToken(token);
     }
+
     public OidcProfile parseJWTToken(String token) throws Exception {
         return getJwtTokenParser().parseToken(token);
     }
+
     public OidcProfile authzWithToken(String token) {
         try {
             AuthorizationResponse authzResponse = getAuthzClient().authorization(token).authorize();
@@ -44,7 +46,7 @@ public class GAFAuthzClientService {
         }
         return null;
     }
-    
+
     public OidcProfile authzWithUsernamePassword(String username, String password) {
         try {
             AuthorizationResponse authzResponse = getAuthzClient().authorization(username, password).authorize();
@@ -54,11 +56,11 @@ public class GAFAuthzClientService {
         }
         return null;
     }
-    
+
 //    public void recordKeycloakUser(OidcProfile profile){
 //        SecurityUtilsExt.recordKeycloakUser(profile);
 //    }
-    
+
     public GAFJWTTokenParser getJwtTokenParser() {
         return jwtTokenParser;
     }

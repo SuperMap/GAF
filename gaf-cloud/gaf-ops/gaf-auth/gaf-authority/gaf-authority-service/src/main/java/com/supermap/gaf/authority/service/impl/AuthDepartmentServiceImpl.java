@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.AuthDepartment;
@@ -37,8 +37,9 @@ import java.util.stream.Collectors;
 
 /**
  * 部门服务实现类
- * @date:2021/3/25
+ *
  * @author zhm
+ * @date:2021/3/25
  */
 @Service
 public class AuthDepartmentServiceImpl implements AuthDepartmentService {
@@ -132,14 +133,14 @@ public class AuthDepartmentServiceImpl implements AuthDepartmentService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void batchInsert(List<AuthDepartment> authDepartments) {
-        if(!CollectionUtils.isEmpty(authDepartments)){
+        if (!CollectionUtils.isEmpty(authDepartments)) {
             Set<String> parentIds = new HashSet<>();
             for (AuthDepartment authDepartment : authDepartments) {
                 authDepartment.setDepartmentId(UUID.randomUUID().toString());
                 parentIds.add(authDepartment.getParentId());
             }
             authDepartmentMapper.batchInsert(authDepartments);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthDepartment.class,parentIds);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthDepartment.class, parentIds);
         }
 
     }
@@ -189,7 +190,7 @@ public class AuthDepartmentServiceImpl implements AuthDepartmentService {
     @Override
     public void batchDelete(String tenantId, List<String> departmentIds) {
         if (!CollectionUtils.isEmpty(departmentIds)) {
-            departmentIds.forEach(departmentId -> ((AuthDepartmentService)AopContext.currentProxy()).deleteAuthDepartment(tenantId, departmentId));
+            departmentIds.forEach(departmentId -> ((AuthDepartmentService) AopContext.currentProxy()).deleteAuthDepartment(tenantId, departmentId));
         }
     }
 
@@ -206,7 +207,7 @@ public class AuthDepartmentServiceImpl implements AuthDepartmentService {
         Integer sortSn = authDepartment.getSortSn();
         Integer oldSortSn = authDepartmentExist.getSortSn();
         authDepartmentMapper.update(authDepartment);
-        batchSortAndCodeService.revisionSortSnForUpdate(AuthDepartment.class,authDepartmentExist.getParentId(),oldSortSn,sortSn);
+        batchSortAndCodeService.revisionSortSnForUpdate(AuthDepartment.class, authDepartmentExist.getParentId(), oldSortSn, sortSn);
         return authDepartment;
     }
 
@@ -255,6 +256,7 @@ public class AuthDepartmentServiceImpl implements AuthDepartmentService {
 
     /**
      * 唯一性校验
+     *
      * @param authDepartment 部门
      * @param isUpdate       是否为更新，如是需要在校验时排除当前部门
      */

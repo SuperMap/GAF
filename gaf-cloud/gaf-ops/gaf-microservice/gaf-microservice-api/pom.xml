@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.supermap.gaf</groupId>
         <artifactId>gaf-microservice</artifactId>
-        <version>2.1.1-SNAPSHOT</version>
+        <version>2.1.1.RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>gaf-microservice-api</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.1.1.RELEASE</version>
 
     <dependencies>
         <dependency>
@@ -48,7 +48,7 @@
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <configuration>
                     <dockerfile>${project.basedir}/src/main/k8s/Dockerfile</dockerfile>
-                    <repository>${CUSTOM_REGISTRY}gaf-microservice-api</repository>
+                    <repository>${CUSTOM_REGISTRY}${project.artifactId}</repository>
                     <tag>${CUSTOM_TAG}</tag>
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                     <skipDockerInfo>true</skipDockerInfo>

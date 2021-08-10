@@ -27,9 +27,10 @@ public abstract class AbstractDynamicRouteServiceImpl implements ApplicationEven
 
     /**
      * 获取路由列表
+     *
      * @return
      */
-    public abstract List <RouteDefinition> getRouteDefinitions();
+    public abstract List<RouteDefinition> getRouteDefinitions();
 
 
     /**
@@ -54,7 +55,7 @@ public abstract class AbstractDynamicRouteServiceImpl implements ApplicationEven
      * @param id
      * @return
      */
-    public abstract MessageResult<Mono <ResponseEntity <Object>>> delete(String id);
+    public abstract MessageResult<Mono<ResponseEntity<Object>>> delete(String id);
 
     /**
      * 修改路由后将绑定到刷新事件

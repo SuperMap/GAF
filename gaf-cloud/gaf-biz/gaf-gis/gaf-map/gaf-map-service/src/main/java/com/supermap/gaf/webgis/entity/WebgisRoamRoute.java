@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.entity;
 
 import io.swagger.annotations.ApiModel;
@@ -18,7 +18,8 @@ import java.util.Date;
 
 /**
  * 漫游路线
- * @author wangxiaolong 
+ *
+ * @author wangxiaolong
  * @date 2021-2-24
  */
 @Data
@@ -26,7 +27,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("漫游路线")
-public class WebgisRoamRoute implements Serializable{
+public class WebgisRoamRoute implements Serializable {
     @NotNull
     @ApiModelProperty("漫游路线id")
     private String gisRoamRouteId;

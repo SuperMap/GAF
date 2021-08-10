@@ -12,10 +12,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfigName {
     String[] value() default {};
+
     boolean toJson() default false;
 
     /**
      * if expand is true toJson also true
+     *
      * @return
      */
     boolean expand() default false;

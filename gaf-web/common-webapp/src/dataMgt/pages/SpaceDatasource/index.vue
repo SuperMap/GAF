@@ -1,10 +1,6 @@
 <template>
   <div class="app-container">
     <div class="page-left">
-      <!-- <div class="tree-catalog">
-        <span class="vertical-line">| </span>
-        数据源分类
-      </div> -->
       <gaf-tree-transparent
         ref="myGafTreeTransparent"
         :searchPlaceholder="searchPlaceholder2"
@@ -15,9 +11,6 @@
         @select="onSelect2"
         :show-line="true"
       >
-        <!-- <template v-slot:icon="{ iconNodeType }">
-          <a-icon :type="iconNodeType.type === 2 ? tag : tags"></a-icon>
-        </template> -->
       </gaf-tree-transparent>
     </div>
     <div class="page-right">
@@ -65,29 +58,13 @@
           </div>
         </template>
         <template #default>
-          <div class="choose-box">
-            <a-icon type="exclamation-circle" class="exclamation" /><span
-              >已选择</span
-            >
-            <b>{{ selectRowLength }}</b>
-            <span>项</span>
-            <a-popconfirm
-              @confirm="() => clearOptions(record)"
-              title="清空后无法恢复，确认是否继续?"
-              ok-text="确认"
-              cancel-text="取消"
-            >
-              <a href="javascript:;"><u>清空</u></a>
-            </a-popconfirm>
-          </div>
+          <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
           <gaf-table-with-page
             :scroll="{ y: 508 , x: 1440}"
             :pagination="pagination"
             :row-selection="{
               selectedRowKeys: selectedRowKeys,
               onChange: onSelectChange,
-              onSelect: rowSelect,
-              onSelectAll: rowSelectAll,
             }"
             :data-source="sysResourceDatasourceList"
             :loading="loading"
@@ -99,11 +76,6 @@
             class="table-style"
             size="middle"
           >
-            <template slot="databaseType" slot-scope="text">
-              <span>
-                {{ databaseTypeMap.get(text) }}
-              </span>
-            </template>
             <template
               slot="customRender"
               slot-scope="text, record, index, column"
@@ -130,13 +102,14 @@
                 map.get(record.catalogCode) ? map.get(record.catalogCode) : ""
               }}
             </template>
-            <template slot="addrandport" slot-scope="text, record">
-              {{ record.addr + ":" + record.port }}
+            <template slot="typeCode" slot-scope="text">
+              {{
+                dataSourceTypeMap.get(text) ? dataSourceTypeMap.get(text) : ""
+              }}
             </template>
             <template
               slot="operation"
               slot-scope="text, record"
-              v-if="hasPKField"
             >
               <a
                 @click.stop="() => handleDetail(record)"
@@ -191,6 +164,7 @@
 
 <script>
 import AddEditForm from "../../views/SpaceDatasource/AddOrEditForm";
+import dictUtil from "../../../common/utils/DictUtil"
 import moment from "moment";
 import "~/assets/css/common.css";
 
@@ -200,31 +174,23 @@ export default {
   },
   data() {
     return {
-      //树形组件是否选择
-      isSecure: false,
       //是否选择时间选择器
       istime: false,
       //时间段信息
       timeRange: [],
-      searchPlaceholder: "请输入模块名称查询",
       dataOfTree1: [],
       dataOfTree: [],
       map: new Map(),
+      // 数据源类型编码值和名字的映射
+      dataSourceTypeMap: new Map(),
       //搜索框Placeholder
-      searchPlaceholder2: "请输入",
+      searchPlaceholder2: "请输入分类名称搜索",
       expandedNodeKeys2: [],
       selectedNodeKeys2: [],
-      // 搜索项
-      searchKey: "",
-      clearFilters: null,
-      // 非多个禁用
-      multiple: true,
       // 标题
       title: "",
       // 编辑记录
       editData: {},
-      // 总条数
-      total: 0,
       selectedRowKeys: [],
       selectRowLength: 0,
       // ${functionName}表格数据
@@ -241,7 +207,6 @@ export default {
       loading: true,
       searchText: "",
       searchText2: "",
-      searchInput: null,
       searchedColumn: "ds_name",
       sorter: {
         order: "",
@@ -249,15 +214,6 @@ export default {
       },
       // 详情：1，新增：2，编辑：3
       operation: 0,
-      // 有无主键
-      hasPKField: true,
-
-      databaseTypeMap: new Map([
-        ["1", "POSTGRESQL"],
-        ["4", "MYSQL"],
-        ["5", "ORACLE"],
-        ["6", "SQLSERVER"],
-      ]),
       // 提供添加服务时使用，用做数据源分类展示
       catalogCode: "",
       // 左侧目录树添加所有类型节点
@@ -267,16 +223,7 @@ export default {
         children: null,
         style: "font-size: 18px;font-weight: bold",
       },
-    };
-  },
-  computed: {
-    columns: function () {
-      const columns = [
-        // {
-        //   title: "数据源id",
-        //   dataIndex: "datasourceId",
-        //   key: "datasource_id",
-        // },
+      columns : [
         {
           title: "数据源别名",
           width: '18%',
@@ -295,18 +242,11 @@ export default {
           scopedSlots: { customRender: "catalogType" },
           width: '10%',
         },
-        // {
-        //   title: '类型',
-        //   sorter: true,
-        //   sortDirections: ['descend', 'ascend'],
-        //   dataIndex: 'type',
-        //   key: 'type',
-        //   scopedSlots: { customRender: 'databaseType' }
-        // },
         {
           title: "数据源类型",
           dataIndex: "typeCode",
           key: "type_code",
+          scopedSlots: { customRender: "typeCode" },
           width: '10%',
         },
         {
@@ -321,26 +261,6 @@ export default {
           key: "db_name",
           width: '12%',
         },
-        // {
-        //   title: '端口',
-        //   dataIndex: 'port',
-        //   key: 'port'
-        // },
-        // {
-        //   title: '服务器地址',
-        //   scopedSlots: { customRender: 'addrandport' }
-        // },
-
-        // {
-        //   title: '用户名',
-        //   dataIndex: 'userName',
-        //   key: 'user_name'
-        // },
-        // {
-        //   title: '描述',
-        //   dataIndex: 'description',
-        //   key: 'description'
-        // },
         {
           title: "时态",
           dataIndex: "timeAttribute",
@@ -353,9 +273,10 @@ export default {
           // width: '15%',
           scopedSlots: { customRender: "operation" },
         },
-      ];
-      return this.hasPKField ? columns : columns.slice(0, columns.length - 2);
-    },
+      ]
+    };
+  },
+  computed: {
     //时间格式
     timeFormat: function () {
       if (
@@ -385,6 +306,7 @@ export default {
   created() {
     this.getDataOfTree();
     // this.defaultPicker() //设置默认时间
+    this.getDataSourceTypeMap();
     this.getList();
   },
   methods: {
@@ -398,7 +320,7 @@ export default {
     },
     //批量删除
     async batchDel() {
-      const url = "/sys-mgt/sys-resource-datasources/";
+      const url = "/data-mgt/sys-resource-datasources/";
       const selectedRowKeys = this.selectedRowKeys;
       // eslint-disable-next-line no-console
       if (selectedRowKeys.length !== 0) {
@@ -422,14 +344,6 @@ export default {
         this.$message.warn("请选择您要删除的内容");
       }
     },
-    rowSelect(record, selected, selectedRows) {
-      // eslint-disable-next-line no-console
-      console.log(record, selected, selectedRows);
-    },
-    rowSelectAll(selected, selectedRows, changeRows) {
-      // eslint-disable-next-line no-console
-      console.log(selected, selectedRows, changeRows);
-    },
     // 根据搜索文本拆分单元格文本内容
     splitCellWithSearchText(text) {
       const str = text === null ? "" : text;
@@ -438,23 +352,6 @@ export default {
         .split(
           new RegExp(`(?<=${this.searchText})|(?=${this.searchText})`, "i")
         );
-    },
-    // 搜索查询
-    handleSearch(selectedKeys, confirm, key, clearFilters) {
-      if (this.searchedColumn !== key && this.clearFilters) this.clearFilters();
-      confirm();
-      this.searchText = selectedKeys[0];
-      this.searchedColumn = key;
-      this.clearFilters = clearFilters;
-    },
-    // 重置查询
-    handleReset(clearFilters, key) {
-      clearFilters();
-      if (this.searchedColumn === key) {
-        this.searchText = "";
-        this.searchedColumn = "";
-        this.clearFilters = null;
-      }
     },
     // 页码，排序项发生改变时，重新获取列表数据
     tableChange(pageInfo, filters, sorter) {
@@ -478,9 +375,9 @@ export default {
       ) {
         this.catalogCode = this.searchText2;
       }
-      this.open = true;
       this.operation = 2;
       this.title = "添加数据源";
+      this.open = true;
     },
     // 添加修改提交后
     handleSubmit() {
@@ -503,13 +400,13 @@ export default {
     //详情展示
     handleDetail(row) {
       this.operation = 1;
-      this.open = true;
       this.title = "详情展示";
       this.editData = row;
+      this.open = true;
     },
     // 删除数据
     async handleDelete(row) {
-      const url = `/sys-mgt/sys-resource-datasources/` + row.datasourceId;
+      const url = `/data-mgt/sys-resource-datasources/` + row.datasourceId;
       const rst = await this.$axios.delete(url);
       if (rst.data.isSuccessed) {
         this.$message.success("删除成功");
@@ -523,6 +420,9 @@ export default {
         ) {
           this.pagination.current--;
         }
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== row.datasourceId
+        })
         this.getList();
       });
     },
@@ -535,19 +435,13 @@ export default {
     onSelectChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys;
       this.selectRowLength = selectedRowKeys.length;
-      if (this.selectedRowKeys.length > 0) {
-        this.multiple = false;
-      } else {
-        this.multiple = true;
-      }
     },
     //获取表单数据
     async getList() {
       this.loading = true;
-      let url = `/sys-mgt/sys-resource-datasources?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&isSdx=true`;
+      let url = `/data-mgt/sys-resource-datasources?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&isSdx=true`;
       if (this.searchText2 && this.searchText2 !== "all") {
         url = url + "&catalogCode" + "=" + this.searchText2.trim();
-        // this.isSecure = false
       }
       //模糊查询
       if (
@@ -562,7 +456,7 @@ export default {
           "&searchFieldValue=" +
           this.searchText.trim();
       }
-      //通过事件段查询
+      //通过时间查询
       if (this.timeRange.length > 0) {
         url =
           url +
@@ -615,6 +509,16 @@ export default {
         this.getList()
       } else {
         this.$message.error("加载API分组树失败,原因：" + res.message);
+      }
+    },
+    //获取数据源类型编码值和名字的映射
+    async getDataSourceTypeMap() {
+      const url = `/sys-mgt/sys-dicts/DataSourceType/tree`
+      const res = await this.$axios.$get(url)
+      if (res.isSuccessed) {
+        this.dataSourceTypeMap = dictUtil.toMap(res.data)
+      } else {
+        this.$message.error('获取数据源类型字典失败,原因：' + res.message)
       }
     },
     getMap(data) {
@@ -674,5 +578,8 @@ export default {
 }
 .ant-calendar-range-picker-input {
   text-align: left;
+}
+.search-position {
+  float: right;
 }
 </style>

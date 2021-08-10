@@ -9,6 +9,7 @@ public final class DbFieldNameConstant {
 
     private DbFieldNameConstant() {
     }
+
     /**
      * 通用字段 表示同级排序序号 从1开始的正整数
      */
@@ -68,7 +69,7 @@ public final class DbFieldNameConstant {
     public static final String POST_NAME = "post_name";
 
     /**
-     *  auth_role 表
+     * auth_role 表
      */
     public static final String ROLE_NAME = "role_name";
     public static final String ROLE_CATALOG_ID = "role_catalog_id";

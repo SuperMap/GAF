@@ -43,53 +43,54 @@ public class GAFPlugin extends AbstractPlugin {
         });
         GafGlobalEnvironments.initResource();
         String nowAlias = GAFProperties.getString("String_Alias");
-        Runtime.getRuntime().addShutdownHook(new Thread(()-> {
-                GafGlobalEnvironments.initResource();
-                String newAlias = GafGlobalEnvironments.getAlias();
-                if(!nowAlias.equals(newAlias)){
-                    String jarPath = GafGlobalEnvironments.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-                    try (ByteArrayOutputStream bArrOS = new ByteArrayOutputStream()) {
-                        try (
-                                JarFile jarFile = new JarFile(jarPath);
-                                JarOutputStream jos = new JarOutputStream(bArrOS)
-                        ) {
-                            jarFile.stream().forEach(entry -> {
-                                try (InputStream is = jarFile.getInputStream(entry)) {
-                                    jos.putNextEntry(new JarEntry(entry.getName()));
-                                    if ("GAF_zh_CN.properties".equals(entry.getName()) || "GAF_en_US.properties".equals(entry.getName()) || "GAF.properties".equals(entry.getName())) {
-                                        Properties properties = new Properties();
-                                        properties.load(is);
-                                        properties.setProperty("String_Alias", newAlias);
-                                        properties.store(jos, null);
-                                    }else if("SuperMap.Desktop.GAF.config".equals(entry.getName())){
-                                        Document document = XmlUtilities.getDocument(is);
-                                        changeConfig(document.getDocumentElement(),nowAlias,newAlias);
-                                        writeXml(document,jos);
-                                    }else {
-                                        byte[] buffer = new byte[1024];
-                                        int len;
-                                        while ((len = is.read(buffer)) > -1) {
-                                            jos.write(buffer, 0, len);
-                                        }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            GafGlobalEnvironments.initResource();
+            String newAlias = GafGlobalEnvironments.getAlias();
+            if (!nowAlias.equals(newAlias)) {
+                String jarPath = GafGlobalEnvironments.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+                try (ByteArrayOutputStream bArrOS = new ByteArrayOutputStream()) {
+                    try (
+                            JarFile jarFile = new JarFile(jarPath);
+                            JarOutputStream jos = new JarOutputStream(bArrOS)
+                    ) {
+                        jarFile.stream().forEach(entry -> {
+                            try (InputStream is = jarFile.getInputStream(entry)) {
+                                jos.putNextEntry(new JarEntry(entry.getName()));
+                                if ("GAF_zh_CN.properties".equals(entry.getName()) || "GAF_en_US.properties".equals(entry.getName()) || "GAF.properties".equals(entry.getName())) {
+                                    Properties properties = new Properties();
+                                    properties.load(is);
+                                    properties.setProperty("String_Alias", newAlias);
+                                    properties.store(jos, null);
+                                } else if ("SuperMap.Desktop.GAF.config".equals(entry.getName())) {
+                                    Document document = XmlUtilities.getDocument(is);
+                                    changeConfig(document.getDocumentElement(), nowAlias, newAlias);
+                                    writeXml(document, jos);
+                                } else {
+                                    byte[] buffer = new byte[1024];
+                                    int len;
+                                    while ((len = is.read(buffer)) > -1) {
+                                        jos.write(buffer, 0, len);
                                     }
-                                    jos.closeEntry();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
                                 }
-                            });
-                        }
-
-                        bArrOS.writeTo(new FileOutputStream(jarPath));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                                jos.closeEntry();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
                     }
 
+                    bArrOS.writeTo(new FileOutputStream(jarPath));
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
-                System.out.println("我被关闭了");
             }
+
+            System.out.println("我被关闭了");
+        }
         ));
     }
+
     private void writeXml(Node node, OutputStream out) throws TransformerException {
         TransformerFactory transFactory = TransformerFactory.newInstance();
         Transformer transformer = transFactory.newTransformer();
@@ -101,6 +102,7 @@ public class GAFPlugin extends AbstractPlugin {
         result.setOutputStream(out);
         transformer.transform(source, result);
     }
+
     private void changeConfig(Node node, String oldAlias, String newAlias) {
 
         NodeList nodeList = node.getChildNodes();
@@ -109,16 +111,17 @@ public class GAFPlugin extends AbstractPlugin {
             if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
                 System.out.println(currentNode.getNodeName());
                 NamedNodeMap attributes = currentNode.getAttributes();
-                for(int j = 0,length = attributes.getLength();j<length;++j){
+                for (int j = 0, length = attributes.getLength(); j < length; ++j) {
                     Node attr = attributes.item(j);
-                    if(attr.getNodeName().equals("label") || attr.getNodeName().equals("title")){
-                        attr.setTextContent(attr.getTextContent().replace(oldAlias,newAlias));
+                    if (attr.getNodeName().equals("label") || attr.getNodeName().equals("title")) {
+                        attr.setTextContent(attr.getTextContent().replace(oldAlias, newAlias));
                     }
                 }
-                changeConfig(currentNode,oldAlias, newAlias);
+                changeConfig(currentNode, oldAlias, newAlias);
             }
         }
     }
+
     @Override
     public boolean isGranted() {
         return true;

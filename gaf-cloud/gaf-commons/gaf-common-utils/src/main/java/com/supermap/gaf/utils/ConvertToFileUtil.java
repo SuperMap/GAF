@@ -35,7 +35,7 @@ public class ConvertToFileUtil {
     }
 
     public static File stringArrListToTempCsv(List<String[]> dataLines) throws IOException {
-        File csvOutputFile = File.createTempFile(TEMP_FILE_NAME ,CSV_FILE_SUFFIX);
+        File csvOutputFile = File.createTempFile(TEMP_FILE_NAME, CSV_FILE_SUFFIX);
         try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
             dataLines.stream()
                     .map(ConvertToFileUtil::convertToCsv)
@@ -44,6 +44,7 @@ public class ConvertToFileUtil {
         assertTrue(csvOutputFile.exists());
         return csvOutputFile;
     }
+
     private static String escapeSpecialCharacters(String data) {
         String escapedData = data.replaceAll("\\R", SPACE);
         if (data.contains(COMMA) || data.contains(ESCAPE_DOUBLE_QUOTES) || data.contains(APOSTROPHE)) {
@@ -54,12 +55,12 @@ public class ConvertToFileUtil {
     }
 
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         List<String[]> dataLines = new ArrayList<>();
         dataLines.add(new String[]
-                { "John", "Doe", "38", "Comment Data\nAnother line of comment data" });
+                {"John", "Doe", "38", "Comment Data\nAnother line of comment data"});
         dataLines.add(new String[]
-                { "Jane", "Doe, Jr.", "19", "She said \"I'm being quoted\"" });
+                {"Jane", "Doe, Jr.", "19", "She said \"I'm being quoted\""});
         ConvertToFileUtil.stringArrListToTempCsv(dataLines);
     }
 }

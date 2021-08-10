@@ -68,7 +68,7 @@ management:
       application: ${spring.application.name}
 # 此处是Fluentd的连接信息，用于收集日志
 fluentd:
-  enable: true
+  enable: false
   host: ${GAF_ENV_FLUENTD_HOST:localhost}
   port: ${GAF_ENV_FLUENTD_PORT:24224}
   tagPrefix: ${GAF_ENV_FLUENTD_TAG:gaf}

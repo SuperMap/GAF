@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.utils;
 
 import java.io.ByteArrayInputStream;
@@ -34,23 +34,25 @@ import org.xml.sax.SAXException;
  * <p>
  * 工具类，提供xml文档解析的简单封装
  * </p>
+ *
  * @author ${Author}
  * @version ${Version}
- * @since 1.0.0
  * @date:2021/3/25
- *
+ * @since 1.0.0
  */
 public class XMLTool {
-    
+
     /**
      * 文档解析器
      */
     private static final DocumentBuilderFactory builderFactoryInstance = DocumentBuilderFactory.newInstance();
     private static final TransformerFactory transformerFactoryInstance = TransformerFactory.newInstance();
+
     /**
      * <p>
-     *  解析xml文档
+     * 解析xml文档
      * </p>
+     *
      * @param filePath
      * @return
      * @since 1.0.0
@@ -63,6 +65,7 @@ public class XMLTool {
      * <p>
      * 解析文件
      * </p>
+     *
      * @param xmlFile
      * @return
      * @since 1.0.0
@@ -70,7 +73,7 @@ public class XMLTool {
     public static Document parse(File xmlFile) {
         Document resultDocument = null;
         if (xmlFile != null && xmlFile.exists() && xmlFile.length() != 0L) {
-            try(FileInputStream fin = new FileInputStream(xmlFile)) {
+            try (FileInputStream fin = new FileInputStream(xmlFile)) {
                 resultDocument = parse((InputStream) fin);
             } catch (FileNotFoundException arg6) {
 //                throw new IllegalArgumentException(
@@ -87,7 +90,7 @@ public class XMLTool {
         Document resultDocument = null;
         try {
             if (inputStream != null) {
-                resultDocument = (Document)builderFactoryInstance.newDocumentBuilder().parse(inputStream);
+                resultDocument = (Document) builderFactoryInstance.newDocumentBuilder().parse(inputStream);
             }
         } catch (IOException arg7) {
             ;
@@ -95,14 +98,15 @@ public class XMLTool {
             ;
         } catch (Exception arg9) {
             ;
-        } 
+        }
         return resultDocument;
     }
-    
+
     /**
      * <p>
      * 获取xml子节点
      * </p>
+     *
      * @param parentNode
      * @param name
      * @return
@@ -123,11 +127,12 @@ public class XMLTool {
         }
         return childNode;
     }
-    
+
     /**
      * <p>
      * 创建子节点
      * </p>
+     *
      * @param node
      * @param nodeName
      * @return
@@ -145,18 +150,19 @@ public class XMLTool {
         current = child;
         return current;
     }
-    
+
     /**
      * <p>
      * 使用newNode替换oldNode的内容
      * </p>
+     *
      * @param oldNode
      * @param newNode
      * @return
      * @since 1.0.0
      */
-    public static boolean replaceNode(Node oldNode, Node newNode){
-        if(oldNode == null || newNode == null || oldNode.getParentNode() == null){
+    public static boolean replaceNode(Node oldNode, Node newNode) {
+        if (oldNode == null || newNode == null || oldNode.getParentNode() == null) {
             return false;
         }
         Node parentNode = oldNode.getParentNode();
@@ -165,11 +171,12 @@ public class XMLTool {
         parentNode.removeChild(oldNode);
         return true;
     }
-    
+
     /**
      * <p>
      * 保存xml到指定文件中
      * </p>
+     *
      * @param doc
      * @param file
      * @return
@@ -177,31 +184,33 @@ public class XMLTool {
      */
     public static boolean save(Document doc, File file) {
         String docStr = XMLTool.xmlToString(doc);
-        try (FileOutputStream outs = new FileOutputStream(file)){
+        try (FileOutputStream outs = new FileOutputStream(file)) {
             IOUtils.write(docStr, outs, "UTF-8");
             return true;
         } catch (FileNotFoundException e) {
             return false;
         } catch (IOException e) {
             return false;
-        } 
+        }
     }
+
     private static boolean isMatchByLocalNameOrNodeName(Node node, String name) {
         String localPart = node.getLocalName();
         String nodeName = node.getNodeName();
         return localPart == null ? nodeName.equalsIgnoreCase(name) : localPart.equalsIgnoreCase(name) || nodeName.equalsIgnoreCase(name);
     }
-    
+
     /**
      * <p>
      * 将xml节点转换为对应的字符串
      * </p>
+     *
      * @param doc
      * @return
      * @since 1.0.0
      */
-    public static String xmlToString(Node node){
-        try(StringWriter writer = new StringWriter();) {
+    public static String xmlToString(Node node) {
+        try (StringWriter writer = new StringWriter();) {
             Transformer transformer = transformerFactoryInstance.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
@@ -217,9 +226,8 @@ public class XMLTool {
             return "";
         }
     }
-    
+
     /**
-     * 
      * @param xml形状的str串
      * @return Document 对象
      */

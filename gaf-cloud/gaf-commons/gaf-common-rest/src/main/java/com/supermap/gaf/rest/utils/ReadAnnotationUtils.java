@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.rest.utils;
 
 import java.io.IOException;
@@ -27,14 +27,14 @@ import org.springframework.util.ClassUtils;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 @SuppressWarnings("rawtypes")
 public class ReadAnnotationUtils {
     private static final PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
     private static final SimpleMetadataReaderFactory register = new SimpleMetadataReaderFactory();
     private static final StandardEnvironment environment = new StandardEnvironment();
- 
- 
+
+
     /**
      * 根据包路径,获取Class的资源路径
      *
@@ -48,7 +48,7 @@ public class ReadAnnotationUtils {
                 + '/' + "**/*.class";
         return resourcePath;
     }
- 
+
     /**
      * 获取指定路径下的类
      *
@@ -56,11 +56,11 @@ public class ReadAnnotationUtils {
      * @param annoClazz
      * @return
      */
-    
+
     public static Set<Class> getClazzFromAnnotation(String pkgPath, Class<? extends Annotation> annoClazz) {
         //获取spring的包路径
         String pathPackage = getResourcePath(pkgPath);
- 
+
         Set<Class> paths = new HashSet<>();
         Resource[] resources = new Resource[0];
         try {
@@ -72,7 +72,7 @@ public class ReadAnnotationUtils {
         }
         for (int i = 0; i < resources.length; i++) {
             Resource resource = resources[i];
- 
+
             MetadataReader metadataReader = null;
             try {
                 //读取资源
@@ -99,12 +99,12 @@ public class ReadAnnotationUtils {
         }
         return paths;
     }
- 
- 
+
+
     public static void main(String[] args) {
         //测试
         Set<Class> clazz = getClazzFromAnnotation("com.supermap.gaf", Path.class);
         System.out.println(clazz);
     }
- 
+
 }

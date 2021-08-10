@@ -84,7 +84,7 @@
           />
         </a-form-item>
         <a-form-item label="图标">
-          <a-input
+          <gaf-icon-picker
             v-decorator="[
               'icon',
               {
@@ -97,8 +97,7 @@
               },
             ]"
             :disabled="operation === 1"
-            placeholder="请输入图标"
-            allow-clear
+            placeholder="请选择图标"
           />
         </a-form-item>
         <a-form-item label="描述">

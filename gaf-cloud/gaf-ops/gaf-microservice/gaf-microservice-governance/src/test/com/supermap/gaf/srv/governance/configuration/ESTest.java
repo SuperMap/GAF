@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.srv.governance.configuration;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -53,8 +53,8 @@ public class ESTest {
     private TraceQueryResource traceQueryResource;
 
     @Test
-    public void testFluent() throws Exception{
-        logQueryResource.listLog(null,null,"asc","now/d","now",0,5);
+    public void testFluent() throws Exception {
+        logQueryResource.listLog(null, null, "asc", "now/d", "now", 0, 5);
 //        logQueryResource.listLog("gaf-microservice-governance","INFO","asc","2020-12-01T10:00:00.000+08:00","now",0,5);
 //        SearchResponse searchResponse = fluentLogQueryService.listLog("s","gaf-dev.gaf-microservice-governance", SortOrder.ASC,"2020-12-01T10:00:00.000+08:00","now",0,10);
         System.out.println(1);
@@ -62,31 +62,30 @@ public class ESTest {
     }
 
     @Test
-    public void testTrace() throws Exception{
-        traceQueryService.searchRootTraceResponse(null,null,SortOrder.ASC,"now-10d","now",0,5);
+    public void testTrace() throws Exception {
+        traceQueryService.searchRootTraceResponse(null, null, SortOrder.ASC, "now-10d", "now", 0, 5);
         System.out.println(1);
 
     }
+
     @Test
-    public void testTraceForSpan() throws Exception{
-        traceQueryService.searchSpanResponseByTraceId(Arrays.asList("6524d51905fcb2fd","3fab7a8e17f890db"));
+    public void testTraceForSpan() throws Exception {
+        traceQueryService.searchSpanResponseByTraceId(Arrays.asList("6524d51905fcb2fd", "3fab7a8e17f890db"));
         System.out.println(1);
     }
 
     @Test
-    public void testBuildTraceTree() throws Exception{
-        SearchResponse searchResponse = traceQueryService.searchSpanResponseByTraceId(Arrays.asList("6524d51905fcb2fd","3fab7a8e17f890db"));
+    public void testBuildTraceTree() throws Exception {
+        SearchResponse searchResponse = traceQueryService.searchSpanResponseByTraceId(Arrays.asList("6524d51905fcb2fd", "3fab7a8e17f890db"));
         traceQueryService.getTraceTreeResponseBySpans(searchResponse);
         System.out.println(1);
     }
 
     @Test
-    public void testTraceTreeResource() throws Exception{
-        MessageResult<TraceTreeNodeResponse> response = traceQueryResource.listTrace(null,null,"asc","now-10d","now",0,5);
+    public void testTraceTreeResource() throws Exception {
+        MessageResult<TraceTreeNodeResponse> response = traceQueryResource.listTrace(null, null, "asc", "now-10d", "now", 0, 5);
         System.out.println(1);
     }
-
-
 
 
 }

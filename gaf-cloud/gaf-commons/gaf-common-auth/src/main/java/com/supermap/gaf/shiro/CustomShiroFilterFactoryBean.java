@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.shiro;
 
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -19,11 +19,11 @@ import org.springframework.beans.factory.BeanInitializationException;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class CustomShiroFilterFactoryBean extends ShiroFilterFactoryBean {
 
     private static final Logger log = LoggerFactory.getLogger(CustomShiroFilter.class);
-    
+
     @Override
     protected AbstractShiroFilter createInstance() throws Exception {
         log.debug("Creating Shiro Filter instance.");

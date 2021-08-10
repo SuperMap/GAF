@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway;
 
 import com.supermap.gaf.gateway.configuration.GafExceptionHandler;
@@ -20,22 +20,23 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.codec.ServerCodecConfigurer;
 
 /**
- * @date:2021/3/25
  * @author dqc
+ * @date:2021/3/25
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.supermap.gaf"})
 @EnableDiscoveryClient
-@MapperScan({"com.supermap.gaf.**.dao","com.supermap.gaf.authority.mapper"})
-@EnableFeignClients("com.supermap.gaf.authentication.client")
+@MapperScan({"com.supermap.gaf.**.dao", "com.supermap.gaf.authority.mapper"})
+@EnableFeignClients({"com.supermap.gaf.authentication.client", "com.supermap.gaf.authority.client"})
 public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run( Application.class, args );
+        SpringApplication.run(Application.class, args);
     }
 
     /**
      * 注册全局异常处理器
+     *
      * @param serverCodecConfigurer
      * @param errorAttributes
      * @return
@@ -43,6 +44,6 @@ public class Application {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public ErrorWebExceptionHandler errorWebExceptionHandler(ServerCodecConfigurer serverCodecConfigurer, ErrorAttributes errorAttributes) {
-        return new GafExceptionHandler(serverCodecConfigurer,errorAttributes);
+        return new GafExceptionHandler(serverCodecConfigurer, errorAttributes);
     }
 }

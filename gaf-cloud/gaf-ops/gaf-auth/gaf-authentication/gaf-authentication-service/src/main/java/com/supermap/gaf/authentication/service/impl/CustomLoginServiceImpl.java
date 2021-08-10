@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.service.impl;
 
 import com.supermap.gaf.authentication.entity.entity.properties.LoginOidcClientProperties;
@@ -52,12 +52,11 @@ public class CustomLoginServiceImpl implements CustomLoginService {
     @Autowired
     private ThirdPartyLoginTypePropertiesHolder thirdPartyLoginTypePropertiesHolder;
     @Autowired
-    private RedisTemplate<String,Object> redisTemplate;
-
+    private RedisTemplate<String, Object> redisTemplate;
 
 
     @Override
-    public OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username,String clientId) {
+    public OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username, String clientId) {
         String scope = "all";
 
         HashMap<String, String> authorizationParameters = new HashMap<String, String>(16);
@@ -80,7 +79,7 @@ public class CustomLoginServiceImpl implements CustomLoginService {
 
         OAuth2Request authorizationRequest = new OAuth2Request(
                 authorizationParameters, clientId,
-                authorities, true,scopes, resourceIds, "",
+                authorities, true, scopes, resourceIds, "",
                 responseType, null);
 
         User userPrincipal = new User(username, "", true, true, true, true, authorities);
@@ -97,7 +96,7 @@ public class CustomLoginServiceImpl implements CustomLoginService {
 
     @Override
     public OAuth2AccessToken createOauth2AccessTokenWithoutPassword(String username) {
-        return createOauth2AccessTokenWithoutPassword(username,CUSTOM_CLIENT);
+        return createOauth2AccessTokenWithoutPassword(username, CUSTOM_CLIENT);
     }
 
     @Override
@@ -116,46 +115,45 @@ public class CustomLoginServiceImpl implements CustomLoginService {
         Set<String> scopes = new HashSet<String>();
         scopes.add(scope);
 
-        TokenRequest refreshTokenRequest = new TokenRequest(authorizationParameters,clientId,scopes,grantType);
+        TokenRequest refreshTokenRequest = new TokenRequest(authorizationParameters, clientId, scopes, grantType);
 
         AuthorizationServerTokenServices tokenServices = configuration.getEndpointsConfigurer().getTokenServices();
 
-        return tokenServices.refreshAccessToken(refreshToken,refreshTokenRequest);
+        return tokenServices.refreshAccessToken(refreshToken, refreshTokenRequest);
     }
 
     @Override
-    public Map<String,?> checkJwtToken(String token) {
+    public Map<String, ?> checkJwtToken(String token) {
         token = HttpRequestUtils.removeTokenBeareHead(token);
-        if (StringUtils.isEmpty(token)){
+        if (StringUtils.isEmpty(token)) {
             return null;
         }
         return configuration.checkTokenEndpoint().checkToken(token);
     }
 
 
-
     @Override
-    public void storeLoginSession(String sessionId, String username,OAuth2AccessToken token, Map thirdPartyToken,String enabledThirdParty,String thirdPartyUsername) {
+    public void storeLoginSession(String sessionId, String username, OAuth2AccessToken token, Map thirdPartyToken, String enabledThirdParty, String thirdPartyUsername) {
         String key = REDIS_LOGIN_SESSION_PREFIX + sessionId;
-        if (null != username){
-            redisTemplate.opsForHash().put(key,"username",username);
+        if (null != username) {
+            redisTemplate.opsForHash().put(key, "username", username);
         }
-        if (null != token){
-            redisTemplate.opsForHash().put(key,"token",token);
+        if (null != token) {
+            redisTemplate.opsForHash().put(key, "token", token);
         }
-        if (null != thirdPartyToken){
-            redisTemplate.opsForHash().put(key,"thirdPartyToken",thirdPartyToken);
+        if (null != thirdPartyToken) {
+            redisTemplate.opsForHash().put(key, "thirdPartyToken", thirdPartyToken);
         }
-        if (null != enabledThirdParty){
-            redisTemplate.opsForHash().put(key,"enabledThirdParty", enabledThirdParty);
+        if (null != enabledThirdParty) {
+            redisTemplate.opsForHash().put(key, "enabledThirdParty", enabledThirdParty);
         }
-        if (null != thirdPartyUsername){
-            redisTemplate.opsForHash().put(key,"thirdPartyUsername", thirdPartyUsername);
+        if (null != thirdPartyUsername) {
+            redisTemplate.opsForHash().put(key, "thirdPartyUsername", thirdPartyUsername);
         }
 
         try {
-            redisTemplate.expire(key,TOKEN_REFRESH_EXPIRE, TimeUnit.SECONDS);
-        }catch (Exception e){
+            redisTemplate.expire(key, TOKEN_REFRESH_EXPIRE, TimeUnit.SECONDS);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -163,44 +161,44 @@ public class CustomLoginServiceImpl implements CustomLoginService {
     @Override
     public void refreshStoreLoginSession(String sessionId, OAuth2AccessToken token) {
         String key = REDIS_LOGIN_SESSION_PREFIX + sessionId;
-        if (null != token){
-            redisTemplate.opsForHash().put(key,"token",token);
+        if (null != token) {
+            redisTemplate.opsForHash().put(key, "token", token);
         }
         try {
-            redisTemplate.expire(key,TOKEN_REFRESH_EXPIRE, TimeUnit.SECONDS);
-        }catch (Exception e){
+            redisTemplate.expire(key, TOKEN_REFRESH_EXPIRE, TimeUnit.SECONDS);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public Map<String, Object> getLoginSessionById(String sessionId) {
-        Map map = redisTemplate.opsForHash().entries(REDIS_LOGIN_SESSION_PREFIX+sessionId);
-        Map<String,Object> result = new HashMap<>(16);
-        map.keySet().forEach(key -> result.put(key.toString(),map.get(key)));
+        Map map = redisTemplate.opsForHash().entries(REDIS_LOGIN_SESSION_PREFIX + sessionId);
+        Map<String, Object> result = new HashMap<>(16);
+        map.keySet().forEach(key -> result.put(key.toString(), map.get(key)));
         return result;
     }
 
 
     @Override
     public Map<String, String> getThirdPartyTokenByCode(String code, String enabledThirdParty) {
-        LoginOidcClientProperties.OidcClientInfo oidcClientInfo = (LoginOidcClientProperties.OidcClientInfo)thirdPartyLoginTypePropertiesHolder.getThirdPartyContext().get(enabledThirdParty.toLowerCase());
+        LoginOidcClientProperties.OidcClientInfo oidcClientInfo = (LoginOidcClientProperties.OidcClientInfo) thirdPartyLoginTypePropertiesHolder.getThirdPartyContext().get(enabledThirdParty.toLowerCase());
 
         LoginOidcClientProperties.Provider provider = oidcClientInfo.getProvider();
         LoginOidcClientProperties.Registration registration = oidcClientInfo.getRegistration();
 
         MultiValueMap body = new LinkedMultiValueMap();
-        body.set("grant_type","authorization_code");
+        body.set("grant_type", "authorization_code");
         body.set("client_id", registration.getClientId());
         body.set("client_secret", registration.getClientSecret());
         body.set("redirect_uri", registration.getRedirectUri());
-        body.set("code",code);
+        body.set("code", code);
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        HttpEntity req = new HttpEntity<>(body,httpHeaders);
-        Map<String,String> tokenRes = restTemplate.postForObject(provider.getTokenUri(),req,Map.class);
+        HttpEntity req = new HttpEntity<>(body, httpHeaders);
+        Map<String, String> tokenRes = restTemplate.postForObject(provider.getTokenUri(), req, Map.class);
         return tokenRes;
     }
 }

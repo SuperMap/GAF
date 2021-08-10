@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import treeUtil from '../../utils/tree/TreeUtil.js'
+import treeUtil from '../../../common/utils/TreeUtil'
 
 export default {
   props: {

@@ -147,25 +147,25 @@
 </template>
 
 <script>
-  import moment from 'moment'
-  import {GafStorage} from 'gaf-ui'
-  export default {
+import moment from 'moment'
+import { GafStorage } from 'gaf-ui'
+export default {
   props: {
     title: {
       type: String,
-      default: ''
+      default: '',
     },
     editData: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     operation: {
       type: Number,
-      default: 0
+      default: 0,
     },
     name: {
       type: String,
-      dafault: ''
+      dafault: '',
     },
     dir: {
       type: String,
@@ -181,27 +181,27 @@
       dataId: '',
       dataNode: {
         name: '',
-        objectType: "commonPrefix"
-      }
+        objectType: 'commonPrefix',
+      },
     }
   },
   beforeMount() {
     this.addOrEditForm = this.$form.createForm(this, { name: 'addOrEditForm' })
   },
   mounted() {
-	const copyData = { ...this.editData }
+    const copyData = { ...this.editData }
     this.dataId = copyData.dataDictId
     delete copyData.dataDictId
     delete copyData.status
     delete copyData.tenantId
-    if(this.operation !== 1) {
+    if (this.operation !== 1) {
       delete copyData.createdTime
       delete copyData.updatedTime
       delete copyData.createdBy
       delete copyData.updatedBy
     }
     if (copyData.createdTime)
-        copyData.createdTime = moment(new Date(copyData.createdTime))
+      copyData.createdTime = moment(new Date(copyData.createdTime))
     if (copyData.updatedTime)
       copyData.updatedTime = moment(new Date(copyData.updatedTime))
     this.addOrEditForm.setFieldsValue({ ...copyData })
@@ -213,12 +213,17 @@
         if (err) {
           return false
         }
-        if (this.operation === 2){
-          this.dataNode.name = this.dir + this.name + (this.dataNode.name.endsWith('/') ? this.dataNode.name : (this.dataNode.name + '/'))
+        if (this.operation === 2) {
+          this.dataNode.name =
+            this.dir +
+            this.name +
+            (this.dataNode.name.endsWith('/')
+              ? this.dataNode.name
+              : this.dataNode.name + '/')
         }
-        const gafstorage = new GafStorage(this.$axios, '/storage/api/')
-        gafstorage.setConfigName(this.configName)
-        gafstorage.createEmptyDir(this.dataNode.name)
+        const gafstorage = new GafStorage(this.$axios, '/storage/api/tenant-created/')
+        await gafstorage.setConfigName(this.configName)
+        await gafstorage.createEmptyDir(this.dataNode.name)
         // this.editData.unshift(this.dataNode)
         this.addOrEditForm.resetFields()
         this.$emit('submit', this.dir)
@@ -228,8 +233,8 @@
     backToList() {
       this.addOrEditForm.resetFields()
       this.$emit('back')
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.srv.governance.service;
 
 
@@ -22,6 +22,7 @@ public interface TraceQueryService {
 
     /**
      * 获取trace收集的日志
+     *
      * @param serviceName
      * @param username
      * @param timestampSort
@@ -35,6 +36,7 @@ public interface TraceQueryService {
 
     /**
      * 通过traceIds查询所有span
+     *
      * @param traceIds
      * @return
      */
@@ -42,6 +44,7 @@ public interface TraceQueryService {
 
     /**
      * 获取结果trace树对象列表
+     *
      * @param searchResponse
      * @return
      */
@@ -52,6 +55,7 @@ public interface TraceQueryService {
      * step 1: 搜索所有根span，获取traceId
      * step 2: 获取所有属于traceId的span
      * step 3: 树形结构化span
+     *
      * @param serviceName
      * @param username
      * @param timestampSort

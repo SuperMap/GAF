@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.services.impl;
 
 import com.github.pagehelper.PageHelper;
@@ -99,7 +99,7 @@ public class ConfigServerMgtServiceImpl implements ConfigServerMgtService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean remove(List<ConfigPropertiesGroup> conditions) {
-        return MybatisBatchUtil.insertOrUpdateBatch(ConfigurationDao.class,conditions, ConfigurationDao::delete);
+        return MybatisBatchUtil.insertOrUpdateBatch(ConfigurationDao.class, conditions, ConfigurationDao::delete);
     }
 
 
@@ -108,7 +108,7 @@ public class ConfigServerMgtServiceImpl implements ConfigServerMgtService {
     public boolean saveConfig(GroupWithProperties groupWithProperties) {
         List<ConfigProperties> configServerInfos = parseGroupWithProperties(groupWithProperties);
         if (CollectionUtils.isNotEmpty(configServerInfos)) {
-            return MybatisBatchUtil.insertOrUpdateBatch(ConfigurationDao.class,configServerInfos, ConfigurationDao::saveConfiguration);
+            return MybatisBatchUtil.insertOrUpdateBatch(ConfigurationDao.class, configServerInfos, ConfigurationDao::saveConfiguration);
         }
         return true;
     }
@@ -183,23 +183,23 @@ public class ConfigServerMgtServiceImpl implements ConfigServerMgtService {
         List<ConfigProperties> toUpdate = new LinkedList<>();
         for (ConfigPropertiesVo vo : configPropertiesVos) {
             boolean isExisted = false;
-            for (ConfigProperties old:oldConfigPropertiesList) {
-                if(Objects.equals(old.getId(),vo.getId())) {
+            for (ConfigProperties old : oldConfigPropertiesList) {
+                if (Objects.equals(old.getId(), vo.getId())) {
                     isExisted = true;
-                    if(!Objects.equals(old.getPropertyKey(),vo.getPropertyKey())
-                        || !Objects.equals(old.getPropertyValue(),vo.getPropertyValue())
-                            || !Objects.equals(old.getDescription(),vo.getDescription())
+                    if (!Objects.equals(old.getPropertyKey(), vo.getPropertyKey())
+                            || !Objects.equals(old.getPropertyValue(), vo.getPropertyValue())
+                            || !Objects.equals(old.getDescription(), vo.getDescription())
                     ) {
                         ConfigProperties configProperties = new ConfigProperties();
-                        BeanUtils.copyProperties(vo,configProperties);
+                        BeanUtils.copyProperties(vo, configProperties);
                         toUpdate.add(configProperties);
                     }
                     break;
                 }
             }
-            if(!isExisted) {
+            if (!isExisted) {
                 ConfigProperties configProperties = new ConfigProperties();
-                BeanUtils.copyProperties(vo,configProperties);
+                BeanUtils.copyProperties(vo, configProperties);
                 configProperties.setApplication(groupWithProperties.getApplication());
                 configProperties.setProfile(groupWithProperties.getProfile());
                 configProperties.setLabel(groupWithProperties.getLabel());
@@ -209,20 +209,20 @@ public class ConfigServerMgtServiceImpl implements ConfigServerMgtService {
             }
         }
         List<String> toRemove = new LinkedList<>();
-        for (ConfigProperties old:oldConfigPropertiesList) {
+        for (ConfigProperties old : oldConfigPropertiesList) {
             List<ConfigPropertiesVo> collect = configPropertiesVos.stream().filter(vo -> Objects.equals(vo.getId(), old.getId())).collect(Collectors.toList());
-            if(collect.size() == 0) {
+            if (collect.size() == 0) {
                 toRemove.add(old.getId());
             }
         }
         if (CollectionUtils.isNotEmpty(toAdd)) {
-            MybatisBatchUtil.insertOrUpdateBatch(ConfigurationDao.class,toAdd, ConfigurationDao::saveConfiguration);
+            MybatisBatchUtil.insertOrUpdateBatch(ConfigurationDao.class, toAdd, ConfigurationDao::saveConfiguration);
         }
         if (CollectionUtils.isNotEmpty(toRemove)) {
             configurationDao.deleleByIds(toRemove);
         }
         if (CollectionUtils.isNotEmpty(toUpdate)) {
-            MybatisBatchUtil.insertOrUpdateBatch(ConfigurationDao.class,toUpdate, ConfigurationDao::updateConfiguration);
+            MybatisBatchUtil.insertOrUpdateBatch(ConfigurationDao.class, toUpdate, ConfigurationDao::updateConfiguration);
         }
         this.publishEvent(groupWithProperties.getApplication());
         return true;
@@ -240,7 +240,6 @@ public class ConfigServerMgtServiceImpl implements ConfigServerMgtService {
         }
         return true;
     }
-
 
 
     /**

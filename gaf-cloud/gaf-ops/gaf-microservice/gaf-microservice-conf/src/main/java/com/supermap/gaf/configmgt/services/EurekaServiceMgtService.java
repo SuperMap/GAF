@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.services;
 
 
@@ -25,7 +25,7 @@ public interface EurekaServiceMgtService {
      * @param eurekaPort
      * @return
      */
-    List <MicroServiceInfo> getAllMicroServices(String eurekaIp, String eurekaPort);
+    List<MicroServiceInfo> getAllMicroServices(String eurekaIp, String eurekaPort);
 
     /**
      * 根据服务名获取服务信息
@@ -42,7 +42,7 @@ public interface EurekaServiceMgtService {
      *
      * @return
      */
-    List <MicroServiceInfo> getAllMicroServices();
+    List<MicroServiceInfo> getAllMicroServices();
 
     /**
      * 根据服务名获取服务信息

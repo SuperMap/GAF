@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.configuration;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -44,15 +44,7 @@ public class GatewayConfigration {
     }
 
 
-    @Bean
-    public JwtTokenFilter tokenFilter() {
-        return new JwtTokenFilter();
-    }
 
-    @Bean
-    public AccessValidFilter permissionAccessFilter() {
-        return new AccessValidFilter();
-    }
 //
 //    @Bean
 //    public ReactiveOAuth2UserService<OidcUserRequest, OidcUser> userService() {

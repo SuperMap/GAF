@@ -15,14 +15,6 @@ import static com.supermap.gaf.gateway.commontypes.constant.GatewayConst.EXCHANG
 
 /**
  *  该代码对应gaf-microservice-gateway中的同名的filter,功能逻辑等应该保持一致
- *
- *   此过滤器提供用户验证认证信息的逻辑
- *  验证认证信息
- *       1.1.静态资源和公共资源不用验证
- *        1.2.其他都需要验证
- *           1.2.1验证失败需要清除cookie
- *           1.2.2验证失败如果是index首页，跳转index首页
- *           1.2.3验证失败如果不是index首页，跳转到登录页
  * @author wxl
  * @date 2021/4/17
  */
@@ -36,21 +28,17 @@ public class XgatewayAuthenticationValidateFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         ExchangeAuthenticationAttribute attribute = ((ExchangeAuthenticationAttribute) request.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME));
         AuthenticationResult authenticationResult = attribute.getAuthenticationResult();
-        if (attribute.getIsPublicUrl() && !attribute.getIsIndexUrl()){
+        if (attribute.getIsPublicUrl()){
             chain.doFilter(request,response);
-        }else if (authenticationResult == null
+        }
+        if (authenticationResult == null
                 || StringUtils.isEmpty(authenticationResult.getUsername())
                 || StringUtils.isEmpty(authenticationResult.getJwtToken())){
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             removeCookie(httpServletResponse);
-            if (attribute.getIsIndexUrl()){
-                chain.doFilter(request,httpServletResponse);
-            }else {
-                ResponseUtils.unAuth((HttpServletResponse) response,"未获取到资源访问的认证身份");
-            }
-        }else {
-            chain.doFilter(request,response);
+            ResponseUtils.unAuth((HttpServletResponse) response,"未获取到资源访问的认证身份");
         }
+        chain.doFilter(request,response);
     }
 
     /**

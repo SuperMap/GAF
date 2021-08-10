@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * 校验字符串是否在指定的集合中
+ *
  * @author wxl
  * @since 2021/6/18
  */
@@ -24,7 +25,7 @@ public class StringRangeValidator implements ConstraintValidator<StringRange, St
         Set<String> fieldNames = Arrays.stream(declaredFields).map(field -> field.getName().replaceAll("([A-Z])", "_$1").toLowerCase()).collect(Collectors.toSet());
         Set<String> specifiedRange = Arrays.stream(constraintAnnotation.value()).map(String::toLowerCase).collect(Collectors.toSet());
         fieldNames.addAll(specifiedRange);
-        range= fieldNames;
+        range = fieldNames;
     }
 
     @Override

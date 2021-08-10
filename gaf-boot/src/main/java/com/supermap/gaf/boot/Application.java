@@ -11,12 +11,13 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.supermap.gaf"})
+@ComponentScan(basePackages = {"com.supermap.gaf"},excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.supermap.gaf.common.storage.*"))
 @MapperScan(basePackages = {"com.supermap.gaf.**.dao", "com.supermap.gaf.data.mgt.mapper"})
 @EnableAsync
 @EnableCaching
@@ -25,9 +26,10 @@ import org.springframework.web.client.RestTemplate;
 public class Application {
 
     @Bean
-    MybatisBatchUtil mybatisBatchUtil(SqlSessionFactory sqlSessionFactory){
-        return  new MybatisBatchUtil(sqlSessionFactory);
+    MybatisBatchUtil mybatisBatchUtil(SqlSessionFactory sqlSessionFactory) {
+        return new MybatisBatchUtil(sqlSessionFactory);
     }
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.gateway.dao.impl;
 
 import com.supermap.gaf.gateway.commontypes.RouteSearchParam;
@@ -44,7 +44,7 @@ public class RouteDaoImpl implements RouteDao {
      * @return
      */
     @Override
-    public List <GatewayRouteEntity> queryRoutes(RouteSearchParam param) {
+    public List<GatewayRouteEntity> queryRoutes(RouteSearchParam param) {
         return sqlSession.selectList("queryRoutes", param);
     }
 
@@ -88,7 +88,7 @@ public class RouteDaoImpl implements RouteDao {
      * @return
      */
     @Override
-    public boolean batchDeleteRoute(List <String> ids) {
+    public boolean batchDeleteRoute(List<String> ids) {
         return sqlSession.delete("batchDeleteRoute", ids) > 0;
     }
 }

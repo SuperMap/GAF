@@ -17,7 +17,6 @@ public class GatewayConst {
     public static final String DEAFULT_KEY = "common";
 
 
-
     public static final String BEARER = "Bearer";
 
 

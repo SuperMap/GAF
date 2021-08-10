@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.menu.service.impl;
 
 import com.alibaba.fastjson.JSON;
@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 
 
 /**
- * @date:2021/3/25
  * @author Yw
+ * @date:2021/3/25
  */
 @Service
 @Slf4j
@@ -53,9 +53,9 @@ public class CustomationServicesImpl implements CustomationServices {
         res.put("customization", customation);
         msg = customation != null ? "查询定制信息成功;" : "查询不到定制信息;0";
 
-        List<MenuInfo> menuArr= menuDao.queryMenus();
+        List<MenuInfo> menuArr = menuDao.queryMenus();
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
-        log.info("customation:{}",shiroUser);
+        log.info("customation:{}", shiroUser);
         // 未经过shiro授权 先返回全部菜单
         if (shiroUser == null) {
             msg += menuArr.size() > 0 ? "查询菜单成功" : "查询不到菜单信息1";
@@ -89,7 +89,7 @@ public class CustomationServicesImpl implements CustomationServices {
         res.put("customization", customation);
 
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
-        List<MenuInfo> menuArr= menuDao.queryMenus();
+        List<MenuInfo> menuArr = menuDao.queryMenus();
         // 未经过shiro授权 先返回全部菜单
         if (shiroUser == null) {
             msg += menuArr.size() > 0 ? "查询菜单成功" : "查询不到菜单信息1";
@@ -113,12 +113,12 @@ public class CustomationServicesImpl implements CustomationServices {
     public CustomationInfo queryConfig() {
         //String userName = "admin";
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
-        if(shiroUser == null) {
+        if (shiroUser == null) {
             return null;
         }
         String tenantId = shiroUser.getTenantId();
 
-        return getCustomizedPortalConfig(tenantId) ;
+        return getCustomizedPortalConfig(tenantId);
     }
 
     @Override
@@ -133,38 +133,38 @@ public class CustomationServicesImpl implements CustomationServices {
     }
 
 
-    private List<MenuInfo> getPermissionMenusNsip(List<MenuInfo> menuArr){
+    private List<MenuInfo> getPermissionMenusNsip(List<MenuInfo> menuArr) {
         List<MenuInfo> accessedMenuInfos = new ArrayList<>();
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
-        log.info("customation:{}",shiroUser);
-        if (shiroUser == null){
+        log.info("customation:{}", shiroUser);
+        if (shiroUser == null) {
             return accessedMenuInfos;
         }
 
         List<String> permessions = shiroUser.getPermerssion();
-        log.info("permessions:{}",JSON.toJSONString(permessions));
-        if(CollectionUtils.isEmpty(permessions)) {
+        log.info("permessions:{}", JSON.toJSONString(permessions));
+        if (CollectionUtils.isEmpty(permessions)) {
             return accessedMenuInfos;
         }
         String containsParam = "menu:*:*";
         if (permessions.contains(containsParam)) {
             return menuArr;
-        }else{
+        } else {
             MenuManager.concatName(menuArr);
-            List<String> menuPermessions = permessions.stream().filter(permession->permession.startsWith("menu:")).collect(Collectors.toList());
-            accessedMenuInfos = menuArr.stream().filter(menu->{
-                for(String permession:menuPermessions){
-                    String[] menuNames = menu.getName().split(":");
-                    String menuName = StringUtils.join(menuNames,":",1,menuNames.length);
-                    String permessionMenuName =  permession.substring(permession.indexOf(":")+1,permession.lastIndexOf(":"));
-                    if(  permessionMenuName.startsWith(menuName)){
-                        System.out.println("matched//"+menuName+"===="+permessionMenuName);
-                        menu.setName(menuNames[0]);
-                        return true;
+            List<String> menuPermessions = permessions.stream().filter(permession -> permession.startsWith("menu:")).collect(Collectors.toList());
+            accessedMenuInfos = menuArr.stream().filter(menu -> {
+                        for (String permession : menuPermessions) {
+                            String[] menuNames = menu.getName().split(":");
+                            String menuName = StringUtils.join(menuNames, ":", 1, menuNames.length);
+                            String permessionMenuName = permession.substring(permession.indexOf(":") + 1, permession.lastIndexOf(":"));
+                            if (permessionMenuName.startsWith(menuName)) {
+                                System.out.println("matched//" + menuName + "====" + permessionMenuName);
+                                menu.setName(menuNames[0]);
+                                return true;
+                            }
+                        }
+                        return false;
                     }
-                }
-                return false;
-            }
             ).collect(Collectors.toList());
 
         }
@@ -175,7 +175,7 @@ public class CustomationServicesImpl implements CustomationServices {
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
         List<String> permessions = shiroUser.getPermerssion();
 
-        log.info("customation:{}",shiroUser);
+        log.info("customation:{}", shiroUser);
         logger.info("=======================");
         logger.info(JSON.toJSONString(permessions));
 
@@ -187,8 +187,8 @@ public class CustomationServicesImpl implements CustomationServices {
          * 具体操作是：获取最后一个冒号的名称即可
          */
         List<MenuInfo> accessedMenuInfos = new ArrayList<>();
-        if(CollectionUtils.isEmpty(permessions)) {
-        	return accessedMenuInfos;
+        if (CollectionUtils.isEmpty(permessions)) {
+            return accessedMenuInfos;
         }
 
         String containsParam = "menu:*:*";
@@ -202,8 +202,8 @@ public class CustomationServicesImpl implements CustomationServices {
                         //名字
                         String menuName = items[items.length - 1];
                         List<MenuInfo> menuInfos = menuArr.stream().filter(
-                        		menuInfo ->StringUtils.equalsIgnoreCase(menuInfo.getName(), menuName)
-                        	).collect(Collectors.toList());
+                                menuInfo -> StringUtils.equalsIgnoreCase(menuInfo.getName(), menuName)
+                        ).collect(Collectors.toList());
                         accessedMenuInfos.addAll(menuInfos);
                     }
                 }
@@ -288,18 +288,18 @@ public class CustomationServicesImpl implements CustomationServices {
 
     private CustomationInfo getCustomizedPortalConfig(String tenantId) {
         CustomationInfo customation = null;
-        if(StringUtils.isBlank(tenantId)) {
+        if (StringUtils.isBlank(tenantId)) {
             tenantId = CustomationInfo.DEFUALT_TENANT_ID;
         }
         customation = customationDao.queryCustomation(tenantId);
-        if(customation == null) {
+        if (customation == null) {
             customation = customationDao.queryCustomation(CustomationInfo.DEFUALT_TENANT_ID);
         }
 
-        if(customation != null && StringUtils.isBlank(customation.getConfigInfo())) {
-            if(StringUtils.isBlank(customation.getDefaultConfigInfo())) {
+        if (customation != null && StringUtils.isBlank(customation.getConfigInfo())) {
+            if (StringUtils.isBlank(customation.getDefaultConfigInfo())) {
                 CustomationInfo defaultCustomation = customationDao.queryCustomation(CustomationInfo.DEFUALT_TENANT_ID);
-                String defaultConfigInfo = defaultCustomation.getConfigInfo() == null? defaultCustomation.getDefaultConfigInfo() : defaultCustomation.getConfigInfo();
+                String defaultConfigInfo = defaultCustomation.getConfigInfo() == null ? defaultCustomation.getDefaultConfigInfo() : defaultCustomation.getConfigInfo();
 
                 customation.setDefaultConfigInfo(defaultConfigInfo);
             }

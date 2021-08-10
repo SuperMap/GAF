@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.desktop.develop.ui;
 
 
@@ -17,14 +17,15 @@ import java.awt.*;
 import static java.awt.GridBagConstraints.BOTH;
 
 /**
- * @date:2021/3/25
  * @author heykb
+ * @date:2021/3/25
  */
-public class GafDatasourceManager extends JPanel{
+public class GafDatasourceManager extends JPanel {
     public static GafTree gafDatasourceManagerTree;
     private JScrollPane jScrollPane;
     private SmButton refreshButton;
-//    AttributeMan
+
+    //    AttributeMan
     public void updateTree(GafTree tree) {
         remove(jScrollPane);
         remove(refreshButton);
@@ -33,7 +34,8 @@ public class GafDatasourceManager extends JPanel{
         revalidate();
 
     }
-    void initComponent(GafTree tree){
+
+    void initComponent(GafTree tree) {
         gafDatasourceManagerTree = tree;
         this.jScrollPane = new JScrollPane(tree);
         this.setLayout(new GridBagLayout());
@@ -41,7 +43,7 @@ public class GafDatasourceManager extends JPanel{
         this.refreshButton.setIcon(DataViewResources.getIcon("/dataviewresources/Catalog/Image_Refresh.png"));
         this.add(this.refreshButton, (new GridBagConstraintsHelper(0, 1)).setFill(BOTH));
         this.add(jScrollPane, new GridBagConstraintsHelper(0, 0).setWeight(1, 1).setFill(BOTH));
-        this.refreshButton.addActionListener(e->{
+        this.refreshButton.addActionListener(e -> {
             try {
                 CommonUtils.refreshDatasourceTree();
             } catch (Exception e1) {
@@ -61,10 +63,10 @@ public class GafDatasourceManager extends JPanel{
 //            }
 //        });
     }
+
     public GafDatasourceManager() {
         initComponent(new GafTree(null, GafTree.GafTreeType.DATASOURCE_TREE));
     }
-
 
 
 }

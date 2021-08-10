@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.util;
 
 import org.apache.ibatis.session.ExecutorType;
@@ -17,8 +17,9 @@ import java.util.function.BiConsumer;
 
 /**
  * mybatis批量插入更新工具类
- * @date:2021/3/25
+ *
  * @author wxl
+ * @date:2021/3/25
  */
 @Component
 public class MybatisBatchUtil {
@@ -72,7 +73,7 @@ public class MybatisBatchUtil {
         if (entityList == null || entityList.size() == 0) {
             throw new MybatisBatchException("entityList must not be empty");
         }
-        try(SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH)) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH)) {
             M modelMapper = sqlSession.getMapper(mapperClass);
             int i = 0;
             for (T entity : entityList) {
@@ -90,6 +91,7 @@ public class MybatisBatchUtil {
     /**
      * 批量插入或更新方法
      * 该方法使用Spring的声明式事务注解需要开启事务管理
+     *
      * @param mapperClass mybatis的mapper类对象
      * @param entityList  实体类集合
      * @param func        回调方法
@@ -105,6 +107,7 @@ public class MybatisBatchUtil {
     /**
      * 批量插入或更新方法
      * 该方法使用Spring的声明式事务注解需要开启事务管理
+     *
      * @param mapperClass mybatis的mapper类对象
      * @param entityList  实体类集合
      * @param batchSize   每次的数量

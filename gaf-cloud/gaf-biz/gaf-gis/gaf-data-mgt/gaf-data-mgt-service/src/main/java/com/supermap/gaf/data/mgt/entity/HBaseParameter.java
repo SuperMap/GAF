@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.data.mgt.entity;
 
 import io.swagger.annotations.ApiModel;
@@ -16,11 +16,10 @@ import java.util.List;
 
 
 /**
-* @author:yw
-* @Date 2021-3-12
- * @date:2021/3/25
- * 注意hbase现只支持发布地图服务、数据服务
-**/
+ * @author:yw
+ * @Date 2021-3-12
+ * @date:2021/3/25 注意hbase现只支持发布地图服务、数据服务
+ **/
 @Data
 @Builder
 @AllArgsConstructor
@@ -86,8 +85,8 @@ public class HBaseParameter {
      */
     public enum SUPPORTSERVICETYPE {
         /**
-        * 地图服务
-        **/
+         * 地图服务
+         **/
         RESTMAP,
         /**
          * 数据服务

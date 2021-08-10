@@ -2,16 +2,14 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- *
  * @author:yj
- * @date:2021/3/25
- * 飞行路线信息
+ * @date:2021/3/25 飞行路线信息
  */
 public class WebgisRouteInfo {
     @ApiModelProperty("路线id")
@@ -39,15 +37,15 @@ public class WebgisRouteInfo {
     @ApiModelProperty("路线所在的文件路径")
     String filePath;
 
-    public WebgisRouteInfo()
-    {
+    public WebgisRouteInfo() {
         indexOfEditStop = -1;
         this.speed = -1;
         tiltFixed = true;
         altitudeFixed = true;
-        headingFixed= true;
+        headingFixed = true;
 
     }
+
     public String getRouteId() {
         return routeId;
     }
@@ -144,7 +142,7 @@ public class WebgisRouteInfo {
         this.filePath = filePath;
     }
 
-    public boolean hasStops(){
+    public boolean hasStops() {
         return this.stops != null && this.stops.length > 0;
     }
 

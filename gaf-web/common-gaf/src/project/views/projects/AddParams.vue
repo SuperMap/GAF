@@ -269,7 +269,7 @@ export default {
     },
     async getOptions() {
       const url =
-        '/sys-mgt/sys-resource-datasources/options?typeCodes=POSTGRESQL&typeCodes=MYSQL&typeCodes=SQL_SERVER&typeCodes=ORACLE'
+        '/data-mgt/sys-resource-datasources/options?typeCodes=1&typeCodes=2&typeCodes=3&typeCodes=4'
       const res = await this.$axios.$get(url)
       // console.log(res)
       if (res.isSuccessed) {
@@ -474,13 +474,13 @@ export default {
         this.options.forEach((option) => {
           if (option.value === this.selectedDataSourceId) {
             let datasourceType = 'POSTGRESQL'
-            if (option.typeCode === 'POSTGRESQL') {
+            if (option.typeCode === '1') {
               datasourceType = 'POSTGRESQL'
-            } else if (option.typeCode === 'MYSQL') {
+            } else if (option.typeCode === '3') {
               datasourceType = 'MYSQL'
-            } else if (option.typeCode === 'ORACLE') {
+            } else if (option.typeCode === '2') {
               datasourceType = 'ORACLE'
-            } else if (option.typeCode === 'SQL_SERVER') {
+            } else if (option.typeCode === '4') {
               datasourceType = 'SQLSERVER'
             }
             this.submitData.dsInfo = {

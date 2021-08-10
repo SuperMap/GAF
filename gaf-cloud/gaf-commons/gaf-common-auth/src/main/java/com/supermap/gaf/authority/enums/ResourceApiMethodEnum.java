@@ -28,9 +28,9 @@ public enum ResourceApiMethodEnum {
 
     private final String value;
 
-    public static ResourceApiMethodEnum getByValue(String value){
-        for (ResourceApiMethodEnum e : ResourceApiMethodEnum.values()){
-            if (e.getValue().equals(value)){
+    public static ResourceApiMethodEnum getByValue(String value) {
+        for (ResourceApiMethodEnum e : ResourceApiMethodEnum.values()) {
+            if (e.getValue().equals(value)) {
                 return e;
             }
         }

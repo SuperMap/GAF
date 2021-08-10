@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authentication.client;
 
 import com.supermap.gaf.authentication.entity.entity.AuthenticationParam;
@@ -27,17 +27,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public interface ValidateClient {
     /**
      * 请求认证中心进行认证校验
+     *
      * @param authenticationParam
      * @return
      */
-    @PostMapping(value = "/authentication/validate",consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/authentication/validate", consumes = APPLICATION_JSON_VALUE)
     MessageResult<AuthenticationResult> authentication(@RequestBody AuthenticationParam authenticationParam);
 
     /**
      * 请求认证中心进行鉴权验证
+     *
      * @return
      */
-    @PostMapping(value = "/authentication/validate/authorization",consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/authentication/validate/authorization", consumes = APPLICATION_JSON_VALUE)
     Boolean authorization(@RequestBody AuthorizationParam authorizationParam);
 
 }

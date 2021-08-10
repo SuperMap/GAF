@@ -2,12 +2,13 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.configuration;
 
 
 import com.supermap.gaf.exception.GafExceptionMapper;
 import com.supermap.gaf.exception.ValidExceptionMapper;
+import com.supermap.gaf.rest.config.CorsFilter;
 import com.supermap.gaf.webgis.resource.root.WebgisRootResource;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.config.SwaggerContextService;
@@ -30,17 +31,21 @@ import java.util.Arrays;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 @Component
 public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
     private ServletConfig servletConfig;
+
     public JerseyConfig() {
         register(WebgisRootResource.class);
         register(GafExceptionMapper.class);
         register(ValidExceptionMapper.class);
+        //跨域过滤器
+        register(CorsFilter.class);
     }
+
     /**
-            * 配置swagger
+     * 配置swagger
      */
     @PostConstruct
     public void configureSwagger() {
@@ -58,7 +63,7 @@ public class JerseyConfig extends ResourceConfig implements ServletConfigAware {
         securityRequirement.requirement("token");
         SecurityRequirement securityRequirement2 = new SecurityRequirement();
         securityRequirement.requirement("basicAuth");
-        swagger.setSecurity(Arrays.asList(securityRequirement,securityRequirement2));
+        swagger.setSecurity(Arrays.asList(securityRequirement, securityRequirement2));
         new SwaggerContextService().withServletConfig(servletConfig).updateSwagger(swagger);
     }
 

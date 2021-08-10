@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.utils;
 
 import java.security.MessageDigest;
@@ -11,34 +11,39 @@ import java.security.MessageDigest;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 
 public class Encript {
     //十六进制下数字到字符的映射数组
-    private final static String[] hexDigits = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
+    private final static String[] hexDigits = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
 
-    /**把inputString加密*/
-    public static String md5(String inputStr){
+    /**
+     * 把inputString加密
+     */
+    public static String md5(String inputStr) {
         return encodeByMD5(inputStr);
     }
 
     /**
      * 验证输入的密码是否正确
-     * @param password 真正的密码（加密后的真密码）
+     *
+     * @param password    真正的密码（加密后的真密码）
      * @param inputString 输入的字符串
      * @return 验证结果，boolean类型
      */
-    public static boolean authenticatePassword(String password,String inputString){
-        if(password.equals(encodeByMD5(inputString))){
+    public static boolean authenticatePassword(String password, String inputString) {
+        if (password.equals(encodeByMD5(inputString))) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    /**对字符串进行MD5编码*/
-    private static String encodeByMD5(String originString){
-        if (originString!=null) {
+    /**
+     * 对字符串进行MD5编码
+     */
+    private static String encodeByMD5(String originString) {
+        if (originString != null) {
             try {
                 //创建具有指定算法名称的信息摘要
                 MessageDigest md5 = MessageDigest.getInstance("MD5");
@@ -56,25 +61,25 @@ public class Encript {
 
     /**
      * 轮换字节数组为十六进制字符串
+     *
      * @param b 字节数组
      * @return 十六进制字符串
-     *
      */
-    private static String byteArrayToHexString(byte[] b){
+    private static String byteArrayToHexString(byte[] b) {
         StringBuffer resultSb = new StringBuffer();
-        for(int i=0;i<b.length;i++){
+        for (int i = 0; i < b.length; i++) {
             resultSb.append(byteToHexString(b[i]));
         }
         return resultSb.toString();
     }
 
     //将一个字节转化成十六进制形式的字符串
-    private static String byteToHexString(byte b){
+    private static String byteToHexString(byte b) {
         int n = b;
-        if(n<0)
-            n=256+n;
-        int d1 = n/16;
-        int d2 = n%16;
+        if (n < 0)
+            n = 256 + n;
+        int d1 = n / 16;
+        int d2 = n % 16;
         return hexDigits[d1] + hexDigits[d2];
     }
 }

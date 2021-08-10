@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.AuthResourceMenu;
@@ -32,9 +32,9 @@ import java.util.stream.Collectors;
 
 /**
  * 菜单服务实现类
+ *
  * @author wxl
  * @date:2021/3/25
- *
  */
 @Service
 public class AuthResourceMenuServiceImpl implements AuthResourceMenuService {
@@ -126,13 +126,13 @@ public class AuthResourceMenuServiceImpl implements AuthResourceMenuService {
             }
             //4、转换为树节点
             List<TreeNode> collect = menus.stream().map(authResourceMenu -> {
-                        TreeNode node = new TreeNode();
-                        node.setSortSn(authResourceMenu.getSortSn());
-                        node.setParentId(authResourceMenu.getMenuCatalogId());
-                        node.setKey(authResourceMenu.getResourceMenuId());
-                        node.setTitle(authResourceMenu.getName());
-                        node.setType(NodeTypeEnum.MENU.getValue());
-                        return node;
+                TreeNode node = new TreeNode();
+                node.setSortSn(authResourceMenu.getSortSn());
+                node.setParentId(authResourceMenu.getMenuCatalogId());
+                node.setKey(authResourceMenu.getResourceMenuId());
+                node.setTitle(authResourceMenu.getName());
+                node.setType(NodeTypeEnum.MENU.getValue());
+                return node;
             }).collect(Collectors.toList());
             List<TreeNode> collect2 = needCatalog.values().stream().map(sysCatalog -> {
                 TreeNode node = new TreeNode();
@@ -200,7 +200,7 @@ public class AuthResourceMenuServiceImpl implements AuthResourceMenuService {
                 authResourceMenu.setResourceMenuId(UUID.randomUUID().toString());
             });
             authResourceMenuMapper.batchInsert(authResourceMenus);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceMenu.class,parentIds);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceMenu.class, parentIds);
         }
     }
 
@@ -218,14 +218,14 @@ public class AuthResourceMenuServiceImpl implements AuthResourceMenuService {
     @Transactional(rollbackFor = Exception.class)
     public AuthResourceMenu updateAuthResourceMenu(AuthResourceMenu authResourceMenu) {
 
-        AuthResourceMenu oldAuthResourceMenu= getRealById(authResourceMenu.getResourceMenuId());
+        AuthResourceMenu oldAuthResourceMenu = getRealById(authResourceMenu.getResourceMenuId());
         int count = authResourceMenuMapper.update(authResourceMenu);
-        if(count >0 ){
+        if (count > 0) {
             String parentId = authResourceMenu.getMenuCatalogId();
-            if(StringUtils.isEmpty(parentId)){
+            if (StringUtils.isEmpty(parentId)) {
                 parentId = oldAuthResourceMenu.getMenuCatalogId();
             }
-            batchSortAndCodeService.revisionSortSnForUpdate(AuthResourceMenu.class,parentId,oldAuthResourceMenu.getSortSn(),authResourceMenu.getSortSn());
+            batchSortAndCodeService.revisionSortSnForUpdate(AuthResourceMenu.class, parentId, oldAuthResourceMenu.getSortSn(), authResourceMenu.getSortSn());
         }
         return authResourceMenu;
     }

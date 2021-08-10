@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.sys.mgt.resource;
 
 import com.supermap.gaf.authority.vo.TreeNode;
@@ -46,6 +46,7 @@ public class SysDictResource implements SysDictClient {
     /**
      * 根据字典类别编码获取字典树的所有节点
      * 未组装为树形结构
+     *
      * @param dictTypeCode 字典类别编码
      * @return 若未查询到则返回null
      */
@@ -165,7 +166,7 @@ public class SysDictResource implements SysDictClient {
         return MessageResult.successe(DictType.class).data(dictType).build();
     }
 
-    @ApiOperation(value = "查询字典",  notes = "根据id查询字典")
+    @ApiOperation(value = "查询字典", notes = "根据id查询字典")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dataDictId", value = "字典id", paramType = "path", dataType = "string", required = true)
     })
@@ -192,20 +193,20 @@ public class SysDictResource implements SysDictClient {
 
     @ApiOperation(value = "分页条件查询字典")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[1,infinity]",paramType = "query", dataType = "integer"),
-            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer")
+            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1", defaultValue = "1", allowableValues = "range[1,infinity]", paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10", allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer")
     })
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public MessageResult<Page<DictDataNode>> pageList(@ApiParam @Valid @BeanParam SysDictSelectVo sysDictSelectVo,
-                                        @DefaultValue("1") @QueryParam("pageNum") Integer pageNum,
-                                        @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
+                                                      @DefaultValue("1") @QueryParam("pageNum") Integer pageNum,
+                                                      @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
         return MessageResult.data(sysDictService.listByPageCondition(sysDictSelectVo, pageNum, pageSize)).message("查询成功").build();
     }
 
     @ApiOperation(value = "新增字典")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "sysDict", value = "字典", dataTypeClass = SysDict.class, paramType = "body",required = true)
+            @ApiImplicitParam(name = "sysDict", value = "字典", dataTypeClass = SysDict.class, paramType = "body", required = true)
     })
     @POST
     @Produces({MediaType.APPLICATION_JSON})

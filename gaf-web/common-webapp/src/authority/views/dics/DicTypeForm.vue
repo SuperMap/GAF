@@ -49,8 +49,8 @@
                     message: '字典编码不能为空'
                   },
                   {
-                    max: 255,
-                    message: '长度不能超过255个字符'
+                    max: 30,
+                    message: '长度不能超过30个字符'
                   }
                 ]
               }
@@ -70,8 +70,8 @@
                     message: '中文名称不能为空'
                   },
                   {
-                    max: 255,
-                    message: '长度不能超过255个字符'
+                    max: 30,
+                    message: '长度不能超过30个字符'
                   }
                 ]
               }
@@ -130,7 +130,7 @@
 
 <script>
     import moment from 'moment'
-    import treeUtil from '../../utils/tree/TreeUtil.js'
+    import treeUtil from '../../../common/utils/TreeUtil'
 
     export default {
   props: {
@@ -246,7 +246,7 @@
         }
         this.loading = false
         this.addOrEditForm.resetFields()
-        this.$emit('submit')
+        this.$emit('back')
       })
     },
     async deleteData() {

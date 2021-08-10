@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.portal.menu.service.impl;
 
 import com.alibaba.fastjson.JSON;
@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* @author:yw
+ * @author:yw
  * @date:2021/3/25
-* @Date 2021-3-12
-**/
+ * @Date 2021-3-12
+ **/
 @Service
 @Qualifier("manager")
 public class ManagerMenuServiceImpl implements MenuService {
@@ -52,7 +52,7 @@ public class ManagerMenuServiceImpl implements MenuService {
                     menuDao.updateMenu(menu);
                 }
                 msg = success ? "添加成功" : "添加失败";
-                res.put("backId",id);
+                res.put("backId", id);
             } else {
                 success = menuDao.updateMenu(menu) > 0;
                 msg = success ? "修改成功" : "修改失败";
@@ -73,7 +73,7 @@ public class ManagerMenuServiceImpl implements MenuService {
         String msg;
         if (menuId != null && !menuId.isEmpty()) {
             // 删除子级菜单
-            List<MenuInfo> menuArr= menuDao.queryMenus();
+            List<MenuInfo> menuArr = menuDao.queryMenus();
             List<String> menuIds = MenuManager.getSubMenuIds(menuArr, menuId);
             success = menuDao.deleteMenuByIds(menuIds) > 0;
             //success = menuDao.deleteMenuById(menuId) > 0;
@@ -121,7 +121,7 @@ public class ManagerMenuServiceImpl implements MenuService {
         boolean success = false;
         Map<String, Object> res = new HashMap<String, Object>(16);
         if (menuId != null && !menuId.isEmpty()) {
-            MenuInfo menu= menuDao.queryMenuById(menuId);
+            MenuInfo menu = menuDao.queryMenuById(menuId);
             success = true;
             msg = menu != null ? "查询成功" : "查询不到信息";
             res.put("data", menu);
@@ -138,7 +138,7 @@ public class ManagerMenuServiceImpl implements MenuService {
         String msg;
         boolean success = false;
         Map<String, Object> res = new HashMap<String, Object>(16);
-        List<MenuInfo> menuArr= menuDao.queryMenus();
+        List<MenuInfo> menuArr = menuDao.queryMenus();
         if (menuArr.size() > 0) {
             success = true;
         }
@@ -153,8 +153,10 @@ public class ManagerMenuServiceImpl implements MenuService {
     public List<MenuInfo> queryMenuFromAuthority() {
         return null;
     }
+
     /**
      * 批量导入
+     *
      * @param flag
      * @param arr
      * @return
@@ -166,7 +168,7 @@ public class ManagerMenuServiceImpl implements MenuService {
         boolean success = false;
         String resString = "";
         try {
-            if(!"".equals(flag)){
+            if (!"".equals(flag)) {
                 //调删除方法
                 int i = menuDao.deleteMenuByFlag(flag);
             }
@@ -179,10 +181,10 @@ public class ManagerMenuServiceImpl implements MenuService {
             }
             success = true;
             msg = "关联成功";
-        }catch (Exception e){
+        } catch (Exception e) {
             success = false;
             msg = "关联失败";
-        }finally {
+        } finally {
             res.put("success", success);
             res.put("msg", msg);
             resString = JSON.toJSONString(res);

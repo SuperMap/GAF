@@ -2,9 +2,8 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.configmgt.dao;
-
 
 
 import com.supermap.gaf.configmgt.commontypes.ConfigProperties;
@@ -24,6 +23,7 @@ import java.util.List;
 public interface ConfigurationDao {
     /**
      * 获取配置信息
+     *
      * @param queryParameter
      * @return
      */
@@ -31,6 +31,7 @@ public interface ConfigurationDao {
 
     /**
      * 保存配置信息
+     *
      * @param configProperties
      * @return
      */
@@ -38,6 +39,7 @@ public interface ConfigurationDao {
 
     /**
      * 删除配置信息
+     *
      * @param configProperties
      * @return
      */
@@ -45,6 +47,7 @@ public interface ConfigurationDao {
 
     /**
      * 编辑配置信息
+     *
      * @param configProperties
      * @return
      */
@@ -52,12 +55,14 @@ public interface ConfigurationDao {
 
     /**
      * 获取微服务名列表
+     *
      * @return
      */
     List<String> getApplicationNames();
 
     /**
      * 查询应用配置文件信息
+     *
      * @param queryParameter
      * @return
      */
@@ -65,12 +70,14 @@ public interface ConfigurationDao {
 
     /**
      * 根据id集合删除配置
+     *
      * @param ids 配置id集合 不能为空集合
      */
     void deleleByIds(List<String> ids);
 
     /**
      * 根据等值查询条件删除
+     *
      * @param condition 等值查询条件,包括application(服务名称),label(分支), profile(环境), tenantId(租户id)
      */
     void delete(ConfigPropertiesGroup condition);

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.AuthDepartment;
@@ -37,9 +37,9 @@ import java.util.stream.Collectors;
 
 /**
  * 岗位服务实现类
+ *
  * @author zhm
  * @date:2021/3/25
- * 
  */
 @Service
 public class AuthPostServiceImpl implements AuthPostService {
@@ -119,7 +119,7 @@ public class AuthPostServiceImpl implements AuthPostService {
             });
         }
         // 一级排序 type  二级排序 序号
-        return TreeConvertUtil.convertToTree(nodes,Comparator.comparing(n->""+n.getType()+n.getSortSn()));
+        return TreeConvertUtil.convertToTree(nodes, Comparator.comparing(n -> "" + n.getType() + n.getSortSn()));
     }
 
     @Override
@@ -171,14 +171,14 @@ public class AuthPostServiceImpl implements AuthPostService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void batchInsert(List<AuthPost> authPosts) {
-        if(!CollectionUtils.isEmpty(authPosts)){
+        if (!CollectionUtils.isEmpty(authPosts)) {
             Set<String> parentIds = new HashSet<>();
             for (AuthPost authPost : authPosts) {
                 authPost.setPostId(UUID.randomUUID().toString());
                 parentIds.add(authPost.getDepartmentId());
             }
             authPostMapper.batchInsert(authPosts);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthPost.class,parentIds);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthPost.class, parentIds);
         }
 
     }
@@ -225,8 +225,8 @@ public class AuthPostServiceImpl implements AuthPostService {
         checkUniqueness(authPost, true);
 
         authPostMapper.update(authPost);
-        String parentId = authPost.getDepartmentId()!=null? authPost.getDepartmentId():authPostExist.getDepartmentId();
-        batchSortAndCodeService.revisionSortSnForUpdate(AuthPost.class,parentId,authPostExist.getSortSn(),authPost.getSortSn());
+        String parentId = authPost.getDepartmentId() != null ? authPost.getDepartmentId() : authPostExist.getDepartmentId();
+        batchSortAndCodeService.revisionSortSnForUpdate(AuthPost.class, parentId, authPostExist.getSortSn(), authPost.getSortSn());
         return authPost;
     }
 

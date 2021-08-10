@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.rest.utils;
 
 import com.supermap.gaf.utils.LogUtil;
@@ -77,7 +77,7 @@ public class OKHttpUtil {
      * @return
      */
     public static String getUseOkhttp(String url) {
-        List <String> result = new ArrayList <>();
+        List<String> result = new ArrayList<>();
         OkHttpClient okHttpClient = new OkHttpClient();
         //创建Request 对象,返回json
         Request request = new Request.Builder().url(url)//请求接口。如果需要传参拼接到接口后面。
@@ -101,7 +101,7 @@ public class OKHttpUtil {
      * @return
      */
     public static String deleteUseOkhttp(String url, String requestBody) {
-        List <String> result = new ArrayList <>();
+        List<String> result = new ArrayList<>();
         OkHttpClient okHttpClient = new OkHttpClient();
         //创建Request 对象,返回json
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");

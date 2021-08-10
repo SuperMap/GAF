@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.analysis.resource.spatial;
 
 
@@ -29,8 +29,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 /**
  * @author dqc
- * @date:2021/3/25
- * /analysis/spatial/overlay
+ * @date:2021/3/25 /analysis/spatial/overlay
  */
 @Path("/")
 @Api(value = "空间分析-叠加分析接口")
@@ -44,7 +43,7 @@ public class OverlayResource {
 
     @ApiOperation(value = "叠加分析", notes = "通过OverlayParamVO实体类的参数，对两个数据集或一个数据集一个Geo对象进行叠加分析")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "overlayParamVO",value = "叠加分析请求参数",paramType = "body",dataTypeClass = OverlayParamVO.class)
+            @ApiImplicitParam(name = "overlayParamVO", value = "叠加分析请求参数", paramType = "body", dataTypeClass = OverlayParamVO.class)
     })
     @POST
     @Produces(APPLICATION_JSON)
@@ -55,9 +54,9 @@ public class OverlayResource {
 
     @ApiOperation(value = "叠加分析结果查询", notes = "通过结果记录ID查询对应分析任务的结果，支持分页查询")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "resultId",value = "结果记录ID",paramType = "path",dataType = "string",required = true,example = "abcde"),
-            @ApiImplicitParam(name = "pageIndex",value = "分页索引",paramType = "query",dataType = "integer",example = "0"),
-            @ApiImplicitParam(name = "pageSize",value = "每页条数",paramType = "query",dataType = "integer",example = "10")
+            @ApiImplicitParam(name = "resultId", value = "结果记录ID", paramType = "path", dataType = "string", required = true, example = "abcde"),
+            @ApiImplicitParam(name = "pageIndex", value = "分页索引", paramType = "query", dataType = "integer", example = "0"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", paramType = "query", dataType = "integer", example = "10")
     })
     @GET
     @Path("/result/{resultId}")
@@ -70,17 +69,17 @@ public class OverlayResource {
 
     @ApiOperation(value = "分析结果记录查询", notes = "通过分析任务名称过滤所有分析结果记录")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "name",value = "分析任务名称",paramType = "path",dataType = "string",required = true,example = "test"),
-            @ApiImplicitParam(name = "pageNum",value = "分页索引",paramType = "query",dataType = "integer",example = "0"),
-            @ApiImplicitParam(name = "pageSize",value = "每页条数",paramType = "query",dataType = "integer",example = "10")
+            @ApiImplicitParam(name = "name", value = "分析任务名称", paramType = "path", dataType = "string", required = true, example = "test"),
+            @ApiImplicitParam(name = "pageNum", value = "分页索引", paramType = "query", dataType = "integer", example = "0"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", paramType = "query", dataType = "integer", example = "10")
     })
     @GET
     @Path("/result/records")
     @Produces(APPLICATION_JSON)
     public MessageResult<Map> getAnalysisResultRecords(@QueryParam("name") String name,
-                                                        @DefaultValue("0") @QueryParam("pageNum") Integer pageNum,
-                                                        @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
-        if (pageNum == null || pageNum < 1){
+                                                       @DefaultValue("0") @QueryParam("pageNum") Integer pageNum,
+                                                       @DefaultValue("10") @QueryParam("pageSize") Integer pageSize) {
+        if (pageNum == null || pageNum < 1) {
             pageNum = 1;
         }
         Integer offset = (pageNum - 1) * pageSize;

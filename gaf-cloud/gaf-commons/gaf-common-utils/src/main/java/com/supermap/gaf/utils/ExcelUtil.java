@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.utils;
 
 import java.io.BufferedInputStream;
@@ -33,6 +33,7 @@ public class ExcelUtil {
 
     /**
      * 获根据文件路径获取Excel工作簿
+     *
      * @param filePath
      * @return
      */
@@ -56,6 +57,7 @@ public class ExcelUtil {
 
     /**
      * 获取当前sheet中活动的单元格所在的最大列数
+     *
      * @param sheet
      * @return
      */
@@ -73,8 +75,9 @@ public class ExcelUtil {
 
     /**
      * 根据sheet,rowIndex,cellIndex获取(创建)单元格
+     *
      * @param sheet
-     * @param rowNum 行
+     * @param rowNum    行
      * @param columnNum 列
      * @return
      */
@@ -83,22 +86,23 @@ public class ExcelUtil {
         // String value = "";
         if (sheet != null) {
             Row row = sheet.getRow(rowNum);
-            if(row == null) {
+            if (row == null) {
                 row = sheet.createRow(rowNum);
             }
             if (row != null) {
                 cell = row.getCell(columnNum);
-                
-                if(cell == null) {
+
+                if (cell == null) {
                     cell = row.createCell(columnNum);
                 }
             }
         }
         return cell;
     }
-    
+
     /**
      * 获取单元格的值
+     *
      * @param cell
      * @return
      */
@@ -119,6 +123,7 @@ public class ExcelUtil {
 
     /**
      * 复制行
+     *
      * @param sheet
      * @param fromRow
      * @param startRow
@@ -139,6 +144,7 @@ public class ExcelUtil {
 
     /**
      * 复制行
+     *
      * @param fromRow
      * @param toRow
      * @param copyValueFlag 是否copy值
@@ -160,6 +166,7 @@ public class ExcelUtil {
 
     /**
      * 单元格设值
+     *
      * @param srcCell
      * @param distCell
      */
@@ -171,32 +178,33 @@ public class ExcelUtil {
         CellType srcCellType = srcCell.getCellTypeEnum();
         distCell.setCellType(srcCellType);
         switch (srcCellType) {
-        case STRING:
-            distCell.setCellValue(srcCell.getRichStringCellValue());
-            break;
-        case BOOLEAN:
-            distCell.setCellValue(srcCell.getBooleanCellValue());
-            break;
-        case FORMULA:
-            distCell.setCellFormula(srcCell.getCellFormula());
-            break;
-        case NUMERIC:
-            if (HSSFDateUtil.isCellDateFormatted(srcCell)) {
-                distCell.setCellValue(srcCell.getDateCellValue());
-            } else {
-                distCell.setCellValue(srcCell.getNumericCellValue());
-            }
-            break;
-        case ERROR:
-            distCell.setCellErrorValue(srcCell.getErrorCellValue());
-            break;
-        case _NONE:
-        case BLANK:
+            case STRING:
+                distCell.setCellValue(srcCell.getRichStringCellValue());
+                break;
+            case BOOLEAN:
+                distCell.setCellValue(srcCell.getBooleanCellValue());
+                break;
+            case FORMULA:
+                distCell.setCellFormula(srcCell.getCellFormula());
+                break;
+            case NUMERIC:
+                if (HSSFDateUtil.isCellDateFormatted(srcCell)) {
+                    distCell.setCellValue(srcCell.getDateCellValue());
+                } else {
+                    distCell.setCellValue(srcCell.getNumericCellValue());
+                }
+                break;
+            case ERROR:
+                distCell.setCellErrorValue(srcCell.getErrorCellValue());
+                break;
+            case _NONE:
+            case BLANK:
         }
     }
 
     /**
      * 获取合并单元格的值
+     *
      * @param sheet
      * @param row
      * @param column
@@ -222,8 +230,9 @@ public class ExcelUtil {
 
     /**
      * 判断指定的单元格是否是合并单元格
+     *
      * @param sheet
-     * @param row 行下标
+     * @param row    行下标
      * @param column 列下标
      * @return
      */
@@ -244,27 +253,28 @@ public class ExcelUtil {
         return false;
     }
 
-    /** 
-     * 创建新excel. 
-     * @param fileDir  excel的路径 
-     * @param sheetName 要创建的表格索引 
-     * @param titleRow excel的第一行即表格头 
-     */  
-    public static void createExcel(String fileDir, String sheetName, String titleRow[]) throws Exception{   
+    /**
+     * 创建新excel.
+     *
+     * @param fileDir   excel的路径
+     * @param sheetName 要创建的表格索引
+     * @param titleRow  excel的第一行即表格头
+     */
+    public static void createExcel(String fileDir, String sheetName, String titleRow[]) throws Exception {
         //新建文件  
         try (XSSFWorkbook workbook = new XSSFWorkbook();
-                FileOutputStream out = new FileOutputStream(fileDir);){
+             FileOutputStream out = new FileOutputStream(fileDir);) {
             workbook.createSheet(sheetName);
             //添加表头  
             XSSFRow row = workbook.getSheet(sheetName).createRow(0);    //创建第一行    
-            for(short i = 0;i < titleRow.length;i++){
+            for (short i = 0; i < titleRow.length; i++) {
                 XSSFCell cell = row.createCell(i);
                 cell.setCellValue(titleRow[i]);
             }
             workbook.write(out);
         } catch (Exception e) {
             throw e;
-        } 
+        }
     }
 
 }

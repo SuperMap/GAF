@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.webgis.service.impl;
 
 import com.alibaba.fastjson.JSON;
@@ -48,15 +48,16 @@ public class WebgisConfigServiceImpl implements WebgisConfigService {
     private WebgisCatalogLayerService webgisCatalogLayerService;
     @Autowired
     private SysCatalogQueryService sysCatalogQueryService;
+
     @Override
-    public Object parseConfig(WebgisToolbarVo toolbarVo){
+    public Object parseConfig(WebgisToolbarVo toolbarVo) {
         WebgisToolbarDo toolbarDo = new WebgisToolbarDo();
-        BeanUtils.copyProperties(toolbarVo,toolbarDo);
+        BeanUtils.copyProperties(toolbarVo, toolbarDo);
         List<WebgisToolbarButton> buttons = toolbarVo.getWebgisToolbarButtons();
-        if(buttons!=null){
-            toolbarDo.setWebgisToolbarButtonDos(buttons.stream().map(button->{
+        if (buttons != null) {
+            toolbarDo.setWebgisToolbarButtonDos(buttons.stream().map(button -> {
                 WebgisToolbarButtonDo buttonDo = new WebgisToolbarButtonDo();
-                BeanUtils.copyProperties(button,buttonDo);
+                BeanUtils.copyProperties(button, buttonDo);
                 return buttonDo;
             }).collect(Collectors.toList()));
         }
@@ -66,29 +67,32 @@ public class WebgisConfigServiceImpl implements WebgisConfigService {
 
     /**
      * 通过根目录id解析出资源目录树配置
+     *
      * @return
      */
     @Override
-    public WebgisConfigData convert2ResourceTreeConfig(String rootCatalogId){
+    public WebgisConfigData convert2ResourceTreeConfig(String rootCatalogId) {
         WebgisConfigData re = new WebgisConfigData();
         Map<String, Object> resourceTree = getResourceTree(rootCatalogId);
         re.setResourceTree(resourceTree);
         return re;
     }
+
     /**
      * 通过根目录id解析出资源目录树
+     *
      * @return
      */
     @Override
-    public Map<String,Object> getResourceTree(String rootCatalogId) {
-        if(!StringUtils.isEmpty(rootCatalogId)){
+    public Map<String, Object> getResourceTree(String rootCatalogId) {
+        if (!StringUtils.isEmpty(rootCatalogId)) {
             List<SysCatalog> sysCatalogs = sysCatalogQueryService.getCatalogTreeListByRootId(rootCatalogId);
-            if(CollectionUtils.isEmpty(sysCatalogs)){
+            if (CollectionUtils.isEmpty(sysCatalogs)) {
                 return null;
             }
             Map<String, Object> resourceTree = new HashMap<>();
-            for(SysCatalog sysCatalog:sysCatalogs){
-                if(sysCatalog.getParentId().equals("0")){
+            for (SysCatalog sysCatalog : sysCatalogs) {
+                if (sysCatalog.getParentId().equals("0")) {
                     sysCatalog.setParentId("");
                 }
             }
@@ -98,38 +102,38 @@ public class WebgisConfigServiceImpl implements WebgisConfigService {
             );
             List layers = (List) parseConfig(webgisCatalogLayers);
             catalogTree.addAll(layers);
-            resourceTree.put("allDataList",catalogTree);
-            resourceTree.put("replaceFields",JSON.parse("{\n" +
+            resourceTree.put("allDataList", catalogTree);
+            resourceTree.put("replaceFields", JSON.parse("{\n" +
                     "                       title: 'resourceName',\n" +
                     "                       key: 'resourceId'\n" +
                     "                     }"));
             return resourceTree;
-        }else{
+        } else {
             return Collections.emptyMap();
         }
     }
 
     @Override
-    public WebgisConfigData convert2ToolbarConfig(List<WebgisToolbarDo> toolbarDos){
+    public WebgisConfigData convert2ToolbarConfig(List<WebgisToolbarDo> toolbarDos) {
         WebgisConfigData re = new WebgisConfigData();
-        if(!CollectionUtils.isEmpty(toolbarDos)){
+        if (!CollectionUtils.isEmpty(toolbarDos)) {
             List<WebgisToolbarDo> horizontalToolbarDos = new ArrayList<>();
             List<WebgisToolbarDo> verticalToolbarDos = new ArrayList<>();
-            for(WebgisToolbarDo toolbarDo:toolbarDos){
+            for (WebgisToolbarDo toolbarDo : toolbarDos) {
                 toolbarDo.setToolbarLocation(PositionTypeEnum.get(toolbarDo.getToolbarLocation()).name());
-                if(BASIC_TYPE.equals(toolbarDo.getType())){
+                if (BASIC_TYPE.equals(toolbarDo.getType())) {
                     verticalToolbarDos.add(toolbarDo);
-                }else{
+                } else {
                     horizontalToolbarDos.add(toolbarDo);
                 }
             }
-            List verticalToolbars = (List)parseConfig(verticalToolbarDos);
+            List verticalToolbars = (List) parseConfig(verticalToolbarDos);
             List horizontalToolbars = (List) parseConfig(horizontalToolbarDos);
             handleSubToolBarConfig(verticalToolbars);
             handleSubToolBarConfig(horizontalToolbars);
             re.setHorizontalToolbars(horizontalToolbars);
             re.setVerticalToolbars(verticalToolbars);
-        }else{
+        } else {
             re.setHorizontalToolbars(Collections.emptyList());
             re.setVerticalToolbars(Collections.emptyList());
         }
@@ -138,39 +142,40 @@ public class WebgisConfigServiceImpl implements WebgisConfigService {
 
 
     @Override
-    public Object parseConfig(Object obj){
-        try{
+    public Object parseConfig(Object obj) {
+        try {
             return AppConfigParser.parse(obj);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new GafException(e.getMessage());
         }
     }
-    private void handleSubToolBarConfig(List toolbars){
-        for(Object toolbar:toolbars){
-            if(toolbar instanceof Map){
-                Map<String,Object> toolbarsMap = (Map)toolbar;
+
+    private void handleSubToolBarConfig(List toolbars) {
+        for (Object toolbar : toolbars) {
+            if (toolbar instanceof Map) {
+                Map<String, Object> toolbarsMap = (Map) toolbar;
                 List buttons = (List) toolbarsMap.get("buttons");
-                if(CollectionUtils.isEmpty(buttons)){
-                    return ;
+                if (CollectionUtils.isEmpty(buttons)) {
+                    return;
                 }
-                for(Object button:buttons){
-                    if(button instanceof Map){
-                        Map<String,Object> buttonMap = (Map)button;
+                for (Object button : buttons) {
+                    if (button instanceof Map) {
+                        Map<String, Object> buttonMap = (Map) button;
                         String name = (String) buttonMap.get("name");
                         String subToolbarId = (String) buttonMap.get("children");
-                        if(!StringUtils.isEmpty(subToolbarId)){
+                        if (!StringUtils.isEmpty(subToolbarId)) {
                             WebgisToolbarDo subToolbarDo = null;
-                            try{
+                            try {
                                 subToolbarDo = webgisToolbarService.getDoById(subToolbarId);
-                                List children = (List)parseConfig(subToolbarDo.getWebgisToolbarButtonDos());
-                                for(Object childrenButton:children){
-                                    if(childrenButton instanceof Map){
-                                        Map<String,Object> childrenButtonMap = (Map)childrenButton;
-                                        childrenButtonMap.put("selectedName",name);
+                                List children = (List) parseConfig(subToolbarDo.getWebgisToolbarButtonDos());
+                                for (Object childrenButton : children) {
+                                    if (childrenButton instanceof Map) {
+                                        Map<String, Object> childrenButtonMap = (Map) childrenButton;
+                                        childrenButtonMap.put("selectedName", name);
                                     }
                                 }
-                                buttonMap.put("children",children);
-                            }catch (Exception e){
+                                buttonMap.put("children", children);
+                            } catch (Exception e) {
                             }
                         }
                     }

@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.sys.mgt.service.impl;
 
 import com.supermap.gaf.sys.mgt.commontype.SysCatalog;
@@ -16,8 +16,7 @@ import java.util.List;
 
 /**
  * @author wangxiaolong
- * @date:2021/3/25
- * 目录服务类
+ * @date:2021/3/25 目录服务类
  */
 @Service
 public class SysCatalogQueryServiceImpl implements SysCatalogQueryService {
@@ -38,7 +37,7 @@ public class SysCatalogQueryServiceImpl implements SysCatalogQueryService {
     }
 
     @Override
-    public List<SysCatalog> getCatalogTreeListByRootId(String rootCatalogId){
+    public List<SysCatalog> getCatalogTreeListByRootId(String rootCatalogId) {
         return sysCatalogQueryMapper.getCatalogTreeListByRootId(rootCatalogId);
     }
 

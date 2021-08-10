@@ -23,6 +23,7 @@ public class AsyncConfig {
         asyncTaskExecutor.initialize();
         return asyncTaskExecutor;
     }
+
     @Bean("taskExecutor")
     public AsyncTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor asyncTaskExecutor = new ThreadPoolTaskExecutor();

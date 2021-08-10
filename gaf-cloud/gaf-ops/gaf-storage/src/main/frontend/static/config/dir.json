@@ -1,0 +1,76 @@
+{"one":{
+  "splitLayersData": [
+
+    {
+      "resourceId": 7189,
+      "pid": "",
+      "resourceName": "分层分户楼层",
+      "resourceLocation":"http://1.202.165.56:8090/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_fcfh",
+      "resourceTag": "RESTREALSPACE-DATA",
+      "resourceTagCN": "三维服务",
+      "sourceType": "SUPERMAP",
+      "sourceTypeName": "SuperMap",
+      "opacity": 1,
+      "isAttributesSave": true,
+      "isHierarchicalHousehold": true,
+      "cameraCoordinate": {
+        "altitude": 62.46821991822186,
+        "heading": 6.2730744988966975,
+        "latitude": 30.484909153821587,
+        "tilt": 72.7806564730819,
+        "longitude": 114.30882900103435
+      }
+    }
+  ],
+  "checkedLayerKeys": [],
+  "link": true
+},
+"two":{
+  "splitLayersData": [
+    {
+      "resourceId": 7169,
+      "pid": "",
+      "resourceName": "G_V01",
+      "resourceLocation":"http://1.202.165.56:8090/iserver/services/3D-cim_gis/rest/realspace/datas/G_V01",
+      "resourceTag": "RESTREALSPACE-DATA",
+      "resourceTagCN": "三维服务",
+      "sourceType": "SUPERMAP",
+      "sourceTypeName": "SuperMap",
+      "opacity": 1,
+      "location": true,
+      "supportDataService": true, 
+      "layerName": "Building@CBD",
+      "dataSetName": "Building", 
+      "cameraCoordinate": {
+        "altitude": 114.3764743079913,
+        "heading": 5.654236538948201,
+        "latitude": 30.466650989920087,
+        "tilt": 70.60882457049563,
+        "longitude": 114.25722359896619
+      }
+    },
+    {
+      "resourceId": 7189,
+      "pid": "",
+      "resourceName": "分层分户楼层",
+      "resourceLocation":"http://1.202.165.56:8090/iserver/services/3D-cim_gis/rest/realspace/datas/wuh_fcfh",
+      "resourceTag": "RESTREALSPACE-DATA",
+      "resourceTagCN": "三维服务",
+      "sourceType": "SUPERMAP",
+      "sourceTypeName": "SuperMap",
+      "opacity": 1,
+      "isAttributesSave": true,
+      "isHierarchicalHousehold": true,
+      "cameraCoordinate": {
+        "altitude": 62.46821991822186,
+        "heading": 6.2730744988966975,
+        "latitude": 30.484909153821587,
+        "tilt": 72.7806564730819,
+        "longitude": 114.30882900103435
+      }
+    }
+  ],
+  "checkedLayerKeys": [7169, 7189],
+  "link": true
+}
+}

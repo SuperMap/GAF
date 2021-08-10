@@ -2,7 +2,7 @@
  * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
  * This program are made available under the terms of the Apache License, Version 2.0
  * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
-*/
+ */
 package com.supermap.gaf.rest.utils;
 
 import java.io.UnsupportedEncodingException;
@@ -23,7 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author:yj
  * @date:2021/3/25
-*/
+ */
 public class HttpUtil {
 
     public static Map<String, String> getURLParameters(String queryString) {
@@ -102,33 +102,33 @@ public class HttpUtil {
         }
         return HttpUtil.getURLParameters(paramString);
     }
-    
+
     public static MediaType getAcceptMediaType(HttpServletRequest request) {
         String accept = request == null ? null : request.getHeader("Accept");
         MediaType type = MediaType.APPLICATION_JSON_TYPE;
-        if(StringUtils.isNotEmpty(accept) && accept.indexOf(",") > -1) {
+        if (StringUtils.isNotEmpty(accept) && accept.indexOf(",") > -1) {
             accept = accept.split(",")[0];
         }
         try {
             type = MediaType.valueOf(accept);
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
-        if(type.toString().equals(MediaType.WILDCARD) || type.toString().startsWith("application/signed-exchange")){
+        if (type.toString().equals(MediaType.WILDCARD) || type.toString().startsWith("application/signed-exchange")) {
             String uri = request.getRequestURI();
-            if(uri.endsWith("js")){
+            if (uri.endsWith("js")) {
                 type = MediaType.valueOf("application/javascript");
             }
-            if(uri.endsWith("css")){
+            if (uri.endsWith("css")) {
                 type = MediaType.valueOf("text/css");
             }
         }
 
         return type;
     }
-    
+
     /**
      * 获取请求ip
-     * 
+     *
      * @param request
      * @return
      */
@@ -150,9 +150,9 @@ public class HttpUtil {
         ip = request.getRemoteAddr();
         return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
     }
-    
-    public static Map<String,String> getRequestHeaders(HttpServletRequest request){
-        Map<String,String> headerMap = new HashMap<>();
+
+    public static Map<String, String> getRequestHeaders(HttpServletRequest request) {
+        Map<String, String> headerMap = new HashMap<>();
         Enumeration<String> headers = request.getHeaderNames();
         while (headers.hasMoreElements()) {
             String header = (String) headers.nextElement();
@@ -160,11 +160,12 @@ public class HttpUtil {
         }
         return headerMap;
     }
-    
+
     /**
      * <p>
-     *  检查rest请求是否编辑操作（对资源产生影响） 
+     * 检查rest请求是否编辑操作（对资源产生影响）
      * </p>
+     *
      * @param method
      * @return
      * @since 1.0.0
@@ -178,6 +179,6 @@ public class HttpUtil {
             return true;
         }
         return false;
-    } 
+    }
 
 }
