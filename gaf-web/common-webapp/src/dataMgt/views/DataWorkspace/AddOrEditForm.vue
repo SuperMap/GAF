@@ -73,7 +73,7 @@
             ]"
             :placeholder="isfiletype ? '请输入工作空间文件' : '请输入服务器地址'"
             allow-clear
-            :style=" isfiletype ? 'width:85%' : ''"
+            :style=" isfiletype ? 'width:77%' : ''"
           />
           <gaf-upload
             :override="operation === 3"
@@ -81,7 +81,8 @@
             v-if="isfiletype"
             accept=".smwu,.sxwu"
             text="选择" :dir="dirPath"
-            minioServiceUrl="/storage/file-storage/"
+            minioServiceUrl="/storage/api/tenant-created-first/"
+            config-name="default"
             @uploadComplate="uploadChange"
             @fileRemove="fileRemove"
           ></gaf-upload>

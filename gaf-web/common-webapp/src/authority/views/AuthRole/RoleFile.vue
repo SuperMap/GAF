@@ -279,10 +279,10 @@ export default {
       let url
       if (!record.expand1) {
         if (record.objectType) {
-          url = `/storage/api/${this.configName}/list-objects/${record.name}?hasPermissions=true`;
+          url = `/permissions/ower/${this.role.roleId}/${this.configName}/list-objects/${record.name}?hasPermissions=true`;
         } else {
           this.configName = record.name
-          url = `/storage/api/${this.configName}/list-objects/?hasPermissions=true`;
+          url = `/permissions/ower/${this.role.roleId}/${this.configName}/list-objects/?hasPermissions=true`;
         }
         this.loading1 = true
         const res = await this.$axios.$get(url);
@@ -309,7 +309,7 @@ export default {
     },
     async submitForm() {
       this.loading = true
-      let url = `/storage/manager/permissions/ower/${this.role.roleId}`
+      let url = `/storage/permissions/ower/${this.role.roleId}`
       this.getCorrectData(this.dataList)
       const res = await this.$axios.$put(url, this.resultData)
       this.loading = false

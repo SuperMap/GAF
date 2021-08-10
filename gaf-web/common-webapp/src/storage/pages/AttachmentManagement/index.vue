@@ -18,7 +18,7 @@
               :max-upload="5"
               :dir="dir"
               :config-name="configName"
-              minio-service-url="/storage/api/platform/"
+              minio-service-url="/storage/api/tenant-created/"
               @uploadComplate="uploadComplate"
             ></gaf-upload>
           </div>
@@ -445,14 +445,14 @@ export default {
     handleDownload(row) {
       gafDownloadUtil(
         this.$axios,
-        `/storage/api/platform/`,
+        `/storage/api/tenant-created/`,
         this.configName,
         row.name
       )
     },
     // 预览
     preview(row) {
-      const gafstorage = new GafStorage(this.$axios, '/storage/api/platform/')
+      const gafstorage = new GafStorage(this.$axios, '/storage/api/tenant-created/')
       gafstorage.setConfigName(this.configName)
       gafstorage.getDownloadSignUrl(row.name, true).then((data) => {
         this.urlImg = data.data.data
@@ -519,7 +519,7 @@ export default {
     },
     // 删除数据
     async handleDelete(row) {
-      const url = `/storage/api/platform/${this.configName}/` + row.name
+      const url = `/storage/api/tenant-created/${this.configName}/` + row.name
       const rst = await this.$axios.delete(url)
       if (rst.data.isSuccessed) {
         this.$message.success('删除成功')
@@ -567,7 +567,7 @@ export default {
     },
     async getList(prefix) {
       this.loading = true
-      let url = `/storage/api/platform/${this.configName}/list-objects/`
+      let url = `/storage/api/tenant-created/${this.configName}/list-objects/`
       if (this.searchText.trim() && this.searchedColumn) {
         url =
           url +

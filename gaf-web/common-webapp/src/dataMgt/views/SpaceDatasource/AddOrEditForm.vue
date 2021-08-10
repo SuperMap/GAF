@@ -121,7 +121,7 @@
                   allow-clear
                   :style="operation !== 1 ? 'width:69%':''"
                 />
-                <gaf-upload v-if="operation !== 1 " @fileRemove="fileRemove" accept=".udb,.udbx,.udd"  text="选择" dir="datas/" minioServiceUrl="/storage/file-storage/" @uploadComplate="uploadChange"></gaf-upload>
+                <gaf-upload v-if="operation !== 1 " @fileRemove="fileRemove" accept=".udb,.udbx,.udd"  text="选择" dir="datas/" minioServiceUrl="/storage/api/tenant-created-first/" config-name="default" @uploadComplate="uploadChange"></gaf-upload>
               </a-form-item>
               <a-form-item v-if="isDatabaseType" label="数据库名称">
                 <a-input

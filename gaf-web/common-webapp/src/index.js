@@ -45,7 +45,6 @@ import SpaceDatasource from './dataMgt/pages/SpaceDatasource'
 import SpaceDatasourceTemplate from './dataMgt/pages/SpaceDatasourceTemplate'
 import DataRights from './dataMgt/pages/DataRights'
 
-import AttachmentManagement from './storage/pages/AttachmentManagement'
 import StorageManagement from './storage/pages/StorageManagement'
 
 const components = [
@@ -66,7 +65,7 @@ const components = [
     //
     DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,
     //
-    AttachmentManagement,StorageManagement
+    StorageManagement
 ];
 
 const install = function(Vue) {
@@ -120,7 +119,7 @@ export {
     //
     DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,
     //
-    AttachmentManagement,StorageManagement
+    StorageManagement
 };
 
 export default {

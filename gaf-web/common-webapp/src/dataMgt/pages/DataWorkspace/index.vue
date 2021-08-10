@@ -427,7 +427,8 @@ export default {
             if (itemChildren.value === row.typeCode) {
               gafDownloadUtil(
                 this.$axios,
-                "/storage/file-storage/",
+                "/storage/api/tenant-created-first/",
+                'default',
                 row.server
               );
               isFileType = true;

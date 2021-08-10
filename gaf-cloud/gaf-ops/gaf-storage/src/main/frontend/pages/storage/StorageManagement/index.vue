@@ -418,7 +418,7 @@ export default {
     },
     // 删除数据
     async handleDelete(row) {
-      const url = `/storage/tenant-server-configs/` + row.id
+      const url = `/storage/global-server-configs/` + row.id
       const rst = await this.$axios.delete(url)
       if (rst.data.isSuccessed) {
         this.$message.success('删除成功')
@@ -437,7 +437,7 @@ export default {
     },
     // 批量删除
     async batchDel() {
-      const url = '/storage/tenant-server-configs/'
+      const url = '/storage/global-server-configs/'
       const selectedRowKeys = this.selectedRowKeys
       if (selectedRowKeys.length !== 0) {
         const rst = await this.$axios.delete(url, { data: selectedRowKeys })

@@ -250,7 +250,7 @@ export default {
           event.preventDefault()
           return false
         }
-        let url = `/storage/global-server-configs`
+        let url = `/storage//tenant-server-configs`
         const data = this.addOrEditForm.getFieldsValue()
         this.loading = true
         if (this.dataId) {

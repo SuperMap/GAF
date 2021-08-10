@@ -221,7 +221,7 @@ export default {
               ? this.dataNode.name
               : this.dataNode.name + '/')
         }
-        const gafstorage = new GafStorage(this.$axios, '/storage/api/platform/')
+        const gafstorage = new GafStorage(this.$axios, '/storage/api/tenant-created/')
         await gafstorage.setConfigName(this.configName)
         await gafstorage.createEmptyDir(this.dataNode.name)
         // this.editData.unshift(this.dataNode)

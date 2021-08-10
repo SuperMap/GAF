@@ -476,7 +476,7 @@ export default {
     },
     async getList() {
       this.loading = true
-      let url = `/storage/global-server-configs?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`
+      let url = `/storage/tenant-server-configs?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`
       if (this.searchText.trim() && this.searchedColumn) {
         url =
           url +

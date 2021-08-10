@@ -285,7 +285,7 @@ export default {
         this.days = 7
       }
       const allMinutes = this.days * 1440 + this.hours * 60 + this.minutes
-      const url = `/storage/api/platform/${this.configName}/share/${this.fileData.name}?expiration=${allMinutes}`
+      const url = `/storage/api/tenant-created/${this.configName}/share/${this.fileData.name}?expiration=${allMinutes}`
       const res = await this.$axios.$get(url)
       if (res.isSuccessed) {
         this.linkValue = res.data.download
