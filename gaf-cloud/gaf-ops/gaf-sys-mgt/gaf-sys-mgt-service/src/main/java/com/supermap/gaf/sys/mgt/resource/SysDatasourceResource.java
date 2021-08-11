@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Component
 @Api(value = "数据源接口")
-public class SysResourceDatasourceResource {
+public class SysDatasourceResource {
 
     @Autowired
     private SysResourceDatasourceClient sysResourceDatasourceClient;
