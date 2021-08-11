@@ -38,7 +38,6 @@ public class ResourceManager implements IMessageConveyor {
         try {
             this.resourceBundle = ResourceBundle.getBundle(paramString);
         } catch (Exception localException) {
-            System.err.println("bundle:" + paramString + " is null");
         }
     }
 
