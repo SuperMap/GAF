@@ -17,5 +17,7 @@
     <include  file="./gaf-storage.xml" relativeToChangelogFile="true"/>
     <include  file="./gaf-sys-mgt.xml" relativeToChangelogFile="true"/>
 
+    <include file="../changelog/component-module-menu/gaf-storage.sql" relativeToChangelogFile="true"/>
+
 
 </databaseChangeLog>
