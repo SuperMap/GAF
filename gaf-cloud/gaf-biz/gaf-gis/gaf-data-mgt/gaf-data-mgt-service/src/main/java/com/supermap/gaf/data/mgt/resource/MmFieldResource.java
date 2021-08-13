@@ -27,6 +27,7 @@ public class MmFieldResource{
     @Autowired
     private MmFieldService mmFieldService;
 
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "根据模型类型查询对应的字段的数据类型集合", notes = "根据模型类型查询对应的字段的数据类型集合")
@@ -39,7 +40,6 @@ public class MmFieldResource{
         mr.setMessage("查询成功");
         return mr;
     }
-
 
 	@GET
     @Produces({MediaType.APPLICATION_JSON})

@@ -58,5 +58,10 @@ public interface MmPhysicsService {
      * @return 
      */
     MmPhysics updateMmPhysics(MmPhysics mmPhysics);
-    
+
+    /**
+     * 批量物理化
+     * @param mmPhysicsList 物理化表集合
+     */
+    void physicalization(List<MmPhysics> mmPhysicsList);
 }

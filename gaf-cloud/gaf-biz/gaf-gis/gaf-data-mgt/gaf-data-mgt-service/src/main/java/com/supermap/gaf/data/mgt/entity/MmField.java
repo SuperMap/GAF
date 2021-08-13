@@ -68,4 +68,7 @@ public class MmField implements Serializable{
     private Date updatedTime;
     @ApiModelProperty("更新人")
     private String updatedBy;
+
+    @ApiModelProperty("排序")
+    private Integer sortSn;
 }

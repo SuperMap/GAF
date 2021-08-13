@@ -17,6 +17,7 @@
         <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
         <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="sort_sn" jdbcType="SMALLINT" property="sortSn" />
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -27,13 +28,16 @@
         field_type,
         field_length,
         field_default,
+        field_precision,
         field_not_null,
         field_primary_key,
         description,
         created_time,
         created_by,
         updated_time,
-        updated_by    </sql>
+        updated_by,
+        sort_sn
+    </sql>
     <select id="select" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM "mm_field"
@@ -58,7 +62,8 @@
             <if test='createdTime != null'>  created_time = #{createdTime} AND </if>
             <if test='createdBy != null'>  created_by = #{createdBy} AND </if>
             <if test='updatedTime != null'>  updated_time = #{updatedTime} AND </if>
-            <if test='updatedBy != null'>  updated_by = #{updatedBy} AND</if>
+            <if test='updatedBy != null'>  updated_by = #{updatedBy} AND </if>
+            <if test='sortSn != null'>  sort_sn = #{sortSn} AND </if>
             <if test ='null != equalFieldName'>  ${equalFieldName}
                 <choose>
                     <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
@@ -89,6 +94,7 @@
 			<if test ='null != createdBy'>created_by,</if>
 			updated_time,
 			<if test ='null != updatedBy'>updated_by,</if>
+			<if test ='null != sortSn'>sort_sn,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test ='null != fieldId'>#{fieldId},</if>
@@ -106,12 +112,13 @@
 			<if test ='null != createdBy'>#{createdBy},</if>
 			now(),
 			<if test ='null != updatedBy'>#{updatedBy},</if>
+			<if test ='null != sortSn'>#{sortSn},</if>
         </trim>
     </insert>
 	<insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO "mm_field"(<include refid="Base_Column_List" />) VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (  #{item.fieldId}  ,  #{item.tableId}  ,  #{item.fieldName}  ,  #{item.fieldAlias}  ,  #{item.fieldType}  ,  #{item.fieldLength}  , #{item.fieldPrecision},  #{item.fieldDefault}  ,  #{item.fieldNotNull}  ,  #{item.fieldPrimaryKey}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+            (  #{item.fieldId}  ,  #{item.tableId}  ,  #{item.fieldName}  ,  #{item.fieldAlias}  ,  #{item.fieldType}  ,  #{item.fieldLength}  , #{item.fieldPrecision},  #{item.fieldDefault}  ,  #{item.fieldNotNull}  ,  #{item.fieldPrimaryKey}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy} ,#{item.sortSn} )
         </foreach>
     </insert>
 	<update id="batchDelete" parameterType="java.util.List">
@@ -140,6 +147,7 @@
 			description = #{description},
 			updated_time = now(),
 			updated_by = #{updatedBy},
+            <if test ="null != sortSn and '' != sortSn">sort_sn = #{sortSn},</if>
         </set>
         WHERE field_id = #{fieldId}
     </update>

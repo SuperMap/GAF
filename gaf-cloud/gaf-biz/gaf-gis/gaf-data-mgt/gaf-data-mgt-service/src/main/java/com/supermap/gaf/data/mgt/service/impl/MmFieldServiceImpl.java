@@ -40,7 +40,10 @@ public class MmFieldServiceImpl implements MmFieldService{
         }
         return  mmFieldMapper.select(fieldId);
     }
-	
+    public List<MmField> selectList(MmFieldSelectVo mmFieldSelectVo) {
+        return mmFieldMapper.selectList(mmFieldSelectVo);
+    }
+
 	@Override
     public Page<MmField> listByPageCondition(MmFieldSelectVo mmFieldSelectVo, int pageNum, int pageSize) {
         PageInfo<MmField> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {

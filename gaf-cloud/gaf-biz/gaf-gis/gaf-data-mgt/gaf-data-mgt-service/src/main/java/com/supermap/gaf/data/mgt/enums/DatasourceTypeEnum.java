@@ -6,8 +6,10 @@
 package com.supermap.gaf.data.mgt.enums;
 
 import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
+import com.supermap.gaf.data.mgt.entity.MmField;
 import com.supermap.gaf.data.mgt.model.FieldTypeInfo;
 import com.supermap.gaf.data.mgt.support.ConnectionInfoConverter;
+import com.supermap.gaf.data.mgt.support.DdlFragmentConverter;
 import com.supermap.gaf.data.mgt.support.FieldTypesSupplier;
 import com.supermap.gaf.data.mgt.support.JdbcConnectionInfo;
 
@@ -20,9 +22,16 @@ import java.util.List;
  * @author wxl
  * @since 2021/7/22
  */
-public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSupplier {
+public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSupplier, DdlFragmentConverter {
 
     POSTGRESQL("1") {
+        @Override
+        public String convertToDdlFragment(MmField mmField) {
+
+
+            return null;
+        }
+
         @Override
         public List<FieldTypeInfo> getFieldTypes() {
             return PostgresqlFieldTypeEnum.toFieldTypeInfoList();
@@ -42,6 +51,13 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         }
 
         @Override
+        public String convertToDdlFragment(MmField mmField) {
+
+
+            return null;
+        }
+
+        @Override
         public JdbcConnectionInfo convert2JdbcConnectionInfo(SysResourceDatasource datasource) {
             String url = "jdbc:oracle:thin:@//" + datasource.getAddr() + ":" + datasource.getDbName();
             String driverClassName = "oracle.jdbc.driver.OracleDriver";
@@ -55,6 +71,13 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         }
 
         @Override
+        public String convertToDdlFragment(MmField mmField) {
+
+
+            return null;
+        }
+
+        @Override
         public JdbcConnectionInfo convert2JdbcConnectionInfo(SysResourceDatasource datasource) {
             String url = "jdbc:mysql://" + datasource.getAddr() + "/" + datasource.getDbName() + "?serverTimezone=UTC";
             String driverClassName = "org.postgresql.Driver";
@@ -65,6 +88,12 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         @Override
         public List<FieldTypeInfo> getFieldTypes() {
             return Collections.EMPTY_LIST;
+        }
+
+        @Override
+        public String convertToDdlFragment(MmField mmField) {
+
+            return null;
         }
 
         @Override

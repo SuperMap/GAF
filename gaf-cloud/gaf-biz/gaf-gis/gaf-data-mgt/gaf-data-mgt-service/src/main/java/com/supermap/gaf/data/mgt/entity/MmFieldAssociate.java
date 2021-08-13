@@ -30,16 +30,16 @@ public class MmFieldAssociate implements Serializable{
     private String modelId;
     @NotNull
     @ApiModelProperty("字段1逻辑表id")
-    private String field1TableId;
+    private String sourceFieldTableId;
     @NotNull
     @ApiModelProperty("字段2逻辑表id")
-    private String field2TableId;
+    private String targetFieldTableId;
     @NotNull
     @ApiModelProperty("字段1字段表id")
-    private String field1Id;
+    private String sourceFieldId;
     @NotNull
     @ApiModelProperty("字段2字段表id")
-    private String field2Id;
+    private String targetFieldId;
     /**
     * 默认值1：now()
     */

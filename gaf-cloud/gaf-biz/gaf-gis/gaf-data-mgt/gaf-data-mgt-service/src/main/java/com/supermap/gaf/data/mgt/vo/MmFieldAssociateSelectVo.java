@@ -44,18 +44,18 @@ public class MmFieldAssociateSelectVo {
         @QueryParam("modelId")
         @ApiModelProperty("模型id")
         private String modelId;
-        @QueryParam("field1TableId")
+        @QueryParam("sourceFieldTableId")
         @ApiModelProperty("字段1逻辑表id")
-        private String field1TableId;
-        @QueryParam("field2TableId")
+        private String sourceFieldTableId;
+        @QueryParam("targetFieldTableId")
         @ApiModelProperty("字段2逻辑表id")
-        private String field2TableId;
-        @QueryParam("field1Id")
+        private String targetFieldTableId;
+        @QueryParam("sourceFieldId")
         @ApiModelProperty("字段1字段表id")
-        private String field1Id;
-        @QueryParam("field2Id")
+        private String sourceFieldId;
+        @QueryParam("targetFieldId")
         @ApiModelProperty("字段2字段表id")
-        private String field2Id;
+        private String targetFieldId;
         @QueryParam("createdTime")
         @ApiModelProperty("创建时间")
         private Date createdTime;

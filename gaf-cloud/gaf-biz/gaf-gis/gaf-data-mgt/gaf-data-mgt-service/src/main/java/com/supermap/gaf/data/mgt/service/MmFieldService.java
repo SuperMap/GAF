@@ -19,6 +19,13 @@ public interface MmFieldService {
     * @return
     */
     MmField getById(String fieldId);
+
+    /**
+     * 条件查询
+     * @param mmFieldSelectVo 查询条件
+     * @return 字段集合
+     */
+    List<MmField> selectList(MmFieldSelectVo mmFieldSelectVo);
 	
 	/**
      * 分页条件查询

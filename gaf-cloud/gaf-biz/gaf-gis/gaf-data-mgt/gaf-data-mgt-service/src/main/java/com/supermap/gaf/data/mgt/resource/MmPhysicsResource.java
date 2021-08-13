@@ -44,14 +44,15 @@ public class MmPhysicsResource{
 		return MessageResult.successe(Page.class).data(page).status(200).message("查询成功").build();
     }
 
-    //@POST
-    //@Produces({MediaType.APPLICATION_JSON})
-    //@ApiOperation(value = "批量物理化", notes = "批量物理化")
-    //@Path("/physicalization-batch")
-    //public MessageResult<Void> physicalization(List<> logicTableIds, MmPhysics mmPhysics ){
-    //    // Page<MmTable> page = mmTableService.listByPageCondition(mmTableSelectVo, pageNum, pageSize);
-    //    return MessageResult.successe(Void.class).data(null).status(200).message("查询成功").build();
-    //}
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "批量物理化", notes = "批量物理化")
+    @Path("/physicalization-batch")
+    public MessageResult<Void> physicalization(List<MmPhysics> mmPhysicsList){
+        mmPhysicsService.physicalization(mmPhysicsList);
+        // Page<MmTable> page = mmTableService.listByPageCondition(mmTableSelectVo, pageNum, pageSize);
+        return MessageResult.successe(Void.class).data(null).status(200).message("查询成功").build();
+    }
 
 	@POST
     @Produces({MediaType.APPLICATION_JSON})

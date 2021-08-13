@@ -67,12 +67,13 @@ public class ConvertHelper {
     }
 
 
-    /**
-     * 解析文件型数据源在oss存储里的真实路径
-     *
-     * @param addr 文件型数据源的路径
-     * @return oss存储里的真实路径
-     */
+
+        /**
+         * 解析文件型数据源在oss存储里的真实路径
+         *
+         * @param addr 文件型数据源的路径
+         * @return oss存储里的真实路径
+         */
     public String resolve(String addr) {
         return storageClient.getVolumePath(addr, SecurityUtilsExt.getUser().getAuthUser().getTenantId(), false).getPath();
     }
