@@ -3005,10 +3005,10 @@ d3-zoom@1:
     d3-selection "1"
     d3-transition "1"
 
-d3@^5.0.0:
-  version "5.16.0"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/d3/-/d3-5.16.0.tgz#9c5e8d3b56403c79d4ed42fbd62f6113f199c877"
-  integrity sha512-4PL5hHaHwX4m7Zr1UapXW23apo6pexCgdetdJ5kTmADpG/7T9Gkxw0M0tf/pjoB63ezCCm0u5UaFYy2aMt0Mcw==
+d3@5.0.0:
+  version "5.0.0"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/d3/-/d3-5.0.0.tgz#b373ce8ccc953cbe09cef4c1e7e2223b42441df9"
+  integrity sha512-JAuq1vvO8AQnAvZ5Gi3OsUWAoB1dOZlIQZEcj+JzEnafmwLlrWcW24o5I7fM9x+tsrZpsi8n9L12iHyHr0HTlg==
   dependencies:
     d3-array "1"
     d3-axis "1"

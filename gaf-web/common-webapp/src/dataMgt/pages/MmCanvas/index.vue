@@ -1,9 +1,7 @@
 <template>
   <div class="app-container">
-    <div class="page-left">
-        
-    </div>
-    <div class="page-right">
+    <div class="page-single">
+      <a-button type="primary" shape="circle" icon="rollback" @click="backModel" class="back"/>
       <svg
         id='mmCavasSvg'
         :width='width'
@@ -17,9 +15,14 @@
 import "~/assets/css/common.css";
 import * as d3 from 'd3'
 export default {
+  props: {
+    modelId: {
+      type: String,
+      default: null,
+    },
+  },
   data() {
     return {
-      modelId: null,
       nodes: [],
       links: [],
       nodeLink: new Map(),
@@ -80,8 +83,8 @@ export default {
   methods: {
     async getData() {
       const that = this
-      that.modelId = this.$route.query.modelId
-      that.modelId = 'eda861df-592c-4856-9ef3-df5bc4004d69'
+      // that.modelId = this.$route.query.modelId
+      // that.modelId = 'eda861df-592c-4856-9ef3-df5bc4004d69'
       const url = `/data-mgt/model-manage/models/${that.modelId}/layout`;
       const res = await this.$axios.get(url);
       if (res.data.successed) {
@@ -396,6 +399,20 @@ export default {
         that.update()
       }
     },
+    backModel() {
+      this.$emit('backModel')
+    }
   },
 }
 </script>
+<style scoped>
+.back {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 100;
+}
+.page-single {
+  position: relative;
+}
+</style>
