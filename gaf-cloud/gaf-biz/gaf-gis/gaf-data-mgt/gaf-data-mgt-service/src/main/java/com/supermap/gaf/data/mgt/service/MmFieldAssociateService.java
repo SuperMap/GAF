@@ -27,8 +27,14 @@ public interface MmFieldAssociateService {
      * @return 分页对象
      */
 	Page<MmFieldAssociate> listByPageCondition(MmFieldAssociateSelectVo mmFieldAssociateSelectVo, int pageNum, int pageSize);
-	
-	
+
+    /**
+     * 条件查询
+     * @param mmFieldAssociateSelectVo
+     * @return
+     */
+	List<MmFieldAssociate> selectList(MmFieldAssociateSelectVo mmFieldAssociateSelectVo);
+
     /**
      * 新增字段关联
      * @return 

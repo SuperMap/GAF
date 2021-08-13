@@ -46,7 +46,12 @@ public class MmTableServiceImpl implements MmTableService{
         return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
     }
 
-	@Override
+    @Override
+    public List<MmTable> selectList(MmTableSelectVo mmTableSelectVo) {
+        return mmTableMapper.selectList(mmTableSelectVo);
+    }
+
+    @Override
     public MmTable insertMmTable(MmTable mmTable){
         // 主键非GeneratedKey，此处添加自定义主键生成策略
 		mmTable.setTableId(UUID.randomUUID().toString());

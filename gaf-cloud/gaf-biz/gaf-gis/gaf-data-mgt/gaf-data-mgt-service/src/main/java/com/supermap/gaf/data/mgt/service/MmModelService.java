@@ -2,6 +2,7 @@ package com.supermap.gaf.data.mgt.service;
 
 import com.supermap.gaf.commontypes.tree.DefaultTreeNode;
 import com.supermap.gaf.data.mgt.entity.MmModel;
+import com.supermap.gaf.data.mgt.entity.vo.MmLayoutVO;
 import com.supermap.gaf.data.mgt.util.Page;
 import com.supermap.gaf.data.mgt.vo.MmModelSelectVo;
 
@@ -65,4 +66,11 @@ public interface MmModelService {
      * @return
      */
     List<DefaultTreeNode> modelTablesTree();
+
+    /**
+     * 查询模型画布数据
+     * @param modelId
+     * @return
+     */
+    MmLayoutVO getMmLayoutVO(String modelId);
 }

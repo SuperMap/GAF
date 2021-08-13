@@ -28,7 +28,17 @@ public interface MmPhysicsService {
      */
 	Page<MmPhysics> listByPageCondition(MmPhysicsSelectVo mmPhysicsSelectVo, int pageNum, int pageSize);
 	
-	
+
+	/**
+     * 模型id-分页查询
+     * @param modelId 模型id
+     * @param pageNum 当前页数
+     * @param pageSize 页面大小
+     * @return 分页对象
+     */
+	Page<MmPhysics> listByModelId(String modelId, int pageNum, int pageSize);
+
+
     /**
      * 新增物理
      * @return 

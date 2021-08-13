@@ -20,13 +20,6 @@ public interface MmFieldService {
     */
     MmField getById(String fieldId);
 
-    /**
-     * 条件查询
-     * @param mmFieldSelectVo 查询条件
-     * @return 字段集合
-     */
-    List<MmField> selectList(MmFieldSelectVo mmFieldSelectVo);
-	
 	/**
      * 分页条件查询
      * @param mmFieldSelectVo 查询条件
@@ -35,8 +28,14 @@ public interface MmFieldService {
      * @return 分页对象
      */
 	Page<MmField> listByPageCondition(MmFieldSelectVo mmFieldSelectVo, int pageNum, int pageSize);
-	
-	
+
+    /**
+     * 条件查询列表
+     * @param mmFieldSelectVo
+     * @return
+     */
+	List<MmField> selectList(MmFieldSelectVo mmFieldSelectVo);
+
     /**
      * 新增字段
      * @return 

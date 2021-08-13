@@ -46,7 +46,12 @@ public class MmFieldAssociateServiceImpl implements MmFieldAssociateService{
         return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
     }
 
-	@Override
+    @Override
+    public List<MmFieldAssociate> selectList(MmFieldAssociateSelectVo mmFieldAssociateSelectVo) {
+        return mmFieldAssociateMapper.selectList(mmFieldAssociateSelectVo);
+    }
+
+    @Override
     public MmFieldAssociate insertMmFieldAssociate(MmFieldAssociate mmFieldAssociate){
         // 主键非GeneratedKey，此处添加自定义主键生成策略
 		mmFieldAssociate.setFieldAssociateId(UUID.randomUUID().toString());

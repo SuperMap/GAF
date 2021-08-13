@@ -3,7 +3,10 @@ package com.supermap.gaf.data.mgt.resource;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.commontypes.tree.DefaultTreeNode;
 import com.supermap.gaf.data.mgt.entity.MmModel;
+import com.supermap.gaf.data.mgt.entity.MmPhysics;
+import com.supermap.gaf.data.mgt.entity.vo.MmLayoutVO;
 import com.supermap.gaf.data.mgt.service.MmModelService;
+import com.supermap.gaf.data.mgt.service.MmPhysicsService;
 import com.supermap.gaf.data.mgt.util.Page;
 import com.supermap.gaf.data.mgt.vo.MmModelSelectVo;
 import io.swagger.annotations.Api;
@@ -19,6 +22,7 @@ import java.util.List;
  * 模型接口
  * @author wxl 
  * @since yyyy-mm-dd
+ * /data-mgt/model-manage/models/
  */
 @Component
 @Api(value = "模型接口")
@@ -26,6 +30,8 @@ public class MmModelResource{
 
     @Autowired
     private MmModelService mmModelService;
+    @Autowired
+    private MmPhysicsService mmPhysicsService;
 	
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -103,8 +109,26 @@ public class MmModelResource{
         return MessageResult.data(model).status(200).message("更新操作成功").build();
     }
 
-	
-	
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "模型画布接口", notes = "模型画布接口")
+    @Path("/{modelId}/layout")
+    public MessageResult<MmLayoutVO> layout(@PathParam("modelId")String modelId){
+        MmLayoutVO mmLayoutVO = mmModelService.getMmLayoutVO(modelId);
+	    return MessageResult.successe(MmLayoutVO.class).data(mmLayoutVO).status(200).message("查询成功").build();
+    }
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "模型物理表查询", notes = "模型物理表查询")
+    @Path("/{modelId}/physics")
+    public MessageResult<Page> physics(@PathParam("modelId")String modelId,
+                                       @DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
+                                       @DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
+        Page<MmPhysics> page = mmPhysicsService.listByModelId(modelId,pageNum,pageSize);
+	    return MessageResult.successe(Page.class).data(page).status(200).message("查询成功").build();
+    }
 
 
 }

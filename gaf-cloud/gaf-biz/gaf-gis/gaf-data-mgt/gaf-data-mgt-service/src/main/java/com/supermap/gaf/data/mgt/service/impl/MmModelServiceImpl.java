@@ -3,12 +3,23 @@ package com.supermap.gaf.data.mgt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.supermap.gaf.commontypes.tree.DefaultTreeNode;
+import com.supermap.gaf.data.mgt.entity.MmField;
+import com.supermap.gaf.data.mgt.entity.MmFieldAssociate;
 import com.supermap.gaf.data.mgt.entity.MmModel;
 import com.supermap.gaf.data.mgt.entity.MmTable;
+import com.supermap.gaf.data.mgt.entity.vo.MmFieldAssociateVO;
+import com.supermap.gaf.data.mgt.entity.vo.MmLayoutVO;
+import com.supermap.gaf.data.mgt.entity.vo.MmLinksVO;
+import com.supermap.gaf.data.mgt.entity.vo.MmTableVO;
 import com.supermap.gaf.data.mgt.mapper.MmModelMapper;
 import com.supermap.gaf.data.mgt.mapper.MmTableMapper;
+import com.supermap.gaf.data.mgt.service.MmFieldAssociateService;
+import com.supermap.gaf.data.mgt.service.MmFieldService;
 import com.supermap.gaf.data.mgt.service.MmModelService;
+import com.supermap.gaf.data.mgt.service.MmTableService;
 import com.supermap.gaf.data.mgt.util.Page;
+import com.supermap.gaf.data.mgt.vo.MmFieldAssociateSelectVo;
+import com.supermap.gaf.data.mgt.vo.MmFieldSelectVo;
 import com.supermap.gaf.data.mgt.vo.MmModelSelectVo;
 import com.supermap.gaf.data.mgt.vo.MmTableSelectVo;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
@@ -18,10 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,9 +44,14 @@ public class MmModelServiceImpl implements MmModelService {
 	
 	@Autowired
     private MmModelMapper mmModelMapper;
-
 	@Autowired
 	private MmTableMapper mmTableMapper;
+	@Autowired
+    private MmTableService mmTableService;
+	@Autowired
+    private MmFieldService mmFieldService;
+	@Autowired
+    private MmFieldAssociateService mmFieldAssociateService;
 	
 	@Override
     public MmModel getById(String modelId){
@@ -137,6 +150,30 @@ public class MmModelServiceImpl implements MmModelService {
             treeNode.setLeaf(tables.size() <= 0);
             return treeNode;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public MmLayoutVO getMmLayoutVO(String modelId) {
+	    //查TableList
+        List<MmTable> mmTables = mmTableService.selectList(MmTableSelectVo.builder().modelId(modelId).build());
+        List<MmTableVO> mmTableVOList = new ArrayList<>();
+        //TableList中循环填充FieldList
+        mmTables.forEach(mmTable -> {
+            List<MmField> mmFieldList = mmFieldService.selectList(MmFieldSelectVo.builder().tableId(mmTable.getTableId()).build());
+            mmTableVOList.add(MmTableVO.build(mmTable,mmFieldList));
+        });
+        //查字段关联List
+        List<MmFieldAssociate> fieldAssociateList = mmFieldAssociateService.selectList(MmFieldAssociateSelectVo.builder().modelId(modelId).build());
+        List<MmFieldAssociateVO> fieldAssociateVOList = new ArrayList<>();
+        fieldAssociateList.forEach(mmFieldAssociate -> {
+            MmField sourceField = mmFieldService.getById(mmFieldAssociate.getSourceFieldId());
+            MmField targetField = mmFieldService.getById(mmFieldAssociate.getTargetFieldId());
+            fieldAssociateVOList.add(MmFieldAssociateVO.build(mmFieldAssociate,sourceField,targetField));
+        });
+        //转换MmLinksVO
+        List<MmLinksVO> mmLinksVOList = new ArrayList<>();
+        fieldAssociateVOList.forEach(fieldAssociateVO -> mmLinksVOList.add(MmLinksVO.build(fieldAssociateVO)));
+        return new MmLayoutVO(mmTableVOList, mmLinksVOList);
     }
 
 }

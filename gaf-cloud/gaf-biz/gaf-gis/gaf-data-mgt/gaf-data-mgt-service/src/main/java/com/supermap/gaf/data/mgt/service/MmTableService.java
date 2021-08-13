@@ -27,7 +27,13 @@ public interface MmTableService {
      * @return 分页对象
      */
 	Page<MmTable> listByPageCondition(MmTableSelectVo mmTableSelectVo, int pageNum, int pageSize);
-	
+
+    /**
+     * 查询MmTable列表
+     * @param mmTableSelectVo
+     * @return
+     */
+	List<MmTable> selectList(MmTableSelectVo mmTableSelectVo);
 	
     /**
      * 新增逻辑

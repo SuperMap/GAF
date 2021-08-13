@@ -29,6 +29,13 @@ public interface MmPhysicsMapper{
      */
 	List<MmPhysics> selectList(MmPhysicsSelectVo mmPhysicsSelectVo);
 
+	/**
+     * 通过 模型id 查询
+     * @param modelId 模型id
+     * @return
+     */
+	List<MmPhysics> listByModelId(@Param("modelId")String modelId);
+
     /**
      * 新增
      *

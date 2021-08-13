@@ -73,7 +73,15 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
         return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
     }
 
-	@Override
+    @Override
+    public Page<MmPhysics> listByModelId(String modelId, int pageNum, int pageSize) {
+        PageInfo<MmPhysics> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
+            mmPhysicsMapper.listByModelId(modelId);
+        });
+        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
+    }
+
+    @Override
     public MmPhysics insertMmPhysics(MmPhysics mmPhysics){
         // 主键非GeneratedKey，此处添加自定义主键生成策略
 		mmPhysics.setPhysicsId(UUID.randomUUID().toString());

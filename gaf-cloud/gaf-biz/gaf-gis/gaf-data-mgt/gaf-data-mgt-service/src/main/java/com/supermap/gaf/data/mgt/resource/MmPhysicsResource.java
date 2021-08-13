@@ -18,6 +18,7 @@ import java.util.List;
  * 物理表接口
  * @author wxl 
  * @date yyyy-mm-dd
+ * data-mgt/model-manage/physics
  */
 @Component
 @Api(value = "物理表接口")
@@ -98,6 +99,8 @@ public class MmPhysicsResource{
         mmPhysicsService.updateMmPhysics(mmPhysics);
 		return MessageResult.successe(Void.class).status(200).message("更新操作成功").build();
     }
+
+
 
 	
 	

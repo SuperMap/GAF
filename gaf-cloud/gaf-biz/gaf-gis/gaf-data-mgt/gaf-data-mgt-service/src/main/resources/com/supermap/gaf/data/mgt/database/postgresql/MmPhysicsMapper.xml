@@ -63,6 +63,11 @@
         </trim>
         <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
     </select>
+    <select id="listByModelId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM "mm_physics"
+        WHERE table_id in
+        (SELECT table_id FROM "mm_table" WHERE model_id = #{modelId})
+    </select>
     <insert id="insert" useGeneratedKeys="true" keyColumn="physics_id" keyProperty="physicsId" parameterType="com.supermap.gaf.data.mgt.entity.MmPhysics">
         INSERT INTO "mm_physics"
         <trim prefix="(" suffix=")" suffixOverrides=",">

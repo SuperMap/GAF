@@ -40,9 +40,6 @@ public class MmFieldServiceImpl implements MmFieldService{
         }
         return  mmFieldMapper.select(fieldId);
     }
-    public List<MmField> selectList(MmFieldSelectVo mmFieldSelectVo) {
-        return mmFieldMapper.selectList(mmFieldSelectVo);
-    }
 
 	@Override
     public Page<MmField> listByPageCondition(MmFieldSelectVo mmFieldSelectVo, int pageNum, int pageSize) {
@@ -52,7 +49,12 @@ public class MmFieldServiceImpl implements MmFieldService{
         return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
     }
 
-	@Override
+    @Override
+    public List<MmField> selectList(MmFieldSelectVo mmFieldSelectVo) {
+        return mmFieldMapper.selectList(mmFieldSelectVo);
+    }
+
+    @Override
     public MmField insertMmField(MmField mmField){
         // 主键非GeneratedKey，此处添加自定义主键生成策略
 		mmField.setFieldId(UUID.randomUUID().toString());
