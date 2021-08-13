@@ -44,6 +44,7 @@ import DataWorkspace from './dataMgt/pages/DataWorkspace'
 import SpaceDatasource from './dataMgt/pages/SpaceDatasource'
 import SpaceDatasourceTemplate from './dataMgt/pages/SpaceDatasourceTemplate'
 import DataRights from './dataMgt/pages/DataRights'
+import MmCanvas from './dataMgt/pages/MmCanvas'
 
 import StorageManagement from './storage/pages/StorageManagement'
 
@@ -117,7 +118,7 @@ export {
     containers,
     hosts,
     //
-    DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,
+    DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,MmCanvas,
     //
     StorageManagement
 };
