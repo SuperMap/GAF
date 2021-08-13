@@ -51,4 +51,32 @@ public class RootResource {
     public Class<SysResourceDatasourceResource> sysResourceDatasourceResource() {
         return SysResourceDatasourceResource.class;
     }
+
+    @Path("/model-manage/field-associates")
+    public Class<MmFieldAssociateResource> mmFieldAssociateResource(){
+        return  MmFieldAssociateResource.class;
+    }
+
+    @Path("/model-manage/fields")
+    public Class<MmFieldResource> mmFieldResource(){
+        return  MmFieldResource.class;
+    }
+
+    @Path("/model-manage/models")
+    public Class<MmModelResource> mmModelResource(){
+        return  MmModelResource.class;
+    }
+
+    @Path("/model-manage/physics")
+    public Class<MmPhysicsResource> mmPhysicsResource(){
+        return  MmPhysicsResource.class;
+    }
+
+    @Path("/model-manage/logic-tables")
+    public Class<MmTableResource> mmTableResource(){
+        return  MmTableResource.class;
+    }
+
+
+
 }

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.mgt.mapper.MmModelMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.data.mgt.entity.MmModel">
+        <result column="model_id" jdbcType="VARCHAR" property="modelId" />
+        <result column="model_name" jdbcType="VARCHAR" property="modelName" />
+        <result column="model_type" jdbcType="VARCHAR" property="modelType" />
+        <result column="model_code" jdbcType="VARCHAR" property="modelCode" />
+        <result column="sort_sn" jdbcType="SMALLINT" property="sortSn" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        model_id,
+        model_name,
+        model_type,
+        model_code,
+        sort_sn,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by
+    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "mm_model"
+        WHERE model_id = #{modelId}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "mm_model"
+        WHERE
+        <trim>
+            <if test='modelId != null'>  model_id = #{modelId} AND</if>
+            <if test='modelName != null'> model_name = #{modelName} AND</if>
+            <if test='modelType != null'> model_type = #{modelType} AND</if>
+            <if test='modelCode != null'> model_code = #{modelCode} AND</if>
+            <if test='sortSn != null'> sort_sn = #{sortSn} AND</if>
+            <if test='description != null'> description = #{description} AND</if>
+            <if test='createdTime != null'> created_time = #{createdTime} AND</if>
+            <if test='createdBy != null'>  created_by = #{createdBy} AND</if>
+            <if test='updatedTime != null'>  updated_time = #{updatedTime} AND</if>
+            <if test='updatedBy != null'>  updated_by = #{updatedBy} AND</if>
+            <if test ='null != equalFieldName'>  ${equalFieldName}
+                <choose>
+                    <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                    <otherwise>  is null </otherwise>
+                </choose>
+                AND
+            </if>
+            <if test ='null != searchFieldName and null != searchFieldValue'>  ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')  AND</if>
+            1=1
+        </trim>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="model_id" keyProperty="modelId" parameterType="com.supermap.gaf.data.mgt.entity.MmModel">
+        INSERT INTO "mm_model"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != modelId'>model_id,</if>
+			<if test ='null != modelName'>model_name,</if>
+			<if test ='null != modelType'>model_type,</if>
+			<if test ='null != modelCode'>model_code,</if>
+			<if test ='null != sortSn'>sort_sn,</if>
+			<if test ='null != description'>description,</if>
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != modelId'>#{modelId},</if>
+			<if test ='null != modelName'>#{modelName},</if>
+			<if test ='null != modelType'>#{modelType},</if>
+			<if test ='null != modelCode'>#{modelCode},</if>
+			<if test ='null != sortSn'>#{sortSn},</if>
+			<if test ='null != description'>#{description},</if>
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "mm_model"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.modelId}  ,  #{item.modelName}  ,  #{item.modelType}  ,  #{item.modelCode}  ,  #{item.sortSn}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        DELETE FROM mm_model
+        WHERE model_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        DELETE FROM mm_model
+        WHERE model_id = #{modelId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.data.mgt.entity.MmModel">
+        UPDATE "mm_model"
+        <set>
+			<if test ="null != modelName and '' != modelName">model_name = #{modelName},</if>				
+			<if test ="null != modelType and '' != modelType">model_type = #{modelType},</if>				
+			<if test ="null != modelCode and '' != modelCode">model_code = #{modelCode},</if>				
+			sort_sn = #{sortSn},
+			description = #{description},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+        </set>
+        WHERE model_id = #{modelId}
+    </update>
+
+</mapper>

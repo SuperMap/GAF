@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.mgt.mapper.MmFieldAssociateMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.data.mgt.entity.MmFieldAssociate">
+        <result column="field_associate_id" jdbcType="VARCHAR" property="fieldAssociateId" />
+        <result column="model_id" jdbcType="VARCHAR" property="modelId" />
+        <result column="field1_table_id" jdbcType="VARCHAR" property="field1TableId" />
+        <result column="field2_table_id" jdbcType="VARCHAR" property="field2TableId" />
+        <result column="field1_id" jdbcType="VARCHAR" property="field1Id" />
+        <result column="field2_id" jdbcType="VARCHAR" property="field2Id" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        field_associate_id,
+        model_id,
+        field1_table_id,
+        field2_table_id,
+        field1_id,
+        field2_id,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "mm_field_associate"
+        WHERE field_associate_id = #{fieldAssociateId}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "mm_field_associate"
+        WHERE
+        <trim>
+            <if test='fieldAssociateId != null'>  field_associate_id = #{fieldAssociateId} AND</if>
+            <if test='modelId != null'>  model_id = #{modelId} AND</if>
+            <if test='field1TableId != null'>  field1_table_id = #{field1TableId} AND</if>
+            <if test='field2TableId != null'>  field2_table_id = #{field2TableId} AND</if>
+            <if test='field1Id != null'>  field1_id = #{field1Id} AND</if>
+            <if test='field2Id != null'>  field2_id = #{field2Id} AND</if>
+            <if test='createdTime != null'>  created_time = #{createdTime} AND</if>
+            <if test='createdBy != null'>  created_by = #{createdBy} AND</if>
+            <if test='updatedTime != null'>  updated_time = #{updatedTime} AND</if>
+            <if test='updatedBy != null'>  updated_by = #{updatedBy} AND</if>
+            <if test ='null != equalFieldName'>  ${equalFieldName}
+                <choose>
+                    <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                    <otherwise>  is null </otherwise>
+                </choose>
+                AND
+            </if>
+            <if test ='null != searchFieldName and null != searchFieldValue'>  ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')  AND</if>
+            1=1
+        </trim>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="field_associate_id" keyProperty="fieldAssociateId" parameterType="com.supermap.gaf.data.mgt.entity.MmFieldAssociate">
+        INSERT INTO "mm_field_associate"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != fieldAssociateId'>field_associate_id,</if>
+			<if test ='null != modelId'>model_id,</if>
+			<if test ='null != field1TableId'>field1_table_id,</if>
+			<if test ='null != field2TableId'>field2_table_id,</if>
+			<if test ='null != field1Id'>field1_id,</if>
+			<if test ='null != field2Id'>field2_id,</if>
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != fieldAssociateId'>#{fieldAssociateId},</if>
+			<if test ='null != modelId'>#{modelId},</if>
+			<if test ='null != field1TableId'>#{field1TableId},</if>
+			<if test ='null != field2TableId'>#{field2TableId},</if>
+			<if test ='null != field1Id'>#{field1Id},</if>
+			<if test ='null != field2Id'>#{field2Id},</if>
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "mm_field_associate"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.fieldAssociateId}  ,  #{item.modelId}  ,  #{item.field1TableId}  ,  #{item.field2TableId}  ,  #{item.field1Id}  ,  #{item.field2Id}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        DELETE FROM mm_field_associate
+        WHERE field_associate_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        DELETE FROM mm_field_associate
+        WHERE field_associate_id = #{fieldAssociateId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.data.mgt.entity.MmFieldAssociate">
+        UPDATE "mm_field_associate"
+        <set>
+			<if test ="null != modelId and '' != modelId">model_id = #{modelId},</if>				
+			<if test ="null != field1TableId and '' != field1TableId">field1_table_id = #{field1TableId},</if>
+			<if test ="null != field2TableId and '' != field2TableId">field2_table_id = #{field2TableId},</if>
+			<if test ="null != field1Id and '' != field1Id">field1_id = #{field1Id},</if>				
+			<if test ="null != field2Id and '' != field2Id">field2_id = #{field2Id},</if>				
+			updated_time = now(),
+			updated_by = #{updatedBy},
+        </set>
+        WHERE field_associate_id = #{fieldAssociateId}
+    </update>
+
+</mapper>

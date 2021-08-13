@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.mgt.mapper.MmPhysicsMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.data.mgt.entity.MmPhysics">
+        <result column="physics_id" jdbcType="VARCHAR" property="physicsId" />
+        <result column="physics_name" jdbcType="VARCHAR" property="physicsName" />
+        <result column="table_id" jdbcType="VARCHAR" property="tableId" />
+        <result column="server" jdbcType="VARCHAR" property="server" />
+        <result column="db_name" jdbcType="VARCHAR" property="dbName" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        physics_id,
+        physics_name,
+        table_id,
+        server,
+        db_name,
+        username,
+        password,
+        type,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "mm_physics"
+        WHERE physics_id = #{physicsId}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "mm_physics"
+        WHERE
+        <trim>
+            <if test='physicsId != null'>  physics_id = #{physicsId} AND</if>
+            <if test='physicsName != null'>  physics_name = #{physicsName} AND</if>
+            <if test='tableId != null'>  table_id = #{tableId} AND</if>
+            <if test='server != null'>  server = #{server} AND</if>
+            <if test='dbName != null'>  db_name = #{dbName} AND</if>
+            <if test='username != null'>  username = #{username} AND</if>
+            <if test='password != null'>  password = #{password} AND</if>
+            <if test='type != null'>  type = #{type} AND</if>
+            <if test='createdTime != null'>  created_time = #{createdTime} AND</if>
+            <if test='createdBy != null'>  created_by = #{createdBy} AND</if>
+            <if test='updatedTime != null'>  updated_time = #{updatedTime} AND</if>
+            <if test='updatedBy != null'>  updated_by = #{updatedBy} AND</if>
+            <if test ='null != equalFieldName'>  ${equalFieldName}
+                <choose>
+                    <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                    <otherwise>  is null </otherwise>
+                </choose>
+                AND
+            </if>
+            <if test ='null != searchFieldName and null != searchFieldValue'>  ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')  AND</if>
+            1=1
+        </trim>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="physics_id" keyProperty="physicsId" parameterType="com.supermap.gaf.data.mgt.entity.MmPhysics">
+        INSERT INTO "mm_physics"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != physicsId'>physics_id,</if>
+			<if test ='null != physicsName'>physics_name,</if>
+			<if test ='null != tableId'>table_id,</if>
+			<if test ='null != server'>server,</if>
+			<if test ='null != dbName'>db_name,</if>
+			<if test ='null != username'>username,</if>
+			<if test ='null != password'>password,</if>
+            <if test ='null != type'>type,</if>
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != physicsId'>#{physicsId},</if>
+			<if test ='null != physicsName'>#{physicsName},</if>
+			<if test ='null != tableId'>#{tableId},</if>
+			<if test ='null != server'>#{server},</if>
+			<if test ='null != dbName'>#{dbName},</if>
+			<if test ='null != username'>#{username},</if>
+			<if test ='null != password'>#{password},</if>
+			<if test ='null != type'>#{type},</if>
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "mm_physics"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.physicsId}  ,  #{item.physicsName}  ,  #{item.tableId}  ,  #{item.server}  ,  #{item.dbName}  ,  #{item.username}  ,  #{item.password}  , #{item.type}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        DELETE FROM mm_physics
+        WHERE physics_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        DELETE FROM mm_physics
+        WHERE physics_id = #{physicsId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.data.mgt.entity.MmPhysics">
+        UPDATE "mm_physics"
+        <set>
+			physics_name = #{physicsName},
+			<if test ="null != tableId and '' != tableId">table_id = #{tableId},</if>
+			<if test ="null != server and '' != server">server = #{server},</if>				
+			db_name = #{dbName},
+			username = #{username},
+			password = #{password},
+			type = #{type},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+        </set>
+        WHERE physics_id = #{physicsId}
+    </update>
+
+</mapper>
