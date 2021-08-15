@@ -1,7 +1,13 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.data.mgt.entity.MmTable;
 import com.supermap.gaf.data.mgt.mapper.MmTableMapper;
 import com.supermap.gaf.data.mgt.service.MmTableService;
@@ -13,7 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +37,8 @@ public class MmTableServiceImpl implements MmTableService{
 	
 	@Autowired
     private MmTableMapper mmTableMapper;
+    @Autowired
+    private BatchSortAndCodeService batchSortAndCodeService;
 	
 	@Override
     public MmTable getById(String tableId){
@@ -51,18 +61,20 @@ public class MmTableServiceImpl implements MmTableService{
         return mmTableMapper.selectList(mmTableSelectVo);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public MmTable insertMmTable(MmTable mmTable){
-        // 主键非GeneratedKey，此处添加自定义主键生成策略
 		mmTable.setTableId(UUID.randomUUID().toString());
 		
 		ShiroUser shiroUser = SecurityUtilsExt.getUser();
 		mmTable.setCreatedBy(shiroUser.getAuthUser().getName());
 		mmTable.setUpdatedBy(shiroUser.getAuthUser().getName());
         mmTableMapper.insert(mmTable);
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmTable.class, Collections.singleton(mmTable.getTableId()));
         return mmTableMapper.select(mmTable.getTableId());
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public void batchInsert(List<MmTable> mmTables){
 		if (mmTables != null && mmTables.size() > 0) {
@@ -73,28 +85,45 @@ public class MmTableServiceImpl implements MmTableService{
 				mmTable.setUpdatedBy(shiroUser.getAuthUser().getName());
             });
             mmTableMapper.batchInsert(mmTables);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmTable.class,Collections.singleton(mmTables.get(0).getModelId()));
         }
         
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public MmTable deleteMmTable(String tableId){
         MmTable mmTable = mmTableMapper.select(tableId);
         mmTableMapper.delete(tableId);
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmTable.class,Collections.singleton(mmTable.getModelId()));
         return mmTable;
     }
 
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public void batchDelete(List<String> tableIds){
+	    if (tableIds == null || tableIds.size() == 0) {
+	        throw new IllegalArgumentException("逻辑表id不能为空");
+        }
+        MmTable mmTable = mmTableMapper.select(tableIds.get(0));
         mmTableMapper.batchDelete(tableIds);
+        if (mmTable != null) {
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmTable.class, Collections.singleton(mmTable.getModelId()));
+        }
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public MmTable updateMmTable(MmTable mmTable){
-		ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        MmTable oldMmTable = mmTableMapper.select(mmTable.getTableId());
+        if (oldMmTable == null) {
+            throw new IllegalArgumentException("逻辑表不存在");
+        }
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
 		mmTable.setUpdatedBy(shiroUser.getAuthUser().getName());
 		mmTableMapper.update(mmTable);
-        return mmTableMapper.select(mmTable.getTableId());
+        batchSortAndCodeService.revisionSortSnForUpdate(MmTable.class,oldMmTable.getModelId(),oldMmTable.getSortSn(),mmTable.getSortSn());
+        return mmTable;
     }
     
 }

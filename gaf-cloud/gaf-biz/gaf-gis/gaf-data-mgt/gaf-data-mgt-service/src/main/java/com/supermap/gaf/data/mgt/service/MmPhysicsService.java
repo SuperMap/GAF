@@ -1,6 +1,12 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.service;
 
 import com.supermap.gaf.data.mgt.entity.MmPhysics;
+import com.supermap.gaf.data.mgt.model.PhysicsResult;
 import com.supermap.gaf.data.mgt.util.Page;
 import com.supermap.gaf.data.mgt.vo.MmPhysicsSelectVo;
 
@@ -73,5 +79,5 @@ public interface MmPhysicsService {
      * 批量物理化
      * @param mmPhysicsList 物理化表集合
      */
-    void physicalization(List<MmPhysics> mmPhysicsList);
+    PhysicsResult physicalization(List<MmPhysics> mmPhysicsList);
 }

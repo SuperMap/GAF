@@ -27,9 +27,8 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
     POSTGRESQL("1") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-
-
-            return null;
+            PostgresqlFieldTypeEnum typeEnum = PostgresqlFieldTypeEnum.fromCode(mmField.getFieldType());
+            return typeEnum.convertToDdlFragment(mmField);
         }
 
         @Override
@@ -40,7 +39,7 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         @Override
         public JdbcConnectionInfo convert2JdbcConnectionInfo(SysResourceDatasource datasource) {
             String url = "jdbc:postgresql://" + datasource.getAddr() + "/" + datasource.getDbName();
-            String driverClassName = "com.mysql.cj.jdbc.Driver";
+            String driverClassName = "org.postgresql.Driver";
             return new JdbcConnectionInfo(driverClassName,url,datasource.getUserName(),datasource.getPassword());
         }
     },
@@ -80,7 +79,7 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         @Override
         public JdbcConnectionInfo convert2JdbcConnectionInfo(SysResourceDatasource datasource) {
             String url = "jdbc:mysql://" + datasource.getAddr() + "/" + datasource.getDbName() + "?serverTimezone=UTC";
-            String driverClassName = "org.postgresql.Driver";
+            String driverClassName = "com.mysql.cj.jdbc.Driver";
             return new JdbcConnectionInfo(driverClassName,url,datasource.getUserName(),datasource.getPassword());
         }
     },

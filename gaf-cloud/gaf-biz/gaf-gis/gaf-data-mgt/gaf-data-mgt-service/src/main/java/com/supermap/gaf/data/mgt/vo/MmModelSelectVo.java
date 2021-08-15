@@ -1,5 +1,12 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.vo;
 
+import com.supermap.gaf.data.mgt.entity.MmModel;
+import com.supermap.gaf.validator.StringRange;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -20,12 +27,14 @@ import java.util.Date;
 @NoArgsConstructor
 @ApiModel("模型 条件查询实体")
 public class MmModelSelectVo {
+        @StringRange(entityClass = MmModel.class, message = "不在指定的字段名范围内")
         @QueryParam("searchFieldName")
         @ApiModelProperty("查询字段名")
         private String searchFieldName;
         @QueryParam("searchFieldValue")
         @ApiModelProperty("查询字段值")
         private String searchFieldValue;
+        @StringRange(entityClass = MmModel.class, message = "不在指定的字段名范围内")
         @QueryParam("equalFieldName")
         @ApiModelProperty("等值查询字段名")
         private String equalFieldName;
@@ -33,9 +42,11 @@ public class MmModelSelectVo {
         @ApiModelProperty("等值查询字段值")
         private String equalFieldValue;
         @QueryParam("orderFieldName")
+        @StringRange(entityClass = MmModel.class, message = "不在指定的字段名范围内")
         @ApiModelProperty("排序字段名")
         private String orderFieldName;
         @QueryParam("orderMethod")
+        @StringRange(value = {"asc", "desc"}, message = "不在指定的范围[asc,desc]内")
         @ApiModelProperty("排序方法")
         private String orderMethod;
         @QueryParam("modelId")

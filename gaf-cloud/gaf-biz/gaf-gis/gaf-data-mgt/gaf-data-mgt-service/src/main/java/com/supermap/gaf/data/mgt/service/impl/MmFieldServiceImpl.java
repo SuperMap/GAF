@@ -1,7 +1,13 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.data.mgt.entity.MmField;
 import com.supermap.gaf.data.mgt.enums.DatasourceTypeEnum;
 import com.supermap.gaf.data.mgt.enums.SdxFieldTypeEnum;
@@ -16,7 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +40,9 @@ public class MmFieldServiceImpl implements MmFieldService{
 	
 	@Autowired
     private MmFieldMapper mmFieldMapper;
+
+    @Autowired
+    private BatchSortAndCodeService batchSortAndCodeService;
 	
 	@Override
     public MmField getById(String fieldId){
@@ -54,18 +65,19 @@ public class MmFieldServiceImpl implements MmFieldService{
         return mmFieldMapper.selectList(mmFieldSelectVo);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public MmField insertMmField(MmField mmField){
-        // 主键非GeneratedKey，此处添加自定义主键生成策略
 		mmField.setFieldId(UUID.randomUUID().toString());
-		
 		ShiroUser shiroUser = SecurityUtilsExt.getUser();
 		mmField.setCreatedBy(shiroUser.getAuthUser().getName());
 		mmField.setUpdatedBy(shiroUser.getAuthUser().getName());
         mmFieldMapper.insert(mmField);
-        return mmField;
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmField.class, Collections.singleton(mmField.getTableId()));
+        return getById(mmField.getFieldId());
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public void batchInsert(List<MmField> mmFields){
 		if (mmFields != null && mmFields.size() > 0) {
@@ -76,25 +88,43 @@ public class MmFieldServiceImpl implements MmFieldService{
 				mmField.setUpdatedBy(shiroUser.getAuthUser().getName());
             });
             mmFieldMapper.batchInsert(mmFields);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmField.class, Collections.singleton(mmFields.get(0).getTableId()));
         }
         
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public void deleteMmField(String fieldId){
-        mmFieldMapper.delete(fieldId);
+        MmField mmField = getById(fieldId);
+        if (mmField != null) {
+            mmFieldMapper.delete(fieldId);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmField.class, Collections.singleton(mmField.getTableId()));
+        }
     }
 
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public void batchDelete(List<String> fieldIds){
+        if (fieldIds == null || fieldIds.size() == 0) {
+            throw new IllegalArgumentException("字段id不能为空");
+        }
+        MmField mmField = getById(fieldIds.get(0));
         mmFieldMapper.batchDelete(fieldIds);
+        if (mmField != null) {
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmField.class, Collections.singleton(mmField.getTableId()));
+        }
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public MmField updateMmField(MmField mmField){
-		ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        MmField oldMmField = getById(mmField.getFieldId());
+
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
 		mmField.setUpdatedBy(shiroUser.getAuthUser().getName());
 		mmFieldMapper.update(mmField);
+        batchSortAndCodeService.revisionSortSnForUpdate(MmField.class,oldMmField.getTableId(),oldMmField.getSortSn(),mmField.getSortSn());
         return mmField;
     }
 

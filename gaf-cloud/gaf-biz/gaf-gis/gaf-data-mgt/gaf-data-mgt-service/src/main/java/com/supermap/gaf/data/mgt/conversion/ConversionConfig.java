@@ -35,6 +35,9 @@ public class ConversionConfig {
         PARSER_CONFIG.getDeserializers().put(EngineType.class, EnumDeserializer.instance);
         PARSER_CONFIG.getDeserializers().put(PrjCoordSys.class, PrjCoordSysDeserializer.instance);
 
+        PARSER_CONFIG.getDeserializers().put(BlockSizeOption.class, EnumDeserializer.instance);
+        PARSER_CONFIG.getDeserializers().put(PixelFormat.class, EnumDeserializer.instance);
+        PARSER_CONFIG.getDeserializers().put(DatasetType.class, EnumDeserializer.instance);
     }
 
     public static ParserConfig getParseConfig() {

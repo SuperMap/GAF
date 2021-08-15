@@ -11,19 +11,33 @@ public interface DdlFragmentConverter {
     String convertToDdlFragment(MmField mmField);
 
     default String getCommonFragment(MmField mmField) {
+        return getNotNull(mmField).append(getDefault(mmField)).append(getComment(mmField)).toString();
+    }
+
+    default StringBuilder getNotNull(MmField mmField) {
         StringBuilder sb = new StringBuilder();
         if (mmField.getFieldNotNull()) {
             sb.append(" NOT NULL ");
         }
+        return sb;
+    }
+
+    default StringBuilder getDefault(MmField mmField) {
+        StringBuilder sb = new StringBuilder();
         String fieldDefault = mmField.getFieldDefault();
         if (fieldDefault != null && !fieldDefault.isEmpty()) {
-            sb.append(" DEFAULT ").append(fieldDefault);
+            sb.append(" DEFAULT ").append(fieldDefault).append(" ");
         }
+        return sb;
+    }
+
+    default StringBuilder getComment(MmField mmField) {
+        StringBuilder sb = new StringBuilder();
         String description = mmField.getDescription();
         if (description != null && !description.isEmpty()) {
-            sb.append("comment '").append(description).append("' ");
+            sb.append(" comment '").append(description).append("' ");
         }
-        return sb.toString();
+        return sb;
     }
 
     default String getLengthPrecision(MmField mmField) {

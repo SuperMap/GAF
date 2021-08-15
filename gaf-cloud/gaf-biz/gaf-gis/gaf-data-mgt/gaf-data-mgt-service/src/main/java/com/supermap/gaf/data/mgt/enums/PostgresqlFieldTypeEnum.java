@@ -1,3 +1,8 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.enums;
 
 import com.supermap.gaf.data.mgt.entity.MmField;
@@ -79,77 +84,156 @@ public enum PostgresqlFieldTypeEnum implements DdlFragmentConverter {
     MONEY("postgresql_money","money") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            return mmField.getFieldName() + " money " + getCommonFragment(mmField);
         }
     },
     // 字符类型
     VARCHAR("postgresql_varchar","varchar") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            Integer fieldLength = mmField.getFieldLength();
+            String length =  fieldLength == null ? "": "("+ fieldLength +")";
+            StringBuilder sb = getNotNull(mmField);
+            String fieldDefault = mmField.getFieldDefault();
+            if (fieldDefault != null && !fieldDefault.isEmpty()) {
+                sb.append(" DEFAULT '").append(fieldDefault).append("' ");
+            }
+            sb.append(getComment(mmField));
+            return mmField.getFieldName() + " varchar" + length + " " + sb;
         }
     },
     CHAR("postgresql_char","char") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            Integer fieldLength = mmField.getFieldLength();
+            String length =  fieldLength == null ? "": "("+ fieldLength +")";
+            StringBuilder sb = getNotNull(mmField);
+            String fieldDefault = mmField.getFieldDefault();
+            if (fieldDefault != null && !fieldDefault.isEmpty()) {
+                sb.append(" DEFAULT '").append(fieldDefault).append("' ");
+            }
+            sb.append(getComment(mmField));
+            return mmField.getFieldName() + " char " + length + " " + sb;
         }
     },
     TEXT("postgresql_text","text") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            StringBuilder sb = getNotNull(mmField);
+            String fieldDefault = mmField.getFieldDefault();
+            if (fieldDefault != null && !fieldDefault.isEmpty()) {
+                sb.append(" DEFAULT '").append(fieldDefault).append("' ");
+            }
+            sb.append(getComment(mmField));
+            return mmField.getFieldName() + " text " +  sb;
         }
     },
-    // 二进制数据类型
+    // 二进制数据类型 默认值或者输入格式 十六进制格式 E'\\xDEADBEEF 或者'\x5c303436'::bytea 转义格式 E'\\047' 或者 '\\047'::bytea
     BYTEA("postgresql_bytea","bytea") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            return mmField.getFieldName() + " bytea " + getCommonFragment(mmField);
         }
     },
     // 日期/时间类型
     TIMESTAMP("postgresql_timestamp","timestamp") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            Integer fieldPrecision = mmField.getFieldPrecision();
+            String precision = "";
+            if(fieldPrecision != null) {
+                if (fieldPrecision < 0) {
+                    precision = "(0)";
+                } else if (fieldPrecision > 6) {
+                    precision = "(6)";
+                } else {
+                    precision = "(" + fieldPrecision +")";
+                }
+            }
+
+            return mmField.getFieldName() + " timestamp" + precision + getCommonFragment(mmField);
         }
     },
     TIMESTAMP_WITH_TIME_ZONE("postgresql_timestamp_with_time_zone","timestamp_with_time_zone") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            Integer fieldPrecision = mmField.getFieldPrecision();
+            String precision = "";
+            if(fieldPrecision != null) {
+                if (fieldPrecision < 0) {
+                    precision = "(0)";
+                } else if (fieldPrecision > 6) {
+                    precision = "(6)";
+                } else {
+                    precision = "(" + fieldPrecision +")";
+                }
+            }
+            return mmField.getFieldName() + " timestamp" + precision + " with time zone "+ getCommonFragment(mmField);
         }
     },
     DATE("postgresql_date","date") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            return mmField.getFieldName() + " date" + getCommonFragment(mmField);
         }
     },
     TIME("postgresql_time","time") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            Integer fieldPrecision = mmField.getFieldPrecision();
+            String precision = "";
+            if(fieldPrecision != null) {
+                if (fieldPrecision < 0) {
+                    precision = "(0)";
+                } else if (fieldPrecision > 6) {
+                    precision = "(6)";
+                } else {
+                    precision = "(" + fieldPrecision +")";
+                }
+            }
+
+            return mmField.getFieldName() + " time" + precision + getCommonFragment(mmField);
         }
     },
     TIME_WITH_TIME_ZONE("postgresql_time_with_time_zone","time_with_time_zone") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            Integer fieldPrecision = mmField.getFieldPrecision();
+            String precision = "";
+            if(fieldPrecision != null) {
+                if (fieldPrecision < 0) {
+                    precision = "(0)";
+                } else if (fieldPrecision > 6) {
+                    precision = "(6)";
+                } else {
+                    precision = "(" + fieldPrecision +")";
+                }
+            }
+            return mmField.getFieldName() + " time" + precision + " with time zone " + getCommonFragment(mmField);
         }
     },
     INTERVAL("postgresql_interval","interval") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            Integer fieldPrecision = mmField.getFieldPrecision();
+            String precision = "";
+            if(fieldPrecision != null) {
+                if (fieldPrecision < 0) {
+                    precision = "(0)";
+                } else if (fieldPrecision > 6) {
+                    precision = "(6)";
+                } else {
+                    precision = "(" + fieldPrecision +")";
+                }
+            }
+            return mmField.getFieldName() + " interval" + precision + getCommonFragment(mmField);
         }
     },
     // 布尔类型
     BOOLEAN("postgresql_boolean","boolean") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
-            return null;
+            return mmField.getFieldName() + " boolean "  + getCommonFragment(mmField);
         }
     };
 

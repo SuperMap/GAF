@@ -1,8 +1,14 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.supermap.gaf.commontypes.tree.DefaultTreeNode;
+import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.data.mgt.entity.MmField;
 import com.supermap.gaf.data.mgt.entity.MmFieldAssociate;
 import com.supermap.gaf.data.mgt.entity.MmModel;
@@ -28,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,7 +59,10 @@ public class MmModelServiceImpl implements MmModelService {
     private MmFieldService mmFieldService;
 	@Autowired
     private MmFieldAssociateService mmFieldAssociateService;
-	
+
+    @Autowired
+    private BatchSortAndCodeService batchSortAndCodeService;
+
 	@Override
     public MmModel getById(String modelId){
         if(modelId == null){
@@ -69,18 +79,21 @@ public class MmModelServiceImpl implements MmModelService {
         return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),pageInfo.getList());
     }
 
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public MmModel insertMmModel(MmModel mmModel){
-        // 主键非GeneratedKey，此处添加自定义主键生成策略
+
 		mmModel.setModelId(UUID.randomUUID().toString());
 		
 		ShiroUser shiroUser = SecurityUtilsExt.getUser();
 		mmModel.setCreatedBy(shiroUser.getAuthUser().getName());
 		mmModel.setUpdatedBy(shiroUser.getAuthUser().getName());
         mmModelMapper.insert(mmModel);
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmModel.class,Collections.singleton(null));
         return mmModelMapper.select(mmModel.getModelId());
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public void batchInsert(List<MmModel> mmModels){
 		if (mmModels != null && mmModels.size() > 0) {
@@ -91,28 +104,42 @@ public class MmModelServiceImpl implements MmModelService {
 				mmModel.setUpdatedBy(shiroUser.getAuthUser().getName());
             });
             mmModelMapper.batchInsert(mmModels);
+            batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmModel.class,Collections.singleton(null));
         }
         
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public MmModel deleteMmModel(String modelId){
         MmModel mmModel = mmModelMapper.select(modelId);
         mmModelMapper.delete(modelId);
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmModel.class,Collections.singleton(null));
         return mmModel;
     }
 
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public void batchDelete(List<String> modelIds){
-        mmModelMapper.batchDelete(modelIds);
+        if (modelIds == null || modelIds.isEmpty()) {
+            throw new IllegalArgumentException("模型id不能为空");
+        }
+	    mmModelMapper.batchDelete(modelIds);
+        batchSortAndCodeService.revisionSortSnForInsertOrDelete(MmModel.class,Collections.singleton(null));
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public MmModel updateMmModel(MmModel mmModel){
-		ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        MmModel oldMmModel = mmModelMapper.select(mmModel.getModelId());
+        if (oldMmModel == null) {
+            throw new IllegalArgumentException("模型不存在");
+        }
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
 		mmModel.setUpdatedBy(shiroUser.getAuthUser().getName());
 		mmModelMapper.update(mmModel);
-        return mmModelMapper.select(mmModel.getModelId());
+        batchSortAndCodeService.revisionSortSnForUpdate(MmModel.class,null,oldMmModel.getSortSn(),mmModel.getSortSn());
+        return getById(mmModel.getModelId());
     }
 
     @Override

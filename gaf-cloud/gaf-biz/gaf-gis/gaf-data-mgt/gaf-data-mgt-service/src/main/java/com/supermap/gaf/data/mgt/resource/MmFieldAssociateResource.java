@@ -1,3 +1,8 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.resource;
 
 import com.supermap.gaf.commontypes.MessageResult;
@@ -10,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -37,7 +43,7 @@ public class MmFieldAssociateResource{
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "分页条件查询字段关联", notes = "分页条件查询字段关联")
-    public MessageResult<Page> pageList(@BeanParam MmFieldAssociateSelectVo mmFieldAssociateSelectVo,
+    public MessageResult<Page> pageList(@Valid @BeanParam MmFieldAssociateSelectVo mmFieldAssociateSelectVo,
 										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
         Page<MmFieldAssociate> page = mmFieldAssociateService.listByPageCondition(mmFieldAssociateSelectVo, pageNum, pageSize);

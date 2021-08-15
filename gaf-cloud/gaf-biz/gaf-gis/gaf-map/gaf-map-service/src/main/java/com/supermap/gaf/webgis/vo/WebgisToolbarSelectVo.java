@@ -57,6 +57,7 @@ public class WebgisToolbarSelectVo {
     @ApiModelProperty("类别。1:基础类,2:业务类(工具条只能选用同种类型按钮)")
     @QueryParam("type")
     private String type;
+    @StringRange(entityClass = WebgisToolbar.class, message = "不在指定的字段名范围内")
     @QueryParam("equalFieldName")
     @ApiModelProperty("等值查询字段名 可查null")
     private String equalFieldName;

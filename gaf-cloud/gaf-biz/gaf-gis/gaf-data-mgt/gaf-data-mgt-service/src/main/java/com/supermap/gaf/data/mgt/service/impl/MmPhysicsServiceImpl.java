@@ -1,3 +1,8 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.service.impl;
 
 import com.alibaba.fastjson.JSON;
@@ -13,24 +18,36 @@ import com.supermap.gaf.data.mgt.entity.MmPhysics;
 import com.supermap.gaf.data.mgt.entity.MmTable;
 import com.supermap.gaf.data.mgt.enums.DatasourceTypeEnum;
 import com.supermap.gaf.data.mgt.mapper.MmPhysicsMapper;
+import com.supermap.gaf.data.mgt.model.PhysicsResult;
+import com.supermap.gaf.data.mgt.model.PhysicsSingleResult;
 import com.supermap.gaf.data.mgt.service.MmFieldService;
 import com.supermap.gaf.data.mgt.service.MmModelService;
 import com.supermap.gaf.data.mgt.service.MmPhysicsService;
 import com.supermap.gaf.data.mgt.service.MmTableService;
 import com.supermap.gaf.data.mgt.support.ConvertHelper;
+import com.supermap.gaf.data.mgt.support.JdbcConnectionInfo;
 import com.supermap.gaf.data.mgt.util.Page;
 import com.supermap.gaf.data.mgt.vo.MmFieldSelectVo;
 import com.supermap.gaf.data.mgt.vo.MmPhysicsSelectVo;
+import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 物理服务实现类
@@ -126,11 +143,33 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
     }
 
     @Override
-    public void physicalization(List<MmPhysics> mmPhysicsList) {
-
-
-
-
+    public PhysicsResult physicalization(List<MmPhysics> mmPhysicsList) {
+        if (mmPhysicsList == null || mmPhysicsList.size() == 0) {
+            throw new IllegalArgumentException("批量物理化参数不能为空");
+        }
+        PhysicsResult physicsResult = new PhysicsResult();
+        List<PhysicsSingleResult> successed = new LinkedList<>();
+        List<PhysicsSingleResult> failed = new LinkedList<>();
+        for (MmPhysics mmPhysics : mmPhysicsList) {
+            PhysicsSingleResult physicsSingleResult = new PhysicsSingleResult();
+            try {
+                physicalizationSingle(mmPhysics);
+                physicsSingleResult.setSuccess(true);
+                successed.add(physicsSingleResult);
+            } catch (Exception e) {
+                physicsSingleResult.setSuccess(false);
+                physicsSingleResult.setMessage(e.getMessage());
+                failed.add(physicsSingleResult);
+            }
+            MmPhysics copy = new MmPhysics();
+            BeanUtils.copyProperties(mmPhysics,copy);
+            copy.setUsername(null);
+            copy.setPassword(null);
+            physicsSingleResult.setMmPhysics(copy);
+        }
+        physicsResult.setSuccessed(successed);
+        physicsResult.setFailed(failed);
+        return physicsResult;
     }
 
     private void physicalizationSingle(MmPhysics mmPhysics) {
@@ -139,10 +178,14 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
         MmModel mmModel = mmModelService.getById(mmTable.getModelId());
         MmFieldSelectVo mmFieldSelectVo = new MmFieldSelectVo();
         mmFieldSelectVo.setTableId(mmPhysics.getTableId());
+        mmFieldSelectVo.setOrderFieldName("sort_sn");
+        mmFieldSelectVo.setOrderMethod("asc");
         List<MmField> mmFields = mmFieldService.selectList(mmFieldSelectVo);
-
-        String name = StringUtils.isEmpty(mmPhysics.getPhysicsName()) ?  mmTable.getTableName():mmPhysics.getPhysicsName();
-        if ("sdx".equals(mmModel.getModelCode())) {
+        if (StringUtils.isEmpty(mmPhysics.getPhysicsName())) {
+            mmPhysics.setPhysicsName(mmTable.getTableName());
+        }
+        String name =  mmPhysics.getPhysicsName();
+        if ("sdx".equals(mmModel.getModelType())) {
             // 空间模型
             String sdxInfoJson = mmTable.getSdxInfo();
             JSONObject sdxInfoJO = JSONObject.parseObject(sdxInfoJson);
@@ -198,7 +241,7 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
                         fieldInfo.setCaption(mmField.getFieldAlias());
                         FieldType fieldType = (FieldType) FieldType.parse(FieldType.class, mmField.getFieldType().replace("sdx_", "").toUpperCase());
                         fieldInfo.setType(fieldType);
-                        fieldInfo.setDefaultValue(fieldInfo.getDefaultValue());
+                        fieldInfo.setDefaultValue(mmField.getFieldDefault());
                         fieldInfo.setRequired(mmField.getFieldNotNull());
                         fieldInfo.setMaxLength(mmField.getFieldLength());
                         fieldInfosArray[i] = fieldInfo;
@@ -207,17 +250,43 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
                 }
                 datasetVector.close();
             }
+            datasource.close();
+            workspace.close();
+            workspace.dispose();
         } else {
-            DatasourceTypeEnum datasourceType = DatasourceTypeEnum.fromCode(mmModel.getModelCode());
+            DatasourceTypeEnum datasourceType = DatasourceTypeEnum.fromCode(mmModel.getModelType());
+            if (mmFields.size() == 0) {
+                throw new IllegalArgumentException("字段数量不能为0");
+            }
+            List<String> ddlFragments = mmFields.stream().sorted(Comparator.comparingInt(MmField::getSortSn)).map(datasourceType::convertToDdlFragment).collect(Collectors.toList());
+            List<String> primaryKeys = mmFields.stream().filter(MmField::getFieldPrimaryKey).map(MmField::getFieldName).collect(Collectors.toList());
 
+            StringBuilder sb = new StringBuilder();
+            sb.append("CREATE TABLE " + name + " (");
+            sb.append(String.join("," , ddlFragments));
+            if (primaryKeys.size() > 0) {
+                sb.append(", PRIMARY KEY (").append(String.join(",",primaryKeys)).append(")");
+            }
+            sb.append(");");
+            String ddl = sb.toString();
 
-
-
+            SysResourceDatasource sysResourceDatasource = convert(mmPhysics);
+            JdbcConnectionInfo jdbcConn = datasourceType.convert2JdbcConnectionInfo(sysResourceDatasource);
+            try {
+                Class.forName(jdbcConn.getDriverClassName());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                throw new GafException("数据库驱动加载失败"+ e.getMessage(),e);
+            }
+            try(Connection connection = DriverManager.getConnection(jdbcConn.getUrl(), jdbcConn.getUsername(), jdbcConn.getPassword());
+                Statement statement = connection.createStatement()) {
+                statement.executeUpdate(ddl);
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+                throw new GafException("创建表失败,原因:" + sqlException.getMessage() ,sqlException);
+            }
         }
-
-
-
-
+        insertMmPhysics(mmPhysics);
     }
 
     private SysResourceDatasource convert(MmPhysics mmPhysics) {

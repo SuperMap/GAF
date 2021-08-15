@@ -1,7 +1,13 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.resource;
 
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.data.mgt.entity.MmPhysics;
+import com.supermap.gaf.data.mgt.model.PhysicsResult;
 import com.supermap.gaf.data.mgt.service.MmPhysicsService;
 import com.supermap.gaf.data.mgt.util.Page;
 import com.supermap.gaf.data.mgt.vo.MmPhysicsSelectVo;
@@ -10,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -38,7 +45,7 @@ public class MmPhysicsResource{
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "分页条件查询物理表", notes = "分页条件查询物理表")
-    public MessageResult<Page> pageList(@BeanParam MmPhysicsSelectVo mmPhysicsSelectVo,
+    public MessageResult<Page> pageList(@Valid @BeanParam MmPhysicsSelectVo mmPhysicsSelectVo,
 										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
         Page<MmPhysics> page = mmPhysicsService.listByPageCondition(mmPhysicsSelectVo, pageNum, pageSize);
@@ -49,10 +56,9 @@ public class MmPhysicsResource{
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "批量物理化", notes = "批量物理化")
     @Path("/physicalization-batch")
-    public MessageResult<Void> physicalization(List<MmPhysics> mmPhysicsList){
-        mmPhysicsService.physicalization(mmPhysicsList);
-        // Page<MmTable> page = mmTableService.listByPageCondition(mmTableSelectVo, pageNum, pageSize);
-        return MessageResult.successe(Void.class).data(null).status(200).message("查询成功").build();
+    public MessageResult<PhysicsResult> physicalization(List<MmPhysics> mmPhysicsList){
+        PhysicsResult physicsResult = mmPhysicsService.physicalization(mmPhysicsList);
+        return MessageResult.data(physicsResult).message("批量物理化").build();
     }
 
 	@POST

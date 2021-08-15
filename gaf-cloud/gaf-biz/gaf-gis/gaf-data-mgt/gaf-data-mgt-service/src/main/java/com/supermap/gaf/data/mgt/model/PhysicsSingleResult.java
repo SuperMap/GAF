@@ -5,25 +5,21 @@
  */
 package com.supermap.gaf.data.mgt.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.supermap.gaf.data.mgt.entity.MmPhysics;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 单表物理化结果
  * @author wxl
- * @since 2021/8/12
+ * @since 2021/8/13
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("字段类型信息")
-public class FieldTypeInfo {
-    @ApiModelProperty("字段类型编码")
-    String code;
-    @ApiModelProperty("字段类型名")
-    String name;
-    @ApiModelProperty("字段类型描述")
-    String descrption;
+@NoArgsConstructor
+public class PhysicsSingleResult {
+    boolean success;
+    String message;
+    MmPhysics mmPhysics;
 }
