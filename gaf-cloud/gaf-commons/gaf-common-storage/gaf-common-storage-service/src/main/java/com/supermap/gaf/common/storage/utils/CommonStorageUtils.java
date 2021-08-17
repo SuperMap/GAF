@@ -39,6 +39,7 @@ public class CommonStorageUtils {
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(minioConfig.getServiceEndpoint(), Regions.DEFAULT_REGION.getName()))
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(minioConfig.getAccessKey(), minioConfig.getSecretKey())))
+                .enablePathStyleAccess()
                 .build();
         return s3Client;
     }
