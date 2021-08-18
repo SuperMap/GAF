@@ -12,6 +12,8 @@ import com.supermap.gaf.data.mgt.service.MmPhysicsService;
 import com.supermap.gaf.data.mgt.util.Page;
 import com.supermap.gaf.data.mgt.vo.MmPhysicsSelectVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,6 +38,9 @@ public class MmPhysicsResource{
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "根据id查询物理表", notes = "根据id查询物理表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "physicsId", value = "物理表id", paramType = "path", dataType = "string", required = true)
+    })
 	@Path("/{physicsId}")
     public MessageResult<MmPhysics> getById(@PathParam("physicsId")String physicsId){
         MmPhysics mmPhysics = mmPhysicsService.getById(physicsId);
@@ -45,6 +50,10 @@ public class MmPhysicsResource{
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "分页条件查询物理表", notes = "分页条件查询物理表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[1,infinity]",paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer")
+    })
     public MessageResult<Page> pageList(@Valid @BeanParam MmPhysicsSelectVo mmPhysicsSelectVo,
 										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
@@ -64,6 +73,9 @@ public class MmPhysicsResource{
 	@POST
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "新增物理表", notes = "新增物理表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mmPhysics", value = "物理表", dataTypeClass = MmPhysics.class, paramType = "body",required = true)
+    })
     public MessageResult<Void> insertMmPhysics(MmPhysics mmPhysics){
         mmPhysicsService.insertMmPhysics(mmPhysics);
 		return MessageResult.successe(Void.class).status(200).message("新增操作成功").build();
@@ -81,6 +93,9 @@ public class MmPhysicsResource{
     @DELETE
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "根据id删除物理表", notes = "根据id删除物理表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "physicsId", value = "物理表id", paramType = "path", dataType = "string", required = true)
+    })
 	@Path("/{physicsId}")
     public MessageResult<Void> deleteMmPhysics(@PathParam("physicsId")String physicsId){
         mmPhysicsService.deleteMmPhysics(physicsId);
@@ -99,6 +114,10 @@ public class MmPhysicsResource{
     @PUT
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "根据id更新物理表", notes = "根据id更新物理表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mmPhysics", value = "物理表", dataTypeClass = MmPhysics.class, paramType = "body",required = true),
+            @ApiImplicitParam(name = "physicsId", value = "物理表id", paramType = "path", dataType = "string", required = true)
+    })
 	@Path("/{physicsId}")
     public MessageResult<Void> updateMmPhysics(MmPhysics mmPhysics,@PathParam("physicsId")String physicsId){
         mmPhysics.setPhysicsId(physicsId);

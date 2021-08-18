@@ -27,6 +27,7 @@ import com.supermap.gaf.data.mgt.service.MmTableService;
 import com.supermap.gaf.data.mgt.support.ConvertHelper;
 import com.supermap.gaf.data.mgt.support.JdbcConnectionInfo;
 import com.supermap.gaf.data.mgt.util.Page;
+import com.supermap.gaf.data.mgt.util.PrjCoordSysUtil;
 import com.supermap.gaf.data.mgt.vo.MmFieldSelectVo;
 import com.supermap.gaf.data.mgt.vo.MmPhysicsSelectVo;
 import com.supermap.gaf.exception.GafException;
@@ -187,6 +188,7 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
         String name =  mmPhysics.getPhysicsName();
         if ("sdx".equals(mmModel.getModelType())) {
             // 空间模型
+
             String sdxInfoJson = mmTable.getSdxInfo();
             JSONObject sdxInfoJO = JSONObject.parseObject(sdxInfoJson);
             String datasetTypeStr = sdxInfoJO.getString("type");
@@ -194,65 +196,74 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
 
             SysResourceDatasource sysResourceDatasource = convert(mmPhysics);
             DatasourceConnectionInfo connectionInfo = convertHelper.conver2DatasourceConnectionInfo(sysResourceDatasource);
-            Workspace workspace = new Workspace();
-            Datasource datasource = workspace.getDatasources().open(connectionInfo);
-            Datasets datasets = datasource.getDatasets();
+            Workspace workspace = null;
+            Datasource datasource = null;
+            try {
+                workspace = new Workspace();
+                datasource = workspace.getDatasources().open(connectionInfo);
+                Datasets datasets = datasource.getDatasets();
 
-            if (DatasetType.GRID.equals(datasetType)) {
-                // 栅格
-                DatasetGridInfo datasetGridInfo = JSON.parseObject(sdxInfoJson,DatasetGridInfo.class, ConversionConfig.getParseConfig());
-                datasetGridInfo.setName(name);
-                DatasetGrid datasetGrid = datasets.create(datasetGridInfo);
-            } else if (DatasetType.IMAGE.equals(datasetType) || DatasetType.WCS.equals(datasetType)|| DatasetType.WMS.equals(datasetType)) {
-                DatasetImageInfo datasetImageInfo = JSON.parseObject(sdxInfoJson, DatasetImageInfo.class, ConversionConfig.getParseConfig());
-                datasetImageInfo.setName(name);
-                DatasetImage datasetImage = datasets.create(datasetImageInfo);
-            } else if (DatasetType.TOPOLOGY.equals(datasetType)) {
-                DatasetTopologyInfo datasetTopologyInfo = JSON.parseObject(sdxInfoJson, DatasetTopologyInfo.class, ConversionConfig.getParseConfig());
-                datasetTopologyInfo.setName(name);
-                DatasetTopology datasetTopology = datasets.create(datasetTopologyInfo);
-            } else if (DatasetType.MOSAIC.equals(datasetType)) {
-                Integer prj = sdxInfoJO.getInteger("prjCoordSys");
-                datasets.createDatasetMosaic(name,prj == null? null : PrjCoordSys.fromEPSG(prj) );
-            } else if (DatasetType.VOLUME.equals(datasetType)) {
-                DatasetVolumeInfo datasetTopologyInfo = JSON.parseObject(sdxInfoJson, DatasetVolumeInfo.class, ConversionConfig.getParseConfig());
-                datasetTopologyInfo.setName(name);
-                DatasetVolume datasetVolume = datasets.create(datasetTopologyInfo);
-            } else {
-                // 矢量
-                DatasetVectorInfo datasetVectorInfo = JSON.parseObject(sdxInfoJson, DatasetVectorInfo.class, ConversionConfig.getParseConfig());
-                datasetVectorInfo.setName(name);
-                Integer prj = sdxInfoJO.getInteger("prjCoordSys");
-                DatasetVector datasetVector;
-                if (prj != null) {
-                    datasetVector = datasets.create(datasetVectorInfo, PrjCoordSys.fromEPSG(prj));
+                if (DatasetType.GRID.equals(datasetType)) {
+                    // 栅格
+                    DatasetGridInfo datasetGridInfo = JSON.parseObject(sdxInfoJson,DatasetGridInfo.class, ConversionConfig.getParseConfig());
+                    datasetGridInfo.setName(name);
+                    DatasetGrid datasetGrid = datasets.create(datasetGridInfo);
+                } else if (DatasetType.IMAGE.equals(datasetType) || DatasetType.WCS.equals(datasetType)|| DatasetType.WMS.equals(datasetType)) {
+                    DatasetImageInfo datasetImageInfo = JSON.parseObject(sdxInfoJson, DatasetImageInfo.class, ConversionConfig.getParseConfig());
+                    datasetImageInfo.setName(name);
+                    DatasetImage datasetImage = datasets.create(datasetImageInfo);
+                } else if (DatasetType.TOPOLOGY.equals(datasetType)) {
+                    DatasetTopologyInfo datasetTopologyInfo = JSON.parseObject(sdxInfoJson, DatasetTopologyInfo.class, ConversionConfig.getParseConfig());
+                    datasetTopologyInfo.setName(name);
+                    DatasetTopology datasetTopology = datasets.create(datasetTopologyInfo);
+                } else if (DatasetType.MOSAIC.equals(datasetType)) {
+                    String prjCoordSysStr = sdxInfoJO.getString("prjCoordSys");
+                    PrjCoordSys prjCoordSys = PrjCoordSysUtil.parse(prjCoordSysStr);
+                    datasets.createDatasetMosaic(name,prjCoordSys);
+                } else if (DatasetType.VOLUME.equals(datasetType)) {
+                    DatasetVolumeInfo datasetTopologyInfo = JSON.parseObject(sdxInfoJson, DatasetVolumeInfo.class, ConversionConfig.getParseConfig());
+                    datasetTopologyInfo.setName(name);
+                    DatasetVolume datasetVolume = datasets.create(datasetTopologyInfo);
                 } else {
-                    datasetVector = datasets.create(datasetVectorInfo);
-                }
-                datasetVector.open();
-                FieldInfos fieldInfos = datasetVector.getFieldInfos();
-                int size = mmFields.size();
-                if (size > 0) {
-                    FieldInfo[] fieldInfosArray = new FieldInfo[size];
-                    for (int i = 0; i < size; i++) {
-                        MmField mmField = mmFields.get(i);
-                        FieldInfo fieldInfo = new FieldInfo();
-                        fieldInfo.setName(mmField.getFieldName());
-                        fieldInfo.setCaption(mmField.getFieldAlias());
-                        FieldType fieldType = (FieldType) FieldType.parse(FieldType.class, mmField.getFieldType().replace("sdx_", "").toUpperCase());
-                        fieldInfo.setType(fieldType);
-                        fieldInfo.setDefaultValue(mmField.getFieldDefault());
-                        fieldInfo.setRequired(mmField.getFieldNotNull());
-                        fieldInfo.setMaxLength(mmField.getFieldLength());
-                        fieldInfosArray[i] = fieldInfo;
+                    // 矢量
+                    DatasetVectorInfo datasetVectorInfo = JSON.parseObject(sdxInfoJson, DatasetVectorInfo.class, ConversionConfig.getParseConfig());
+                    datasetVectorInfo.setName(name);
+                    String prjCoordSysStr = sdxInfoJO.getString("prjCoordSys");
+                    PrjCoordSys prjCoordSys = PrjCoordSysUtil.parse(prjCoordSysStr);
+                    DatasetVector datasetVector = datasets.create(datasetVectorInfo, prjCoordSys);
+                    datasetVector.open();
+                    FieldInfos fieldInfos = datasetVector.getFieldInfos();
+                    int size = mmFields.size();
+                    if (size > 0) {
+                        FieldInfo[] fieldInfosArray = new FieldInfo[size];
+                        for (int i = 0; i < size; i++) {
+                            MmField mmField = mmFields.get(i);
+                            FieldInfo fieldInfo = new FieldInfo();
+                            fieldInfo.setName(mmField.getFieldName());
+                            fieldInfo.setCaption(mmField.getFieldAlias());
+                            FieldType fieldType = (FieldType) FieldType.parse(FieldType.class, mmField.getFieldType().replace("sdx_", "").toUpperCase());
+                            fieldInfo.setType(fieldType);
+                            fieldInfo.setDefaultValue(mmField.getFieldDefault());
+                            fieldInfo.setRequired(mmField.getFieldNotNull());
+                            fieldInfo.setMaxLength(mmField.getFieldLength());
+                            fieldInfosArray[i] = fieldInfo;
+                        }
+                        fieldInfos.addRange(fieldInfosArray);
                     }
-                    fieldInfos.addRange(fieldInfosArray);
+                    datasetVector.close();
                 }
-                datasetVector.close();
+
+            } finally {
+                if (datasource != null) {
+                    datasource.close();
+                }
+                if (workspace != null) {
+                    workspace.close();
+                    workspace.dispose();
+                }
             }
-            datasource.close();
-            workspace.close();
-            workspace.dispose();
+
+
         } else {
             DatasourceTypeEnum datasourceType = DatasourceTypeEnum.fromCode(mmModel.getModelType());
             if (mmFields.size() == 0) {
