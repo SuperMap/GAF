@@ -71,11 +71,9 @@ public class CustomTokenRealm extends AuthorizingRealm {
             final Pac4jPrincipal principal = new Pac4jPrincipal(Arrays.asList(new CommonProfile[]{profile}));
             return new SimpleAuthenticationInfo(principal, Boolean.TRUE, getName());
         } catch (Exception e) {
-            log.error("获取用户信息失败");
-            e.printStackTrace();
+            log.error("【URI:" + ((CustomToken) token).getRequest().getRequestURI() + "】获取用户信息失败");
             throw new AuthenticationException("获取用户信息失败:");
         }
-
     }
 
     /**

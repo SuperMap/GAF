@@ -69,5 +69,10 @@ public interface MmFieldAssociateService {
      * @return 
      */
     MmFieldAssociate updateMmFieldAssociate(MmFieldAssociate mmFieldAssociate);
-    
+
+    /**
+     * 更新两表之间的所有字段关联
+     * @param mmFieldAssociates
+     */
+    void refreshMmFieldAssociateByTables(String sourceFieldTableId,String targetFieldTableId,List<MmFieldAssociate> mmFieldAssociates);
 }

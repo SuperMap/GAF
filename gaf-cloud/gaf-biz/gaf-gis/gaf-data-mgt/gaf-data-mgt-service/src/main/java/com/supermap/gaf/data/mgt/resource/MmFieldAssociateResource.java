@@ -26,6 +26,7 @@ import java.util.List;
  * 字段关联接口
  * @author wxl 
  * @date yyyy-mm-dd
+ * /data-mgt/model-manage/field-associates
  */
 @Component
 @Api(value = "字段关联接口")
@@ -111,6 +112,17 @@ public class MmFieldAssociateResource{
     public MessageResult<Void> updateMmFieldAssociate(MmFieldAssociate mmFieldAssociate,@PathParam("fieldAssociateId")String fieldAssociateId){
         mmFieldAssociate.setFieldAssociateId(fieldAssociateId);
         mmFieldAssociateService.updateMmFieldAssociate(mmFieldAssociate);
+		return MessageResult.successe(Void.class).status(200).message("更新操作成功").build();
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "更新两表之间的所有字段关联", notes = "更新两表之间的所有字段关联")
+	@Path("/refresh-by-tables")
+    public MessageResult<Void> refreshMmFieldAssociateByTables(@QueryParam("sourceFieldTableId")String sourceFieldTableId,
+                                                               @QueryParam("targetFieldTableId")String targetFieldTableId,
+                                                               List<MmFieldAssociate> mmFieldAssociates){
+        mmFieldAssociateService.refreshMmFieldAssociateByTables(sourceFieldTableId,targetFieldTableId,mmFieldAssociates);
 		return MessageResult.successe(Void.class).status(200).message("更新操作成功").build();
     }
 
