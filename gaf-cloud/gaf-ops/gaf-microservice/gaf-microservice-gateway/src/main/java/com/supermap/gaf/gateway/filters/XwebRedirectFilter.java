@@ -46,10 +46,12 @@ public class XwebRedirectFilter implements WebFilter {
 
         //入口filter填充uri基础属性
         boolean isIndexUrl = uri.startsWith(gatewaySecurityProperties.getIndexUrl());
+        boolean isProfileUrl = uri.startsWith(gatewaySecurityProperties.getProfileUrl());
         List<String> publicUrls = gatewaySecurityProperties.getPublicUrls();
         boolean isPublicUri = AccessValidUtils.isPublicUrls(uri, publicUrls);
         ExchangeAuthenticationAttribute attribute = new ExchangeAuthenticationAttribute();
         attribute.setIsIndexUrl(isIndexUrl);
+        attribute.setIsProfileUrl(isProfileUrl);
         attribute.setIsPublicUrl(isPublicUri);
         attribute.setGatewaySecurityProperties(gatewaySecurityProperties);
         attribute.setUri(uri);
