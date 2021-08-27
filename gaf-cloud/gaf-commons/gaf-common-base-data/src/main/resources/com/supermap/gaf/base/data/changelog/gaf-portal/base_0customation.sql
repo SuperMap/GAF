@@ -4,3 +4,6 @@ INSERT INTO "public"."customation"("loginAdress", "logoutAdress", "profileAdress
 
 -- changeset SYS:20210718-0
 update customation set "layoutType" = 'topLeft' WHERE "id" = '7c94f0c0-d27f-4402-b01b-83d74e2a48f2';
+
+-- changeset SYS:20210809-4
+update customation set "color" = '#323944' WHERE "id" = '7c94f0c0-d27f-4402-b01b-83d74e2a48f2';

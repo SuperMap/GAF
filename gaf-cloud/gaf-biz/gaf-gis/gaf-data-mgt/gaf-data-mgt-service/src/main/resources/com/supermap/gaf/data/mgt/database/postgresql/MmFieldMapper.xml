@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.mgt.mapper.MmFieldMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.data.mgt.entity.MmField">
+        <result column="field_id" jdbcType="VARCHAR" property="fieldId" />
+        <result column="table_id" jdbcType="VARCHAR" property="tableId" />
+        <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+        <result column="field_alias" jdbcType="VARCHAR" property="fieldAlias" />
+        <result column="field_type" jdbcType="VARCHAR" property="fieldType" />
+        <result column="field_length" jdbcType="SMALLINT" property="fieldLength" />
+        <result column="field_precision" jdbcType="SMALLINT" property="fieldPrecision" />
+        <result column="field_default" jdbcType="VARCHAR" property="fieldDefault" />
+        <result column="field_not_null" jdbcType="BIT" property="fieldNotNull" />
+        <result column="field_primary_key" jdbcType="BIT" property="fieldPrimaryKey" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="sort_sn" jdbcType="SMALLINT" property="sortSn" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        field_id,
+        table_id,
+        field_name,
+        field_alias,
+        field_type,
+        field_length,
+        field_default,
+        field_precision,
+        field_not_null,
+        field_primary_key,
+        description,
+        created_time,
+        created_by,
+        updated_time,
+        updated_by,
+        sort_sn
+    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "mm_field"
+        WHERE field_id = #{fieldId}
+    </select>
+    <select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "mm_field"
+        WHERE
+        <trim>
+            <if test='fieldId != null'>  field_id = #{fieldId} AND </if>
+            <if test='tableId != null'>  table_id = #{tableId} AND </if>
+            <if test='fieldName != null'>  field_name = #{fieldName} AND </if>
+            <if test='fieldAlias != null'>  field_alias = #{fieldAlias} AND </if>
+            <if test='fieldType != null'>  field_type = #{fieldType} AND </if>
+            <if test='fieldLength != null'>  field_length = #{fieldLength} AND </if>
+            <if test='fieldPrecision != null'>  field_precision = #{fieldPrecision} AND </if>
+            <if test='fieldDefault != null'>  field_default = #{fieldDefault} AND </if>
+            <if test='fieldNotNull != null'>  field_not_null = #{fieldNotNull} AND </if>
+            <if test='fieldPrimaryKey != null'>  field_primary_key = #{fieldPrimaryKey} AND </if>
+            <if test='description != null'>  description = #{description} AND </if>
+            <if test='createdTime != null'>  created_time = #{createdTime} AND </if>
+            <if test='createdBy != null'>  created_by = #{createdBy} AND </if>
+            <if test='updatedTime != null'>  updated_time = #{updatedTime} AND </if>
+            <if test='updatedBy != null'>  updated_by = #{updatedBy} AND </if>
+            <if test='sortSn != null'>  sort_sn = #{sortSn} AND </if>
+            <if test ='null != equalFieldName'>  ${equalFieldName}
+                <choose>
+                    <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                    <otherwise>  is null </otherwise>
+                </choose>
+                AND
+            </if>
+            <if test ='null != searchFieldName and null != searchFieldValue'>  ${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')  AND</if>
+            1=1
+        </trim>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="field_id" keyProperty="fieldId" parameterType="com.supermap.gaf.data.mgt.entity.MmField">
+        INSERT INTO "mm_field"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != fieldId'>field_id,</if>
+			<if test ='null != tableId'>table_id,</if>
+			<if test ='null != fieldName'>field_name,</if>
+			<if test ='null != fieldAlias'>field_alias,</if>
+			<if test ='null != fieldType'>field_type,</if>
+			<if test ='null != fieldLength'>field_length,</if>
+			<if test ='null != fieldPrecision'>field_precision,</if>
+			<if test ='null != fieldDefault'>field_default,</if>
+			<if test ='null != fieldNotNull'>field_not_null,</if>
+			<if test ='null != fieldPrimaryKey'>field_primary_key,</if>
+			<if test ='null != description'>description,</if>
+			created_time,
+			<if test ='null != createdBy'>created_by,</if>
+			updated_time,
+			<if test ='null != updatedBy'>updated_by,</if>
+			<if test ='null != sortSn'>sort_sn,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != fieldId'>#{fieldId},</if>
+			<if test ='null != tableId'>#{tableId},</if>
+			<if test ='null != fieldName'>#{fieldName},</if>
+			<if test ='null != fieldAlias'>#{fieldAlias},</if>
+			<if test ='null != fieldType'>#{fieldType},</if>
+			<if test ='null != fieldLength'>#{fieldLength},</if>
+			<if test ='null != fieldPrecision'>#{fieldPrecision},</if>
+			<if test ='null != fieldDefault'>#{fieldDefault},</if>
+			<if test ='null != fieldNotNull'>#{fieldNotNull},</if>
+			<if test ='null != fieldPrimaryKey'>#{fieldPrimaryKey},</if>
+			<if test ='null != description'>#{description},</if>
+			now(),
+			<if test ='null != createdBy'>#{createdBy},</if>
+			now(),
+			<if test ='null != updatedBy'>#{updatedBy},</if>
+			<if test ='null != sortSn'>#{sortSn},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "mm_field"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.fieldId}  ,  #{item.tableId}  ,  #{item.fieldName}  ,  #{item.fieldAlias}  ,  #{item.fieldType}  ,  #{item.fieldLength}  , #{item.fieldPrecision},  #{item.fieldDefault}  ,  #{item.fieldNotNull}  ,  #{item.fieldPrimaryKey}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy} ,#{item.sortSn} )
+        </foreach>
+    </insert>
+	<update id="batchDelete" parameterType="java.util.List">
+        DELETE FROM mm_field
+        WHERE field_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+	<update id="delete" >
+        DELETE FROM mm_field
+        WHERE field_id = #{fieldId}
+    </update>
+    <update id="update" parameterType="com.supermap.gaf.data.mgt.entity.MmField">
+        UPDATE "mm_field"
+        <set>
+			<if test ="null != tableId and '' != tableId">table_id = #{tableId},</if>
+			<if test ="null != fieldName and '' != fieldName">field_name = #{fieldName},</if>				
+			field_alias = #{fieldAlias},
+			<if test ="null != fieldType and '' != fieldType">field_type = #{fieldType},</if>				
+			field_length = #{fieldLength},
+            field_precision = #{fieldPrecision},
+			field_default = #{fieldDefault},
+			<if test ="null != fieldNotNull and '' != fieldNotNull">field_not_null = #{fieldNotNull},</if>				
+			<if test ="null != fieldPrimaryKey and '' != fieldPrimaryKey">field_primary_key = #{fieldPrimaryKey},</if>				
+			description = #{description},
+			updated_time = now(),
+			updated_by = #{updatedBy},
+            <if test ="null != sortSn and '' != sortSn">sort_sn = #{sortSn},</if>
+        </set>
+        WHERE field_id = #{fieldId}
+    </update>
+
+</mapper>

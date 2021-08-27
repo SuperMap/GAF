@@ -6,8 +6,8 @@
 package com.supermap.gaf.sys.mgt.resource.root;
 
 import com.supermap.gaf.sys.mgt.resource.SysCatalogResource;
+import com.supermap.gaf.sys.mgt.resource.SysDatasourceResource;
 import com.supermap.gaf.sys.mgt.resource.SysDictResource;
-import com.supermap.gaf.sys.mgt.resource.SysResourceDatasourceResource;
 import io.swagger.annotations.Api;
 
 import javax.ws.rs.Path;
@@ -31,8 +31,8 @@ public class RootResource {
     }
 
     @Path("/sys-resource-datasources")
-    public Class<SysResourceDatasourceResource> sysResourceDatasourceResource() {
-        return SysResourceDatasourceResource.class;
+    public Class<SysDatasourceResource> sysResourceDatasourceResource() {
+        return SysDatasourceResource.class;
     }
 
 }

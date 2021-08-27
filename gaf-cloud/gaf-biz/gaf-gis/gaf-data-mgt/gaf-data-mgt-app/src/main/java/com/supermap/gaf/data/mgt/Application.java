@@ -15,6 +15,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -27,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableDiscoveryClient
 @EnableFeignClients({"com.supermap.gaf"})
 @MapperScan(basePackages = {"com.supermap.gaf.**.dao", "com.supermap.gaf.**.mapper"})
+@EnableTransactionManagement
 public class Application {
 
     public static void main(String[] args) {

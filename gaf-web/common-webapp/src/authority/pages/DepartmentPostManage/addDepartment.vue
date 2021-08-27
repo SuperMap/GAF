@@ -437,7 +437,7 @@ export default {
               }
             });
           });
-          console.log(this.departmentList);
+          this.selectedRowKeys = []
         } else {
           this.$message.error(`删除失败,原因:${rst.data.message}`);
         }

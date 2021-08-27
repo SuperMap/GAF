@@ -1,0 +1,572 @@
+<template>
+  <div>
+    <gaf-table-layout>
+      <template #actions>
+        <button @click="handleAdd" class="btn-fun blue">
+          <a-icon type="plus-circle" /><span>{{ addButtonName }}</span>
+        </button>
+        <a-popconfirm
+          class="btn-fun blue"
+          title="删除后无法恢复，确认是否继续?"
+          ok-text="确认"
+          cancel-text="取消"
+          @confirm="() => batchDel()"
+        >
+          <button class="btn-fun blue">
+            <span>批量删除</span>
+          </button>
+        </a-popconfirm>
+        <a-popconfirm
+          class="btn-fun blue"
+          title="是否批量物理化"
+          ok-text="确认"
+          cancel-text="取消"
+          @confirm="() => handlePhysicalization()"
+        >
+          <button class="btn-fun blue">
+            <span>批量物理化</span>
+          </button>
+        </a-popconfirm>
+        <button @click="modelCanvas" class="btn-fun blue btn-16">
+         <span>模型画布</span>
+        </button>
+      </template>
+      <template #filter>
+        <div class="search-position">
+          <a-input-search
+            @search="onSearch"
+            placeholder="请输入名称查询"
+            size="large"
+          >
+          </a-input-search>
+        </div>
+      </template>
+      <template #default>
+        <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
+        <gaf-table-with-page
+          :showXH="false"
+          :row-selection="{
+            selectedRowKeys: selectedRowKeys,
+            onChange: rowChange,
+            onSelect: rowSelect,
+            onSelectAll: rowSelectAll,
+          }"
+          :pagination="pagination"
+          :data-source="authResourceApiList"
+          :loading="loading"
+          @change="tableChange"
+          :row-key="(r) => r.tableId"
+          :columns="
+            columns.filter((item) => item.dataIndex !== 'resourceApiId')
+          "
+          class="table-style"
+          size="middle"
+        >
+          <template
+            slot="operation"
+            slot-scope="text, record"
+            v-if="hasPKField"
+          >
+            <!-- <a
+              @click.stop="() => handleDetail(record)"
+              class="btn-view"
+              href="javascript:;"
+            >
+              <a-icon type="profile" /> 详情
+            </a>
+            <a-divider type="vertical" />
+            <a
+              @click.stop="() => handleUpdate(record)"
+              class="btn-edit"
+              href="javascript:;"
+            >
+              <a-icon type="edit" /> 编辑
+            </a>
+            <a-divider type="vertical" /> -->
+            <a-popconfirm
+              @confirm="() => handleDelete(record)"
+              title="删除后无法恢复，确认是否继续?"
+              ok-text="确认"
+              cancel-text="取消"
+            >
+              <a href="javascript:;">删除</a>
+            </a-popconfirm>
+          </template>
+          <template slot="timeRender" v-if="timeFormat" slot-scope="text">
+            {{ timeFormat(text) }}
+          </template>
+        </gaf-table-with-page>
+      </template>
+    </gaf-table-layout>
+    <gaf-drawer
+      :visible="modalVisible"
+      :width="500"
+      :footer="null"
+      :centered="true"
+      @close="handleBack"
+      :closable="false"
+      placement="right"
+      destroy-on-close
+    >
+      <table-form
+        ref="dicTypeForm"
+        :editData="editData"
+        :operation="operation"
+        :modelId="modelId"
+        :optionsPrjCoordSys="optionsPrjCoordSys"
+        @add-success="afterAddDicTypeSuccess"
+        @update-success="afterUpdateDicTypeSuccess"
+        @delete-success="afterDeleteDicTypeSuccess"
+        @back="handleBack"
+      ></table-form>
+    </gaf-drawer>
+    <gaf-drawer
+    :visible="open"
+    :width="500"
+    :footer="null"
+    :centered="true"
+    @close="handleBackDrawer"
+    :closable="false"
+    placement="right"
+    destroy-on-close
+  >
+    <physicalization-form
+      :title="titlePhysicalization"
+      :editData="editData"
+      :tableId="selectedRowKeys"
+      @submit="handleSubmit"
+      @back="handleBackDrawer"
+      :operation="operation"
+    >
+    </physicalization-form>
+  </gaf-drawer>
+  </div>
+</template>
+
+<script>
+import TableForm from "./TableForm";
+import treeUtil from '../../../common/utils/TreeUtil'
+import PhysicalizationForm from './PhysicalizationForm'
+
+export default {
+  components: {
+    TableForm,
+    PhysicalizationForm
+  },
+  props: {
+    component: {
+      type: String,
+      default: "",
+    },
+    dataOfTree: {
+      type: Array,
+      default: () => [],
+    },
+    typeList: {
+      type: Array,
+      dafault: () => [],
+    },
+    editData: {
+      type: Object,
+      default: null,
+    },
+    operation: {
+      type: Number,
+      default: 0,
+    },
+    addButtonName: {
+      type: String,
+      dafault: "",
+    },
+    modelId: {
+      type: String,
+      dafault: "",
+    }
+  },
+  inject: ['mainCompent'],
+  data() {
+    return {
+      optionsPrjCoordSys: [],
+      // 搜索项
+      searchKey: "",
+      titlePhysicalization: "物理化",
+      clearFilters: null,
+      // 非多个禁用
+      multiple: true,
+      // 标题
+      title: "",
+      // 总条数
+      total: 0,
+      selectedRowKeys: [],
+      selectRowLength: 0,
+      // ${functionName}表格数据
+      authResourceApiList: [],
+      // 是否显示添加修改弹出层
+      open: false,
+      // 分页参数
+      pagination: {
+        pageSize: 10,
+        current: 1,
+        total: 0,
+      },
+      // 列表是否加载中
+      loading: false,
+      searchText: "",
+      searchInput: null,
+      searchedColumn: "table_name",
+      sorter: {
+        order: "",
+        field: "",
+      },
+      // 详情：1，新增：2，编辑：3
+      // operation: 0,
+      modalVisible: false,
+      // 有无主键
+      hasPKField: true,
+      typeList2: [],
+      searchTextApiList: [],
+    };
+  },
+  watch: {
+    typeList(newdata) {
+      console.log(newdata, "new");
+      this.typeList2 = JSON.parse(JSON.stringify(newdata)).map((item) => {
+        delete item.children;
+        return item;
+      });
+      this.searchTextApiList = JSON.parse(JSON.stringify(newdata)).map(
+        (item) => {
+          delete item.children;
+          return item;
+        }
+      );
+    },
+    modelId: function (newValue) {
+      console.log(newValue, 'newValue')
+      this.pagination.current = 1;
+      this.getList();
+    },
+  },
+  computed: {
+    columns: function () {
+      const columns = [
+        {
+          title: "名称",
+          dataIndex: "tableName",
+          key: "table_name",
+        },
+        {
+          title: "所有者",
+          dataIndex: "createdBy",
+          key: "created_by",
+        },
+        // {
+        //   title: "类型",
+        //   dataIndex: "tableType",
+        //   key: "table_type",
+        // },
+        {
+          title: "注册时间",
+          dataIndex: "createdTime",
+          scopedSlots: { customRender: "timeRender" },
+          key: "created_time",
+        },
+        {
+          title: "操作",
+          align: "center",
+          // width: 260,
+          scopedSlots: { customRender: "operation" },
+        },
+      ];
+      return this.hasPKField ? columns : columns.slice(0, columns.length - 2);
+    },
+    timeFormat: function () {
+      if (
+        this.columns.filter(
+          (item) =>
+            item.scopedSlots && item.scopedSlots.customRender === "timeRender"
+        ).length > 0
+      ) {
+        return function (str) {
+          if (!str || str === "") {
+            return "";
+          }
+          const dt = new Date(str);
+          const year = dt.getFullYear();
+          let month = dt.getMonth() + 1;
+          let date = dt.getDate();
+          let hour = dt.getHours();
+          let minute = dt.getMinutes();
+          let second = dt.getSeconds();
+
+          month = month < 10 ? "0" + month : month;
+          date = date < 10 ? "0" + date : date;
+          hour = hour < 10 ? "0" + hour : hour;
+          minute = minute < 10 ? "0" + minute : minute;
+          second = second < 10 ? "0" + second : second;
+
+          return `${year}/${month}/${date} ${hour}:${minute}:${second}`;
+        };
+      }
+      return null;
+    },
+  },
+  mounted() {
+    // console.log(this.mainCompent.modelData.modelType)
+    if (this.modelId !== '') {
+      this.getList()
+    }
+    this.getPrjCoordSys()
+    console.log(this.editData, "ssss");
+  },
+  methods: {
+    // 清空
+    clearOptions() {
+      this.selectedRowKeys = [];
+      this.selectRowLength = 0;
+    },
+    // 复选框
+    rowChange(selectedRowKeys) {
+      this.selectedRowKeys = selectedRowKeys;
+      this.selectRowLength = selectedRowKeys.length;
+    },
+    rowSelect(record, selected, selectedRows) {
+      console.log(record, selected, selectedRows);
+    },
+    rowSelectAll(selected, selectedRows, changeRows) {
+      console.log(selected, selectedRows, changeRows);
+    },
+    handleSearchFieldChange(value) {
+      this.searchedColumn = value;
+    },
+    // 功能未实现
+    // 搜索查询
+    async onSearch(val) {
+      this.searchText = val;
+      this.pagination.current = 1;
+      await this.getList();
+      // if (val === "") {
+      //   this.typeList2 = this.searchTextApiList;
+      // } else {
+      //   this.typeList2 = this.searchTextApiList.filter(
+      //     (ltem) => ltem.title.includes(val) === true
+      //   );
+      // }
+    },
+    // 重置查询
+    /*  handleReset(clearFilters, key) {
+      clearFilters()
+      if (this.searchedColumn === key) {
+        this.searchText = ''
+        this.searchedColumn = ''
+        this.clearFilters = null
+      }
+    }, */
+    // 页码，排序项发生改变时，重新获取列表数据
+    tableChange(pageInfo, filters, sorter) {
+      if (pageInfo) {
+        this.pagination.current = pageInfo.current;
+        this.pagination.pageSize = pageInfo.pageSize;
+      }
+      if (sorter) {
+        this.sorter.order = sorter.order === "descend" ? "DESC" : "ASC";
+        this.sorter.field = sorter.columnKey;
+      }
+      this.getList()
+    },
+    // 添加数据
+    handleAdd() {
+      this.$emit("onAddDicType");
+      // this.operation = 2
+      // this.operation1 = 'add'
+      this.modalVisible = true;
+      // this.title = '添加api资源'
+      // this.$nextTick(()=> {
+      //   this.$refs.dicTypeForm.clear()
+      // })
+    },
+    // 添加修改提交后
+    handleSubmit() {
+      this.open = false;
+      this.getList();
+    },
+    // 添加修改返回后
+    handleBack() {
+      this.editData = {}
+      this.open = false;
+      this.modalVisible = false;
+    },
+    // 修改数据
+    handleUpdate(row) {
+      this.operation = 3;
+      this.open = true;
+      this.modalVisible = true;
+      this.title = "修改api资源";
+      this.editData = row;
+    },
+    handleDetail(row) {
+      this.operation = 1;
+      this.open = true;
+      this.modalVisible = true;
+      this.title = "详情展示";
+      this.editData = row;
+    },
+    // 删除数据
+    async handleDelete(row) {
+      // this.$refs.addEditForm.cancelDelete()
+      console.log(row);
+      const url = `/data-mgt/model-manage/logic-tables/` + row.tableId;
+      const rst = await this.$axios.delete(url);
+      if (rst.data.isSuccessed) {
+        // this.typeList.forEach((item, index) => {
+        //   if (item.key === row.key) {
+        //     this.typeList.splice(index, 1);
+        //   }
+        // });
+        this.$message.success("删除成功");
+        // if (this.typeList && this.typeList.length === 0) {
+        //   this.$emit("delete-success", rst.data.data, true);
+        // } else {
+        //   this.$emit("delete-success", rst.data.data);
+        // }
+
+        this.$emit('delete-success', rst.data.data)
+      } else {
+        this.$message.error("删除失败，原因: " + rst.data.message);
+      }
+      this.$nextTick(() => {
+        if (
+          this.pagination.current !== 1 &&
+          this.authResourceApiList.length === 1
+        ) {
+          this.pagination.current--;
+        }
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== row.tableId
+        })
+        this.getList()
+      });
+    },
+    // 批量删除
+    async batchDel() {
+      const url = `/data-mgt/model-manage/logic-tables/`;
+      const selectedRowKeys = this.selectedRowKeys;
+      if (selectedRowKeys.length !== 0) {
+        const rst = await this.$axios.delete(url, { data: selectedRowKeys });
+        if (rst.data.isSuccessed) {
+          this.$message.success("删除成功");
+          this.$emit("delete-success", { modelId: this.modelId, key: selectedRowKeys },)
+          this.selectedRowKeys = [];
+        } else {
+          this.$message.error(`删除失败,原因:${rst.data.message}`);
+        }
+        this.$nextTick(() => {
+          if (
+            this.pagination.current !== 1 &&
+            selectedRowKeys.length === this.authResourceApiList.length
+          ) {
+            this.pagination.current--;
+          }
+          this.getList()
+        });
+      } else {
+        this.$message.warn("请选择您要删除的内容");
+      }
+    },
+    onSelectChange(selectedRowKeys) {
+      this.selectedRowKeys = selectedRowKeys;
+      if (this.selectedRowKeys.length > 0) {
+        this.multiple = false;
+      } else {
+        this.multiple = true;
+      }
+    },
+    async getList() {
+      this.loading = true;
+      let url = `/data-mgt/model-manage/logic-tables?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&modelId=${this.modelId}`;
+      if (this.searchText.trim() && this.searchedColumn) {
+        url =
+          url +
+          "&searchFieldName=" +
+          this.searchedColumn +
+          "&searchFieldValue=" +
+          this.searchText.trim();
+      }
+      if (this.sorter.order && this.sorter.field) {
+        url =
+          url +
+          "&orderFieldName=" +
+          this.sorter.field +
+          "&orderMethod=" +
+          this.sorter.order;
+      }
+      const res = await this.$axios.$get(url);
+      this.loading = false;
+      if (res.isSuccessed) {
+        this.searchTextApiList = res.data.pageList;
+        this.authResourceApiList = res.data.pageList;
+        this.pagination.total = res.data.totalCount;
+      } else {
+        this.$message.error(`查询失败,原因:${res.message}`);
+      }
+    },
+    afterAddDicTypeSuccess(data) {
+      this.getList()
+      this.modalVisible = false;
+      this.$emit("add-success", data);
+    },
+    afterUpdateDicTypeSuccess(data) {
+      this.$emit("update-success", data);
+    },
+    afterDeleteDicTypeSuccess(data) {
+      this.getList()
+      if (this.typeList2 && this.typeList2.length === 0) {
+        this.$emit("delete-success", data, true);
+      }
+      this.$emit("delete-success", data);
+    },
+    cancleWhenAdd(data) {
+      this.modalVisible = false;
+      this.$emit("cancleWhenAdd", data);
+    },
+    handleBackDrawer() {
+      this.open = false;
+    },
+    handlePhysicalization() {
+      if (this.selectedRowKeys.length === 0) {
+        this.$message.warning('请选择要物理化的内容')
+      } else {
+        this.open = true
+      }
+    },
+    modelCanvas() {
+      this.$emit('changeShowModelCanvas')
+    },
+    async getPrjCoordSys() {
+      const url = `/data-mgt/datasource/list-coordsys`
+      const res = await this.$axios.$get(url)
+      if (res.isSuccessed) {
+        this.optionsPrjCoordSys = res.data
+        treeUtil.forEach(this.optionsPrjCoordSys,(item => {
+          if (item.userObject) {
+            item['value'] = item.userObject.code
+          } else {
+            item['value'] = item.key
+            item['disabled'] = true
+          }
+        }))
+      } else {
+        this.$message.error('加载坐标系失败,原因：' + res.message)
+      }
+    }
+  },
+};
+</script>
+<style scoped>
+  /deep/ .action-filter.ant-row > div:first-child {
+    width: 60%;
+  }
+  /deep/ .action-filter.ant-row > div:last-child {
+    width: 40%;
+  }
+</style>

@@ -139,7 +139,7 @@ public class DbMinioConfigHandler extends AbstractMinioConfigHandler {
             body.append(String.format("mntPoint=%s", getS3VolumePath(volumeId))).append(lineSeparator);
         }
         StringBuilder header = new StringBuilder("[config]");
-        header.append("section=").append(StringUtils.join(configs, ",")).append("");
+        header.append(lineSeparator).append("section=").append(StringUtils.join(configs, ",")).append(lineSeparator);
         return new String(header.append(body));
     }
 

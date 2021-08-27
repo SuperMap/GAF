@@ -5,11 +5,11 @@
     <parent>
         <artifactId>gaf-data-mgt</artifactId>
         <groupId>com.supermap.gaf</groupId>
-        <version>2.1.1.RELEASE</version>
+        <version>${revision}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>2.1.1.RELEASE</version>
+    <version>${revision}</version>
     <artifactId>gaf-data-mgt-client</artifactId>
 
 

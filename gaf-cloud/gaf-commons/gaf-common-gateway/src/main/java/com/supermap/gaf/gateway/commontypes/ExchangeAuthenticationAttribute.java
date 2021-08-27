@@ -26,6 +26,7 @@ public class ExchangeAuthenticationAttribute implements Serializable {
     private String uri;
     private Boolean isPublicUrl;
     private Boolean isIndexUrl;
+    private Boolean isProfileUrl;
     private AuthenticationResult authenticationResult;
     private GatewaySecurityProperties gatewaySecurityProperties;
 }

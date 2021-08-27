@@ -40,7 +40,7 @@ public class XgatewayAuthorizationValidateFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         ExchangeAuthenticationAttribute attribute = ((ExchangeAuthenticationAttribute) request.getAttribute(EXCHANGE_AUTHENTICATION_ATTRIBUTE_NAME));
-        if (attribute.getIsPublicUrl() || attribute.getIsIndexUrl()){
+        if (attribute.getIsPublicUrl() || attribute.getIsIndexUrl() || attribute.getIsProfileUrl()){
             chain.doFilter(request, response);
         }else{
             AuthenticationResult authenticationResult = attribute.getAuthenticationResult();

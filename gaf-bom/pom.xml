@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.supermap.gaf</groupId>
         <artifactId>gaf</artifactId>
-        <version>2.1.1.RELEASE</version>
+        <version>${revision}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>gaf-bom</artifactId>
-    <version>2.1.1.RELEASE</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
 
@@ -107,6 +107,7 @@
         <plugin.surefire.version>${plugin.failsafe.version}</plugin.surefire.version>
         <plugin.tomcat.version>2.2</plugin.tomcat.version>
         <plugin.war.version>3.2.1</plugin.war.version>
+        <flatten-maven-plugin.version>1.1.0</flatten-maven-plugin.version>
 
         <akka24.version>2.4.14</akka24.version>
         <akka23.version>2.3.16</akka23.version>
@@ -1798,5 +1799,15 @@
         </dependencies>
 
     </dependencyManagement>
-
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>${flatten-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

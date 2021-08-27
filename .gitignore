@@ -118,8 +118,10 @@
 **/sw.*
 **/dist.zip
 
+gaf-cloud/gaf-ops/gaf-storage/src/main/frontend/node
+
 .npm
 *.tgz
 
-
+.flattened-pom.xml
 

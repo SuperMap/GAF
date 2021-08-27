@@ -10,6 +10,7 @@ import com.supermap.gaf.commontypes.tree.DefaultTreeNode;
 import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
 import com.supermap.gaf.data.mgt.vo.SysResourceDatasourceSelectVo;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,6 +27,14 @@ public interface SysResourceDatasourceService {
      * @return  数据源 若未查询到则返回null
      */
     SysResourceDatasource getById(String datasourceId);
+
+    /**
+     * 根据id集合查询数据源
+     * @param datasourceIds 数据源id集合
+     * @return  数据源列表 若未查询到则返回空集合
+     */
+    List<SysResourceDatasource> listByIds(Collection<String> datasourceIds);
+
 	
 	/**
      * 分页条件查询

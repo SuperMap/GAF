@@ -15,5 +15,11 @@ INSERT INTO "auth_role_menu"("role_menu_id", "role_id", "resource_module_id", "s
 INSERT INTO "auth_role_menu"("role_menu_id", "role_id", "resource_module_id", "status", "sort_sn", "description", "created_time", "created_by", "updated_time", "updated_by", "resource_menu_id") VALUES ('5c3c06c1-ff55-4b0f-8982-ee6cadec2270', 'role_000001', '2b6f1cb5-c469-4cc0-9afa-09e76a28f818', 't', 1, NULL, '2021-03-23 08:26:41.927204', NULL, '2021-03-23 08:26:41.927204', NULL, 'c7e91d31-c0cf-4758-a247-dcc6398399af');
 
 -- changeset SYS:20210810-0
-UPDATE "auth_resource_module" SET name='存储配置', module_url = '/storage/view/index.html#/StorageManagement' WHERE resource_module_id = '2b6f1cb5-c469-4cc0-9afa-09e76a28f818'
-UPDATE "auth_resource_menu" SET name='存储配置'WHERE resource_menu_id = 'c7e91d31-c0cf-4758-a247-dcc6398399af'
+UPDATE "auth_resource_module" SET name='存储配置', module_url = '/storage/view/index.html#/StorageManagement' WHERE resource_module_id = '2b6f1cb5-c469-4cc0-9afa-09e76a28f818';
+UPDATE "auth_resource_menu" SET name='存储配置'WHERE resource_menu_id = 'c7e91d31-c0cf-4758-a247-dcc6398399af';
+
+-- changeset SYS:20210810-1
+UPDATE "auth_resource_module" SET  path = '/storage/StorageManagement' WHERE resource_module_id = '2b6f1cb5-c469-4cc0-9afa-09e76a28f818';
+
+-- changeset SYS:20210817-8
+INSERT INTO "auth_role_menu" ("role_menu_id", "role_id", "resource_module_id", "status", "sort_sn", "description", "created_time", "created_by", "updated_time", "updated_by", "resource_menu_id") VALUES ('eadbaa67-9a3f-4a15-b136-9022ccb92c4c', '8343b450-baac-4d34-902a-49e60284560d', '2b6f1cb5-c469-4cc0-9afa-09e76a28f818', 't', 1, NULL, '2021-08-17 00:58:37.359445', NULL, '2021-08-17 00:58:37.359445', NULL, 'c7e91d31-c0cf-4758-a247-dcc6398399af');

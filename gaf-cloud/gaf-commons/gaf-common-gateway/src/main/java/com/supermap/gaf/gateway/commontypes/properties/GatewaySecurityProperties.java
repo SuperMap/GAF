@@ -28,6 +28,7 @@ public class GatewaySecurityProperties {
     public static String DEFAULT_LOGIN_URL = "/login";
     public static String DEFAULT_LOGOUT_URL = "/logout";
     public static String DEFAULT_INDEX_URL = "/index.html";
+    public static String DEFAULT_PROFILE_URL = "/portal/user/profile/detail";
     public static String DEFAULT_PUBLIC_URLS = "/**/view/**,/**/static/**,/**/_static/**";
 
     private String centerLoginUrl = DEFAULT_LOGIN_URL;
@@ -39,6 +40,8 @@ public class GatewaySecurityProperties {
     private String gatewayLogoutUrl = DEFAULT_LOGOUT_URL;
 
     private String indexUrl = DEFAULT_INDEX_URL;
+
+    private String profileUrl = DEFAULT_PROFILE_URL;
 
     private boolean apiAuthzEnable = false;
 
@@ -83,6 +86,14 @@ public class GatewaySecurityProperties {
 
     public void setIndexUrl(String indexUrl) {
         this.indexUrl = indexUrl;
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 
     public List<String> getPublicUrls() {

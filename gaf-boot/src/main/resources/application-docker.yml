@@ -91,6 +91,7 @@ gateway:
     gatewayLoginUrl: /login
     gatewayLogoutUrl: /logout
     indexUrl: /viewer/#/
+    profileUrl: /portal/user/profile/detail
     publicUrls: /viewer/**,/monitor/**,/grafana/**,/**/actuator/**,/authentication/**,/authority/tenant/**,/base/fileservice/file/upload/swagger/*,/cloud-portal/**,/logout,/oauth/**,/oauth2/**,/login/**,/api/**,/**/view/**, /**/*.js,/*.*, /lang/**,/img/**,/**/static/**,/**/_static/**, /docs/**,/security/token/**,/config/**,/_static/**,/samples/**,/portal/customization**,/portal/user/profile**,/es/**,/log/env/logFluentdEsUrl,/map/webgis-view/**,/map/webgis-apps/*/config
 
 #################################################gaf-authentication##############################

@@ -102,14 +102,14 @@ public class BatchSortAndCodeServiceImpl implements BatchSortAndCodeService {
             }
             if (field.isAnnotationPresent(LogicDeleteField.class)) {
                 revisionSortSnParam.setLogicDeleteFieldName(fieldName);
-                founded.add(ParentIdField.class);
+                founded.add(LogicDeleteField.class);
             }
         }
         revisionSortSnParam.setParentId(parentId);
         revisionSortSnParam.setOldSortSn(oldSortSn);
         revisionSortSnParam.setCurSortSn(curSortSn);
         Assert.notNull(revisionSortSnParam.getIdFieldName(), "could not found id property or @Id in class " + entityClass.getSimpleName());
-        Assert.notNull(revisionSortSnParam.getParentIdFieldName(), "could not found pid property or @ParentIdField in class " + entityClass.getSimpleName());
+        //Assert.notNull(revisionSortSnParam.getParentIdFieldName(), "could not found pid property or @ParentIdField in class " + entityClass.getSimpleName());
         Assert.notNull(revisionSortSnParam.getSortSnFieldName(), "could not found sort_sn property or @SortSnField in class " + entityClass.getSimpleName());
         Assert.notNull(revisionSortSnParam.getUpdatedTimeFieldName(), "could found find updated_time property or @UpdatedTimeField in class " + entityClass.getSimpleName());
         return batchSortAndCodeMapper.revisionSortSn(revisionSortSnParam);

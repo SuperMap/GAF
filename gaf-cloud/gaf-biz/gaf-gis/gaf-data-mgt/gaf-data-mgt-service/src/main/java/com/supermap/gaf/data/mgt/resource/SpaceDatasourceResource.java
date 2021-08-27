@@ -1,14 +1,24 @@
+/*
+ * Copyright© 2000 - 2021 SuperMap Software Co.Ltd. All rights reserved.
+ * This program are made available under the terms of the Apache License, Version 2.0
+ * which accompanies this distribution and is available at http://www.apache.org/licenses/LICENSE-2.0.html.
+ */
 package com.supermap.gaf.data.mgt.resource;
 
+import com.supermap.data.GeoSpatialRefType;
 import com.supermap.gaf.commontypes.MessageResult;
+import com.supermap.gaf.commontypes.tree.DefaultTreeNode;
 import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
 import com.supermap.gaf.data.mgt.conversion.result.DataExportResult;
 import com.supermap.gaf.data.mgt.conversion.result.DataImportResult;
 import com.supermap.gaf.data.mgt.entity.BuildS3MParameter;
 import com.supermap.gaf.data.mgt.entity.DataSourceInfo;
 import com.supermap.gaf.data.mgt.entity.GDataset;
+import com.supermap.gaf.data.mgt.model.CoordSysInfo;
 import com.supermap.gaf.data.mgt.service.S3MCacheService;
 import com.supermap.gaf.data.mgt.service.SpaceDatasourceService;
+import com.supermap.gaf.data.mgt.support.TempSerialNumberGenerator;
+import com.supermap.gaf.data.mgt.util.PrjCoordSysUtil;
 import com.supermap.gaf.data.mgt.vo.TemplateToTargetVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -19,7 +29,10 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 空间数据源接口
@@ -35,6 +48,121 @@ public class SpaceDatasourceResource {
 
     @Autowired
     private S3MCacheService s3mCacheService;
+
+    @ApiOperation(value = "获取所有所有已预定义坐标系信息", notes = "获取的坐标系数据为树形结构,分为两层,第一层为坐标系分组节点,分组名固定为常用坐标系、平面坐标系、地理坐标系、投影坐标系,第二层就是具体的坐标系信息节点。" +
+            "坐标系信息包含编码、名称、类型(平面、地理、投影)、epsg code" +
+            "")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/list-coordsys")
+    public MessageResult<List<DefaultTreeNode>> listPrjCoordSys() {
+        List<DefaultTreeNode> treeList = new LinkedList<>();
+
+        DefaultTreeNode frequentlyUsedGroup = new DefaultTreeNode();
+        frequentlyUsedGroup.setLeaf(false);
+        frequentlyUsedGroup.setTitle("常用坐标系");
+        frequentlyUsedGroup.setKey("1");
+        frequentlyUsedGroup.setSortSn(1);
+        frequentlyUsedGroup.setParentId("0");
+        treeList.add(frequentlyUsedGroup);
+
+        DefaultTreeNode planerGroup = new DefaultTreeNode();
+        planerGroup.setLeaf(false);
+        planerGroup.setTitle("平面坐标系");
+        planerGroup.setKey("2");
+        planerGroup.setSortSn(2);
+        planerGroup.setParentId("0");
+        treeList.add(planerGroup);
+
+        DefaultTreeNode geoGroup = new DefaultTreeNode();
+        geoGroup.setLeaf(false);
+        geoGroup.setTitle("地理坐标系");
+        geoGroup.setKey("3");
+        geoGroup.setSortSn(3);
+        geoGroup.setParentId("0");
+        treeList.add(geoGroup);
+
+        DefaultTreeNode prjGroup = new DefaultTreeNode();
+        prjGroup.setLeaf(false);
+        prjGroup.setTitle("投影坐标系");
+        prjGroup.setKey("4");
+        prjGroup.setSortSn(4);
+        prjGroup.setParentId("0");
+        treeList.add(prjGroup);
+
+        List<CoordSysInfo> frequentlyUsed = PrjCoordSysUtil.listFrequentlyUsed();
+        TempSerialNumberGenerator tempSerialNumberGenerator = new TempSerialNumberGenerator(4,1);
+
+        List<DefaultTreeNode> frequentlyUsedNodes = new LinkedList<>();
+        for (int i = 0; i < frequentlyUsed.size(); i++) {
+            DefaultTreeNode treeNode = new DefaultTreeNode();
+            treeNode.setKey(String.valueOf(tempSerialNumberGenerator.nextInt()));
+            treeNode.setParentId("1");
+            treeNode.setSortSn(i+1);
+            treeNode.setLeaf(true);
+            CoordSysInfo coordSysInfo = frequentlyUsed.get(i);
+            treeNode.setTitle(coordSysInfo.getName());
+            treeNode.setUserObject(coordSysInfo);
+            frequentlyUsedNodes.add(treeNode);
+        }
+        frequentlyUsedGroup.setChildren(frequentlyUsedNodes);
+
+        List<CoordSysInfo> all = PrjCoordSysUtil.listPrjCoordSysInfo();
+        Map<String, List<CoordSysInfo>> groupMap = all.stream().collect(Collectors.groupingBy(CoordSysInfo::getCoordSysInfoType));
+
+        List<CoordSysInfo> planerCoordSysInfos = groupMap.get(GeoSpatialRefType.SPATIALREF_NONEARTH.name());
+        List<DefaultTreeNode> planerNodes = new LinkedList<>();
+        for (int i = 0; i < planerCoordSysInfos.size(); i++) {
+            CoordSysInfo planerInfo = planerCoordSysInfos.get(i);
+            DefaultTreeNode treeNode = new DefaultTreeNode();
+            treeNode.setKey(String.valueOf(tempSerialNumberGenerator.nextInt()));
+            treeNode.setParentId("2");
+            treeNode.setSortSn(i+1);
+            treeNode.setLeaf(true);
+            treeNode.setTitle(planerInfo.getName());
+            treeNode.setUserObject(planerInfo);
+            planerNodes.add(treeNode);
+        }
+        planerGroup.setChildren(planerNodes);
+
+        List<CoordSysInfo> geoCoordSysInfos = groupMap.get(GeoSpatialRefType.SPATIALREF_EARTH_LONGITUDE_LATITUDE.name());
+        List<DefaultTreeNode> geoNodes = new LinkedList<>();
+        for (int i = 0; i < geoCoordSysInfos.size(); i++) {
+            CoordSysInfo geoInfo = geoCoordSysInfos.get(i);
+            DefaultTreeNode treeNode = new DefaultTreeNode();
+            treeNode.setKey(String.valueOf(tempSerialNumberGenerator.nextInt()));
+            treeNode.setParentId("3");
+            treeNode.setSortSn(i+1);
+            treeNode.setLeaf(true);
+            treeNode.setTitle(geoInfo.getName());
+            treeNode.setUserObject(geoInfo);
+            geoNodes.add(treeNode);
+        }
+        geoGroup.setChildren(geoNodes);
+
+        List<CoordSysInfo> coordSysInfos = groupMap.get(GeoSpatialRefType.SPATIALREF_EARTH_PROJECTION.name());
+        List<DefaultTreeNode> prjNodes = new LinkedList<>();
+        for (int i = 0; i < coordSysInfos.size(); i++) {
+            CoordSysInfo prjInfo = coordSysInfos.get(i);
+            DefaultTreeNode treeNode = new DefaultTreeNode();
+            treeNode.setKey(String.valueOf(tempSerialNumberGenerator.nextInt()));
+            treeNode.setParentId("4");
+            treeNode.setSortSn(i+1);
+            treeNode.setLeaf(true);
+            treeNode.setTitle(prjInfo.getName());
+            treeNode.setUserObject(prjInfo);
+            prjNodes.add(treeNode);
+        }
+        prjGroup.setChildren(prjNodes);
+
+        MessageResult<List<DefaultTreeNode>> mr = new MessageResult<>();
+        mr.setSuccessed(true);
+        mr.setData(treeList);
+        mr.setMessage("查询坐标系成功");
+        return mr;
+    }
+
+
 
     @ApiOperation(value = "新建空的空间数据源", notes = "新建空的空间数据源")
     @ApiImplicitParams({
@@ -91,7 +219,7 @@ public class SpaceDatasourceResource {
                             "\t\t\"importMode\": \"NONE\", // 设置当同名数据集存在时导入的模式\n" +
                             "\t\t\"scalingFactor\": {\"ratioX\":0.9 , \"ratioY\":0.9, \"ratioZ\":0.9}, // 设置缩放因子\n" +
                             "\t\t\"targetEncodeType\": \"NONE\", // 设置要生成的数据集的编码类型\n" +
-                            "\t\t\"targetPrjCoordSys\": 4520, // 设置导入后目标数据的坐标系 注意:该项的值是坐标系的EPSG编码\n" +
+                            "\t\t\"targetPrjCoordSys\": \"PCS_WGS_1984_UTM_1N\", // 设置导入后目标数据的坐标系 注意:该项的值参考最后面关于坐标系的特殊说明\n" +
                             "\t\t\"importEmptyDataset\": true  // 是否导入空数据集 注意:该设置项非每种导入类型都有\n" +
                             "\t},\n" +
                             "\t\"dataInfosPart\": [{// 导入数据信息部分，即对源数据集到目标数据集的映射的设置(可选)\n" +
@@ -136,8 +264,8 @@ public class SpaceDatasourceResource {
                             "1. ImportSetting类设置属性importMode的方法setImportMode(ImportMode importMode),其方法参数是自定义枚举类型,取枚举实例的名字,转换为json参数-> basePart: {\"importMode\": \"NONE\"}\n" +
                             "2. ImportSetting类设置缩放因子方法setScalingFactor(double ratioX, double ratioY, double ratioZ),虽然不是设置属性的方法,\n" +
                             "也可以将方法的多个参数视为一个json对象,转换为json参数-> basePart: {\"scalingFactor\": {\"ratioX\":0.9 , \"ratioY\":0.9, \"ratioZ\":0.9}}\n" +
-                            "3. ImportSetting类设置属性targetPrjCoordSys的方法setTargetPrjCoordSys(PrjCoordSys prjCoordSys), 这里的方法参数是坐标系,稍微特殊,转换为json参数时使用坐标系的EPSG编码值代表坐标系,\n" +
-                            "转换为json参数-> basePart: {\"targetPrjCoordSys\": 4520}, 其中4520时EPSG值\n" +
+                            "3. ImportSetting类设置属性targetPrjCoordSys的方法setTargetPrjCoordSys(PrjCoordSys prjCoordSys), 这里的方法参数是坐标系,稍微特殊,参考最后的关于坐标系的特殊说明,\n" +
+                            "转换为json参数-> basePart: {\"targetPrjCoordSys\": \"PCS_WGS_1984_UTM_1N\"}, 其中PCS_WGS_1984_UTM_1N是指定格式的字符串，代表某坐标系\n" +
                             "这几条规则也适用于下面的dataInfosPart\n" +
                             "\n" +
                             "三 dataInfosPart导入数据信息部分，即对源数据集到目标数据集的映射的设置\n" +
@@ -146,7 +274,25 @@ public class SpaceDatasourceResource {
                             "1. ImportDataInfoVCT类的修改指定字段的字段名称的方法changeFieldName(String oldName,String newName),\n" +
                             "转换为json参数时,将方法名作为设置项名,将方法的多个参数视为一个json对象,转换结果为 \"changeFieldName\": { \"oldFieldName\": \"BZ\", \"newFieldName\": \"BZ2\"}\n" +
                             "这里, 旧字段名统一为oldFieldName 新字段名统一为newFieldName\n" +
-                            "注意: dataInfosPart JSON数组内的JSON对象顺序很重要,可以先调用查看数据导入时所有源数据集到目标数据集映的接口,得到顺序和映射详情,再做参数设置\n"
+                            "注意: dataInfosPart JSON数组内的JSON对象顺序很重要,可以先调用查看数据导入时所有源数据集到目标数据集映的接口,得到顺序和映射详情,再做参数设置\n" +
+                            "\n" +
+                            "关于坐标系的特殊说明：\n" +
+                            "用指定格式的坐标系字符串来代表坐标系. 暂时不支持自定义坐标系\n" +
+                            "坐标系分为平面坐标系 地理坐标系 投影坐标系\n" +
+                            "坐标系字符串格式是\n" +
+                            "1. 平面坐标系：\n" +
+                            "PCS_NON_EARTH_${坐标系单位}, 坐标系单位有CENTIMETER(厘米) DECIMETER分米 FOOT英尺 INCH英寸 KILOMETER千米\n" +
+                            "METER米 MILE英里 MILIMETER毫米 ,具体可查看iobjects for java 在线帮助文档搜索Unit枚举类(com.supermap.data.Unit)\n" +
+                            "例如：PCS_NON_EARTH_METER 或者 PCS_NON_EARTH_MILE\n" +
+                            "2. 地理坐标系\n" +
+                            "PCS_EARTH_LONGITUDE_LATITUDE_${地理坐标系类型名}\n" +
+                            "地理坐标系类型名可参考iobjects for java 在线帮助文档 GeoCoordSysType 枚举类(com.supermap.data.GeoCoordSysType)\n" +
+                            "例如：GeoCoordSysType枚举类中的实例GCS_CHINA_2000,则得到地理坐标系字符串为PCS_EARTH_LONGITUDE_LATITUDE_GCS_CHINA_2000\n" +
+                            "3. 投影坐标系\n" +
+                            "可参考iobjects for java 在线帮助文档, 搜索PrjCoordSysType枚举类(com.supermap.data.PrjCoordSysType)\n" +
+                            "每个枚举实例名就代表投影坐标系,除了PCS_NON_EARTH  PCS_EARTH_LONGITUDE_LATITUDE PCS_USER_DEFINED\n" +
+                            "例如：PrjCoordSysType枚举类实例 PCS_WGS_1984_UTM_1N,则得到投影坐标系字符串为 PCS_WGS_1984_UTM_1N" +
+                            ""
                     , dataTypeClass = String.class, paramType = "body",required = true),
     })
     @POST

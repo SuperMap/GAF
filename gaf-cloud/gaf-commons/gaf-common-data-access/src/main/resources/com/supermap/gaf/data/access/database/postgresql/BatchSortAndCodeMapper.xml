@@ -13,17 +13,24 @@
             </if>
            ) as _seqnum
             from "${tableName}" m
-            WHERE
-            <choose>
-                <when  test="parentId != null">
-                    m.${parentIdFieldName}=#{parentId}
-                </when>
-                <otherwise>
-                    m.${parentIdFieldName} is null
-                </otherwise>
-            </choose>
-            <if test="logicDeleteFieldName != null">
-                and m.${logicDeleteFieldName}=true
+            <if test="parentIdFieldName != null">
+                WHERE
+                <choose>
+                    <when  test="parentId != null">
+                        m.${parentIdFieldName}=#{parentId}
+                    </when>
+                    <otherwise>
+                        m.${parentIdFieldName} is null
+                    </otherwise>
+                </choose>
+                <if test="logicDeleteFieldName != null">
+                    and m.${logicDeleteFieldName}=true
+                </if>
+            </if>
+            <if test="parentIdFieldName == null">
+                <if test="logicDeleteFieldName != null">
+                    WHERE  m.${logicDeleteFieldName}=true
+                </if>
             </if>
         ) m
         WHERE t.${idFieldName} = m.${idFieldName}
@@ -38,15 +45,20 @@
         </if>
         ) as _seqnum
         from "${tableName}" m
-        WHERE
-        <choose>
-            <when  test="parentId != null">
-                m.${parentIdFieldName}=#{parentId}
-            </when>
-            <otherwise>
-                m.${parentIdFieldName} is null
-            </otherwise>
-        </choose>
+        <if test="parentIdFieldName != null">
+            WHERE
+            <choose>
+                <when  test="parentId != null">
+                    m.${parentIdFieldName}=#{parentId}
+                </when>
+                <otherwise>
+                    m.${parentIdFieldName} is null
+                </otherwise>
+            </choose>
+        </if>
+        <if test="parentIdFieldName == null">
+            WHERE  1 = 1
+        </if>
         <if test="conditions != null and conditions.size > 0">
             and <foreach collection="conditions" item="condition" separator=" and ">
             m.${condition}
