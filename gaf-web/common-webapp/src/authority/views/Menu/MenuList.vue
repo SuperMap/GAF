@@ -1,6 +1,6 @@
 <template>
   <div>
-    <gaf-table-layout v-show="!open">
+    <gaf-table-layout>
       <template #actions>
         <button @click="handleAdd" class="btn-fun blue btn-16">
           <a-icon type="plus-circle" /><span>新增</span>

@@ -18,7 +18,6 @@
               <a-icon
                 :type="iconNodeType.type === 'model' ? 'apartment' : 'database'"
               ></a-icon>
-              <!-- <a-button type="primary" @click="hh(iconNodeType)"></a-button> -->
             </template>
           </gaf-tree-transparent>
         </div>
@@ -43,7 +42,7 @@
               ></model-form>
             </div>
           </a-tab-pane>
-          <a-tab-pane key="4" v-if="isModel" tab="逻辑表">
+          <a-tab-pane key="4" v-if="isModel && dataLength" tab="逻辑表" :force-render="true">
             <div class="margin-15">
               <logic-list
                 ref="dicTypeForm"
@@ -174,6 +173,9 @@
     }
   },
   computed: {
+    dataLength: function() {
+      return this.dataOfTree.length
+    }
   },
   watch: {
     isModel: function(newValue) {
@@ -186,7 +188,6 @@
     selectedNodeKeys: function() {
       this.selectedNodeKeyVesion += 1
     },
-    
   },
   async created() {
     await this.getTree()  
@@ -207,9 +208,7 @@
     // this.catalogList = this.dataOfTree[0].children.filter(item => item.type === 12)
   },
   methods: {
-    // 当字典目录添加成功后
     afterAddCatalogSuccess(model) {
-      console.log(model,this.dataOfTree,'tree')
       this.$refs.myGafTree.inserNode({
         key: model.modelId,
         title: model.modelName,
@@ -228,7 +227,6 @@
       this.modelData = model
     },
     afterUpdateCatalogSuccess(model) {
-      console.log(model)
       this.$refs.myGafTree.updateNode({
         key: model.modelId,
         title: model.modelName,
@@ -240,7 +238,6 @@
       }
       this.modelEditData = model
     },
-    // 删除字典目录成功
     afterDeleteCatalogSuccess(model,boolean) {
       if(boolean){
         this.openAddType = true
@@ -262,7 +259,6 @@
       this.modelOperation = 'add'
       // this.$refs.modelForm.clear()
     },
-    // 当字典类别添加成功后
     afterAddLogicTableSuccess(table) {
       console.log('sds')
       this.openAddCatalog=false
@@ -325,29 +321,23 @@
       }
       this.selectedNodeKeys = []
       this.tableOperation = 2
-      // this.$refs.dicTypeForm.clear()
     },
     onAddCatalog() {
-      // this.groupShow = true
-      // this.activeKey = '1'
       this.selectedNodeKeys = []
       this.modelOperation = 'add'
       this.$nextTick(()=> {
-        // this.$refs.modelForm.clear()
       })
     },
     onAddDicType() {
-      // this.groupShow = false
-      // this.activeKey = '2'
-      this.tableEditData = {}
-      this.selectedNodeKeys = []
-      this.tableOperation = 2
-      // this.$nextTick(()=> {
-      //   this.$refs.dicTypeForm.clear()
-      // })
+      if (this.selectedNodeKeys.length === 0) {
+        this.$message.info('请选择一个模型')
+      } else {
+        this.tableEditData = {}
+        this.selectedNodeKeys = []
+        this.tableOperation = 2
+      }
     },
     async onSelect(selectedKeys, e) {
-      console.log(selectedKeys, e)
       if (e.selected) {
         if (e.node.dataRef.userObject.type === 'model') {
           const model = await this.getModel(e.node.dataRef.key)
@@ -356,7 +346,6 @@
           this.isModel = true
           this.activeKey = '4'
           this.modelId = e.node.dataRef.key
-          console.log(this.modelId, '2')
           this.modelData = model
         } else if (e.node.dataRef.userObject.type === 'table') {
           const table = await this.getTable(e.node.dataRef.key)
@@ -369,66 +358,6 @@
           this.modelData = model
         }
       }
-      
-      // this.typeList = []
-      // this.catalogList = []
-      // if (e.node.dataRef.children){
-      //   this.typeList = e.node.dataRef.children.filter(item => item.type === 14)
-      //   this.catalogList = e.node.dataRef.children.filter(item => item.type === 12)
-      // }
-      // if (this.typeList.length > 0){
-      //   this.openAddCatalog = false
-      // } else {
-      //   this.openAddCatalog = true
-      // }
-      // if (this.catalogList.length > 0){
-      //   this.openAddType = false
-      // } else {
-      //   this.openAddType = true
-      // }
-      // this.nodeType = e.node.dataRef.type
-      // if (e.selected) {
-      //   const selectKey = selectedKeys[0]
-      //   if (e.node.dataRef.type === 12) {
-      //     this.isModel = true
-      //     this.groupShow = true
-      //     this.activeKey = '1'
-      //     const catalog = await this.getCatalog(selectKey)
-      //     if(catalog) {
-      //       this.modelOperation = 'edit'
-      //       this.modelEditData = {...catalog}
-      //       this.tableEditData = {catalogId: catalog.catalogId}
-      //       this.openCatalogForm = true
-      //       if (catalog.catalogId === this.rootNode){
-      //         this.openCatalogForm = false
-      //         this.activeKey = '5'
-      //       }
-      //     }
-      //     this.tab1SelectedKeyVesion = this.selectedNodeKeyVesion
-      //   } else if (e.node.dataRef.type === 14) {
-      //     this.isModel = true
-      //     this.groupShow = false
-      //     const dicType = await this.getTable(selectKey)
-      //     if(dicType) {
-      //         this.tableOperation = 3
-      //         this.tableEditData = dicType
-      //       }
-      //     if(this.activeKey === '1' || this.activeKey === '2') {
-      //       this.activeKey = '2'
-      //       if(dicType) {
-      //         this.tableOperation = 3
-      //         this.tableEditData = dicType
-      //       }
-      //       this.tab2SelectedKeyVesion = this.selectedNodeKeyVesion
-      //     } else if(this.activeKey === '3') {
-      //       this.dicTypeId = selectKey
-      //       if(dicType) {
-      //         this.dictCode = dicType.dictCode
-      //       }
-      //       this.tab3SelectedKeyVesion = this.selectedNodeKeyVesion
-      //     }
-      //   }
-      // }
     },
     changeOperation() {
       this.modelOperation = 'add'
@@ -436,7 +365,6 @@
     async tabChange(activeKey) {
       if (this.selectedNodeKeys && this.selectedNodeKeys.length === 1) {
         const selectKey = this.selectedNodeKeys[0]
-          // eslint-disable-next-line no-empty
         if (activeKey === '1' && this.tab1SelectedKeyVesion < this.selectedNodeKeyVesion) {
           const catalog = await this.getModel(selectKey)
           if(catalog) {
@@ -478,7 +406,6 @@
       }
     },
     async getModel(modelId) {
-      // const url = `/data-mgt/model-manage/${modelId}`
       const url = `/data-mgt/model-manage/models/${modelId}`
       const res = await this.$axios.$get(url)
       if(res.isSuccessed) {
@@ -493,40 +420,11 @@
       const url = '/data-mgt/model-manage/models/model-tables-tree'
       const res = await this.$axios.$get(url)
       if (res.isSuccessed) {
-        console.log(res, 'res')
         this.dataOfTree = res.data
         this.setScopedSlots(this.dataOfTree)
-        // this.dataOfTree = treeUtil.convertToCustomSortTree({key: '0'}, res.data, (a , b) => {
-        //   if(a.type == b.type) {
-        //     return a.sortSn - b.sortSn
-        //   } else {
-        //     return a.type - b.type
-        //   }
-        // })
-        // this.dataOfTree.map(item => {
-        //   if (item.logicTables.length > 0) {
-        //     item.logicTables.map(childrenItem => {
-        //       childrenItem['key'] = childrenItem.tableId
-        //       childrenItem['title'] = childrenItem.tableName
-        //       childrenItem['scopedSlots'] =  { title: 'title' }
-        //     })
-        //   }
-        //   item['key'] = item.modelId
-        //   item['title'] = item.modelName
-        //   item['children'] = item.logicTables
-        //   item['scopedSlots'] =  { title: 'title' }
-        // })
-        // if (this.dataOfTree.length === 0) {
-        //   this.activeKey = '1'
-        //   this.modelOperation = 'add'
-        // }
-        console.log(this.dataOfTree, 'data')
       } else {
         this.$message.error(`查询失败,原因:${res.message}`)
       }
-    },
-    hh(ss) {
-      console.log(ss, 'ss')
     },
     setScopedSlots(data) {
       data.forEach(item => {

@@ -76,7 +76,7 @@
             :treeData="treeData"
             placeholder="请选择字段类型"
             tree-node-filter-prop="title"
-            :replaceFields="{children:'children', title:'name', key:'code' }"
+            :replaceFields="{children:'children', title:'name', key:'code' , value: 'code'}"
             show-search
             tree-default-expand-all
             allow-clear
@@ -249,11 +249,8 @@
   },
   beforeMount() {
     this.addOrEditForm = this.$form.createForm(this, { name: 'addOrEditForm' })
-    // this.getTreeData()
-    // if (mainCompent.modelData.modelType !== 'sdx')
   },
   mounted() {
-    console.log(this.mainCompent, 'modelData')
     const copyData = { ...this.editData }
     this.dataId = copyData.fieldId
     delete copyData.status

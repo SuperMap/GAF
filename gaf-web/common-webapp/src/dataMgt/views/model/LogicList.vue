@@ -113,6 +113,7 @@
         :editData="editData"
         :operation="operation"
         :modelId="modelId"
+        :optionsPrjCoordSys="optionsPrjCoordSys"
         @add-success="afterAddDicTypeSuccess"
         @update-success="afterUpdateDicTypeSuccess"
         @delete-success="afterDeleteDicTypeSuccess"
@@ -144,6 +145,7 @@
 
 <script>
 import TableForm from "./TableForm";
+import treeUtil from '../../../common/utils/TreeUtil'
 import PhysicalizationForm from './PhysicalizationForm'
 
 export default {
@@ -181,8 +183,10 @@ export default {
       dafault: "",
     }
   },
+  inject: ['mainCompent'],
   data() {
     return {
+      optionsPrjCoordSys: [],
       // 搜索项
       searchKey: "",
       titlePhysicalization: "物理化",
@@ -308,19 +312,11 @@ export default {
     },
   },
   mounted() {
-    this.typeList2 = JSON.parse(JSON.stringify(this.typeList)).map((item) => {
-      delete item.children;
-      return item;
-    });
-    this.searchTextApiList = JSON.parse(JSON.stringify(this.typeList)).map(
-      (item) => {
-        delete item.children;
-        return item;
-      }
-    );
+    // console.log(this.mainCompent.modelData.modelType)
     if (this.modelId !== '') {
       this.getList()
     }
+    this.getPrjCoordSys()
     console.log(this.editData, "ssss");
   },
   methods: {
@@ -376,7 +372,7 @@ export default {
         this.sorter.order = sorter.order === "descend" ? "DESC" : "ASC";
         this.sorter.field = sorter.columnKey;
       }
-      // this.getList()
+      this.getList()
     },
     // 添加数据
     handleAdd() {
@@ -446,40 +442,20 @@ export default {
           this.pagination.current--;
         }
         this.selectedRowKeys = this.selectedRowKeys.filter(item => {
-          return item !== row.key
+          return item !== row.tableId
         })
         this.getList()
       });
     },
     // 批量删除
     async batchDel() {
-      console.log(this.editData);
       const url = `/data-mgt/model-manage/logic-tables/`;
       const selectedRowKeys = this.selectedRowKeys;
-      console.log(selectedRowKeys);
       if (selectedRowKeys.length !== 0) {
         const rst = await this.$axios.delete(url, { data: selectedRowKeys });
         if (rst.data.isSuccessed) {
           this.$message.success("删除成功");
           this.$emit("delete-success", { modelId: this.modelId, key: selectedRowKeys },)
-          // if (this.typeList2 && this.typeList2.length === 0) {
-          //   this.$emit(
-          //     "delete-success",
-          //     { catalogId: this.typeList[0].parentId, key: selectedRowKeys },
-          //     true
-          //   );
-          // }
-          // this.$emit("delete-success", {
-          //   catalogId: this.typeList[0].parentId,
-          //   key: selectedRowKeys,
-          // });
-          // this.selectedRowKeys.forEach((item) => {
-          //   this.typeList.forEach((x, index) => {
-          //     if (item === x.key) {
-          //       this.typeList.splice(index, 1);
-          //     }
-          //   });
-          // });
           this.selectedRowKeys = [];
         } else {
           this.$message.error(`删除失败,原因:${rst.data.message}`);
@@ -565,6 +541,23 @@ export default {
     },
     modelCanvas() {
       this.$emit('changeShowModelCanvas')
+    },
+    async getPrjCoordSys() {
+      const url = `/data-mgt/datasource/list-coordsys`
+      const res = await this.$axios.$get(url)
+      if (res.isSuccessed) {
+        this.optionsPrjCoordSys = res.data
+        treeUtil.forEach(this.optionsPrjCoordSys,(item => {
+          if (item.userObject) {
+            item['value'] = item.userObject.code
+          } else {
+            item['value'] = item.key
+            item['disabled'] = true
+          }
+        }))
+      } else {
+        this.$message.error('加载坐标系失败,原因：' + res.message)
+      }
     }
   },
 };

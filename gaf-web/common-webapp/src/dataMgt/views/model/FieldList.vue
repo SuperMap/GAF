@@ -78,20 +78,6 @@
             {{ map.get(text)}}
           </template>
           <template slot="operation" slot-scope="text, record">
-            <!-- <a
-              @click.stop="() => handleAddChild(record)"
-              class="btn-margin"
-              href="javascript:;"
-            >
-              <u>添加子项</u>
-            </a>
-            <a
-              @click.stop="() => handleDetail(record)"
-              class="btn-margin"
-              href="javascript:;"
-            >
-              <u>详情</u>
-            </a> -->
             <a
               @click.stop="() => handleUpdate(record)"
               class="btn-margin"
@@ -202,6 +188,12 @@ export default {
         {
           title: "字段名称",
           dataIndex: "fieldName",
+          key: "field_name",
+          width: 150,
+        },
+        {
+          title: "字段别名",
+          dataIndex: "fieldAlias",
           key: "field_name",
           width: 150,
         },
@@ -328,13 +320,6 @@ export default {
       }
       this.getList();
     },
-    // onExpandedRowsChange(expandedRows) {
-    //   if(!expandedRows || expandedRows.length == 0) {
-    //     this.expandedRowKeys = []
-    //   } else {
-    //     this.expandedRowKeys = expandedRows.map(el=> el.dictId);
-    //   }
-    // },
     // 添加数据
     handleAdd() {
       this.operation = 2;
@@ -430,7 +415,6 @@ export default {
       console.log(selected, selectedRows, changeRows);
     },
     async getList() {
-      console.log(this.pagination)
       this.loading = true;
       let url = `/data-mgt/model-manage/fields?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&tableId=${this.tableId}`;
       if (this.searchText.trim() && this.searchedColumn) {
@@ -455,21 +439,12 @@ export default {
         this.pagination.current = res.data.pageNum;
         this.pagination.pageSize = res.data.pageSize;
         this.pagination.total = res.data.total;
-        // children空数组置为null
-        // if(res.data.content && res.data.content.length > 0) {
-        //   treeUtil.deepFirstTraverseTree(null, res.data.content, (parentNode, node) => {
-        //     if(node.children && node.children.length == 0) {
-        //       node.children = null
-        //     }
-        //   })
-        // }
         this.fieldList = res.data.pageList;
       } else {
         this.$message.error(`查询失败,原因:${res.message}`);
       }
     },
     async getModel() {
-      // const url = `/data-mgt/model-manage/${modelId}`
       const url = `/data-mgt/model-manage/models/${this.modelId}`
       const res = await this.$axios.$get(url)
       if(res.isSuccessed) {
@@ -484,10 +459,6 @@ export default {
       const res = await this.$axios.$get(url)
       if (res.isSuccessed) {
         this.treeData = res.data
-        this.treeData.forEach(item => {
-          item['value'] = item.code
-          this.map.set(item.code, item.name)
-        })
       } else {
         this.$message.error('加载字段类型失败,原因：' + res.message)
       }

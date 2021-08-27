@@ -192,4 +192,7 @@ export default {
   width: 100%;
   border-bottom: 1px solid #ccc;
 }
+/deep/ .btn-fun.blue {
+  width: auto;
+}
 </style>

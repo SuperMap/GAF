@@ -16,7 +16,7 @@
         :wrapper-col="{ span: 17 }"
         hide-required-mark
       >
-        <a-form-item v-if="isSdx" label="空间数据库类型">
+        <a-form-item v-if="isSdx" label="数据源类型">
           <a-tree-select
             v-decorator="[
               'type',
@@ -24,13 +24,14 @@
                 rules: [
                   {
                     required: true,
-                    message: '空间数据库类型不能为空'
+                    message: '数据源类型不能为空'
                   }
                 ],
               }
             ]"
+            @change="typeChange"
             :treeData="treeData"
-            placeholder="请选择空间数据库类型"
+            placeholder="请选择数据源类型"
             tree-node-filter-prop="title"
             show-search
             tree-default-expand-all
@@ -38,7 +39,10 @@
           >
           </a-tree-select>
         </a-form-item>
-        <a-form-item label="地址">
+        <a-form-item v-if="isSdx" label="是否为数据源模板">
+          <a-switch v-model="isTemplate" checked-children="是" un-checked-children="否"/>
+        </a-form-item>
+        <!-- <a-form-item label="地址">
           <a-input
             :disabled="operation === 1"
             v-decorator="[
@@ -59,30 +63,30 @@
             placeholder="请输入地址"
             allow-clear
           />
-        </a-form-item>
-        <a-form-item label="数据库">
-          <a-input
-            :disabled="operation === 1"
+        </a-form-item> -->
+        <a-form-item label="数据源">
+           <a-tree-select
             v-decorator="[
-              'dbName',
+              'datasourceId',
               {
                 rules: [
                   {
                     required: true,
-                    message: '请输入数据库'
-                  },
-                  {
-                    max: 30,
-                    message: '长度不能超过30个字符'
+                    message: '数据源类型不能为空'
                   }
-                ]
+                ],
               }
             ]"
-            placeholder="请输入数据库"
+            :treeData="dbNameTreeData"
+            :replaceFields="{children:'children', title:'dsName', key:'datasourceId' , value: 'datasourceId'}"
+            placeholder="请选择数据源类型"
+            tree-node-filter-prop="title"
+            show-search
+            tree-default-expand-all
             allow-clear
           />
         </a-form-item>
-        <a-form-item label="用户名">
+        <!-- <a-form-item label="用户名">
           <a-input
             :disabled="operation === 1"
             v-decorator="[
@@ -125,7 +129,7 @@
             placeholder="请输入密码"
             allow-clear
           />
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item v-if="!showPname" label="物理表名">
           <a-input
             :disabled="operation === 1"
@@ -226,7 +230,18 @@
     return {
       dataId: '',
       loading: false,
-      treeData: []
+      treeData: [],
+      dbNameTreeData: [],
+      isTemplate: false,
+      typeValue: ''
+    }
+  },
+  watch: {
+    isTemplate: function() {
+      console.log(this)
+      if (this.typeValue) {
+        this.getDbNameTreeData()
+      }
     }
   },
   computed: {
@@ -240,7 +255,9 @@
   beforeMount() {
     this.addOrEditForm = this.$form.createForm(this, { name: 'addOrEditForm' })
     this.getTreeData()
-    // if (mainCompent.modelData.modelType !== 'sdx')
+    if (!this.isSdx) {
+      this.getDbNameTreeData()
+    }
   },
   mounted() {
     console.log(this.mainCompent, 'modelData')
@@ -305,7 +322,6 @@
           }
         } else {
           const rst = await this.$axios.post(url, physicalData)
-          console.log(rst)
           if (rst.data.data.failed.length === 0) {
             this.$message.success('添加成功')
           } else {
@@ -313,7 +329,6 @@
             rst.data.data.failed.forEach(item => {
               errorMessage += `${item.mmPhysics.physicsName}:${item.message}\n`
             })
-            console.log(errorMessage)
             this.$message.error(`添加失败,原因:${rst.data.message}${errorMessage}`)
           }
         }
@@ -336,6 +351,27 @@
         this.$message.error('加载API分组树失败,原因：' + res.message)
       }
     },
+    typeChange(value) {
+      console.log(value)
+      this.typeValue = value
+      this.getDbNameTreeData()
+    },
+    async getDbNameTreeData() {
+      let url = `/data-mgt/sys-resource-datasources?typeCodes=${this.typeValue}&isSdx=${this.isSdx}&pageNum=0&pageSize=0`
+      if(!this.isSdx) {
+        url = `/data-mgt/sys-resource-datasources?typeCodes=${this.mainCompent.modelData.modelType}&isSdx=${this.isSdx}&pageNum=0&pageSize=0`
+      }
+      if (this.isTemplate) {
+        url = url + "&isTemplate=" + this.isTemplate
+      }
+      const res = await this.$axios.$get(url)
+      if (res.isSuccessed) {
+        console.log(res.data)
+        this.dbNameTreeData = res.data.content
+      } else {
+        this.$message.error('加载API分组树失败,原因：' + res.message)
+      }
+    }
   }
 }
 </script>

@@ -125,17 +125,17 @@ export default {
       columns: [
         {
           title: "数据源地址",
-          dataIndex: "db_url",
-          key: "db_url",
+          dataIndex: "addr",
+          key: "addr",
         },
         {
           title: "数据库",
-          dataIndex: "db_name",
+          dataIndex: "dbName",
           key: "db_name",
         },
         {
           title: "物理表名称",
-          dataIndex: "physics_name",
+          dataIndex: "physicsName",
           key: "physics_name",
         },
       ],
@@ -213,13 +213,6 @@ export default {
       }
       this.getList();
     },
-    // onExpandedRowsChange(expandedRows) {
-    //   if(!expandedRows || expandedRows.length == 0) {
-    //     this.expandedRowKeys = []
-    //   } else {
-    //     this.expandedRowKeys = expandedRows.map(el=> el.dictId);
-    //   }
-    // },
     // 添加数据
     handleAdd() {
       this.operation = 2;
@@ -351,7 +344,7 @@ export default {
     },
     async getList() {
       this.loading = true;
-      let url = `/data-mgt/model-manage/models/${this.modelId}/physics?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}`;
+      let url = `/data-mgt/model-manage/physics/detail?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&tableId=${this.tableId}`;
       if (this.dicTypeId) {
         url += `&pid=${this.dicTypeId}`;
       }
@@ -377,29 +370,21 @@ export default {
           "&searchFieldValue=" +
           this.searchText.trim();
       }
-      if (this.sorter.order && this.sorter.field) {
-        url =
-          url +
-          "&orderFieldName=" +
-          this.sorter.field +
-          "&orderMethod=" +
-          this.sorter.order;
-      }
+      // if (this.sorter.order && this.sorter.field) {
+      //   url =
+      //     url +
+      //     "&orderFieldName=" +
+      //     this.sorter.field +
+      //     "&orderMethod=" +
+      //     this.sorter.order;
+      // }
       const res = await this.$axios.$get(url);
       this.loading = false;
       if (res.isSuccessed) {
         this.pagination.current = res.data.pageNum;
         this.pagination.pageSize = res.data.pageSize;
         this.pagination.total = res.data.totalCount;
-        // children空数组置为null
-        // if(res.data.content && res.data.content.length > 0) {
-        //   treeUtil.deepFirstTraverseTree(null, res.data.content, (parentNode, node) => {
-        //     if(node.children && node.children.length == 0) {
-        //       node.children = null
-        //     }
-        //   })
-        // }
-        this.sysDictList = res.data.content;
+        this.sysDictList = res.data.pageList;
       } else {
         this.$message.error(`查询失败,原因:${res.message}`);
       }

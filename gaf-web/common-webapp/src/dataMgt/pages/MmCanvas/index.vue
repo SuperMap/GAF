@@ -9,12 +9,26 @@
         style='border:1px dashed #000;background-color: #efefef;'
       ></svg>
     </div>
+    <a-modal
+      v-model="open"
+      :width="800"
+      title="字段关系管理"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      destroy-on-close
+    >
+      <add-edit-form @handleCancel="handleCancel" ref="addEditForm" :modelId="modelId" :tableId="tableId"></add-edit-form>
+    </a-modal>
   </div>
 </template>
 <script>
 import "~/assets/css/common.css";
+import AddEditForm from '../../views/MmCanvas/AddOrEditForm'
 import * as d3 from 'd3'
 export default {
+  components: {
+    AddEditForm
+  },
   props: {
     modelId: {
       type: String,
@@ -37,7 +51,9 @@ export default {
       deletedNodes: new Map(),
       hightColor: '#19be6b',
       headColor: '#fff',
-      headTextColor: '#000'
+      headTextColor: '#000',
+      open: false,
+      tableId: ''
     }
   },
   async mounted() {
@@ -81,14 +97,16 @@ export default {
     this.update()
   },
   methods: {
-    async getData() {
+    async getData(boolean) {
       const that = this
       // that.modelId = this.$route.query.modelId
       // that.modelId = 'eda861df-592c-4856-9ef3-df5bc4004d69'
       const url = `/data-mgt/model-manage/models/${that.modelId}/layout`;
       const res = await this.$axios.get(url);
       if (res.data.successed) {
-        that.nodes = res.data.data.nodes
+        if (!boolean) {
+          that.nodes = res.data.data.nodes
+        }
         that.links = res.data.data.links
 
         that.links.forEach(item => {
@@ -270,6 +288,8 @@ export default {
         .attr('style', 'cursor: pointer;')
         .on('click', function (field) {
           console.log(field)
+          that.tableId = field.tableId
+          that.open = true
         })
       // 节点高亮
       tableField.on('mouseenter', function () {
@@ -401,6 +421,14 @@ export default {
     },
     backModel() {
       this.$emit('backModel')
+    },
+    async handleOk() {
+      this.$refs.addEditForm.submitForm()
+      await this.getData(true)
+      this.update()
+    },
+    handleCancel() {
+      this.open = false
     }
   },
 }
