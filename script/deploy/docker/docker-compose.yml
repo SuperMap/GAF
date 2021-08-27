@@ -206,7 +206,7 @@ services:
       GAF_USERNAME: sys_admin
       GAF_PASSWORD: 123456
       GAF_TOKEN_URL: http://gaf-authentication:8080/authentication/token
-      GAF_CONFIG_URL: http://gaf-authority:8080/authority/auth-tenants/s3-config
+      GAF_CONFIG_URL: http://gaf-storage:8080/storage/volume/config-ini
     volumes:
     - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs:shared
     container_name: gaf-s3fs-mount
@@ -219,7 +219,7 @@ services:
       GAF_USERNAME: sys_admin
       GAF_PASSWORD: 123456
       GAF_TOKEN_URL: http://gaf-boot:8080/authentication/token
-      GAF_CONFIG_URL: http://gaf-boot:8080/authority/auth-tenants/s3-config
+      GAF_CONFIG_URL: http://gaf-boot:8080/storage/volume/config-ini
     volumes:
     - ${GAF_VOL_DIR}/mnt/data-s3fs:/data-s3fs:shared
     container_name: gaf-s3fs-mount
