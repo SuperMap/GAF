@@ -47,3 +47,6 @@ INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "pr
 
 -- changeset SYS:20210423-0
 INSERT INTO config_properties (id, pro_key, pro_value, application, profile, "label", tenant_id, created_time, created_by, updated_time, updated_by, description) VALUES('b9b023', 'management.endpoint.health.show-details', 'always', 'gaf-authority', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+
+-- changeset SYS:20210825-0
+INSERT INTO config_properties (id, pro_key, pro_value, application, profile, "label", tenant_id, created_time, created_by, updated_time, updated_by, description) VALUES('b9b133', 'management.health.mail.enabled', false, 'gaf-authority', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);

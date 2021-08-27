@@ -6,6 +6,7 @@
 package com.supermap.gaf.data.mgt.service;
 
 import com.supermap.gaf.data.mgt.entity.MmPhysics;
+import com.supermap.gaf.data.mgt.entity.vo.MmPhysicsVO;
 import com.supermap.gaf.data.mgt.model.PhysicsResult;
 import com.supermap.gaf.data.mgt.util.Page;
 import com.supermap.gaf.data.mgt.vo.MmPhysicsSelectVo;
@@ -24,6 +25,14 @@ public interface MmPhysicsService {
     * @return
     */
     MmPhysics getById(String physicsId);
+    /**
+     * 分页条件查询物理表详情
+     * @param mmPhysicsSelectVo 查询条件
+     * @param pageNum 当前页数
+     * @param pageSize 页面大小
+     * @return 分页对象
+     */
+    Page<MmPhysicsVO> listWithDetail(MmPhysicsSelectVo mmPhysicsSelectVo, Integer pageNum, Integer pageSize);
 	
 	/**
      * 分页条件查询
@@ -80,4 +89,7 @@ public interface MmPhysicsService {
      * @param mmPhysicsList 物理化表集合
      */
     PhysicsResult physicalization(List<MmPhysics> mmPhysicsList);
+
+
+
 }

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>gaf-commons</artifactId>
         <groupId>com.supermap.gaf</groupId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

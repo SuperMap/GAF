@@ -16,14 +16,12 @@ import com.supermap.gaf.data.mgt.entity.MmField;
 import com.supermap.gaf.data.mgt.entity.MmModel;
 import com.supermap.gaf.data.mgt.entity.MmPhysics;
 import com.supermap.gaf.data.mgt.entity.MmTable;
+import com.supermap.gaf.data.mgt.entity.vo.MmPhysicsVO;
 import com.supermap.gaf.data.mgt.enums.DatasourceTypeEnum;
 import com.supermap.gaf.data.mgt.mapper.MmPhysicsMapper;
 import com.supermap.gaf.data.mgt.model.PhysicsResult;
 import com.supermap.gaf.data.mgt.model.PhysicsSingleResult;
-import com.supermap.gaf.data.mgt.service.MmFieldService;
-import com.supermap.gaf.data.mgt.service.MmModelService;
-import com.supermap.gaf.data.mgt.service.MmPhysicsService;
-import com.supermap.gaf.data.mgt.service.MmTableService;
+import com.supermap.gaf.data.mgt.service.*;
 import com.supermap.gaf.data.mgt.support.ConvertHelper;
 import com.supermap.gaf.data.mgt.support.JdbcConnectionInfo;
 import com.supermap.gaf.data.mgt.util.Page;
@@ -44,10 +42,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -73,6 +68,9 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
 	private MmFieldService mmFieldService;
 
     @Autowired
+    private SysResourceDatasourceService sysResourceDatasourceService;
+
+    @Autowired
     private ConvertHelper convertHelper;
 	
 	@Override
@@ -82,8 +80,38 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
         }
         return  mmPhysicsMapper.select(physicsId);
     }
-	
-	@Override
+
+    @Override
+    public Page<MmPhysicsVO> listWithDetail(MmPhysicsSelectVo mmPhysicsSelectVo, Integer pageNum, Integer pageSize) {
+        PageInfo<MmPhysics> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
+            mmPhysicsMapper.selectList(mmPhysicsSelectVo);
+        });
+        List<MmPhysics> mmPhysicsList = pageInfo.getList();
+        if (mmPhysicsList.isEmpty()) {
+            List<MmPhysicsVO> result= Collections.emptyList();
+            return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),result);
+        }
+        Set<String> datasourceIds = mmPhysicsList.stream().map(MmPhysics::getDatasourceId).collect(Collectors.toSet());
+        List<SysResourceDatasource> sysResourceDatasources = sysResourceDatasourceService.listByIds(datasourceIds);
+        Map<String, SysResourceDatasource> datasourceMap = sysResourceDatasources.stream().collect(Collectors.toMap(SysResourceDatasource::getDatasourceId, sysResourceDatasource -> sysResourceDatasource));
+        List<MmPhysicsVO> result = mmPhysicsList.stream().map(mmPhysics -> {
+            MmPhysicsVO mmPhysicsVO = new MmPhysicsVO();
+            BeanUtils.copyProperties(mmPhysics, mmPhysicsVO);
+            SysResourceDatasource datasource = datasourceMap.get(mmPhysics.getDatasourceId());
+            if (datasource != null) {
+                mmPhysicsVO.setDsName(datasource.getDsName());
+                mmPhysicsVO.setAddr(datasource.getAddr());
+                mmPhysicsVO.setDbName(datasource.getDbName());
+                mmPhysicsVO.setIsSdx(datasource.getIsSdx());
+                mmPhysicsVO.setIsTemplate(datasource.getIsTemplate());
+                mmPhysicsVO.setTypeCode(datasource.getTypeCode());
+            }
+            return mmPhysicsVO;
+        }).collect(Collectors.toList());
+        return Page.create(pageInfo.getPageNum(),pageInfo.getPageSize(),(int)pageInfo.getTotal(),pageInfo.getPages(),result);
+    }
+
+    @Override
     public Page<MmPhysics> listByPageCondition(MmPhysicsSelectVo mmPhysicsSelectVo, int pageNum, int pageSize) {
         PageInfo<MmPhysics> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> {
             mmPhysicsMapper.selectList(mmPhysicsSelectVo);
@@ -162,11 +190,7 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
                 physicsSingleResult.setMessage(e.getMessage());
                 failed.add(physicsSingleResult);
             }
-            MmPhysics copy = new MmPhysics();
-            BeanUtils.copyProperties(mmPhysics,copy);
-            copy.setUsername(null);
-            copy.setPassword(null);
-            physicsSingleResult.setMmPhysics(copy);
+            physicsSingleResult.setMmPhysics(mmPhysics);
         }
         physicsResult.setSuccessed(successed);
         physicsResult.setFailed(failed);
@@ -186,15 +210,22 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
             mmPhysics.setPhysicsName(mmTable.getTableName());
         }
         String name =  mmPhysics.getPhysicsName();
+        SysResourceDatasource sysResourceDatasource = sysResourceDatasourceService.getById(mmPhysics.getDatasourceId());
+        if (sysResourceDatasource == null) {
+            throw new IllegalArgumentException("数据源不存在");
+        }
         if ("sdx".equals(mmModel.getModelType())) {
             // 空间模型
-
             String sdxInfoJson = mmTable.getSdxInfo();
+            if (StringUtils.isEmpty(sdxInfoJson)) {
+                throw new IllegalArgumentException("空间模型下的逻辑表"+ name+"对应的数据集属性信息不能为空");
+            }
             JSONObject sdxInfoJO = JSONObject.parseObject(sdxInfoJson);
             String datasetTypeStr = sdxInfoJO.getString("type");
+            if (StringUtils.isEmpty(datasetTypeStr)) {
+                throw new IllegalArgumentException("空间模型下的逻辑表"+ name+"对应的数据集信息中数据集类型不能为空");
+            }
             DatasetType datasetType = (DatasetType) DatasetType.parse(DatasetType.class, datasetTypeStr);
-
-            SysResourceDatasource sysResourceDatasource = convert(mmPhysics);
             DatasourceConnectionInfo connectionInfo = convertHelper.conver2DatasourceConnectionInfo(sysResourceDatasource);
             Workspace workspace = null;
             Datasource datasource = null;
@@ -281,7 +312,6 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
             sb.append(");");
             String ddl = sb.toString();
 
-            SysResourceDatasource sysResourceDatasource = convert(mmPhysics);
             JdbcConnectionInfo jdbcConn = datasourceType.convert2JdbcConnectionInfo(sysResourceDatasource);
             try {
                 Class.forName(jdbcConn.getDriverClassName());
@@ -299,21 +329,5 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
         }
         insertMmPhysics(mmPhysics);
     }
-
-    private SysResourceDatasource convert(MmPhysics mmPhysics) {
-        SysResourceDatasource datasource = new SysResourceDatasource();
-        datasource.setAddr(mmPhysics.getServer());
-        datasource.setDbName(mmPhysics.getDbName());
-        datasource.setIsSdx(true);
-        datasource.setDsName(UUID.randomUUID().toString());
-        datasource.setUserName(mmPhysics.getUsername());
-        datasource.setPassword(mmPhysics.getPassword());
-        datasource.setTypeCode(mmPhysics.getType());
-        return datasource;
-    }
-
-
-
-
 
 }

@@ -58,21 +58,9 @@ public class MmPhysicsSelectVo {
         @QueryParam("tableId")
         @ApiModelProperty("逻辑表id")
         private String tableId;
-        @QueryParam("server")
-        @ApiModelProperty("数据库地址")
-        private String server;
-        @QueryParam("dbName")
-        @ApiModelProperty("数据库名")
-        private String dbName;
-        @QueryParam("username")
-        @ApiModelProperty("用户名")
-        private String username;
-        @QueryParam("password")
-        @ApiModelProperty("密码")
-        private String password;
-        @QueryParam("type")
-        @ApiModelProperty("数据源类型")
-        private String type;
+        @QueryParam("datasourceId")
+        @ApiModelProperty("数据源id")
+        private String datasourceId;
         @QueryParam("createdTime")
         @ApiModelProperty("创建时间")
         private Date createdTime;

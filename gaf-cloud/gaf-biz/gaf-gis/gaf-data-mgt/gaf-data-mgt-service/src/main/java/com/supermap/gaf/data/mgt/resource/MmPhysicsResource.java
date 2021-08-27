@@ -7,6 +7,7 @@ package com.supermap.gaf.data.mgt.resource;
 
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.data.mgt.entity.MmPhysics;
+import com.supermap.gaf.data.mgt.entity.vo.MmPhysicsVO;
 import com.supermap.gaf.data.mgt.model.PhysicsResult;
 import com.supermap.gaf.data.mgt.service.MmPhysicsService;
 import com.supermap.gaf.data.mgt.util.Page;
@@ -34,7 +35,22 @@ import java.util.List;
 public class MmPhysicsResource{
     @Autowired
     private MmPhysicsService mmPhysicsService;
-	
+
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "分页条件查询物理表", notes = "分页条件查询物理表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[1,infinity]",paramType = "query", dataType = "integer"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer")
+    })
+    public MessageResult<Page> pageList(@Valid @BeanParam MmPhysicsSelectVo mmPhysicsSelectVo,
+                                        @DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
+                                        @DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
+        Page<MmPhysics> page = mmPhysicsService.listByPageCondition(mmPhysicsSelectVo, pageNum, pageSize);
+        return MessageResult.successe(Page.class).data(page).status(200).message("查询成功").build();
+    }
+
+
 	@GET
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "根据id查询物理表", notes = "根据id查询物理表")
@@ -48,16 +64,17 @@ public class MmPhysicsResource{
     }
 
 	@GET
+    @Path("/detail")
     @Produces({MediaType.APPLICATION_JSON})
-    @ApiOperation(value = "分页条件查询物理表", notes = "分页条件查询物理表")
+    @ApiOperation(value = "分页条件查询物理表详情", notes = "分页条件查询物理表详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页码", example = "1",defaultValue = "1", allowableValues = "range[1,infinity]",paramType = "query", dataType = "integer"),
             @ApiImplicitParam(name = "pageSize", value = "每页条数", example = "10", defaultValue = "10",allowableValues = "range(0,infinity]", paramType = "query", dataType = "integer")
     })
-    public MessageResult<Page> pageList(@Valid @BeanParam MmPhysicsSelectVo mmPhysicsSelectVo,
+    public MessageResult<Page> pageListWithDetail(@Valid @BeanParam MmPhysicsSelectVo mmPhysicsSelectVo,
 										@DefaultValue("1")@QueryParam("pageNum")Integer pageNum,
 										@DefaultValue("10")@QueryParam("pageSize")Integer pageSize){
-        Page<MmPhysics> page = mmPhysicsService.listByPageCondition(mmPhysicsSelectVo, pageNum, pageSize);
+        Page<MmPhysicsVO> page = mmPhysicsService.listWithDetail(mmPhysicsSelectVo, pageNum, pageSize);
 		return MessageResult.successe(Page.class).data(page).status(200).message("查询成功").build();
     }
 
@@ -85,8 +102,8 @@ public class MmPhysicsResource{
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/batch")
     @ApiOperation(value = "批量新增物理表", notes = "批量新增物理表")
-    public MessageResult<Void> batchInsert(List<MmPhysics> MmPhysicss){
-        mmPhysicsService.batchInsert(MmPhysicss);
+    public MessageResult<Void> batchInsert(List<MmPhysics> mmPhysicss){
+        mmPhysicsService.batchInsert(mmPhysicss);
 		return MessageResult.successe(Void.class).status(200).message("批量新增操作成功").build();
     }
 

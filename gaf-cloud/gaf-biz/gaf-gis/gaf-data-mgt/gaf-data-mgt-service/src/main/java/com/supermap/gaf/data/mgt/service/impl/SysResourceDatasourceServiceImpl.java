@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotEmpty;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,8 +97,22 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         return sysResourceDatasource;
     }
 
-	
-	@Override
+    @Override
+    public List<SysResourceDatasource> listByIds(@NotEmpty Collection<String> datasourceIds) {
+        if (datasourceIds == null || datasourceIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<SysResourceDatasource> sysResourceDatasources = sysResourceDatasourceMapper.selectByIds(datasourceIds);
+        sysResourceDatasources.forEach(sysResourceDatasource -> {
+            if (!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
+                sysResourceDatasource.setPassword(decrypt(sysResourceDatasource.getPassword(), secretKey));
+            }
+        });
+        return sysResourceDatasources;
+    }
+
+
+    @Override
     public Page<SysResourceDatasource> listByPageCondition(SysResourceDatasourceSelectVo sysResourceDatasourceSelectVo, int pageNum, int pageSize) {
         PageInfo<SysResourceDatasource> pageInfo = PageHelper.startPage(pageNum, pageSize).doSelectPageInfo(() -> sysResourceDatasourceMapper.selectList(sysResourceDatasourceSelectVo));
         Page<SysResourceDatasource> page = new Page<>();

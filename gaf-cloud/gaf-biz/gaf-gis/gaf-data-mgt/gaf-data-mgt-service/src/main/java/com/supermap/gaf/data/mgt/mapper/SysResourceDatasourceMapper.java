@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,6 +28,13 @@ public interface SysResourceDatasourceMapper {
      * @return 数据源 未查询到则返回null
      */
     SysResourceDatasource select(@Param("datasourceId") String datasourceId);
+
+    /**
+     * 根据数据源id集合查询数据源列表
+     * @param datasourceIds 数据源id集合
+     * @return 数据源列表
+     */
+    List<SysResourceDatasource> selectByIds(Collection<String> datasourceIds);
 
     /**
      * 等值条件和单字段模糊查询
@@ -73,4 +81,6 @@ public interface SysResourceDatasourceMapper {
      * @return
      */
     List<SysResourceDatasource> getByName(@Param("dsName")String dsName, @Param("isSdx")Boolean isSdx,@Param("isTemplate") Boolean isTemplate);
+
+
 }

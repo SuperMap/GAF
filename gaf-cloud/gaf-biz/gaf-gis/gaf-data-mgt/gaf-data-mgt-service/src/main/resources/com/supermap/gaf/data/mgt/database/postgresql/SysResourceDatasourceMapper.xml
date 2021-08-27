@@ -62,6 +62,16 @@
         FROM "sys_resource_datasource"
         WHERE ds_name = #{dsName} AND status = true and is_sdx = #{isSdx} and is_template = #{isTemplate}
     </select>
+    <select id="selectByIds" resultType="com.supermap.gaf.data.mgt.commontype.SysResourceDatasource">
+        SELECT <include refid="Base_Column_List"/>
+        FROM "sys_resource_datasource"
+        WHERE datasource_id IN
+        <foreach collection="collection" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+
+    </select>
+
     <select id="selectList" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -83,6 +93,7 @@
         </if>
         <if test='null != orderFieldName and null != orderMethod'>order by ${orderFieldName} ${orderMethod}</if>
     </select>
+
     <insert id="insert" useGeneratedKeys="true" keyColumn="datasource_id" keyProperty="datasourceId" parameterType="com.supermap.gaf.data.mgt.commontype.SysResourceDatasource">
         INSERT INTO "sys_resource_datasource"
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -28,3 +28,30 @@ COMMENT ON COLUMN mm_physics.created_time IS '创建时间';
 COMMENT ON COLUMN mm_physics.created_by IS '创建人';
 COMMENT ON COLUMN mm_physics.updated_time IS '更新时间';
 COMMENT ON COLUMN mm_physics.updated_by IS '更新人';
+
+-- changeset SYS:20210820-1
+DROP TABLE IF EXISTS mm_physics;
+create table mm_physics
+(
+    physics_id varchar(36) not null constraint mm_physics_pkey primary key,
+    physics_name varchar(255),
+    table_id varchar(36) not null,
+    datasource_id varchar(36) not null,
+    created_time timestamp default now() not null,
+    created_by varchar(255),
+    updated_time timestamp,
+    updated_by varchar(255) not null
+);
+
+comment on table mm_physics is '数据模型管理-物理表';
+comment on column mm_physics.physics_id is '主键';
+comment on column mm_physics.physics_name is '物理表名';
+comment on column mm_physics.table_id is '逻辑表id';
+comment on column mm_physics.datasource_id is '数据源id';
+comment on column mm_physics.created_time is '创建时间';
+comment on column mm_physics.created_by is '创建人';
+comment on column mm_physics.updated_time is '更新时间';
+comment on column mm_physics.updated_by is '更新人';
+
+alter table mm_physics owner to admin;
+

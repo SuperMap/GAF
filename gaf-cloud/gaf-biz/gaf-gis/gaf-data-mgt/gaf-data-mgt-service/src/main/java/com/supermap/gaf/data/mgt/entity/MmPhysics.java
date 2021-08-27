@@ -36,16 +36,8 @@ public class MmPhysics implements Serializable{
     @ApiModelProperty("逻辑表id")
     private String tableId;
     @NotNull
-    @ApiModelProperty("数据库地址")
-    private String server;
-    @ApiModelProperty("数据库名")
-    private String dbName;
-    @ApiModelProperty("用户名")
-    private String username;
-    @ApiModelProperty("密码")
-    private String password;
-    @ApiModelProperty("数据源类型")
-    private String type;
+    @ApiModelProperty("数据源id")
+    private String datasourceId;
     /**
     * 默认值1：now()
     */
