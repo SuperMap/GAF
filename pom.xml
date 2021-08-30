@@ -8,20 +8,14 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
     <properties>
-        <revision>${gaf-revision}</revision>
-    </properties>
+        <revision>${gaf-open-revision}</revision>
 
-    <profiles>
-        <profile>
-            <id>open</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <gaf-revision>2.1.2-SNAPSHOT</gaf-revision>
-            </properties>
-        </profile>
-    </profiles>
+
+
+        <gaf-open-revision>2.1.2-SNAPSHOT</gaf-open-revision>
+
+
+    </properties>
 
     <inceptionYear>2021</inceptionYear>
 
