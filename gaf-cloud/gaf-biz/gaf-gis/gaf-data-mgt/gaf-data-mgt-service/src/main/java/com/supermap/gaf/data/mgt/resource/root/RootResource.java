@@ -46,10 +46,7 @@ public class RootResource {
     public Class<ServiceResource> serviceResource() {
         return ServiceResource.class;
     }
-    @Path("/metadatas")
-    public Class<MetadataManagementResource> metadataManagementResource() {
-        return MetadataManagementResource.class;
-    }
+
     @Path("/sys-resource-datasources")
     public Class<SysResourceDatasourceResource> sysResourceDatasourceResource() {
         return SysResourceDatasourceResource.class;

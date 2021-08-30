@@ -49,11 +49,6 @@ public class SpaceDatasourceResource {
     @Autowired
     private S3MCacheService s3mCacheService;
 
-    @Path("/{datasourceId}/datasets/{datasetName}")
-    public Class<DatasetResource> datasetResourceClass(){
-        return DatasetResource.class;
-    }
-
     @ApiOperation(value = "获取所有所有已预定义坐标系信息", notes = "获取的坐标系数据为树形结构,分为两层,第一层为坐标系分组节点,分组名固定为常用坐标系、平面坐标系、地理坐标系、投影坐标系,第二层就是具体的坐标系信息节点。" +
             "坐标系信息包含编码、名称、类型(平面、地理、投影)、epsg code" +
             "")

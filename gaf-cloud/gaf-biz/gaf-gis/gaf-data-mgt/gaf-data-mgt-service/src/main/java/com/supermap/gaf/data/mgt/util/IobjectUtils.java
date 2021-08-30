@@ -1,9 +1,10 @@
 package com.supermap.gaf.data.mgt.util;
 
 import com.supermap.data.*;
-import com.supermap.gaf.data.mgt.entity.MmField;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * The type Iobject utils.
@@ -107,28 +108,6 @@ public class IobjectUtils {
         return re;
     }
 
-    /**
-     * Gets recordset property.
-     *
-     * @param dataset the dataset
-     * @return the recordset property
-     */
-    public static List<MmField> getRecordsetProperty(Dataset dataset) {
-        List<MmField> re = new ArrayList<>();
-        if (dataset instanceof DatasetVector) {
-            DatasetVector datasetVector = (DatasetVector) dataset;
-            FieldInfos fieldInfos = datasetVector.getFieldInfos();
-            for (int i = 0; i < fieldInfos.getCount(); ++i) {
-                FieldInfo fieldInfo = fieldInfos.get(i);
-                if (fieldInfos.get(i).isSystemField()) {
-//                    item.put("fieldName", "*" + fieldInfo.getName());
-                    continue;
-                }
-                re.add(DatamgtCommonUtils.convert2MmField(fieldInfo,type->"sdx_"+type));
-            }
-        }
-        return re;
-    }
 
     /**
      * Is modify field enable boolean.
