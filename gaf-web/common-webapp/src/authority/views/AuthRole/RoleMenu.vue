@@ -2,7 +2,7 @@
   <div class="page-single">
     <div style="margin-bottom: 10px">
       <button @click="handleAdd" class="btn-fun blue">
-        添加至{{`${role.roleName}`}}
+        保存
       </button>
     </div>
     <div >
@@ -19,7 +19,6 @@
         :checkable="true"
         :checkNodeStrictly="false"
         v-model="checkedNodeKeys"
-        :show-line="true"
       >
         <template v-slot:icon="{ iconNodeType }">
           <a-icon

@@ -38,7 +38,6 @@
           :autoExpandParent="true"
           :selectedKeys.sync="selectedNodeKeys"
           @select="onSelect"
-          :show-line="true"
         ></gaf-tree-transparent>
       </div>
       <div class="page-right">

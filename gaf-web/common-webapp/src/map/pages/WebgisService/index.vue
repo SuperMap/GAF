@@ -13,7 +13,6 @@
           :expanded-node-keys.sync="expandedNodeKeys"
           :show-search="false"
           @select="onSelect"
-          :show-line="true"
         >
         </gaf-tree-transparent> -->
         <a-menu

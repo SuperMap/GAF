@@ -21,7 +21,6 @@
           :expandedNodeKeys.sync="expandedNodeKeys"
           :selectedKeys.sync="selectedNodeKeys"
           @select="onSelect"
-          :show-line="true"
         >
           <template v-slot:icon="{ iconNodeType }">
             <a-icon
@@ -48,7 +47,6 @@
             :checkNodeStrictly="false"
             v-model="checkedNodeKeys"
             @select="onSelect2"
-            :show-line="true"
           >
             <template v-slot:icon="{ iconNodeType }">
               <a-icon

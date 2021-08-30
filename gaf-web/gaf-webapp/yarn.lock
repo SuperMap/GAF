@@ -4668,7 +4668,7 @@ functional-red-black-tree@^1.0.1:
   resolved "https://nexus.gaf.net.cn/repository/npm-group/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
 
-gaf-ui@^2.0.25:
+gaf-ui@2.0.25:
   version "2.0.25"
   resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.25.tgz#a2da09f6c4c934bfcbb10023011e3ca1772d4382"
   integrity sha512-166IvzogBchMjZxc9rIi3/vQsUdXndj9XDRywCKX+zbnQqXHh7vx3lEIMN7PZLOeyIoO8eZn7vvMoI3ChGxFdQ==

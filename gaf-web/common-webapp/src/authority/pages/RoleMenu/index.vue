@@ -13,7 +13,6 @@
           :searchType="[0]"
           :expandedNodeKeys.sync="expandedNodeKeys"
           @select="onSelect"
-          :show-line="true"
         >
           <template v-slot:icon="{ iconNodeType }">
             <a-icon :type="iconNodeType.type === 12 ? tags : tag"></a-icon>
@@ -40,7 +39,6 @@
             :checkable="true"
             :checkNodeStrictly="false"
             v-model="checkedNodeKeys"
-            :show-line="true"
           >
             <template v-slot:icon="{ iconNodeType }">
               <a-icon

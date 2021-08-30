@@ -9,7 +9,6 @@
         :expandedNodeKeys.sync="expandedNodeKeys2"
         :selectedKeys.sync="selectedNodeKeys2"
         @select="onSelect2"
-        :show-line="true"
       >
       </gaf-tree-transparent>
     </div>

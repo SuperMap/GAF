@@ -23,7 +23,6 @@
         :auto-expand-parent="true"
         :selected-keys.sync="selectedNodeKeys"
         @select="onSelect"
-        :show-line="true"
       >
         <template v-slot:icon="{ iconNodeType }">
           <slot

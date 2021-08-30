@@ -1,178 +1,120 @@
 <template>
   <div class="app-container">
-    <div class="page-left">
-      <gaf-tree-transparent
-        ref="myGafTreeTransparent"
-        :searchPlaceholder="searchPlaceholder2"
-        :data-of-tree="dataOfTree1"
-        :searchType="[0]"
-        :expandedNodeKeys.sync="expandedNodeKeys2"
-        :selectedKeys.sync="selectedNodeKeys2"
-        @select="onSelect2"
-      >
-      </gaf-tree-transparent>
-    </div>
-    <div class="page-right">
-      <gaf-table-layout>
-        <template #actions>
-          <button @click="handleAdd" class="btn-fun blue btn-16">
-            <a-icon type="plus-circle" /><span>新增</span>
-          </button>
-          <a-popconfirm
-            class="btn-fun blue"
-            title="删除后无法恢复，确认是否继续?"
-            ok-text="确认"
-            cancel-text="取消"
-            @confirm="() => batchDel()"
-          >
-            <button class="btn-fun blue">
-              <span>批量删除</span>
-            </button>
-          </a-popconfirm>
-        </template>
-        <template #filter>
-          <div class="search-position">
-            <a-row type="flex" justify="end">
-              <a-col :span="12">
-                <label style="font-size: 16px">时态：</label>
-                <a-range-picker
-                  :show-time="{ format: 'HH:mm:ss' }"
-                  :value="timeRange"
-                  @change="onPickerChange"
-                  @ok="onPickerOk"
-                  size="large"
-                  style="width: 240px;margin-right:10px;text-align: center;"
-                  format="YYYY-MM-DD"
-                />
-              </a-col>
-              <a-col :span="6">
-                <a-input-search
-                  @search="onSearch"
-                  placeholder="请输入数据源别名查询"
-                  size="large"
-                >
-                </a-input-search>
-              </a-col>
-            </a-row>
-          </div>
-        </template>
-        <template #default>
-          <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
-          <gaf-table-with-page
-            :scroll="{ y: 508 , x: 1440}"
-            :pagination="pagination"
-            :row-selection="{
-              selectedRowKeys: selectedRowKeys,
-              onChange: onSelectChange,
-            }"
-            :data-source="sysResourceDatasourceList"
-            :loading="loading"
-            @change="tableChange"
-            :row-key="(r, i) => r.datasourceId"
-            :columns="
-              columns.filter((item) => item.dataIndex !== 'datasourceId')
-            "
-            class="table-style"
-            size="middle"
-          >
-            <template
-              slot="customRender"
-              slot-scope="text, record, index, column"
-            >
-              <span v-if="searchText && searchedColumn === column.key">
-                <template
-                  v-for="(fragment, i) in splitCellWithSearchText(text)"
-                >
-                  <mark
-                    v-if="fragment.toLowerCase() === searchText.toLowerCase()"
-                    :key="i"
-                    class="highlight"
-                    >{{ fragment }}</mark
-                  >
-                  <template v-else>{{ fragment }}</template>
-                </template>
-              </span>
-              <template v-else>
-                {{ text }}
-              </template>
-            </template>
-            <template slot="catalogType" slot-scope="text, record">
-              {{
-                map.get(record.catalogCode) ? map.get(record.catalogCode) : ""
-              }}
-            </template>
-            <template slot="typeCode" slot-scope="text">
-              {{
-                dataSourceTypeMap.get(text) ? dataSourceTypeMap.get(text) : ""
-              }}
-            </template>
-            <template
-              slot="operation"
-              slot-scope="text, record"
-            >
-              <a
-                @click.stop="() => handleDetail(record)"
-                href="javascript:;"
-                class="btn-margin"
-              >
-                <u>详情</u>
-              </a>
-              <!-- <a-divider type="vertical" />
-                <a @click.stop="() => handleUpdate(record)" href="javascript:;" class="btn-edit">
-                  <a-icon type="edit" /> 编辑
-                </a> -->
-              <a-popconfirm
-                @confirm="() => handleDelete(record)"
-                title="删除后无法恢复，确认是否继续?"
-                ok-text="确认"
-                cancel-text="取消"
-              >
-                <a href="javascript:;"><u>删除</u></a>
-              </a-popconfirm>
-            </template>
-            <template slot="timeRender" v-if="timeFormat" slot-scope="text">
-              {{ timeFormat(text) }}
-            </template>
-          </gaf-table-with-page>
-        </template>
-      </gaf-table-layout>
-      <gaf-drawer
-        :visible="open"
-        :width="500"
-        :footer="null"
-        :centered="true"
-        @close="handleBack"
-        :closable="false"
-        placement="right"
-        destroy-on-close
-      >
-        <add-edit-form
-          :title="title"
-          :editData="editData"
-          :data-of-tree="dataOfTree"
-          @submit="handleSubmit"
-          @back="handleBack"
-          :operation="operation"
-          :catalogCode="catalogCode"
+    <div v-show="!openInfobox">
+      <div class="page-left">
+        <gaf-tree-transparent
+          ref="myGafTreeTransparent"
+          :searchPlaceholder="searchPlaceholder2"
+          :data-of-tree="dataOfTree1"
+          :searchType="[0]"
+          :expandedNodeKeys.sync="expandedNodeKeys2"
+          :selectedKeys.sync="selectedNodeKeys2"
+          @select="onSelect2"
         >
-        </add-edit-form>
-      </gaf-drawer>
+        </gaf-tree-transparent>
+      </div>
+      <div class="page-right">
+        <gaf-table-layout>
+          <template #actions>
+            <button v-show="false" @click="handleAdd" class="btn-fun blue btn-16">
+              <a-icon type="plus-circle" /><span>同步</span>
+            </button>
+          </template>
+          <template #filter>
+            <div class="search-position" style="width: 850px">
+              <a-row type="flex" justify="end">
+                <!-- <a-col :span="12">
+                  <label style="font-size: 16px">时态：</label>
+                  <a-range-picker
+                    :show-time="{ format: 'HH:mm:ss' }"
+                    :value="timeRange"
+                    @change="onPickerChange"
+                    @ok="onPickerOk"
+                    size="large"
+                    style="width: 240px;margin-right:10px;text-align: center;"
+                    format="YYYY-MM-DD"
+                  />
+                </a-col> -->
+                <a-col :span="6">
+                  <a-input-search
+                    @search="onSearch"
+                    placeholder="请输入名称查询"
+                    size="large"
+                  >
+                  </a-input-search>
+                </a-col>
+              </a-row>
+            </div>
+          </template>
+          <template #default>
+            <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
+            <gaf-table-with-page
+              :showXH="false"
+              :pagination="pagination"
+              :row-selection="{
+                selectedRowKeys: selectedRowKeys,
+                onChange: onSelectChange,
+              }"
+              :data-source="metaDataList"
+              :loading="loading"
+              @change="tableChange"
+              :row-key="(r, i) => i + r.recordName + r.recordType + r.catalogCode"
+              :columns="
+                columns.filter((item) => item.dataIndex !== 'datasourceId')
+              "
+              class="table-style"
+              size="middle"
+            >
+              <template
+                slot="customRender"
+                slot-scope="text, record"
+              >
+                <a
+                  @click.stop="() => handleDetail(record)"
+                  href="javascript:;"
+                  class="btn-margin"
+                >
+                  <u>{{ text }}</u>
+                </a>
+              </template>
+              <template slot="catalogType" slot-scope="text, record">
+                {{
+                  map.get(record.catalogCode) ? map.get(record.catalogCode) : ""
+                }}
+              </template>
+              <template slot="typeCode" slot-scope="text">
+                {{
+                  dataSourceTypeMap.get(text) ? dataSourceTypeMap.get(text) : ""
+                }}
+              </template>
+              <template slot="timeRender" v-if="timeFormat" slot-scope="text">
+                {{ timeFormat(text) }}
+              </template>
+            </gaf-table-with-page>
+          </template>
+        </gaf-table-layout>
+      </div>
+    </div>
+    <div v-if="openInfobox">
+      <info-box @changeOpenInfobox="changeOpenInfobox" :data="SingleData" @updatedData="updatedData" />
     </div>
   </div>
 </template>
 
 <script>
-import AddEditForm from "../../views/SpaceDatasource/AddOrEditForm";
+import infoBox from "../../views/MetadataManagement/infoBox";
 import dictUtil from "../../../common/utils/DictUtil"
 import moment from "moment";
 import "~/assets/css/common.css";
 
 export default {
   components: {
-    AddEditForm,
+    infoBox,
   },
   data() {
     return {
+      SingleData: null,
+      openInfobox: false,
       //是否选择时间选择器
       istime: false,
       //时间段信息
@@ -193,7 +135,8 @@ export default {
       selectedRowKeys: [],
       selectRowLength: 0,
       // ${functionName}表格数据
-      sysResourceDatasourceList: [],
+      metaDataList: [],
+      tempMetaDataList: [],
       // 是否显示添加修改弹出层
       open: false,
       // 分页参数
@@ -224,54 +167,32 @@ export default {
       },
       columns : [
         {
-          title: "数据源别名",
-          width: '18%',
+          title: "名称",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
-          dataIndex: "dsName",
-          key: "ds_name",
+          dataIndex: "recordName",
+          key: "recordName",
         },
         {
-          title: "数据源分类",
+          title: "目录",
           dataIndex: "catalogCode",
           key: "catalog_code",
           scopedSlots: { customRender: "catalogType" },
-          width: '10%',
         },
         {
-          title: "数据源类型",
-          dataIndex: "typeCode",
-          key: "type_code",
-          scopedSlots: { customRender: "typeCode" },
-          width: '10%',
+          title: "数据源",
+          dataIndex: "datasourceName",
+          key: "datasource_name",
+          scopedSlots: { customRender: "datasourceName" },
         },
         {
-          title: "服务器地址",
-          dataIndex: "addr",
-          key: "addr",
-          width: '20%',
-        },
-        {
-          title: "数据库名称",
-          dataIndex: "dbName",
-          key: "db_name",
-          width: '12%',
-        },
-        {
-          title: "时态",
-          dataIndex: "timeAttribute",
-          key: "time_attribute",
-          scopedSlots: { customRender: "timeRender" },
-          width: '10%',
-        },
-        {
-          title: "操作",
-          // width: '15%',
-          scopedSlots: { customRender: "operation" },
-        },
+          title: "类型",
+          dataIndex: "recordType",
+          key: "recordType",
+        }
       ]
     };
   },
@@ -304,9 +225,7 @@ export default {
   },
   created() {
     this.getDataOfTree();
-    // this.defaultPicker() //设置默认时间
-    this.getDataSourceTypeMap();
-    this.getList();
+    this.getList()
   },
   methods: {
     moment,
@@ -315,7 +234,13 @@ export default {
       // eslint-disable-next-line no-console
       this.searchText = val;
       this.pagination.current = 1;
-      await this.getList();
+      if (val === "") {
+        this.metaDataList = this.tempMetaDataList;
+      } else {
+        this.metaDataList = this.tempMetaDataList.filter(
+          (ltem) => ltem.recordName.includes(val) === true
+        );
+      }
     },
     //批量删除
     async batchDel() {
@@ -332,7 +257,7 @@ export default {
         this.$nextTick(() => {
           if (
             this.pagination.current !== 1 &&
-            selectedRowKeys.length === this.sysResourceDatasourceList.length
+            selectedRowKeys.length === this.metaDataList.length
           ) {
             this.pagination.current--;
           }
@@ -362,7 +287,7 @@ export default {
         this.sorter.order = sorter.order === "descend" ? "DESC" : "ASC";
         this.sorter.field = sorter.columnKey;
       }
-      this.getList();
+      // this.getList();
     },
     // 添加数据
     handleAdd() {
@@ -398,10 +323,8 @@ export default {
     },
     //详情展示
     handleDetail(row) {
-      this.operation = 1;
-      this.title = "详情展示";
-      this.editData = row;
-      this.open = true;
+      this.SingleData = row;
+      this.openInfobox = true;
     },
     // 删除数据
     async handleDelete(row) {
@@ -415,7 +338,7 @@ export default {
       this.$nextTick(() => {
         if (
           this.pagination.current !== 1 &&
-          this.sysResourceDatasourceList.length === 1
+          this.metaDataList.length === 1
         ) {
           this.pagination.current--;
         }
@@ -438,61 +361,30 @@ export default {
     //获取表单数据
     async getList() {
       this.loading = true;
-      let url = `/data-mgt/sys-resource-datasources?pageSize=${this.pagination.pageSize}&pageNum=${this.pagination.current}&isSdx=true`;
-      if (this.searchText2 && this.searchText2 !== "all") {
-        url = url + "&catalogCode" + "=" + this.searchText2.trim();
-      }
-      //模糊查询
-      if (
-        this.searchText2 !== "all" &&
-        this.searchText.trim() &&
-        this.searchedColumn
-      ) {
-        url =
-          url +
-          "&searchFieldName=" +
-          this.searchedColumn +
-          "&searchFieldValue=" +
-          this.searchText.trim();
-      }
-      //通过时间查询
-      if (this.timeRange.length > 0) {
-        url =
-          url +
-          "&startTimeStamp=" +
-          this.timeRange[0] +
-          "&endTimeStamp=" +
-          this.timeRange[1];
-      }
-      if (this.sorter.order && this.sorter.field) {
-        url =
-          url +
-          "&orderFieldName=" +
-          this.sorter.field +
-          "&orderMethod=" +
-          this.sorter.order;
-      }
+      let url = `/data-mgt/metadatas`;
       const res = await this.$axios.$get(url);
       this.loading = false;
       if (res.isSuccessed) {
-        this.pagination.current = res.data.pageIndex;
-        this.pagination.pageSize = res.data.pageSize;
-        this.pagination.total = res.data.total;
-        this.sysResourceDatasourceList = res.data.content;
+        console.log(res)
+        this.metaDataList = res.data;
+        this.tempMetaDataList = res.data
       } else {
         this.$message.error(`查询失败,原因:${res.message}`);
       }
     },
     //树形组件select事件
     onSelect2(selectedKeys, e) {
-      this.isApiList =
-        !e.node.dataRef.children || e.node.dataRef.children.length === 0;
+      console.log(selectedKeys, e)
       this.searchText2 = "";
+      if (e.node.dataRef.key === 'all') {
+         this.metaDataList = this.tempMetaDataList
+         return
+      }
       if (!e.node.dataRef.children || e.node.dataRef.children.length === 0) {
         if (e.selected) {
           this.searchText2 = e.node.dataRef.key;
+          this.metaDataList = this.tempMetaDataList.filter(item => item.catalogCode === this.searchText2)
         }
-        this.getList();
       }
     },
     //获取数据源分类树形数据
@@ -505,7 +397,6 @@ export default {
         this.dataOfTree1 = [...this.dataOfTree1,...this.changePropertyName(res.data)]
         this.getMap(res.data)
         this.dataOfTree = res.data
-        this.getList()
       } else {
         this.$message.error("加载API分组树失败,原因：" + res.message);
       }
@@ -559,6 +450,12 @@ export default {
       });
       return item;
     },
+    changeOpenInfobox() {
+      this.openInfobox = false
+    },
+    updatedData() {
+      this.getList()
+    }
   },
 };
 </script>
@@ -580,19 +477,5 @@ export default {
 }
 .search-position {
   float: right;
-  width: auto;
-}
-/deep/ .filter.ant-col.ant-col-12 {
-  float: right;
-  width: 65%;
-}
-/deep/ .search-position .ant-col.ant-col-12 {
-  width: auto;
-}
-/deep/ .search-position .ant-col.ant-col-6 {
-  width: auto;
-}
-/deep/ .action-filter.ant-row > .ant-col.ant-col-12:first-child {
-  width: 30%;
 }
 </style>
