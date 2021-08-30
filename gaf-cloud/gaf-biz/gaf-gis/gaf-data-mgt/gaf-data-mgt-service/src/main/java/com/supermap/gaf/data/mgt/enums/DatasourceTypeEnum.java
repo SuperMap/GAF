@@ -6,15 +6,9 @@
 package com.supermap.gaf.data.mgt.enums;
 
 import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
-import com.supermap.gaf.data.mgt.entity.MmField;
-import com.supermap.gaf.data.mgt.model.FieldTypeInfo;
 import com.supermap.gaf.data.mgt.support.ConnectionInfoConverter;
-import com.supermap.gaf.data.mgt.support.DdlFragmentConverter;
-import com.supermap.gaf.data.mgt.support.FieldTypesSupplier;
 import com.supermap.gaf.data.mgt.support.JdbcConnectionInfo;
 
-import java.util.Collections;
-import java.util.List;
 
 /**
  * 普通关系型数据库类型
@@ -22,29 +16,9 @@ import java.util.List;
  * @author wxl
  * @since 2021/7/22
  */
-public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSupplier, DdlFragmentConverter {
+public enum DatasourceTypeEnum implements ConnectionInfoConverter {
 
     POSTGRESQL("1") {
-        @Override
-        public String convertToDdlFragment(MmField mmField) {
-            PostgresqlFieldTypeEnum typeEnum = PostgresqlFieldTypeEnum.fromCode(mmField.getFieldType());
-            return typeEnum.convertToDdlFragment(mmField);
-        }
-
-        @Override
-        public List<FieldTypeInfo> getFieldTypes() {
-            return PostgresqlFieldTypeEnum.toFieldTypeInfoList();
-        }
-
-        @Override
-        public FieldTypeInfo getFieldType(String sqlType) {
-            PostgresqlFieldTypeEnum type = PostgresqlFieldTypeEnum.valueOf(sqlType.toUpperCase());
-            FieldTypeInfo fieldTypeInfo = new FieldTypeInfo();
-            fieldTypeInfo.setCode(type.getCode());
-            fieldTypeInfo.setName(type.getName());
-            fieldTypeInfo.setDescrption(type.getName());
-            return fieldTypeInfo;
-        }
 
         @Override
         public JdbcConnectionInfo convert2JdbcConnectionInfo(SysResourceDatasource datasource) {
@@ -54,22 +28,6 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         }
     },
     ORACLE("2") {
-        @Override
-        public List<FieldTypeInfo> getFieldTypes() {
-            return Collections.EMPTY_LIST;
-        }
-
-        @Override
-        public FieldTypeInfo getFieldType(String sqlType) {
-            return null;
-        }
-
-        @Override
-        public String convertToDdlFragment(MmField mmField) {
-
-
-            return null;
-        }
 
         @Override
         public JdbcConnectionInfo convert2JdbcConnectionInfo(SysResourceDatasource datasource) {
@@ -79,22 +37,6 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         }
     },
     MYSQL("3") {
-        @Override
-        public List<FieldTypeInfo> getFieldTypes() {
-            return Collections.EMPTY_LIST;
-        }
-
-        @Override
-        public FieldTypeInfo getFieldType(String sqlType) {
-            return null;
-        }
-
-        @Override
-        public String convertToDdlFragment(MmField mmField) {
-
-
-            return null;
-        }
 
         @Override
         public JdbcConnectionInfo convert2JdbcConnectionInfo(SysResourceDatasource datasource) {
@@ -104,21 +46,6 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         }
     },
     SQL_SERVER("4") {
-        @Override
-        public List<FieldTypeInfo> getFieldTypes() {
-            return Collections.EMPTY_LIST;
-        }
-
-        @Override
-        public FieldTypeInfo getFieldType(String sqlType) {
-            return null;
-        }
-
-        @Override
-        public String convertToDdlFragment(MmField mmField) {
-
-            return null;
-        }
 
         @Override
         public JdbcConnectionInfo convert2JdbcConnectionInfo(SysResourceDatasource datasource) {
@@ -138,21 +65,4 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         return code;
     }
 
-    public static DatasourceTypeEnum fromName(String name) {
-        for (DatasourceTypeEnum datasourceType : DatasourceTypeEnum.values()) {
-            if (datasourceType.name().equalsIgnoreCase(name)) {
-                return datasourceType;
-            }
-        }
-        throw new IllegalArgumentException("不支持的类型:" + name);
-    }
-
-    public static DatasourceTypeEnum fromCode(String code) {
-        for (DatasourceTypeEnum datasourceType : DatasourceTypeEnum.values()) {
-            if (datasourceType.getCode().equals(code)) {
-                return datasourceType;
-            }
-        }
-        throw new IllegalArgumentException("不支持的类型编码:" + code);
-    }
 }
