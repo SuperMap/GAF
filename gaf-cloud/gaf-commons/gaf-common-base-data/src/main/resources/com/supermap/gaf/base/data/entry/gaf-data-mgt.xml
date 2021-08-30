@@ -9,11 +9,6 @@
     <include file="../ddl/config_properties.sql" relativeToChangelogFile="true"/>
     <include file="../ddl/sys_resource_datasource.sql" relativeToChangelogFile="true"/>
     <include file="../ddl/sys_dict.sql" relativeToChangelogFile="true"/>
-    <include file="../ddl/mm_field.sql" relativeToChangelogFile="true"/>
-    <include file="../ddl/mm_field_associate.sql" relativeToChangelogFile="true"/>
-    <include file="../ddl/mm_model.sql" relativeToChangelogFile="true"/>
-    <include file="../ddl/mm_physics.sql" relativeToChangelogFile="true"/>
-    <include file="../ddl/mm_table.sql" relativeToChangelogFile="true"/>
 
     <include file="../changelog/dict/base_0catalog.sql" relativeToChangelogFile="true"/>
     <include file="../changelog/dict/WorkSpaceType.sql" relativeToChangelogFile="true"/>

@@ -44,8 +44,6 @@ import DataWorkspace from './dataMgt/pages/DataWorkspace'
 import SpaceDatasource from './dataMgt/pages/SpaceDatasource'
 import SpaceDatasourceTemplate from './dataMgt/pages/SpaceDatasourceTemplate'
 import DataRights from './dataMgt/pages/DataRights'
-import model from './dataMgt/pages/model'
-import MetadataManagement from './dataMgt/pages/MetadataManagement'
 
 import StorageManagement from './storage/pages/StorageManagement'
 
@@ -65,7 +63,7 @@ const components = [
     //容器监控
     containers,hosts,
     //
-    DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,model,MetadataManagement,
+    DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,
     //
     StorageManagement
 ];
@@ -119,7 +117,7 @@ export {
     containers,
     hosts,
     //
-    DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,model,MetadataManagement,
+    DataWorkspace,SpaceDatasource,SpaceDatasourceTemplate,DataRights,
     //
     StorageManagement
 };
