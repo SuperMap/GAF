@@ -52,6 +52,10 @@ public class MmField implements Serializable{
     private Integer fieldLength;
     @ApiModelProperty("字段精度")
     private Integer fieldPrecision;
+    @ApiModelProperty("小数位")
+    private Integer fieldScale;
+    @ApiModelProperty("主键排序，1...")
+    private Integer pkSeq;
     @ApiModelProperty("字段默认值")
     private String fieldDefault;
     /**

@@ -22,7 +22,6 @@
             :expandedNodeKeys.sync="expandedNodeKeys"
             :selectedKeys.sync="selectedNodeKeys"
             @select="onSelect"
-            :show-line="true"
           >
             <template v-slot:icon="{ iconNodeType }">
               <a-icon
@@ -72,7 +71,7 @@
               </div>
               <div class="add-botton">
                 <button @click="handleAdd" class="main-top-button">
-                  <span><a-icon type="arrow-left" />添加至当前用户</span>
+                  <span><a-icon type="arrow-left" />保存</span>
                 </button>
               </div>
             </div>

@@ -37,6 +37,16 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         }
 
         @Override
+        public FieldTypeInfo getFieldType(String sqlType) {
+            PostgresqlFieldTypeEnum type = PostgresqlFieldTypeEnum.valueOf(sqlType.toUpperCase());
+            FieldTypeInfo fieldTypeInfo = new FieldTypeInfo();
+            fieldTypeInfo.setCode(type.getCode());
+            fieldTypeInfo.setName(type.getName());
+            fieldTypeInfo.setDescrption(type.getName());
+            return fieldTypeInfo;
+        }
+
+        @Override
         public JdbcConnectionInfo convert2JdbcConnectionInfo(SysResourceDatasource datasource) {
             String url = "jdbc:postgresql://" + datasource.getAddr() + "/" + datasource.getDbName();
             String driverClassName = "org.postgresql.Driver";
@@ -47,6 +57,11 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         @Override
         public List<FieldTypeInfo> getFieldTypes() {
             return Collections.EMPTY_LIST;
+        }
+
+        @Override
+        public FieldTypeInfo getFieldType(String sqlType) {
+            return null;
         }
 
         @Override
@@ -70,6 +85,11 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         }
 
         @Override
+        public FieldTypeInfo getFieldType(String sqlType) {
+            return null;
+        }
+
+        @Override
         public String convertToDdlFragment(MmField mmField) {
 
 
@@ -87,6 +107,11 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         @Override
         public List<FieldTypeInfo> getFieldTypes() {
             return Collections.EMPTY_LIST;
+        }
+
+        @Override
+        public FieldTypeInfo getFieldType(String sqlType) {
+            return null;
         }
 
         @Override
@@ -113,6 +138,14 @@ public enum DatasourceTypeEnum implements ConnectionInfoConverter, FieldTypesSup
         return code;
     }
 
+    public static DatasourceTypeEnum fromName(String name) {
+        for (DatasourceTypeEnum datasourceType : DatasourceTypeEnum.values()) {
+            if (datasourceType.name().equalsIgnoreCase(name)) {
+                return datasourceType;
+            }
+        }
+        throw new IllegalArgumentException("不支持的类型:" + name);
+    }
 
     public static DatasourceTypeEnum fromCode(String code) {
         for (DatasourceTypeEnum datasourceType : DatasourceTypeEnum.values()) {

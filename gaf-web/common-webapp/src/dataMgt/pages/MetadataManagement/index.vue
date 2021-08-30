@@ -1,0 +1,481 @@
+<template>
+  <div class="app-container">
+    <div v-show="!openInfobox">
+      <div class="page-left">
+        <gaf-tree-transparent
+          ref="myGafTreeTransparent"
+          :searchPlaceholder="searchPlaceholder2"
+          :data-of-tree="dataOfTree1"
+          :searchType="[0]"
+          :expandedNodeKeys.sync="expandedNodeKeys2"
+          :selectedKeys.sync="selectedNodeKeys2"
+          @select="onSelect2"
+        >
+        </gaf-tree-transparent>
+      </div>
+      <div class="page-right">
+        <gaf-table-layout>
+          <template #actions>
+            <button v-show="false" @click="handleAdd" class="btn-fun blue btn-16">
+              <a-icon type="plus-circle" /><span>同步</span>
+            </button>
+          </template>
+          <template #filter>
+            <div class="search-position" style="width: 850px">
+              <a-row type="flex" justify="end">
+                <!-- <a-col :span="12">
+                  <label style="font-size: 16px">时态：</label>
+                  <a-range-picker
+                    :show-time="{ format: 'HH:mm:ss' }"
+                    :value="timeRange"
+                    @change="onPickerChange"
+                    @ok="onPickerOk"
+                    size="large"
+                    style="width: 240px;margin-right:10px;text-align: center;"
+                    format="YYYY-MM-DD"
+                  />
+                </a-col> -->
+                <a-col :span="6">
+                  <a-input-search
+                    @search="onSearch"
+                    placeholder="请输入名称查询"
+                    size="large"
+                  >
+                  </a-input-search>
+                </a-col>
+              </a-row>
+            </div>
+          </template>
+          <template #default>
+            <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
+            <gaf-table-with-page
+              :showXH="false"
+              :pagination="pagination"
+              :row-selection="{
+                selectedRowKeys: selectedRowKeys,
+                onChange: onSelectChange,
+              }"
+              :data-source="metaDataList"
+              :loading="loading"
+              @change="tableChange"
+              :row-key="(r, i) => i + r.recordName + r.recordType + r.catalogCode"
+              :columns="
+                columns.filter((item) => item.dataIndex !== 'datasourceId')
+              "
+              class="table-style"
+              size="middle"
+            >
+              <template
+                slot="customRender"
+                slot-scope="text, record"
+              >
+                <a
+                  @click.stop="() => handleDetail(record)"
+                  href="javascript:;"
+                  class="btn-margin"
+                >
+                  <u>{{ text }}</u>
+                </a>
+              </template>
+              <template slot="catalogType" slot-scope="text, record">
+                {{
+                  map.get(record.catalogCode) ? map.get(record.catalogCode) : ""
+                }}
+              </template>
+              <template slot="typeCode" slot-scope="text">
+                {{
+                  dataSourceTypeMap.get(text) ? dataSourceTypeMap.get(text) : ""
+                }}
+              </template>
+              <template slot="timeRender" v-if="timeFormat" slot-scope="text">
+                {{ timeFormat(text) }}
+              </template>
+            </gaf-table-with-page>
+          </template>
+        </gaf-table-layout>
+      </div>
+    </div>
+    <div v-if="openInfobox">
+      <info-box @changeOpenInfobox="changeOpenInfobox" :data="SingleData" @updatedData="updatedData" />
+    </div>
+  </div>
+</template>
+
+<script>
+import infoBox from "../../views/MetadataManagement/infoBox";
+import dictUtil from "../../../common/utils/DictUtil"
+import moment from "moment";
+import "~/assets/css/common.css";
+
+export default {
+  components: {
+    infoBox,
+  },
+  data() {
+    return {
+      SingleData: null,
+      openInfobox: false,
+      //是否选择时间选择器
+      istime: false,
+      //时间段信息
+      timeRange: [],
+      dataOfTree1: [],
+      dataOfTree: [],
+      map: new Map(),
+      // 数据源类型编码值和名字的映射
+      dataSourceTypeMap: new Map(),
+      //搜索框Placeholder
+      searchPlaceholder2: "请输入分类名称搜索",
+      expandedNodeKeys2: [],
+      selectedNodeKeys2: [],
+      // 标题
+      title: "",
+      // 编辑记录
+      editData: {},
+      selectedRowKeys: [],
+      selectRowLength: 0,
+      // ${functionName}表格数据
+      metaDataList: [],
+      tempMetaDataList: [],
+      // 是否显示添加修改弹出层
+      open: false,
+      // 分页参数
+      pagination: {
+        pageSize: 10,
+        current: 1,
+        total: 0,
+      },
+      // 列表是否加载中
+      loading: true,
+      searchText: "",
+      searchText2: "",
+      searchedColumn: "ds_name",
+      sorter: {
+        order: "",
+        field: "",
+      },
+      // 详情：1，新增：2，编辑：3
+      operation: 0,
+      // 提供添加服务时使用，用做数据源分类展示
+      catalogCode: "",
+      // 左侧目录树添加所有类型节点
+      searchAllNode: {
+        key: "all",
+        title: "所有类型",
+        children: null,
+        style: "font-size: 18px;font-weight: bold",
+      },
+      columns : [
+        {
+          title: "名称",
+          scopedSlots: {
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
+          },
+          dataIndex: "recordName",
+          key: "recordName",
+        },
+        {
+          title: "目录",
+          dataIndex: "catalogCode",
+          key: "catalog_code",
+          scopedSlots: { customRender: "catalogType" },
+        },
+        {
+          title: "数据源",
+          dataIndex: "datasourceName",
+          key: "datasource_name",
+          scopedSlots: { customRender: "datasourceName" },
+        },
+        {
+          title: "类型",
+          dataIndex: "recordType",
+          key: "recordType",
+        }
+      ]
+    };
+  },
+  computed: {
+    //时间格式
+    timeFormat: function () {
+      if (
+        this.columns.filter(
+          (item) =>
+            item.scopedSlots && item.scopedSlots.customRender === "timeRender"
+        ).length > 0
+      ) {
+        return function (str) {
+          if (!str || str === "") {
+            return "";
+          }
+          const dt = new Date(str);
+          const year = dt.getFullYear();
+          let month = dt.getMonth() + 1;
+          let date = dt.getDate();
+
+          month = month < 10 ? "0" + month : month;
+          date = date < 10 ? "0" + date : date;
+
+          return `${year}/${month}/${date}`;
+        };
+      }
+      return null;
+    },
+  },
+  created() {
+    this.getDataOfTree();
+    this.getList()
+  },
+  methods: {
+    moment,
+    //搜索
+    async onSearch(val) {
+      // eslint-disable-next-line no-console
+      this.searchText = val;
+      this.pagination.current = 1;
+      if (val === "") {
+        this.metaDataList = this.tempMetaDataList;
+      } else {
+        this.metaDataList = this.tempMetaDataList.filter(
+          (ltem) => ltem.recordName.includes(val) === true
+        );
+      }
+    },
+    //批量删除
+    async batchDel() {
+      const url = "/data-mgt/sys-resource-datasources/";
+      const selectedRowKeys = this.selectedRowKeys;
+      // eslint-disable-next-line no-console
+      if (selectedRowKeys.length !== 0) {
+        const rst = await this.$axios.delete(url, { data: selectedRowKeys });
+        if (rst.data.isSuccessed) {
+          this.$message.success("删除成功");
+        } else {
+          this.$message.error(`删除失败,原因:${rst.data.message}`);
+        }
+        this.$nextTick(() => {
+          if (
+            this.pagination.current !== 1 &&
+            selectedRowKeys.length === this.metaDataList.length
+          ) {
+            this.pagination.current--;
+          }
+          this.getList();
+          this.selectedRowKeys = [];
+        });
+      } else {
+        this.$message.warn("请选择您要删除的内容");
+      }
+    },
+    // 根据搜索文本拆分单元格文本内容
+    splitCellWithSearchText(text) {
+      const str = text === null ? "" : text;
+      return str
+        .toString()
+        .split(
+          new RegExp(`(?<=${this.searchText})|(?=${this.searchText})`, "i")
+        );
+    },
+    // 页码，排序项发生改变时，重新获取列表数据
+    tableChange(pageInfo, filters, sorter) {
+      if (pageInfo) {
+        this.pagination.current = pageInfo.current;
+        this.pagination.pageSize = pageInfo.pageSize;
+      }
+      if (sorter) {
+        this.sorter.order = sorter.order === "descend" ? "DESC" : "ASC";
+        this.sorter.field = sorter.columnKey;
+      }
+      // this.getList();
+    },
+    // 添加数据
+    handleAdd() {
+      this.catalogCode = "";
+      if (
+        this.searchText2 &&
+        this.searchText2 !== "" &&
+        this.searchText2 !== "all"
+      ) {
+        this.catalogCode = this.searchText2;
+      }
+      this.operation = 2;
+      this.title = "添加数据源";
+      this.open = true;
+    },
+    // 添加修改提交后
+    handleSubmit() {
+      this.open = false;
+      this.editData = {};
+      this.getList();
+    },
+    // 添加修改返回后
+    handleBack() {
+      this.editData = {};
+      this.open = false;
+    },
+    // 修改数据
+    handleUpdate(row) {
+      this.operation = 3;
+      this.open = true;
+      this.title = "修改数据源";
+      this.editData = row;
+    },
+    //详情展示
+    handleDetail(row) {
+      this.SingleData = row;
+      this.openInfobox = true;
+    },
+    // 删除数据
+    async handleDelete(row) {
+      const url = `/data-mgt/sys-resource-datasources/` + row.datasourceId;
+      const rst = await this.$axios.delete(url);
+      if (rst.data.isSuccessed) {
+        this.$message.success("删除成功");
+      } else {
+        this.$message.error(`删除失败,原因:${rst.data.message}`);
+      }
+      this.$nextTick(() => {
+        if (
+          this.pagination.current !== 1 &&
+          this.metaDataList.length === 1
+        ) {
+          this.pagination.current--;
+        }
+        this.selectedRowKeys = this.selectedRowKeys.filter(item => {
+          return item !== row.datasourceId
+        })
+        this.getList();
+      });
+    },
+    // 清空
+    clearOptions() {
+      this.selectedRowKeys = [];
+      this.selectRowLength = 0;
+    },
+    //表格选中项发生变化时的回调
+    onSelectChange(selectedRowKeys) {
+      this.selectedRowKeys = selectedRowKeys;
+      this.selectRowLength = selectedRowKeys.length;
+    },
+    //获取表单数据
+    async getList() {
+      this.loading = true;
+      let url = `/data-mgt/metadatas`;
+      const res = await this.$axios.$get(url);
+      this.loading = false;
+      if (res.isSuccessed) {
+        console.log(res)
+        this.metaDataList = res.data;
+        this.tempMetaDataList = res.data
+      } else {
+        this.$message.error(`查询失败,原因:${res.message}`);
+      }
+    },
+    //树形组件select事件
+    onSelect2(selectedKeys, e) {
+      console.log(selectedKeys, e)
+      this.searchText2 = "";
+      if (e.node.dataRef.key === 'all') {
+         this.metaDataList = this.tempMetaDataList
+         return
+      }
+      if (!e.node.dataRef.children || e.node.dataRef.children.length === 0) {
+        if (e.selected) {
+          this.searchText2 = e.node.dataRef.key;
+          this.metaDataList = this.tempMetaDataList.filter(item => item.catalogCode === this.searchText2)
+        }
+      }
+    },
+    //获取数据源分类树形数据
+    async getDataOfTree() {
+      const url = `/sys-mgt/sys-dicts/NR_DATA_CATEGORY/tree`;
+      const params = { level: 3 };
+      const res = await this.$axios.$get(url, { params });
+      if (res.isSuccessed) {
+        this.dataOfTree1.push(this.searchAllNode)
+        this.dataOfTree1 = [...this.dataOfTree1,...this.changePropertyName(res.data)]
+        this.getMap(res.data)
+        this.dataOfTree = res.data
+      } else {
+        this.$message.error("加载API分组树失败,原因：" + res.message);
+      }
+    },
+    //获取数据源类型编码值和名字的映射
+    async getDataSourceTypeMap() {
+      const url = `/sys-mgt/sys-dicts/DataSourceType/tree`
+      const res = await this.$axios.$get(url)
+      if (res.isSuccessed) {
+        this.dataSourceTypeMap = dictUtil.toMap(res.data)
+      } else {
+        this.$message.error('获取数据源类型字典失败,原因：' + res.message)
+      }
+    },
+    getMap(data) {
+      data.forEach((element) => {
+        this.map.set(element.value, element.label);
+        if (element.children) {
+          this.getMap(element.children);
+        }
+      });
+    },
+    //时间选择器change事件
+    onPickerChange(date) {
+      this.timeRange.length = 0;
+      this.timeRange.push(...date);
+    },
+    //时间选择器点完ok重新加载列表
+    onPickerOk() {
+      // this.istime = true
+      this.getList();
+    },
+    //默认时间
+    defaultPicker() {
+      const from = moment().subtract(1, "days");
+      const to = moment();
+      this.timeRange.length = 0;
+      this.timeRange.push(from);
+      this.timeRange.push(to);
+    },
+    //改变属性名
+    changePropertyName(data) {
+      let item = [];
+      data.map((list) => {
+        let newData = {};
+        newData.key = list.value;
+        newData.title = list.label;
+        newData.scopedSlots = {title: "title"}
+        newData.children = list.children  ? this.changePropertyName(list.children) : [];    //如果还有子集，就再次调用自己
+        item.push(newData);
+      });
+      return item;
+    },
+    changeOpenInfobox() {
+      this.openInfobox = false
+    },
+    updatedData() {
+      this.getList()
+    }
+  },
+};
+</script>
+
+<style scoped>
+.app-container {
+  height: 100%;
+}
+.add-user-btn {
+  border: none;
+  background-color: rgb(47, 117, 249);
+  color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 2px 2px rgba(84, 92, 100, 0.55);
+  transition: linear 0.2s;
+  box-shadow: 3px 3px 0 rgba(128, 128, 128, 0.3);
+}
+.ant-calendar-range-picker-input {
+  text-align: left;
+}
+.search-position {
+  float: right;
+}
+</style>

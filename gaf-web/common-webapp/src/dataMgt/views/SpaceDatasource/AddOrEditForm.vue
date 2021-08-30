@@ -9,7 +9,7 @@
       </template>
     </div>
     <div class="drawer-content">
-      <a-tabs default-active-key="1">
+      <a-tabs default-active-key="1"  :class="operation === 2 ?  'addHidden' : ''">
         <a-tab-pane key="1" tab="基本信息">
           <div class="page-container-box">
             <a-form
@@ -598,5 +598,8 @@ button {
 .btn-div {
   text-align: center;
   margin: 15px 0;
+}
+/deep/ .addHidden .ant-tabs-bar.ant-tabs-top-bar {
+  display: none;
 }
 </style>

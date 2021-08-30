@@ -19,23 +19,15 @@
             </a>
           </template>
         </a-breadcrumb>
-        <span class="logout"
+        <!-- <span class="logout"
           ><a-dropdown :trigger="['click']">
             <form id="logoutForm" method="post" action="/logout">
               <a class="ant-dropdown-link" @click.stop="() => logout()">
                 退出 <a-icon type="logout" />
               </a>
             </form>
-            <!-- <a-menu slot="overlay">
-              <a-menu-item>
-                <a href="javascript:;">个人中心</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:;" @click.stop="() => logout()">退出</a>
-              </a-menu-item>
-            </a-menu> -->
           </a-dropdown></span
-        >
+        > -->
       </div>
       <div v-show="isShow">
         <gaf-table-layout>

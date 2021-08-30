@@ -10,7 +10,7 @@ import com.supermap.data.conversion.ImportDataInfos;
 import com.supermap.data.conversion.ImportMode;
 import com.supermap.data.conversion.ImportSettingFileGDBVector;
 import com.supermap.gaf.data.mgt.Application;
-import com.supermap.gaf.data.mgt.resource.SpaceDatasourceResource;
+import com.supermap.gaf.data.mgt.service.SpaceDatasourceService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,18 +28,18 @@ import java.util.UUID;
 public class SpaceDatasourceResourceTest {
 
     @Autowired
-    private SpaceDatasourceResource spaceDatasourceResource;
+    private SpaceDatasourceService spaceDatasourceService;
 
     @Test
     public void testExport() {
         String s = "[{\"commonPart\":{\"exportSettingType\":\"CSV\",\"sourceDataset\":\"XZQ\",\"sourceDatasourceId\":\"9e36ae94-8817-4d28-a710-f73de5e3a605\"},\"basePart\":{\"targetFilePath\":\"C:/Users/wxl/Desktop/xzq.csv\",\"targetFileType\":\"CSV\"}}]";
-        spaceDatasourceResource.exportData(s);
+        spaceDatasourceService.exportData(s);
     }
     
     @Test
     public void testImport2() {
         String s = "[{\"commonPart\":{\"importSettingType\":\"VCT\",\"sourceFilePath\":\"E:\\chromedownload\\九寨沟县(513225)第三次国土调查成果\\九寨沟县(513225)第三次国土调查成果\\基础数据包\\标准格式数据\\2001H2021513225.vct\",\"targetDatasourceId\":\"9e36ae94-8817-4d28-a710-f73de5e3a605\"},\"basePart\":{\"importEmptyDataset\":true},\"dataInfosPart\":[{\"targetName\":\"mytesttargetname\"},{\"changeFieldName\":{\"oldFieldName\":\"BZ\",\"newFieldName\":\"BZ2\"}},{\"importFieldState\":{\"oldFieldName\":\"HDMC\",\"excludeField\":true}}]}]";
-        spaceDatasourceResource.importData(s);
+        spaceDatasourceService.importData(s);
     }
 
     @Test

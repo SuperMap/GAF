@@ -12,7 +12,6 @@
             :selectedKeys.sync="selectedNodeKeys"
             :searchPlaceholder="searchPlaceholder"
             @select="onSelect"
-            :show-line="true"
           >
             <template v-slot:icon="{ iconNodeType }">
               <a-icon

@@ -48,7 +48,6 @@
             :expandedNodeKeys.sync="expandedNodeKeys2"
             :selectedKeys.sync="selectedNodeKeys2"
             @select="onSelect2"
-            :show-line="true"
           >
             <template v-slot:icon="{ iconNodeType }">
               <a-icon :type="iconNodeType.type === 5 ? tag : tags"></a-icon>

@@ -9,7 +9,6 @@
         :expandedNodeKeys.sync="expandedNodeKeys2"
         :selectedKeys.sync="selectedNodeKeys2"
         @select="onSelect2"
-        :show-line="true"
       >
       </gaf-tree-transparent>
     </div>
@@ -32,7 +31,7 @@
           </a-popconfirm>
         </template>
         <template #filter>
-          <div class="search-position" style="width: 850px">
+          <div class="search-position">
             <a-row type="flex" justify="end">
               <a-col :span="12">
                 <label style="font-size: 16px">时态：</label>
@@ -581,5 +580,19 @@ export default {
 }
 .search-position {
   float: right;
+  width: auto;
+}
+/deep/ .filter.ant-col.ant-col-12 {
+  float: right;
+  width: 65%;
+}
+/deep/ .search-position .ant-col.ant-col-12 {
+  width: auto;
+}
+/deep/ .search-position .ant-col.ant-col-6 {
+  width: auto;
+}
+/deep/ .action-filter.ant-row > .ant-col.ant-col-12:first-child {
+  width: 30%;
 }
 </style>

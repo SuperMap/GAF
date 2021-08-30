@@ -4,7 +4,7 @@
       <a-modal
         v-model="visible"
         title="已关联的服务"
-        :mask="false"
+        :mask="true"
         :width="950"
         :centered="true"
         :footer="null"

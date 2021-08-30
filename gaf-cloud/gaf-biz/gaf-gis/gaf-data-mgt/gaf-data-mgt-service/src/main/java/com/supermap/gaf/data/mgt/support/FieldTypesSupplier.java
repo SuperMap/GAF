@@ -13,4 +13,10 @@ public interface FieldTypesSupplier {
      * @return 段数据类型编码和名称映射的集合
      */
     List<FieldTypeInfo> getFieldTypes();
+
+    /**
+     * 获取对应的字段数据类型编码和名称映射的集合
+     * @return 段数据类型编码和名称映射的集合
+     */
+    FieldTypeInfo getFieldType(String sqlType);
 }

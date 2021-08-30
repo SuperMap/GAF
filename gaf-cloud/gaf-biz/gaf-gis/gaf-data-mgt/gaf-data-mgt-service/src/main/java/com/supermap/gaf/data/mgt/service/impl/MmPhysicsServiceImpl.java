@@ -24,6 +24,7 @@ import com.supermap.gaf.data.mgt.model.PhysicsSingleResult;
 import com.supermap.gaf.data.mgt.service.*;
 import com.supermap.gaf.data.mgt.support.ConvertHelper;
 import com.supermap.gaf.data.mgt.support.JdbcConnectionInfo;
+import com.supermap.gaf.data.mgt.util.DatamgtCommonUtils;
 import com.supermap.gaf.data.mgt.util.Page;
 import com.supermap.gaf.data.mgt.util.PrjCoordSysUtil;
 import com.supermap.gaf.data.mgt.vo.MmFieldSelectVo;
@@ -269,14 +270,14 @@ public class MmPhysicsServiceImpl implements MmPhysicsService{
                         FieldInfo[] fieldInfosArray = new FieldInfo[size];
                         for (int i = 0; i < size; i++) {
                             MmField mmField = mmFields.get(i);
-                            FieldInfo fieldInfo = new FieldInfo();
-                            fieldInfo.setName(mmField.getFieldName());
-                            fieldInfo.setCaption(mmField.getFieldAlias());
-                            FieldType fieldType = (FieldType) FieldType.parse(FieldType.class, mmField.getFieldType().replace("sdx_", "").toUpperCase());
-                            fieldInfo.setType(fieldType);
-                            fieldInfo.setDefaultValue(mmField.getFieldDefault());
-                            fieldInfo.setRequired(mmField.getFieldNotNull());
-                            fieldInfo.setMaxLength(mmField.getFieldLength());
+                            FieldInfo fieldInfo = DatamgtCommonUtils.convert2FieldInfo(mmField,DatamgtCommonUtils.FIELD_TYPE_2_TYPE_CODE_CONVERT);
+//                            fieldInfo.setName(mmField.getFieldName());
+//                            fieldInfo.setCaption(mmField.getFieldAlias());
+//                            FieldType fieldType = (FieldType) FieldType.parse(FieldType.class, mmField.getFieldType().replace("sdx_", "").toUpperCase());
+//                            fieldInfo.setType(fieldType);
+//                            fieldInfo.setDefaultValue(mmField.getFieldDefault());
+//                            fieldInfo.setRequired(mmField.getFieldNotNull());
+//                            fieldInfo.setMaxLength(mmField.getFieldLength());
                             fieldInfosArray[i] = fieldInfo;
                         }
                         fieldInfos.addRange(fieldInfosArray);
