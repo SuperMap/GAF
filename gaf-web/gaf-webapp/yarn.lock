@@ -4670,8 +4670,8 @@ functional-red-black-tree@^1.0.1:
 
 gaf-ui@^2.0.25:
   version "2.0.25"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.25.tgz#2b38190fafd78f865eb8a9d097f46160afcdedb4"
-  integrity "sha1-1EZxZ2l1l5g2aQIQZ8utPi5DXOk= sha512-ad4zLqoSfIrxPYnLNBy8/3ig/S9l285QhySl3k7uBmSGbEqcgNZ4VsDO9o6g0/IKjI02adf1+LrlBiaAToyTPw=="
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.25.tgz#a2da09f6c4c934bfcbb10023011e3ca1772d4382"
+  integrity sha512-166IvzogBchMjZxc9rIi3/vQsUdXndj9XDRywCKX+zbnQqXHh7vx3lEIMN7PZLOeyIoO8eZn7vvMoI3ChGxFdQ==
   dependencies:
     ant-design-vue "^1.7.2"
     core-js "^2.6.5"
