@@ -55,6 +55,10 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
     @Value("${gaf.database.secretKey:}")
     private String secretKey;
 
+    public static void main(String[] args) {
+        String s = new SysResourceDatasourceServiceImpl().encrypt("root","1q2w3e4r5t6y7u8i");
+        System.out.println(s);
+    }
     private String encrypt(String text, String secretKey) {
         if (StringUtils.isEmpty(secretKey)) {
             throw new GafException("未配置数据库密码秘钥");
@@ -68,6 +72,11 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         }
         SymmetricCrypto aes = new SymmetricCrypto(SymmetricAlgorithm.AES, key);
         return aes.encryptHex(text);
+    }
+
+    @Override
+    public String decrypt(String CipherPassword) {
+        return decrypt(CipherPassword,secretKey);
     }
 
     private String decrypt(String text, String secretKey) {

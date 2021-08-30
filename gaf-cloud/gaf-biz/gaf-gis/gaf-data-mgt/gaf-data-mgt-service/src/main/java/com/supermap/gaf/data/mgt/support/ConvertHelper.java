@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 ;
@@ -46,9 +49,26 @@ public class ConvertHelper {
     public DatasourceConnectionInfo conver2DatasourceConnectionInfo(SysResourceDatasource sysResourceDatasource) {
         checkSdx(sysResourceDatasource);
         EngineType engineType = (EngineType) EngineType.parse(EngineType.class, sysResourceDatasource.getTypeCode());
+        String rootPath = null;
+        if (isFileType(engineType)){
+            rootPath = resolve(sysResourceDatasource.getAddr());
+        }
+        return conver2DatasourceConnectionInfo(sysResourceDatasource,rootPath);
+    }
+
+    // 不支持非空间数据源
+    public DatasourceConnectionInfo conver2DatasourceConnectionInfo(SysResourceDatasource sysResourceDatasource,String rootPath) {
+        checkSdx(sysResourceDatasource);
+        EngineType engineType = (EngineType) EngineType.parse(EngineType.class, sysResourceDatasource.getTypeCode());
         if (isFileType(engineType)) {
-            String realPath = resolve(sysResourceDatasource.getAddr());
-            return  new DatasourceConnectionInfo(realPath,sysResourceDatasource.getDsName() + UUID.randomUUID(),sysResourceDatasource.getPassword());
+            if(rootPath==null){
+                throw new RuntimeException("rootPath 不能为空");
+            }
+            Path realPath = Paths.get(rootPath).resolve(sysResourceDatasource.getAddr());
+            if(!Files.exists(realPath)){
+                throw new RuntimeException("文件不存在");
+            }
+            return  new DatasourceConnectionInfo(realPath.toString(),sysResourceDatasource.getDsName() + UUID.randomUUID(),sysResourceDatasource.getPassword());
         }
         String tns = sysResourceDatasource.getAddr();
         String database = sysResourceDatasource.getDbName();

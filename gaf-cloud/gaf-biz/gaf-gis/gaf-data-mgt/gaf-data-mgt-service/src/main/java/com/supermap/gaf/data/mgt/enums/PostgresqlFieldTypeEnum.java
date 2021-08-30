@@ -18,12 +18,36 @@ import java.util.stream.Collectors;
  * @author wxl
  * @since 2021-8-12
  */
-public enum PostgresqlFieldTypeEnum implements DdlFragmentConverter {
+public enum PostgresqlFieldTypeEnum implements  DdlFragmentConverter {
     // 数值类型
     SMALLINT ("postgresql_smallint","smallint") {
         @Override
         public String convertToDdlFragment(MmField mmField) {
+
             return mmField.getFieldName() + " smallint " + getCommonFragment(mmField);
+        }
+    },
+    // 数值类型
+    INT2 ("postgresql_smallint","int2") {
+        @Override
+        public String convertToDdlFragment(MmField mmField) {
+
+            return mmField.getFieldName() + " int2 " + getCommonFragment(mmField);
+        }
+    },
+    // 数值类型
+    INT4 ("postgresql_smallint","int4") {
+        @Override
+        public String convertToDdlFragment(MmField mmField) {
+
+            return mmField.getFieldName() + " int4 " + getCommonFragment(mmField);
+        }
+    },
+    INT8 ("postgresql_smallint","int8") {
+        @Override
+        public String convertToDdlFragment(MmField mmField) {
+
+            return mmField.getFieldName() + " int8 " + getCommonFragment(mmField);
         }
     },
     INTEGER("postgresql_integer","integer") {
@@ -142,7 +166,7 @@ public enum PostgresqlFieldTypeEnum implements DdlFragmentConverter {
             Integer fieldPrecision = mmField.getFieldPrecision();
             String precision = "";
             if(fieldPrecision != null) {
-                if (fieldPrecision < 0) {
+                if (fieldPrecision  < 0) {
                     precision = "(0)";
                 } else if (fieldPrecision > 6) {
                     precision = "(6)";
@@ -234,6 +258,13 @@ public enum PostgresqlFieldTypeEnum implements DdlFragmentConverter {
         @Override
         public String convertToDdlFragment(MmField mmField) {
             return mmField.getFieldName() + " boolean "  + getCommonFragment(mmField);
+        }
+    },
+    // 布尔类型
+    BOOL("postgresql_bool","bool") {
+        @Override
+        public String convertToDdlFragment(MmField mmField) {
+            return mmField.getFieldName() + " bool "  + getCommonFragment(mmField);
         }
     };
 

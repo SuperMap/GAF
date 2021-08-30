@@ -35,6 +35,7 @@ public interface SysResourceDatasourceService {
      */
     List<SysResourceDatasource> listByIds(Collection<String> datasourceIds);
 
+    String decrypt(String CipherPassword);
 	
 	/**
      * 分页条件查询
@@ -100,4 +101,5 @@ public interface SysResourceDatasourceService {
      * @return
      */
     List<SysResourceDatasource> getByName(String dsName,Boolean isSdx,Boolean isTemplate);
+
 }

@@ -82,7 +82,7 @@ public class GafClient {
         urlParams.put("username", username);
         urlParams.put("password", password);
         JSONObject re = (JSONObject) HttpUtils.doPostJson(url, null, urlParams, JSONObject.class);
-        checkResult(re);
+        checkResult(re,true);
         JSONObject data = re.getJSONObject("data");
         if (data.getLongValue("expires_in") < 3600) {
             return refreshToken(data.getString("refresh_token"), host);
@@ -96,7 +96,7 @@ public class GafClient {
         NameValuePair pair = new BasicNameValuePair("refresh_token", refreshToken);
         params.add(pair);
         JSONObject re = (JSONObject) HttpUtils.doPostJson(url, params, JSONObject.class);
-        checkResult(re);
+        checkResult(re,true);
         ApplicationContextUtils.getOutput().output("刷新token");
         return re.getJSONObject("data");
     }
@@ -112,7 +112,7 @@ public class GafClient {
             return HttpUtils.doGet(url, urlParams, headers, JSONObject.class);
         });
 //        JSONObject re = (JSONObject) HttpUtils.doGet(url,urlParams,headers,JSONObject.class);
-        checkResult(re);
+        checkResult(re,true);
         return re.getJSONObject("data").getJSONArray("pageList");
     }
 
@@ -123,7 +123,7 @@ public class GafClient {
             headers.put("Authorization", "Bearer " + token);
             return HttpUtils.doGet(url, null, headers, JSONObject.class);
         });
-        checkResult(re);
+        checkResult(re,true);
         return re.getJSONArray("data");
     }
 
@@ -182,7 +182,7 @@ public class GafClient {
                 headers.put("Authorization", "Bearer " + token);
                 return HttpUtils.doPutJson(url, null, null, headers, JSONObject.class);
             });
-            checkResult(re);
+            checkResult(re,true);
             return new PresignUploadRequest(re.getString("data"), contentMd5);
         } catch (Exception e) {
             throw new FileUploadException(Paths.get(keyName).getFileName().toString());
@@ -203,7 +203,7 @@ public class GafClient {
                 return HttpUtils.doGet(url, null, headers, JSONObject.class);
             });
             //        JSONObject re = (JSONObject) HttpUtils.doGet(url,null,headers,JSONObject.class);
-            checkResult(re);
+            checkResult(re,true);
             return re.getString("data");
         } catch (Exception e) {
             throw new FileDownloadException(Paths.get(keyName).getFileName().toString());
@@ -243,7 +243,10 @@ public class GafClient {
 
 
     private void checkResult(JSONObject re) {
-        if (!re.getBoolean("successed")) {
+        checkResult(re,false);
+    }
+    private void checkResult(JSONObject re,boolean requiredData){
+        if (!re.getBoolean("successed") || (requiredData && re.get("data")==null)) {
             ApplicationContextUtils.getOutput().output(JSON.toJSONString(re));
             throw new RuntimeException("操作失败：" + re.getString("message"));
         }

@@ -77,6 +77,7 @@
         <include refid="Base_Column_List"/>
         FROM "sys_resource_datasource"
         WHERE status = true
+        <if test='null != datasourceId'>AND datasource_id = #{datasourceId} </if>
         <if test='null != startTime'>AND date(time_attribute) >=  date(#{startTime}) </if>
         <if test='null != endTime'>AND date(#{endTime}) >= date(time_attribute)</if>
         <if test='null != sdx'>AND is_sdx = #{sdx}</if>

@@ -34,6 +34,8 @@ public class SysResourceDatasourceSelectVo {
 	@ApiParam("开始时间戳")
 	@ApiModelProperty("开始时间戳")
 	private Long startTimeStamp;
+	@ApiModelProperty("数据源id")
+	private String datasourceId;
 	@QueryParam("endTimeStamp")
 	@ApiParam("结束时间戳")
 	@ApiModelProperty("结束时间戳")
