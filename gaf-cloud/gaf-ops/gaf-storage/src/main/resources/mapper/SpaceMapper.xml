@@ -72,7 +72,7 @@
     <select id="selectByIdAndTargetType" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM "storage_space"
-        WHERE id = #{id} and targetType = #{targetType}
+        WHERE id = #{id} and target_type = #{targetType}
     </select>
     <select id="selectByIdsAndTargetTypeAndTargetId" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
@@ -80,7 +80,7 @@
         WHERE id IN
         <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
             #{id}
-        </foreach> and targetType = #{targetType} and targetId = #{targetId}
+        </foreach> and target_type = #{targetType} and target = #{targetId}
     </select>
 	<select id="selectList" resultMap="BaseResultMap" >
         SELECT <include refid="Base_Column_List" />
@@ -147,7 +147,7 @@
 
     <delete id="batchDeleteByIdsAndTargetType" parameterType="java.util.List">
         DELETE FROM "storage_space"
-        WHERE targetType = #{targetType} and id IN
+        WHERE target_type = #{targetType} and id IN
         <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
@@ -158,7 +158,7 @@
     </delete>
     <delete id="deleteByIdAndTargetType" >
         DELETE FROM "storage_space"
-        WHERE id = #{id} and targetType = #{targetType}
+        WHERE id = #{id} and target_type = #{targetType}
     </delete>
     <update id="update" parameterType="com.supermap.gaf.storage.entity.Space">
         UPDATE "storage_space"
@@ -188,7 +188,7 @@
             <if test ='null != totalSize'>total_size = #{totalSize},</if>
             updated_time = now(),
         </set>
-        WHERE id = #{id} and targetType = #{targetType}
+        WHERE id = #{id} and target_type = #{targetType}
     </update>
 
 </mapper>
