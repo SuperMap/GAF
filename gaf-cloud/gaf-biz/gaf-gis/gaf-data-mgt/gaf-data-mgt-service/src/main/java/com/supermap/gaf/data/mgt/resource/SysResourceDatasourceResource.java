@@ -120,9 +120,11 @@ public class SysResourceDatasourceResource  implements SysResourceDatasourceClie
 	@POST
     @Produces({MediaType.APPLICATION_JSON})
     public MessageResult<SysResourceDatasource> insertSysResourceDatasource(SysResourceDatasource sysResourceDatasource) {
-        MessageResult<Void> mr = checkHelper.checkConnection(sysResourceDatasource);
-        if (!mr.isSuccessed()) {
-            return MessageResult.failed(SysResourceDatasource.class).message(mr.getMessage()).build();
+        if (! "UDB".equals(sysResourceDatasource.getTypeCode()) &&  !"UDBX".equals(sysResourceDatasource.getTypeCode())) {
+            MessageResult<Void> mr = checkHelper.checkConnection(sysResourceDatasource);
+            if (!mr.isSuccessed()) {
+                return MessageResult.failed(SysResourceDatasource.class).message(mr.getMessage()).build();
+            }
         }
         SysResourceDatasource datasource = sysResourceDatasourceService.insertSysResourceDatasource(sysResourceDatasource);
         return MessageResult.successe(SysResourceDatasource.class).data(datasource).status(200).message("新增操作成功").build();

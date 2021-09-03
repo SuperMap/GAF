@@ -206,10 +206,8 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         if (!mr.isSuccessed()) {
             throw new GafException("查询字典NR_DATA_CATEGORY失败，原因:"+mr.getMessage());
         }
+
         List<DictDataNode> dataSourceTypeTree = mr.getData();
-        if(dataSourceTypeTree == null || dataSourceTypeTree.size() == 0) {
-            return null;
-        }
         List<DefaultTreeNode> allNodes = new LinkedList<>();
         Map<String, DictDataNode> codeMap = new HashMap<>(16);
         TreeUtil.deepFirstTraverseTree(dataSourceTypeTree,(dictDataNode, iterator) -> {
@@ -225,13 +223,11 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
             codeMap.putIfAbsent(dictDataNode.getValue(),dictDataNode);
             return TreeUtil.VisitResult.CONTINUE;
         });
+
         SysResourceDatasourceSelectVo selectVo = new SysResourceDatasourceSelectVo();
         selectVo.setSdx(true);
         selectVo.setTemplate(false);
         List<SysResourceDatasource> datasources = sysResourceDatasourceMapper.selectList(selectVo);
-        if(datasources == null || datasources.size() == 0) {
-            return null;
-        }
         Map<String, List<SysResourceDatasource>> groups = datasources.stream().peek(sysResourceDatasource -> sysResourceDatasource.setPassword(decrypt(sysResourceDatasource.getPassword(), secretKey))).collect(Collectors.groupingBy(SysResourceDatasource::getCatalogCode));
         groups.forEach((catalogCode, sysResourceDatasources) -> {
             if(sysResourceDatasources!=null && sysResourceDatasources.size() > 0) {
