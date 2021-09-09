@@ -198,7 +198,7 @@
 </template>
 
 <script>
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 import moment from 'moment'
 export default {
   props: {
@@ -250,7 +250,7 @@ export default {
           event.preventDefault()
           return false
         }
-        let url = `/storage/tenant-server-configs`
+        let url = `/storage/tenant-server-configs/`
         const data = this.addOrEditForm.getFieldsValue()
         this.loading = true
         if (this.dataId) {

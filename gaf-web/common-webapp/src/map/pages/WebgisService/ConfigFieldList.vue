@@ -90,6 +90,7 @@ export default {
         pageSize: 10,
         current: 1,
         total: 0,
+        simple: true
       },
       sorter: {
         order: null,

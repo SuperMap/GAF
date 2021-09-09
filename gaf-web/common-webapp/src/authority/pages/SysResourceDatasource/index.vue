@@ -135,7 +135,7 @@
 
 <script>
 import AddEditForm from "../../views/SysResourceDatasource/AddOrEditForm";
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 
 export default {
   components: {

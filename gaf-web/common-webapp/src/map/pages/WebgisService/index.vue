@@ -188,7 +188,7 @@
 
 <script>
 // @ts-nocheck
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 import AddEditForm from "../../views/WebgisService/AddOrEditForm.vue";
 import ConfigFieldList from "./ConfigFieldList.vue";
 import LinkService from "./LinkService.vue";

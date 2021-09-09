@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import '~/assets/css/common.css'
+//test
 import AddEditForm from '../../views/projGroup/AddOrEditForm'
 import GroupUsers from '../../views/projGroup/GroupUsers'
 import GroupProjects from '../../views/projGroup/GroupProjects'

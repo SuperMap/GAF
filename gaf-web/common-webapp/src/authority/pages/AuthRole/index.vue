@@ -35,7 +35,7 @@
 <script>
 import RoleManage from '../../views/AuthRole/RoleList'
 import CatalogManage from '../SysCatalog/CatalogManage'
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 import RoleApi from './RoleApi'
 export default {
   components: {

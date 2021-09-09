@@ -22,7 +22,7 @@
 <script>
 import ApiManage from '../../views/ComponentApi/ApiList'
 import CatalogManage from '../SysCatalog/CatalogManage'
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 export default {
   components: {
     CatalogManage,

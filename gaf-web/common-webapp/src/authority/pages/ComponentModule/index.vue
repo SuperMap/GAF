@@ -50,7 +50,7 @@
 import ModuleManage from '../../views/ComponentModule/ModuleList'
 import CatalogManage from '../SysCatalog/CatalogManage'
 import ModuleApi from '../ModuleApi'
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 
 export default {
   components: {

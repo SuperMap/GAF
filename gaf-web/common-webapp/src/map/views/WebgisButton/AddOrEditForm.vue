@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 import moment from "moment";
 export default {
   props: {

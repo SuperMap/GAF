@@ -77,7 +77,7 @@
   </div>
 </template>
 <script>
-import '~/assets/css/common.css'
+//test
 import '../../views/css/workFlow.css'
 import GafBtnSkip from '../../views/GafAllBusiness/GafBtnSkip'
 export default {

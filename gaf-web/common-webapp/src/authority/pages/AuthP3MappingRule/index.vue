@@ -113,7 +113,7 @@
 
 <script>
 import AddEditForm from "../../views/AuthP3MappingRule/AddOrEditForm";
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 
 export default {
   components: {

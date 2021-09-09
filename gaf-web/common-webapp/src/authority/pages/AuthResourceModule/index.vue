@@ -97,7 +97,7 @@
 
 <script>
 import AddEditForm from "../../views/AuthResourceModule/AddOrEditForm";
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 
 export default {
   components: {

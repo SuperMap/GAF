@@ -113,7 +113,7 @@
     // @ts-ignore
     import DicCatalogForm from '../../views/dics/DictCatalogForm'
     import DicTypeForm from '../../views/dics/DicTypeForm'
-    import '~/assets/css/common.css'
+    import '../../../common/css/common.css'
     import DicList from '../../views/dics/DicList.vue'
     import treeUtil from '../../../common/utils/TreeUtil'
     import addType from './addType'

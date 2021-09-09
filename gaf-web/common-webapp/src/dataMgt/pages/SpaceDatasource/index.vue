@@ -165,7 +165,7 @@
 import AddEditForm from "../../views/SpaceDatasource/AddOrEditForm";
 import dictUtil from "../../../common/utils/DictUtil"
 import moment from "moment";
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 
 export default {
   components: {

@@ -113,7 +113,7 @@
 </template>
 
 <script>
-    import '~/assets/css/common.css'
+    import '../../../common/css/common.css'
     import AddEditForm from '../../views/WebgisCatalogLayer/AddOrEditForm.vue'
     import WebgisMutiSelectList from '../WebgisService/WebgisMutiSelectList.vue'
 

@@ -160,7 +160,7 @@
 </template>
 
 <script>
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 import AddEditForm from '../../views/StorageManagement/AddOrEditForm.vue'
 import AttachmentManagement from '../AttachmentManagement/index.vue'
 export default {
