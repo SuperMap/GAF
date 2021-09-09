@@ -38,14 +38,14 @@ public interface TenantSpaceConfigService {
     /**
      * 新增
      *
-     * @return 新增的globalServerConfig
+     * @return 新增的TenantServerConf
      */
-    void insertGlobalServerConfig(SpaceConfig spaceConfig);
+    void insertTenantServerConf(SpaceConfig spaceConfig);
 
     /**
      * 删除
      */
-    void deleteGlobalServerConfig(String id);
+    void deleteTenantServerConf(String id);
 
     /**
      * 批量删除
@@ -55,9 +55,8 @@ public interface TenantSpaceConfigService {
     /**
      * 更新
      *
-     * @return 更新后的globalServerConfig
      */
-    void updateGlobalServerConfig(SpaceConfig spaceConfig);
+    void updateTenantServerConf(SpaceConfig spaceConfig);
 
     Page<Space> allocated(SpaceSelectVo spaceSelectVo, Integer pageNum, Integer pageSize);
 

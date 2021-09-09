@@ -129,13 +129,19 @@ public class DbMinioConfigHandler extends AbstractMinioConfigHandler {
         }
         List<String> configs = new ArrayList<>();
         for (SpaceConfig config : spaceConfigs) {
+            String bucketName = config.getBucketName();
+            int hasSubPath = bucketName.indexOf("/");
+            if(hasSubPath!=-1){
+                bucketName = bucketName.substring(0,hasSubPath);
+            }
+
             String volumeId = config.getId();
             configs.add(volumeId);
             body.append(String.format("[%s]", volumeId)).append(lineSeparator);
             body.append(String.format("url=%s", config.getServiceEndpoint())).append(lineSeparator);
             body.append(String.format("key=%s", config.getAccessKey())).append(lineSeparator);
             body.append(String.format("secret=%s", config.getSecretKey())).append(lineSeparator);
-            body.append(String.format("bucket=%s", config.getBucketName())).append(lineSeparator);
+            body.append(String.format("bucket=%s", bucketName)).append(lineSeparator);
             body.append(String.format("mntPoint=%s", getS3VolumePath(volumeId))).append(lineSeparator);
         }
         StringBuilder header = new StringBuilder("[config]");

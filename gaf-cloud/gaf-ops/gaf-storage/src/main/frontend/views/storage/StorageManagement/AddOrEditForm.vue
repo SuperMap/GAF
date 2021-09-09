@@ -254,7 +254,7 @@ export default {
         const data = this.addOrEditForm.getFieldsValue()
         this.loading = true
         if (this.dataId) {
-          url = url + this.dataId
+          url = url + '/'+this.dataId
           const rst = await this.$axios.put(url, data)
           if (rst.data.isSuccessed) {
             this.$message.success('更新成功')

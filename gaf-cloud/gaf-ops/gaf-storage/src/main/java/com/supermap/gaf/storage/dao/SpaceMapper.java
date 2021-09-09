@@ -51,7 +51,7 @@ public interface SpaceMapper {
     /**
      * 批量删除
      */
-    int batchDelete(@Param("targetType") List<String> ids);
+    int batchDelete(@Param("list") List<String> ids);
 
     int batchDeleteByIdsAndTargetType(@Param("list") List<String> ids, @Param("targetType") String targetType);
 

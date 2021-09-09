@@ -111,7 +111,7 @@ public class TenantSpaceConfigServiceImpl implements TenantSpaceConfigService {
 
     @Override
     @Transactional
-    public void insertGlobalServerConfig(SpaceConfig spaceConfig) {
+    public void insertTenantServerConf(SpaceConfig spaceConfig) {
         String s3ServerId = UUID.randomUUID().toString();
         S3Server s3Server = S3Server.builder().id(s3ServerId).accessKey(spaceConfig.getAccessKey()).serviceEndpoint(spaceConfig.getServiceEndpoint())
                 .secretKey(spaceConfig.getSecretKey()).build();
@@ -124,7 +124,7 @@ public class TenantSpaceConfigServiceImpl implements TenantSpaceConfigService {
 
 
     @Override
-    public void deleteGlobalServerConfig(String id) {
+    public void deleteTenantServerConf(String id) {
         List<Space> spaces = spaceMapper.selectList(SpaceSelectVo.builder().id(id).target(tenantInfoI.getTenantId()).targetType(TargetType.TENANT.getValue()).build());
         if (!CollectionUtils.isEmpty(spaces)) {
             Space space = spaces.get(0);
@@ -152,14 +152,15 @@ public class TenantSpaceConfigServiceImpl implements TenantSpaceConfigService {
 
     @Override
     @Transactional
-    public void updateGlobalServerConfig(SpaceConfig spaceConfig) {
+    public void updateTenantServerConf(SpaceConfig spaceConfig) {
         List<Space> spaces = spaceMapper.selectList(SpaceSelectVo.builder().id(spaceConfig.getId()).targetType(TargetType.TENANT.getValue()).target(tenantInfoI.getTenantId()).build());
         if (!CollectionUtils.isEmpty(spaces)) {
             Space space = spaces.get(0);
             S3Server s3Server = S3Server.builder().id(space.getParentSpaceId()).accessKey(spaceConfig.getAccessKey()).serviceEndpoint(spaceConfig.getServiceEndpoint())
                     .secretKey(spaceConfig.getSecretKey()).build();
             s3ServerMapper.update(s3Server);
-            Space spaceUpdate = Space.builder().createdType(CreatedType.CREATED.getValue()).target(tenantInfoI.getTenantId()).targetType(TargetType.TENANT.getValue()).build();
+            Space spaceUpdate = Space.builder().createdType(CreatedType.CREATED.getValue()).target(tenantInfoI.getTenantId())
+                    .targetType(TargetType.TENANT.getValue()).storageName(spaceConfig.getBucketName()).build();
             BeanUtils.copyProperties(spaceConfig, spaceUpdate);
             spaceMapper.update(spaceUpdate);
         }

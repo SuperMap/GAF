@@ -117,7 +117,10 @@ public class GlobalSpaceConfigServiceImpl implements GlobalSpaceConfigService {
             S3Server s3Server = S3Server.builder().id(space.getParentSpaceId()).accessKey(spaceConfig.getAccessKey()).serviceEndpoint(spaceConfig.getServiceEndpoint())
                     .secretKey(spaceConfig.getSecretKey()).build();
             s3ServerMapper.update(s3Server);
-            Space spaceUpdate = Space.builder().createdType(CreatedType.CREATED.getValue()).target("").targetType(TargetType.PLATFORM.getValue()).build();
+            Space spaceUpdate = Space.builder().createdType(CreatedType.CREATED.getValue()).target("")
+                    .targetType(TargetType.PLATFORM.getValue())
+                    .storageName(spaceConfig.getBucketName())
+                    .build();
             BeanUtils.copyProperties(spaceConfig, spaceUpdate);
             spaceMapper.update(spaceUpdate);
 
