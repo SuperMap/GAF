@@ -56,12 +56,13 @@ public class TokenResource {
         UserDetails userDetails = customUserDetailsServiceImpl.loadUserByUsername(username);
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             result.setMessage("password is incorrect");
+            result.setSuccessed(false);
             return result;
         }
 
         OAuth2AccessToken oAuth2AccessToken = customLoginService.createOauth2AccessTokenWithoutPassword(username);
-
-        return MessageResult.successe(OAuth2AccessToken.class).data(oAuth2AccessToken).build();
+        result.setData(oAuth2AccessToken);
+        return result;
     }
 
     @ApiOperation(value = "请求新token", notes = "通过刷新token请求新的token")

@@ -31,7 +31,10 @@ public class FluentdAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     protected void append(ILoggingEvent eventObject) {
         if (cfg != null && cfg.isEnable()) {
             if (fluentLogger == null) {
-                this.fluentLogger = FluentLogger.getLogger(cfg.getTagPrefix(), cfg.getHost(), cfg.getPort());
+                FluentLogger testFluentLogger = FluentLogger.getLogger(cfg.getTagPrefix(), cfg.getHost(), cfg.getPort());
+                if (testFluentLogger != null && testFluentLogger.isConnected()){
+                    this.fluentLogger = testFluentLogger;
+                }
             }
         } else {
             return;

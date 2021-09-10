@@ -38,7 +38,7 @@ public class UsernamePasswordAuthenticationFailureHandler implements Authenticat
         httpServletResponse.addCookie(cookie);
         httpServletResponse.setStatus(HttpStatus.OK.value());
         httpServletResponse.setContentType("application/json;charset=UTF-8");
-        MessageResult result = MessageResult.successe(Void.class).status(HttpStatus.UNAUTHORIZED.value()).build();
+        MessageResult result = MessageResult.failed(Void.class).status(HttpStatus.UNAUTHORIZED.value()).build();
         httpServletResponse.getWriter().write(objectMapper.writeValueAsString(result));
     }
 }
