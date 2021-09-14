@@ -48,7 +48,7 @@ public interface WebgisServiceService {
      *
      * @return
      */
-    void insertWebgisService(WebgisService webgisService, String type);
+    WebgisService insertWebgisService(WebgisService webgisService, String type);
 
 
     void registryWebgis(WebgisService webgisService);

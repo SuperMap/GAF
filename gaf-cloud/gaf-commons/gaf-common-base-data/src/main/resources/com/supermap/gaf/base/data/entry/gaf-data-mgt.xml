@@ -9,6 +9,8 @@
     <include file="../ddl/config_properties.sql" relativeToChangelogFile="true"/>
     <include file="../ddl/sys_resource_datasource.sql" relativeToChangelogFile="true"/>
     <include file="../ddl/sys_dict.sql" relativeToChangelogFile="true"/>
+    <include file="../ddl/service_source.sql" relativeToChangelogFile="true"/>
+
 
     <include file="../changelog/dict/base_0catalog.sql" relativeToChangelogFile="true"/>
     <include file="../changelog/dict/WorkSpaceType.sql" relativeToChangelogFile="true"/>

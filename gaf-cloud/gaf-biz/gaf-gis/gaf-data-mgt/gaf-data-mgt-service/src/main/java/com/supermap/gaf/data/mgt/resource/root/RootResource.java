@@ -52,4 +52,9 @@ public class RootResource {
         return SysResourceDatasourceResource.class;
     }
 
+    @Path("/service-sources")
+    public Class<ServiceSourceResource> serviceSourceResource(){
+        return  ServiceSourceResource.class;
+    }
+
 }

@@ -144,7 +144,8 @@ public class WebgisServiceResource {
             CompletableFuture future = asyncService.batchRegistryWebgis(webgisService, registryType, code);
             future.thenRun(() -> registryResultCacheI.done(requestCode));
         } else {
-            webgisServiceService.insertWebgisService(webgisService, registryType);
+            WebgisService re = webgisServiceService.insertWebgisService(webgisService, registryType);
+            code = re.getGisServiceId();
         }
         return MessageResult.data(code).status(200).message("操作成功").build();
     }

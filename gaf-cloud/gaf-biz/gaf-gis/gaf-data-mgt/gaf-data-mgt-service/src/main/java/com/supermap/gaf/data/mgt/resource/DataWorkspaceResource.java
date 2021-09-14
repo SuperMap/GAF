@@ -89,9 +89,8 @@ public class DataWorkspaceResource {
     @ApiImplicitParam(name = "dataWorkspace", value = "工作空间实体类", paramType = "body", dataTypeClass = DataWorkspace.class)
     @POST
     @Produces({MediaType.APPLICATION_JSON})
-    public MessageResult<Void> insertDataWorkspace(@Valid DataWorkspace dataWorkspace) {
-        dataWorkspaceService.insertDataWorkspace(dataWorkspace);
-        return MessageResult.successe(Void.class).status(200).message("新增操作成功").build();
+    public MessageResult<DataWorkspace> insertDataWorkspace(@Valid DataWorkspace dataWorkspace) {
+        return MessageResult.data(dataWorkspaceService.insertDataWorkspace(dataWorkspace)).message("新增操作成功").build();
     }
 
 

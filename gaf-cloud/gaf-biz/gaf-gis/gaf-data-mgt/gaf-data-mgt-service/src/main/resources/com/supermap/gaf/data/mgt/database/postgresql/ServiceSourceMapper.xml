@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermap.gaf.data.mgt.mapper.ServiceSourceMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.data.mgt.entity.ServiceSource">
+        <result column="service_source_id" jdbcType="VARCHAR" property="serviceSourceId" />
+        <result column="source_id" jdbcType="VARCHAR" property="sourceId" />
+        <result column="service_id" jdbcType="VARCHAR" property="serviceId" />
+        <result column="source_type" jdbcType="SMALLINT" property="sourceType" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        service_source_id,
+        source_id,
+        service_id,
+        source_type    </sql>
+    <select id="select" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "service_source"
+        WHERE service_source_id = #{serviceSourceId}
+    </select>
+	<select id="selectList" resultMap="BaseResultMap" >
+        SELECT <include refid="Base_Column_List" />
+        FROM "service_source"
+        <trim prefix="WHERE" suffixOverrides="AND">
+                <if test='serviceSourceId != null'>service_source_id = #{serviceSourceId} AND </if>
+                <if test='sourceId != null'>source_id = #{sourceId} AND </if>
+                <if test='serviceId != null'>service_id = #{serviceId} AND </if>
+                <if test='sourceType != null'>source_type = #{sourceType} AND </if>
+            <if test ='null != equalFieldName'>${equalFieldName}
+                <choose>
+                    <when test="equalFieldValue != null"> = #{equalFieldValue} </when>
+                    <otherwise>  is null </otherwise>
+                </choose>
+                AND
+            </if>
+            <if test ='null != searchFieldName and null != searchFieldValue'>${searchFieldName} LIKE CONCAT('%', #{searchFieldValue}, '%')  AND </if>
+        </trim>
+        <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
+    </select>
+    <insert id="insert" useGeneratedKeys="false" keyColumn="service_source_id" keyProperty="serviceSourceId" parameterType="com.supermap.gaf.data.mgt.entity.ServiceSource">
+        INSERT INTO "service_source"
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test ='null != serviceSourceId'>service_source_id,</if>
+			<if test ='null != sourceId'>source_id,</if>
+			<if test ='null != serviceId'>service_id,</if>
+			<if test ='null != sourceType'>source_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test ='null != serviceSourceId'>#{serviceSourceId},</if>
+			<if test ='null != sourceId'>#{sourceId},</if>
+			<if test ='null != serviceId'>#{serviceId},</if>
+			<if test ='null != sourceType'>#{sourceType},</if>
+        </trim>
+    </insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO "service_source"(<include refid="Base_Column_List" />) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (  #{item.serviceSourceId}  ,  #{item.sourceId}  ,  #{item.serviceId}  ,  #{item.sourceType}  )
+        </foreach>
+    </insert>
+	<delete id="batchDelete" parameterType="java.util.List">
+        DELETE FROM "service_source" 
+        WHERE service_source_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+	<delete id="delete" >
+        DELETE FROM "service_source"
+        WHERE service_source_id = #{serviceSourceId}
+    </delete>
+    <update id="update" parameterType="com.supermap.gaf.data.mgt.entity.ServiceSource">
+        UPDATE "service_source"
+        <set>
+			<if test ='null != sourceId'>source_id = #{sourceId},</if>				
+			<if test ='null != serviceId'>service_id = #{serviceId},</if>				
+			<if test ='null != sourceType'>source_type = #{sourceType},</if>				
+        </set>
+        WHERE service_source_id = #{serviceSourceId}
+    </update>
+
+</mapper>

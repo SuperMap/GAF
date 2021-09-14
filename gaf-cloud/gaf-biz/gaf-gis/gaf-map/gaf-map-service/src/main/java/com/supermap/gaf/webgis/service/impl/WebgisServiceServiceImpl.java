@@ -111,7 +111,7 @@ public class WebgisServiceServiceImpl implements WebgisServiceService {
     }
 
     @Override
-    public void insertWebgisService(WebgisService webgisService, String type) {
+    public WebgisService insertWebgisService(WebgisService webgisService, String type) {
         if (!REGISTRY_TYPE_SINGLE.equals(type)) {
             throw new GafException("未知注册类型");
         }
@@ -120,6 +120,7 @@ public class WebgisServiceServiceImpl implements WebgisServiceService {
         webgisService.setUpdatedBy(shiroUser.getAuthUser().getName());
         webgisConfigService.parseConfig(webgisService);
         registryWebgis(webgisService);
+        return webgisService;
     }
 
 
