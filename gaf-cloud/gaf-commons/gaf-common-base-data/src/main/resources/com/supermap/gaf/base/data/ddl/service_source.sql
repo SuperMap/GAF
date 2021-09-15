@@ -6,8 +6,7 @@ CREATE TABLE "service_source" (
    "source_id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
    "service_id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
    "source_type" int2 NOT NULL,
-   CONSTRAINT "rel_tile_service_copy1_pkey" PRIMARY KEY ("service_source_id"),
-   CONSTRAINT "rel_tile_service_copy1_tile_id_service_id_key" UNIQUE ("source_id", "service_id")
+   CONSTRAINT "rel_tile_service_copy1_pkey" PRIMARY KEY ("service_source_id")
 )
 ;
 

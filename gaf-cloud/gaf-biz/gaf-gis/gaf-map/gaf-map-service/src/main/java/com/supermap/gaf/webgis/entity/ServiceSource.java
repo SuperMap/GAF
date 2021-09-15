@@ -1,4 +1,4 @@
-package com.supermap.gaf.data.mgt.entity;
+package com.supermap.gaf.webgis.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

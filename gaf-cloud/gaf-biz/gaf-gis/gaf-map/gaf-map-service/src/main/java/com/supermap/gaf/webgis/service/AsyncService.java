@@ -8,6 +8,7 @@ package com.supermap.gaf.webgis.service;
 import com.supermap.gaf.webgis.entity.WebgisService;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -17,5 +18,5 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public interface AsyncService {
 
-    CompletableFuture<Void> batchRegistryWebgis(WebgisService webgisService, String type, String resultCode);
+    CompletableFuture<Void> batchRegistryWebgis(WebgisService webgisService, String type, String resultCode,@Nullable String sourceId, @Nullable Integer sourceType);
 }

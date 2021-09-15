@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.supermap.gaf.data.mgt.mapper.ServiceSourceMapper">
-    <resultMap id="BaseResultMap" type="com.supermap.gaf.data.mgt.entity.ServiceSource">
+<mapper namespace="com.supermap.gaf.webgis.dao.ServiceSourceMapper">
+    <resultMap id="BaseResultMap" type="com.supermap.gaf.webgis.entity.ServiceSource">
         <result column="service_source_id" jdbcType="VARCHAR" property="serviceSourceId" />
         <result column="source_id" jdbcType="VARCHAR" property="sourceId" />
         <result column="service_id" jdbcType="VARCHAR" property="serviceId" />
@@ -37,7 +37,7 @@
         </trim>
         <if test ='null != orderFieldName'>order by ${orderFieldName} <if test ='null != orderMethod'> ${orderMethod}</if></if>
     </select>
-    <insert id="insert" useGeneratedKeys="false" keyColumn="service_source_id" keyProperty="serviceSourceId" parameterType="com.supermap.gaf.data.mgt.entity.ServiceSource">
+    <insert id="insert" useGeneratedKeys="false" keyColumn="service_source_id" keyProperty="serviceSourceId" parameterType="com.supermap.gaf.webgis.entity.ServiceSource">
         INSERT INTO "service_source"
         <trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test ='null != serviceSourceId'>service_source_id,</if>
@@ -69,7 +69,7 @@
         DELETE FROM "service_source"
         WHERE service_source_id = #{serviceSourceId}
     </delete>
-    <update id="update" parameterType="com.supermap.gaf.data.mgt.entity.ServiceSource">
+    <update id="update" parameterType="com.supermap.gaf.webgis.entity.ServiceSource">
         UPDATE "service_source"
         <set>
 			<if test ='null != sourceId'>source_id = #{sourceId},</if>				

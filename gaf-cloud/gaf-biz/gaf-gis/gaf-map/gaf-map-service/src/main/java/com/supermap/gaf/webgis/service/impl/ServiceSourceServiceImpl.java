@@ -1,12 +1,12 @@
-package com.supermap.gaf.data.mgt.service.impl;
+package com.supermap.gaf.webgis.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.supermap.gaf.data.mgt.entity.ServiceSource;
-import com.supermap.gaf.data.mgt.mapper.ServiceSourceMapper;
-import com.supermap.gaf.data.mgt.service.ServiceSourceService;
-import com.supermap.gaf.data.mgt.util.Page;
-import com.supermap.gaf.data.mgt.vo.ServiceSourceSelectVo;
+import com.supermap.gaf.webgis.dao.ServiceSourceMapper;
+import com.supermap.gaf.webgis.entity.ServiceSource;
+import com.supermap.gaf.webgis.service.ServiceSourceService;
+import com.supermap.gaf.webgis.util.Page;
+import com.supermap.gaf.webgis.vo.ServiceSourceSelectVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

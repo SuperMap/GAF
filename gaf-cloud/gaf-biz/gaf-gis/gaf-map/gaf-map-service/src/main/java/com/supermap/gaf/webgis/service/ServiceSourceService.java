@@ -1,8 +1,8 @@
-package com.supermap.gaf.data.mgt.service;
+package com.supermap.gaf.webgis.service;
 
-import com.supermap.gaf.data.mgt.entity.ServiceSource;
-import com.supermap.gaf.data.mgt.util.Page;
-import com.supermap.gaf.data.mgt.vo.ServiceSourceSelectVo;
+import com.supermap.gaf.webgis.entity.ServiceSource;
+import com.supermap.gaf.webgis.util.Page;
+import com.supermap.gaf.webgis.vo.ServiceSourceSelectVo;
 
 import java.util.List;
 

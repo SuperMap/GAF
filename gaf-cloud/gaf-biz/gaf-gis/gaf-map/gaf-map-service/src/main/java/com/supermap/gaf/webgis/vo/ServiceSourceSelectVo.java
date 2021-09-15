@@ -1,4 +1,4 @@
-package com.supermap.gaf.data.mgt.vo;
+package com.supermap.gaf.webgis.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

@@ -1,10 +1,10 @@
-package com.supermap.gaf.data.mgt.resource;
+package com.supermap.gaf.webgis.resource;
 
 import com.supermap.gaf.commontypes.MessageResult;
-import com.supermap.gaf.data.mgt.entity.ServiceSource;
-import com.supermap.gaf.data.mgt.service.ServiceSourceService;
-import com.supermap.gaf.data.mgt.util.Page;
-import com.supermap.gaf.data.mgt.vo.ServiceSourceSelectVo;
+import com.supermap.gaf.webgis.entity.ServiceSource;
+import com.supermap.gaf.webgis.service.ServiceSourceService;
+import com.supermap.gaf.webgis.util.Page;
+import com.supermap.gaf.webgis.vo.ServiceSourceSelectVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Component
 @Api(value = "服务来源关联表接口")
-public class ServiceSourceResource{
+public class ServiceSourceResource {
     @Autowired
     private ServiceSourceService serviceSourceService;
 	

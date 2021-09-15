@@ -1,7 +1,7 @@
-package com.supermap.gaf.data.mgt.mapper;
+package com.supermap.gaf.webgis.dao;
 
-import com.supermap.gaf.data.mgt.entity.ServiceSource;
-import com.supermap.gaf.data.mgt.vo.ServiceSourceSelectVo;
+import com.supermap.gaf.webgis.entity.ServiceSource;
+import com.supermap.gaf.webgis.vo.ServiceSourceSelectVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Mapper
 @Component
-public interface ServiceSourceMapper{
+public interface ServiceSourceMapper {
 	/**
      * 根据主键 serviceSourceId查询
      * 
