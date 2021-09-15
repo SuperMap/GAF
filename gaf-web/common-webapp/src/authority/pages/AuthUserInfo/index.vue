@@ -6,7 +6,7 @@
 
 <script>
 import AuthUserInfo from '../../views/AuthUserInfo/UserInfo'
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 
 export default {
   components: {

@@ -111,7 +111,7 @@
 
 <script>
 // @ts-nocheck
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 import AddEditForm from "../../views/WebgisToolbar/AddOrEditForm.vue";
 
 export default {

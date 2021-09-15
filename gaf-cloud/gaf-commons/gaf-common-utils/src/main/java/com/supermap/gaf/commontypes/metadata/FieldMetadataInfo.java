@@ -1,6 +1,7 @@
 package com.supermap.gaf.commontypes.metadata;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.google.common.collect.Sets;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -8,13 +9,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.util.Asserts;
 
 import javax.annotation.Nullable;
 import java.sql.Connection;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The type Field metadata info.
@@ -31,10 +31,6 @@ import java.util.Set;
 public class FieldMetadataInfo {
     @ApiModelProperty(value = "字段名")
     private String fieldName;
-    @ApiModelProperty(value = "小写驼峰字段名")
-    private String fieldLowCamelName;
-    @ApiModelProperty(value = "大写驼峰字段名")
-    private String fieldUpperCamelName;
     @ApiModelProperty(value = "sql类型")
     private String sqlType;
     @ApiModelProperty(value = "jdbc类型")
@@ -55,11 +51,30 @@ public class FieldMetadataInfo {
     private boolean isPrimaryKey;
     @ApiModelProperty(value = "主键序号")
     private Integer pkSeq;
+    @ApiModelProperty(value = "主键名称")
+    private String pkName;
     @JSONField(name = "isAutoincrement")
     @ApiModelProperty(value = "是否自增")
     private boolean isAutoincrement;
     @ApiModelProperty("小数位数")
     private Integer scale;
+
+    private static final Set<String> HAS_LENGTH_TYPE = new HashSet<>();
+    private static final Set<String> HAS_PRECISION_AND_SCALE_TYPE = new HashSet<>();
+    private static final Map<String,Set<String>> TYPE_ALIAS = new HashMap<>();
+    static {
+        HAS_LENGTH_TYPE.addAll(Arrays.asList("character", "varying", "varchar", "char"));
+        HAS_PRECISION_AND_SCALE_TYPE.addAll(Arrays.asList("numeric"));
+        List<Set<String>> same = Arrays.asList(
+                Sets.newHashSet("int2","smallint"),
+                Sets.newHashSet("int4","integer"),
+                Sets.newHashSet("int8","bigint"));
+        for(Set<String> set:same){
+            for(String item:set){
+                TYPE_ALIAS.put(item,set);
+            }
+        }
+    }
 
 
     public boolean isValueCharType(){
@@ -68,33 +83,43 @@ public class FieldMetadataInfo {
     }
 
     /**
-     * 生成数据类型ddl片段。如：varchar(10)
+     * 类型及其类型属性比较
+     * @param fieldMetadataInfo
+     * @return
+     */
+    public boolean typeEquals(FieldMetadataInfo fieldMetadataInfo){
+        boolean typeSame = true;
+        if(!StringUtils.equalsIgnoreCase(getSqlType(),fieldMetadataInfo.getSqlType())){
+            Set<String> alias = TYPE_ALIAS.get(this.getSqlType());
+            if(alias==null || !alias.contains(fieldMetadataInfo.getSqlType().toLowerCase())){
+                typeSame = false;
+            }
+        }
+        return typeSame && StringUtils.equals(genTypePropertyDDLFragment(this),genTypePropertyDDLFragment(fieldMetadataInfo));
+    }
+
+    /**
+     * 生成数据类型ddl片段。如：varchar(10).
      *
      * @param connection the connection
      * @return string string
      */
     public String genDataTypeDDLFragment(Connection connection) {
         Asserts.notBlank(getSqlType(),"类型");
-        Set<String> hasLength = new HashSet<>();
-        hasLength.addAll(Arrays.asList("CHARACTER", "VARYING", "VARCHAR", "CHAR"));
-        Set<String> hasPrecisionAndScale = new HashSet<>();
-        hasPrecisionAndScale.addAll(Arrays.asList("NUMERIC"));
-        String hasLengthTp = "%s(%s)";
-        String hasPrecisionAndScaleTp = "%s(%s,%s)";
-        String sqlType = getSqlType();
-        if (getColumnSize() != null && hasLength.contains(sqlType.toUpperCase())) {
-            return String.format(hasLengthTp, sqlType, "" + getColumnSize());
-        } else if (getColumnSize() != null && hasPrecisionAndScale.contains(sqlType.toUpperCase())) {
-            if (getScale() == null) {
-                return String.format(hasLengthTp, sqlType, "" + getColumnSize());
-            } else {
-                return String.format(hasPrecisionAndScaleTp, sqlType, "" + getColumnSize(), "" + getScale());
-            }
-        } else {
-            return sqlType;
-        }
+        return getSqlType()+genTypePropertyDDLFragment(this);
     }
-
+    private String genTypePropertyDDLFragment(FieldMetadataInfo fieldMetadataInfo){
+        String sqlType = fieldMetadataInfo.getSqlType();
+        Integer columnSize = fieldMetadataInfo.getColumnSize();
+        Integer scale = fieldMetadataInfo.getScale();
+        if (columnSize != null && HAS_LENGTH_TYPE.contains(sqlType.toLowerCase())) {
+            return String.format("(%s)", "" + columnSize);
+        }
+        if (columnSize != null && HAS_PRECISION_AND_SCALE_TYPE.contains(sqlType.toLowerCase())) {
+            return String.format("(%s,%s)", "" + columnSize,scale == null?"0":"" + scale);
+        }
+        return "";
+    }
 
     /**
      * 生成null约束ddl片段。如：NOT NULL

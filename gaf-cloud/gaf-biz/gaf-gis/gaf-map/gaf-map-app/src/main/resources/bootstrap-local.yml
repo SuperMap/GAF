@@ -50,7 +50,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     password: '123456'
-    url: jdbc:postgresql://192.168.11.118:32222/gaf
+    url: jdbc:postgresql://192.168.11.118:32224/gaf
     username: admin
   mail:
     default-encoding: utf-8
@@ -65,8 +65,8 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
-    fetchRegistry: true
-    register-with-eureka: true
+#    fetchRegistry: true
+#    register-with-eureka: true
 #logging:
 #  level:
 #    com.supermap.gaf: debug

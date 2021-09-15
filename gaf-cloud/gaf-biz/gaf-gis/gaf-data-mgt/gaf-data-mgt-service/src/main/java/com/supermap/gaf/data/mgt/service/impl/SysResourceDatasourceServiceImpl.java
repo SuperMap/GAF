@@ -9,6 +9,7 @@ import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.supermap.gaf.common.storage.client.StorageClient;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.commontypes.Page;
 import com.supermap.gaf.commontypes.tree.DefaultTreeNode;
@@ -18,14 +19,17 @@ import com.supermap.gaf.data.mgt.model.DatasourceConnectionInfo;
 import com.supermap.gaf.data.mgt.service.SysResourceDatasourceService;
 import com.supermap.gaf.data.mgt.vo.SysResourceDatasourceSelectVo;
 import com.supermap.gaf.exception.GafException;
+import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.sys.mgt.client.SysDictClient;
 import com.supermap.gaf.sys.mgt.model.DictData;
 import com.supermap.gaf.sys.mgt.model.DictDataNode;
 import com.supermap.gaf.utils.TreeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotEmpty;
@@ -51,6 +55,10 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
     private SysResourceDatasourceMapper sysResourceDatasourceMapper;
     @Autowired
     private SysDictClient sysDictClient;
+
+    @Autowired
+    @Qualifier("DatamgtStorageClient")
+    private StorageClient storageClient;
 
     @Value("${gaf.database.secretKey:}")
     private String secretKey;
@@ -166,15 +174,26 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         }
         
     }
-	
+
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public void deleteSysResourceDatasource(String datasourceId){
+        SysResourceDatasource sysResourceDatasource = getById(datasourceId);
         sysResourceDatasourceMapper.delete(datasourceId);
+        if ("udb".equalsIgnoreCase(sysResourceDatasource.getTypeCode()) || "udbx".equalsIgnoreCase(sysResourceDatasource.getTypeCode())) {
+            storageClient.delete(sysResourceDatasource.getAddr(), SecurityUtilsExt.getUser().getAuthUser().getTenantId());
+        }
     }
 
+    @Transactional(rollbackFor = Exception.class)
 	@Override
     public void batchDelete(List<String> datasourceIds){
-        sysResourceDatasourceMapper.batchDelete(datasourceIds);
+        if (datasourceIds == null || datasourceIds.isEmpty()) {
+            return;
+        }
+        for (String datasourceId : datasourceIds) {
+            deleteSysResourceDatasource(datasourceId);
+        }
     }
 	
 	@Override

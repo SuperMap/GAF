@@ -43,6 +43,7 @@
         <trim prefix="WHERE" suffixOverrides="AND">
             sp.created_type = 'C' AND
             <if test='target != null'>sp.target = #{target} AND </if>
+            <if test='targetType != null'>sp.target_type = #{targetType} AND </if>
             <if test='bucketName != null'>sp.storage_name = #{bucketName} AND </if>
             <if test='id != null'>sp.id = #{id} AND </if>
             <if test='name != null'>sp.name = #{name} AND </if>

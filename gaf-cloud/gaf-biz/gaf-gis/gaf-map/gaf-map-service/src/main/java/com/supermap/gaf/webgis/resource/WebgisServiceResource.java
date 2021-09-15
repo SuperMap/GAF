@@ -5,6 +5,7 @@
  */
 package com.supermap.gaf.webgis.resource;
 
+import com.alibaba.fastjson.JSON;
 import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.exception.GafException;
@@ -17,6 +18,7 @@ import com.supermap.gaf.webgis.service.AsyncService;
 import com.supermap.gaf.webgis.service.WebgisServiceService;
 import com.supermap.gaf.webgis.service.impl.WebgisServiceServiceImpl;
 import com.supermap.gaf.webgis.util.Page;
+import com.supermap.gaf.webgis.util.WebgisCommonUtils;
 import com.supermap.gaf.webgis.vo.WebgisServiceConditonVo;
 import com.supermap.gaf.webgis.vo.WebgisServiceSelectVo;
 import io.swagger.annotations.Api;
@@ -24,6 +26,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -34,6 +38,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -46,6 +51,7 @@ import java.util.concurrent.CompletableFuture;
 @Component
 @Api(value = "GIS服务接口")
 public class WebgisServiceResource {
+    private static final Logger log = LoggerFactory.getLogger(WebgisServiceResource.class);
 
     @Autowired
     private WebgisServiceService webgisServiceService;
@@ -125,9 +131,14 @@ public class WebgisServiceResource {
     @ApiOperation(value = "注册GIS服务", notes = "注册GIS服务")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "registryType", value = "注冊类型", allowableValues = "server,batch,single", paramType = "query", dataType = "string", required = false)})
-    public MessageResult<String> insertWebgisService(WebgisService webgisService, @DefaultValue("single") @QueryParam("registryType") String registryType) {
-        String code = null;
-        if (WebgisServiceServiceImpl.REGISTRY_TYPE_SERVER.equals(registryType) || WebgisServiceServiceImpl.REGISTRY_TYPE_BATCH.equals(registryType)) {
+    public MessageResult<String> insertWebgisService(WebgisService webgisService,
+                                                     @DefaultValue("single") @QueryParam("registryType") String registryType,
+                                                     @QueryParam("sourceType") Integer sourceType,
+                                                     @QueryParam("sourceId") String sourceId) {
+        String re = "";
+        if(WebgisServiceServiceImpl.REGISTRY_TYPE_SINGLE.equals(registryType)){
+            re = JSON.toJSONString(webgisServiceService.insertWebgisService(webgisService, sourceId,sourceType));
+        }else{
             try {
                 new URL(webgisService.getAddress());
                 new RestTemplate().headForHeaders(webgisService.getAddress());
@@ -136,17 +147,32 @@ public class WebgisServiceResource {
             } catch (Exception e) {
                 throw new GafException("无法解析服务列表");
             }
-            ShiroUser shiroUser = SecurityUtilsExt.getUser();
-            webgisService.setCreatedBy(shiroUser.getAuthUser().getName());
-            webgisService.setUpdatedBy(shiroUser.getAuthUser().getName());
-            final String requestCode = registryResultCacheI.generateKey();
-            code = requestCode;
-            CompletableFuture future = asyncService.batchRegistryWebgis(webgisService, registryType, code);
-            future.thenRun(() -> registryResultCacheI.done(requestCode));
-        } else {
-            webgisServiceService.insertWebgisService(webgisService, registryType);
+            if (WebgisServiceServiceImpl.REGISTRY_TYPE_SERVER.equals(registryType)) {
+                ShiroUser shiroUser = SecurityUtilsExt.getUser();
+                webgisService.setCreatedBy(shiroUser.getAuthUser().getName());
+                webgisService.setUpdatedBy(shiroUser.getAuthUser().getName());
+                final String requestCode = registryResultCacheI.generateKey();
+                re = requestCode;
+                CompletableFuture future = asyncService.batchRegistryWebgis(webgisService, registryType, requestCode,sourceId,sourceType);
+                future.thenRun(() -> registryResultCacheI.done(requestCode));
+            }else if(WebgisServiceServiceImpl.REGISTRY_TYPE_BATCH.equals(registryType)){
+                List<String> urls = new ArrayList<>();
+                WebgisCommonUtils.listService(webgisService.getTypeCode(),webgisService.getAddress(), service -> {
+                    try{
+                        service.setDescription(webgisService.getDescription());
+                        service.setTimeAttribute(webgisService.getTimeAttribute());
+                        service.setMoreProperties(webgisService.getMoreProperties());
+                        webgisServiceService.registryWebgis(service,sourceId,sourceType);
+                        urls.add(service.getAddress());
+                    }catch (Exception e){
+                        log.error("注册{}失败：{}",service.getAddress(),e.getMessage());
+                    }
+                    return null;
+                });
+                re = JSON.toJSONString(urls);
+            }
         }
-        return MessageResult.data(code).status(200).message("操作成功").build();
+        return MessageResult.data(re).status(200).message("操作成功").build();
     }
 
 

@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 import WebgisCatalogLayer from "../WebgisCatalogLayer/index.vue";
 
 export default {

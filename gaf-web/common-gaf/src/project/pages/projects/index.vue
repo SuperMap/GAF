@@ -144,7 +144,7 @@
 </template>
 
 <script>
-import "~/assets/css/common.css";
+//test
 import AddEditForm from "../../views/projects/AddEditForm";
 import AddParams from "../../views/projects/AddParams";
 import { columns } from "./columns";

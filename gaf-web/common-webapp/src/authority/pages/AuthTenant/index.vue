@@ -178,7 +178,7 @@
 import AddEditForm from "../../views/AuthTenant/AddOrEditForm";
 import Administrators from "../../views/AuthTenant/Administrators";
 import MappingProcess from "../../views/AuthTenant/MappingProcess";
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 
 export default {
   components: {

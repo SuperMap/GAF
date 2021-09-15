@@ -114,7 +114,7 @@
 import AddEditForm from "../../views/AuthUser/AddOrEditForm";
 import UserTableNoPage from "../DepartmentPostManage/UserTableNoPage";
 import AuthUserParttime from "../AuthUserParttime/index";
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 
 export default {
   components: {

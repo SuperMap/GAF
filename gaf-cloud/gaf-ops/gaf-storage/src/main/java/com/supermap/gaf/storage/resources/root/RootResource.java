@@ -92,6 +92,12 @@ public class RootResource implements InitializingBean {
     @Path("/validate-s3config")
     public MessageResult<Void> validateS3Config(MinioConfig minioConfig) {
         try {
+            String bucketName = minioConfig.getBucketName();
+            int hasSubPath = bucketName.indexOf("/");
+            if(hasSubPath!=-1){
+                bucketName = bucketName.substring(0,hasSubPath);
+                minioConfig.setBucketName(bucketName);
+            }
             AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
             s3Client.doesBucketExistV2(minioConfig.getBucketName());
         } catch (Exception e) {

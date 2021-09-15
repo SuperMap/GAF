@@ -101,7 +101,7 @@
 
 <script>
 // @ts-nocheck
-import '~/assets/css/common.css'
+//test
 // @ts-ignore
 import AddEditForm from '../../views/codeTemplate/AddOrEditForm'
 // @ts-ignore

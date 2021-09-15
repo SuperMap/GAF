@@ -109,4 +109,9 @@ public class WebgisRootResource {
         return MessageResult.data(appConfigData).status(200).message("查询成功").build();
     }
 
+    @Path("/service-sources")
+    public Class<ServiceSourceResource> serviceSourceResource(){
+        return  ServiceSourceResource.class;
+    }
+
 }

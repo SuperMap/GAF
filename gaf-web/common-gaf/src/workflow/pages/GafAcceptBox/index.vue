@@ -70,7 +70,7 @@
   </div>
 </template>
 <script>
-import "~/assets/css/common.css";
+//test
 import "../../views/css/workFlow.css";
 import GafTimeSwitch from "../../views/GafWorkflowCommon/GafTimeSwitch";
 import GafBusinessBox from "../../views/GafWorkflowCommon/GafBusinessBox";

@@ -12,6 +12,7 @@ import com.supermap.gaf.webgis.vo.WebgisServiceConditonVo;
 import com.supermap.gaf.webgis.vo.WebgisServiceSelectVo;
 import com.supermap.gaf.webgis.util.Page;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -48,10 +49,10 @@ public interface WebgisServiceService {
      *
      * @return
      */
-    void insertWebgisService(WebgisService webgisService, String type);
+    WebgisService insertWebgisService(WebgisService webgisService, @Nullable String sourceId, @Nullable Integer sourceType);
 
 
-    void registryWebgis(WebgisService webgisService);
+    WebgisService registryWebgis(WebgisService webgisService, @Nullable String sourceId, @Nullable Integer sourceType);
 
     /**
      * 批量插入

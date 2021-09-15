@@ -21,11 +21,13 @@ import com.supermap.gaf.sys.mgt.commontype.SysCatalog;
 import com.supermap.gaf.sys.mgt.enums.CatalogTypeEnum;
 import com.supermap.gaf.utils.AppConfigParser;
 import com.supermap.gaf.webgis.cache.RegistryResultCacheI;
+import com.supermap.gaf.webgis.dao.ServiceSourceMapper;
 import com.supermap.gaf.webgis.dao.WebgisDataServiceFieldMapper;
 import com.supermap.gaf.webgis.dao.WebgisServiceAssociationMapper;
 import com.supermap.gaf.webgis.dao.WebgisServiceMapper;
 import com.supermap.gaf.webgis.domain.BatchRegistryServiceResult;
 import com.supermap.gaf.webgis.domain.WebgisServiceDo;
+import com.supermap.gaf.webgis.entity.ServiceSource;
 import com.supermap.gaf.webgis.entity.WebgisDataServiceField;
 import com.supermap.gaf.webgis.entity.WebgisService;
 import com.supermap.gaf.webgis.enums.ServiceTypeEnum;
@@ -33,15 +35,19 @@ import com.supermap.gaf.webgis.service.WebgisCatalogLayerService;
 import com.supermap.gaf.webgis.service.WebgisConfigService;
 import com.supermap.gaf.webgis.service.WebgisServiceService;
 import com.supermap.gaf.webgis.util.Page;
+import com.supermap.gaf.webgis.vo.ServiceSourceSelectVo;
 import com.supermap.gaf.webgis.vo.WebgisServiceConditonVo;
 import com.supermap.gaf.webgis.vo.WebgisServiceSelectVo;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -58,6 +64,7 @@ public class WebgisServiceServiceImpl implements WebgisServiceService {
     public static final String REGISTRY_TYPE_BATCH = "batch";
     public static final String REGISTRY_TYPE_SINGLE = "single";
 
+    private static final Logger log = LoggerFactory.getLogger(WebgisServiceServiceImpl.class);
 
     @Autowired
     public RegistryResultCacheI registryResultCacheI;
@@ -85,6 +92,9 @@ public class WebgisServiceServiceImpl implements WebgisServiceService {
     @Autowired
     private WebgisConfigService webgisConfigService;
 
+    @Autowired
+    private ServiceSourceMapper serviceSourceMapper;
+
     @Override
     public WebgisService getById(String gisServiceId) {
         if (gisServiceId == null) {
@@ -111,32 +121,42 @@ public class WebgisServiceServiceImpl implements WebgisServiceService {
     }
 
     @Override
-    public void insertWebgisService(WebgisService webgisService, String type) {
-        if (!REGISTRY_TYPE_SINGLE.equals(type)) {
-            throw new GafException("未知注册类型");
-        }
+    public WebgisService insertWebgisService(WebgisService webgisService, @Nullable String sourceId, @Nullable Integer sourceType) {
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
         webgisService.setCreatedBy(shiroUser.getAuthUser().getName());
         webgisService.setUpdatedBy(shiroUser.getAuthUser().getName());
         webgisConfigService.parseConfig(webgisService);
-        registryWebgis(webgisService);
+        registryWebgis(webgisService,sourceId,sourceType);
+        return webgisService;
     }
 
 
     @Override
     @Transactional
-    public void registryWebgis(WebgisService webgisService) {
+    public WebgisService registryWebgis(WebgisService webgisService, @Nullable String sourceId, @Nullable Integer sourceType) {
         if (!"MAPWORLD".equals(webgisService.getTypeCode())) {
             List<WebgisService> webgisServices = webgisServiceMapper.selectList(WebgisServiceSelectVo.builder().address(webgisService.getAddress()).build());
             if (!CollectionUtils.isEmpty(webgisServices)) {
-
                 throw new GafException("服务地址重复", 409);
             }
         }
-        webgisService.setGisServiceId(UUID.randomUUID().toString());
+        String id = UUID.randomUUID().toString();
+        Date now  = new Date();
+        webgisService.setCreatedTime(now);
+        webgisService.setUpdatedTime(now);
+        webgisService.setGisServiceId(id);
         AuthResourceApi authResourceApi = addWebgisServiceApi(webgisService);
         webgisService.setResourceApiId(authResourceApi.getResourceApiId());
         webgisServiceMapper.insert(webgisService);
+        log.info("服务：{},{}",id,webgisService.getAddress());
+        if(sourceId!=null && sourceType!=null){
+            List<ServiceSource> list = serviceSourceMapper.selectList(ServiceSourceSelectVo.builder().serviceId(id).serviceId(sourceId).sourceType(sourceType).build());
+            if(CollectionUtils.isEmpty(list)){
+                log.info("关联：{},{},{}",id,sourceId,sourceType);
+                serviceSourceMapper.insert(ServiceSource.builder().serviceSourceId(UUID.randomUUID().toString()).serviceId(id).serviceId(sourceId).sourceType(sourceType).build());
+            }
+        }
+        return webgisService;
     }
 
     private AuthResourceApi addWebgisServiceApi(WebgisService webgisService) {

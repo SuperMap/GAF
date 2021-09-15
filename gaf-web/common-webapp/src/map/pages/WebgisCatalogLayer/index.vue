@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 import LayerList from './LayerList'
 import CatalogManage from './CatalogManage'
 

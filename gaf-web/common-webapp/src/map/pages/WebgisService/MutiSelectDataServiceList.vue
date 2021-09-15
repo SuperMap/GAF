@@ -76,7 +76,7 @@
   </div>
 </template>
 <script>
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 // @ts-nocheck
 export default {
   props: {

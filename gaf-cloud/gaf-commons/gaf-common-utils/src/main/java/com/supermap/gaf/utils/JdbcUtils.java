@@ -1,15 +1,14 @@
 package com.supermap.gaf.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.CaseFormat;
 import com.microsoft.sqlserver.jdbc.SQLServerConnection;
-import com.supermap.gaf.commontypes.metadata.FieldMetadataInfo;
-import com.supermap.gaf.commontypes.metadata.JdbcConnectionMetadata;
-import com.supermap.gaf.commontypes.metadata.PkMetadataInfo;
-import com.supermap.gaf.commontypes.metadata.TableMetadataInfo;
+import com.supermap.gaf.commontypes.metadata.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.postgresql.PGConnection;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
@@ -55,6 +54,27 @@ public class JdbcUtils {
         } catch (Exception e) {
             log.error("type-mapping.json解析失败");
         }
+
+    }
+
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class ModifySqls {
+        private List<String> rename;
+        private List<String> modify;
+        private List<String> comment;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class AddSqls {
+        private List<String> add;
+        private List<String> comment;
     }
 
     public static Connection openConnection(String url, String username, String password) {
@@ -65,7 +85,7 @@ public class JdbcUtils {
             props.setProperty("remarks", "true");
             return DriverManager.getConnection(url, props);
         } catch (SQLException e) {
-            throw new IllegalArgumentException("数据库连接失败:"+e.getMessage());
+            throw new IllegalArgumentException("数据库连接失败:" + e.getMessage());
         }
     }
 
@@ -154,7 +174,6 @@ public class JdbcUtils {
     }
 
 
-
     public static void injectTableRemarks2SqlServer(SQLServerConnection connection, TableMetadataInfo tableMetadataInfo, String tableName) {
         try (PreparedStatement ps = connection.prepareStatement(SQLSERVER_SELECT_TABLE_REMARKS_SQL_TP);) {
             ps.setString(1, tableName);
@@ -191,106 +210,80 @@ public class JdbcUtils {
     }
 
     public static void addField(Connection connection, String tableName, FieldMetadataInfo fieldMetadataInfo) {
-        if (connection instanceof PGConnection) {
+        List<String> sqls = new ArrayList<>();
+        AddSqls addSqls = addFieldsDDLs(connection, tableName, Arrays.asList(fieldMetadataInfo));
+        // 添加字段
+        sqls.addAll(addSqls.getAdd());
+        sqls.addAll(addSqls.getComment());
+        // 主键修改
+        if (fieldMetadataInfo.isPrimaryKey()) {
+            // 复合主键在指定顺序插入主键，或者插在末尾
             StringBuilder alterSql = new StringBuilder("ALTER TABLE ");
             alterSql.append(tableName).append(" ");
             List<String> alterDDLItems = new ArrayList<>();
-            // 添加字段
-            alterDDLItems.add(fieldMetadataInfo.genAddColumnDDLFragment(connection));
-            // 主键修改
-            if (fieldMetadataInfo.isPrimaryKey()) {
-                // 复合主键在指定顺序插入主键，或者插在末尾
-                TableMetadataInfo tableMetadataInfo = getTableMetadata(connection, tableName, false);
-                alterDDLItems.addAll(addPkDDLItems(connection, tableMetadataInfo.getPkMetadataInfos(), fieldMetadataInfo));
-            }
-            // 添加注释
-            String commentDDL = fieldMetadataInfo.genCommentDDL(connection, tableName);
-            try (Statement statement = connection.createStatement()) {
+            TableMetadataInfo tableMetadataInfo = getTableMetadata(connection, tableName, false);
+            alterDDLItems.addAll(addPkDDLItems(connection, tableMetadataInfo.getPkMetadataInfos(), fieldMetadataInfo));
+            if (!alterDDLItems.isEmpty()) {
                 String sql = alterSql.append("\n").append(String.join(",\n", alterDDLItems)).append(";").toString();
-                log.info("添加字段DDL:{}", sql);
-                statement.execute(sql);
-                if (commentDDL != null) {
-                    log.info("{}", sql);
-                    statement.execute(commentDDL);
-                }
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                sqls.add(sql);
             }
         }
+        runDDL(connection, sqls);
     }
 
     public static void modifyField(Connection connection, String tableName, String originFieldName, FieldMetadataInfo fieldMetadataInfo) {
         List<String> sqls = new ArrayList<>();
         TableMetadataInfo tableMetadataInfo = getTableMetadata(connection, tableName, originFieldName);
-        // 名称变化
-        if (!originFieldName.equals(fieldMetadataInfo.getFieldName())) {
-            // 修改字段名优先
-            sqls.add(fieldMetadataInfo.genRenameDDL(connection, tableName, originFieldName));
-        }
 
-        StringBuilder alterSql = new StringBuilder("ALTER TABLE ");
-        alterSql.append(tableName).append(" ");
         List<String> alterDDLItems = new ArrayList<>();
         List<PkMetadataInfo> pkMetadataInfos = tableMetadataInfo.getPkMetadataInfos();
         FieldMetadataInfo originFieldMetadataInfo = tableMetadataInfo.getFieldMetadataInfos().get(0);
-        // 主键变化
-        if (originFieldMetadataInfo.isPrimaryKey() != fieldMetadataInfo.isPrimaryKey()) {
-            if (fieldMetadataInfo.isPrimaryKey()) {
-                alterDDLItems.addAll(addPkDDLItems(connection, pkMetadataInfos, fieldMetadataInfo));
-            } else {
-                alterDDLItems.addAll(deletePkDDLItems(connection, pkMetadataInfos, originFieldName));
-            }
-        } else if (fieldMetadataInfo.isPrimaryKey()) {
-            for (PkMetadataInfo item : pkMetadataInfos) {
-                if (item.getColumnName().equals(originFieldName)) {
-                    // 主键序列变化
-                    if (!item.getSeq().equals(fieldMetadataInfo.getPkSeq())) {
-                        item.setSeq(fieldMetadataInfo.getPkSeq());
-                        String[] pkColumns = pkMetadataInfos.stream()
-                                .sorted(Comparator.comparing(PkMetadataInfo::getSeq).thenComparing((o1, o2) -> {
-                                    if (o1.getColumnName().equals(fieldMetadataInfo.getFieldName())) {
-                                        return -1;
-                                    } else {
-                                        return 1;
-                                    }
-                                }))
-                                .map(PkMetadataInfo::getColumnName).toArray(String[]::new);
-                        alterDDLItems.addAll(modifyPk(connection, item.getPkName(), pkColumns));
+        ModifySqls modifySqls = modifyFieldsDDLs(connection, tableName, Arrays.asList(originFieldMetadataInfo), Arrays.asList(new UpdateMetadataParam<>(originFieldName, fieldMetadataInfo)));
 
-                    }
-                    break;
+        List<PkMetadataInfo> newPkMetadataInfos = new ArrayList<>();
+        // 主键变化
+        for(PkMetadataInfo item:pkMetadataInfos){
+            if(!item.getColumnName().equals(fieldMetadataInfo.getFieldName())){
+                newPkMetadataInfos.add(item);
+            }
+        }
+        if(fieldMetadataInfo.isPrimaryKey()){
+            newPkMetadataInfos.add(new PkMetadataInfo(fieldMetadataInfo.getFieldName(),fieldMetadataInfo.getPkName(),fieldMetadataInfo.getPkSeq()));
+        }
+        if(!CollectionUtils.isEmpty(pkMetadataInfos) || !CollectionUtils.isEmpty(newPkMetadataInfos)){
+            String oldPKsDDLFragment = addPrimaryKeyDDLFragment(connection,pkMetadataInfos,null);
+            String newPkDDLFragment = addPrimaryKeyDDLFragment(connection,newPkMetadataInfos,fieldMetadataInfo.getFieldName());
+            if(!StringUtils.equals(oldPKsDDLFragment,newPkDDLFragment)){
+                if(!CollectionUtils.isEmpty(pkMetadataInfos)){
+                    // 删除主键
+                    alterDDLItems.add(new FieldMetadataInfo().genDropConstraintDDLFragment(connection,pkMetadataInfos.get(0).getPkName()));
+                    // 添加新的主键
+                    alterDDLItems.add(newPkDDLFragment);
                 }
             }
         }
-        // 类型变化
-        if (!StringUtils.equalsIgnoreCase(originFieldMetadataInfo.genDataTypeDDLFragment(connection), fieldMetadataInfo.genDataTypeDDLFragment(connection))) {
-            alterDDLItems.add(fieldMetadataInfo.genModifyTypeDDLFragment(connection));
+
+
+        // 1.重命名字段
+        sqls.addAll(modifySqls.getRename());
+        // 2.更改主键
+        if (!alterDDLItems.isEmpty()) {
+            String tp = "ALTER TABLE %s %s;";
+            sqls.add(String.format(tp,tableName,String.join(",\n", alterDDLItems)));
         }
-        // NULL约束变化
-        if (originFieldMetadataInfo.isNullable() != fieldMetadataInfo.isNullable()) {
-            alterDDLItems.add(fieldMetadataInfo.genModifyNullConstraintDDLFragment(connection));
-        }
-        // Default约束变化
-        if (!StringUtils.equals(originFieldMetadataInfo.getDefaultValue(), fieldMetadataInfo.getDefaultValue())) {
-            alterDDLItems.add(fieldMetadataInfo.genModifyDefaultConstraintDDLFragment(connection));
-        }
-        if (!CollectionUtils.isEmpty(alterDDLItems)) {
-            String sql2 = alterSql.append("\n").append(String.join(",\n", alterDDLItems)).append(";").toString();
-            sqls.add(sql2);
-        }
-        // 注释变化
-        if (!StringUtils.equals(originFieldMetadataInfo.getRemarks(), fieldMetadataInfo.getRemarks())) {
-            if (fieldMetadataInfo.getRemarks() == null) {
-                fieldMetadataInfo.setRemarks("");
-            }
-            sqls.add(fieldMetadataInfo.genCommentDDL(connection, tableName));
-        }
+        // 3.更改其他属性
+        sqls.addAll(modifySqls.getModify());
+        sqls.addAll(modifySqls.getComment());
+        runDDL(connection, sqls);
+    }
+
+    static void runDDL(Connection connection, List<String> sqls) {
         if (sqls.size() > 0) {
             try (Statement statement = connection.createStatement()) {
-                log.info("更改字段DDL：");
+//                log.info("DDL：");
                 for (String sql : sqls) {
-                    log.info("{}",sql);
+//                    log.info("{}", sql);
+                    System.out.println(sql);
                     statement.execute(sql);
                 }
             } catch (SQLException e) {
@@ -312,14 +305,200 @@ public class JdbcUtils {
         FieldMetadataInfo fieldMetadataInfo = FieldMetadataInfo.builder().fieldName(fieldName).build();
         alterDDLItems.add(fieldMetadataInfo.genDropColumnDDLFragment(connection));
 
-        try (Statement statement = connection.createStatement()) {
-            String sql = alterSql.append("\n").append(String.join(",\n", alterDDLItems)).append(";").toString();
-            log.info("删除字段DDL:{}", sql);
-            statement.execute(sql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        runDDL(connection,Arrays.asList(alterSql.append("\n").append(String.join(",\n", alterDDLItems)).append(";").toString()));
+
     }
+
+    public static void batchDeleteFields(Connection connection, String tableName, Set<String> deletes) {
+        TableMetadataInfo tableMetadataInfo = getTableMetadata(connection, tableName, true);
+        List<FieldMetadataInfo> fieldMetadataInfos = tableMetadataInfo.getFieldMetadataInfos();
+        List<UpdateMetadataParam<FieldMetadataInfo>> fields = fieldMetadataInfos.stream().map(item -> {
+            if(deletes.contains(item.getFieldName())){
+                return new UpdateMetadataParam<FieldMetadataInfo>(item.getFieldName(), null);
+            }else{
+                return new UpdateMetadataParam<FieldMetadataInfo>(item.getFieldName(), item);
+            }
+        }).collect(Collectors.toList());
+        batchUpdateFields(connection, tableMetadataInfo, tableName, fields);
+    }
+
+    public static void batchUpdateFields(Connection connection, TableMetadataInfo tableMetadataInfo, String tableName, List<UpdateMetadataParam<FieldMetadataInfo>> fields) {
+        List<PkMetadataInfo> pkMetadataInfos = tableMetadataInfo.getPkMetadataInfos();
+        List<FieldMetadataInfo> fieldMetadataInfos = tableMetadataInfo.getFieldMetadataInfos();
+        List<FieldMetadataInfo> added = new ArrayList<>();
+        List<PkMetadataInfo> newPks = new ArrayList<>();
+        List<String> deleted = new ArrayList<>();
+        List<UpdateMetadataParam<FieldMetadataInfo>> updated = new ArrayList<>();
+        for (UpdateMetadataParam<FieldMetadataInfo> item : fields) {
+
+            if (StringUtils.isEmpty(item.getOldName())) {
+                // 新增
+                added.add(item.getMetadata());
+                continue;
+            } else if (item.getMetadata() == null) {
+                // 删除
+                deleted.add(item.getOldName());
+            } else {
+                // 更新
+                updated.add(item);
+            }
+            if(item.getMetadata() != null){
+                FieldMetadataInfo field = item.getMetadata();
+                // 主键
+                if (field.isPrimaryKey()) {
+                    newPks.add(new PkMetadataInfo(field.getFieldName(), field.getPkName(), field.getPkSeq()));
+                }
+            }
+        }
+        boolean pkChanged = false;
+        if (!CollectionUtils.isEmpty(pkMetadataInfos)) {
+            if (pkMetadataInfos.size() != newPks.size()) {
+                pkChanged = true;
+            } else {
+                Map<String, PkMetadataInfo> oldPkMap = pkMetadataInfos.stream().collect(Collectors.toMap(PkMetadataInfo::getColumnName, item -> item));
+                for (PkMetadataInfo newPk : newPks) {
+                    if (!oldPkMap.containsKey(newPk)) {
+                        pkChanged = true;
+                        break;
+                    } else {
+                        PkMetadataInfo oldPk = oldPkMap.get(newPk.getColumnName());
+                        if (!oldPk.getSeq().equals(newPk.getSeq()) || StringUtils.equals(oldPk.getPkName(), newPk.getPkName())) {
+                            pkChanged = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        List<String> sqls = new ArrayList<>();
+        ModifySqls modify = modifyFieldsDDLs(connection, tableName, fieldMetadataInfos, updated);
+        AddSqls add = addFieldsDDLs(connection, tableName, added);
+        List<String> delete = deleteFieldsDDLs(connection, tableName, deleted);
+        String tp = "ALTER TABLE %s %s;";
+        // 1.删除主键
+        if (pkChanged && !CollectionUtils.isEmpty(pkMetadataInfos)) {
+
+            sqls.add(String.format(tp, tableName,new FieldMetadataInfo().genDropConstraintDDLFragment(connection, pkMetadataInfos.get(0).getPkName())));
+        }
+        // 2.删除字段
+        sqls.addAll(delete);
+        // 3.先更改字段名称
+        sqls.addAll(modify.getRename());
+        // 4.增加字段
+        sqls.addAll(add.getAdd());
+        sqls.addAll(add.getComment());
+        // 5.添加主键，在删除和更改其他字段属性之前
+        if (pkChanged) {
+            String[] pkColumns = newPks.stream()
+                    .sorted(Comparator.comparing(PkMetadataInfo::getSeq))
+                    .map(PkMetadataInfo::getColumnName).toArray(String[]::new);
+            sqls.add(String.format(tp,tableName, new FieldMetadataInfo().genAddPrimaryKeyDDLFragment(connection, pkColumns)));
+        }
+        // 6.更改字段属性
+        sqls.addAll(modify.getModify());
+        sqls.addAll(modify.getComment());
+        runDDL(connection, sqls);
+    }
+
+    static List<String> deleteFieldsDDLs(Connection connection, String tableName, List<String> fieldNames) {
+        List<String> re = new ArrayList<>();
+        if (CollectionUtils.isEmpty(fieldNames)) {
+            return re;
+        }
+        List<String> alterDDLItems = new ArrayList<>();
+        for (String fieldName : fieldNames) {
+            // 删除字段
+            FieldMetadataInfo fieldMetadataInfo = FieldMetadataInfo.builder().fieldName(fieldName).build();
+            alterDDLItems.add(fieldMetadataInfo.genDropColumnDDLFragment(connection));
+        }
+        String tp = "ALTER TABLE %s %s;";
+        String sql = String.format(tp,tableName,String.join(",\n", alterDDLItems));
+        re.add(sql);
+        return re;
+    }
+
+    static AddSqls addFieldsDDLs(Connection connection, String tableName, List<FieldMetadataInfo> fieldMetadataInfos) {
+        AddSqls re = new AddSqls();
+        if (CollectionUtils.isEmpty(fieldMetadataInfos)) {
+            re.setAdd(new ArrayList<>());
+            re.setComment(new ArrayList<>());
+            return re;
+        }
+        List<String> commentSqls = new ArrayList<>();
+        List<String> alterDDLItems = new ArrayList<>();
+        for (FieldMetadataInfo fieldMetadataInfo : fieldMetadataInfos) {
+            // 添加字段
+            alterDDLItems.add(fieldMetadataInfo.genAddColumnDDLFragment(connection));
+            // 添加注释
+            String commentDDL = fieldMetadataInfo.genCommentDDL(connection, tableName);
+            if (commentDDL != null) {
+                commentSqls.add(commentDDL);
+            }
+        }
+        String tp = "ALTER TABLE " + tableName + " %s;";
+        String sql = String.format(tp,String.join(",\n", alterDDLItems));
+        re.setAdd(Arrays.asList(sql));
+        re.setComment(commentSqls);
+        return re;
+    }
+
+    static ModifySqls modifyFieldsDDLs(Connection connection, String tableName, List<FieldMetadataInfo> originFieldMetadataInfos, List<UpdateMetadataParam<FieldMetadataInfo>> fields) {
+        ModifySqls re = new ModifySqls();
+        if (CollectionUtils.isEmpty(fields)) {
+            re.setModify(new ArrayList<>());
+            re.setRename(new ArrayList<>());
+            re.setComment(new ArrayList<>());
+            return re;
+        }
+        Map<String, FieldMetadataInfo> originFieldsMap = originFieldMetadataInfos.stream().collect(Collectors.toMap(FieldMetadataInfo::getFieldName, item -> item));
+        List<String> alterDDLItems = new ArrayList<>();
+        StringBuilder alterSql = new StringBuilder("ALTER TABLE ");
+        alterSql.append(tableName).append(" ");
+        List<String> renameSqls = new ArrayList<>();
+        List<String> commentSqls = new ArrayList<>();
+        List<String> modifySqls = new ArrayList<>();
+        for (UpdateMetadataParam<FieldMetadataInfo> item : fields) {
+            String originFieldName = item.getOldName();
+            if (originFieldName == null) {
+                continue;
+            }
+            FieldMetadataInfo fieldMetadataInfo = item.getMetadata();
+            FieldMetadataInfo originFieldMetadataInfo = originFieldsMap.get(originFieldName);
+            // 名称变化
+            if (!item.getOldName().equals(fieldMetadataInfo.getFieldName())) {
+                // 修改字段名优先
+                renameSqls.add(fieldMetadataInfo.genRenameDDL(connection, tableName, originFieldName));
+            }
+            // 类型变化
+            if (!originFieldMetadataInfo.typeEquals(fieldMetadataInfo)){
+                alterDDLItems.add(fieldMetadataInfo.genModifyTypeDDLFragment(connection));
+            }
+            // NULL约束变化
+            if (originFieldMetadataInfo.isNullable() != fieldMetadataInfo.isNullable()) {
+                alterDDLItems.add(fieldMetadataInfo.genModifyNullConstraintDDLFragment(connection));
+            }
+            // Default约束变化
+            if (!StringUtils.equals(originFieldMetadataInfo.getDefaultValue(), fieldMetadataInfo.getDefaultValue())) {
+                alterDDLItems.add(fieldMetadataInfo.genModifyDefaultConstraintDDLFragment(connection));
+            }
+            // 注释变化
+            if (!StringUtils.equals(originFieldMetadataInfo.getRemarks(), fieldMetadataInfo.getRemarks())) {
+                if (fieldMetadataInfo.getRemarks() == null) {
+                    fieldMetadataInfo.setRemarks("");
+                }
+                commentSqls.add(fieldMetadataInfo.genCommentDDL(connection, tableName));
+            }
+        }
+        if(alterDDLItems.size()>0){
+            String modifySql = alterSql.append("\n").append(String.join(",\n", alterDDLItems)).append(";").toString();
+            modifySqls.add(modifySql);
+        }
+        re.setModify(modifySqls);
+        re.setRename(renameSqls);
+        re.setComment(commentSqls);
+        return re;
+    }
+
 
 
     static List<String> addPkDDLItems(Connection connection, List<PkMetadataInfo> originPkMetadataInfos, FieldMetadataInfo fieldMetadataInfo) {
@@ -387,9 +566,6 @@ public class JdbcUtils {
         return alterDDLItems;
     }
 
-
-
-
     static TableMetadataInfo convert2TableMetadataInfo(ResultSet tableRs, JdbcConnectionMetadata jdbcConnectionInfo, DatabaseMetaData databaseMetaData, boolean returnFields, @Nullable String fieldNamePattern) {
         try {
             String tableName = tableRs.getString("TABLE_NAME");
@@ -439,8 +615,6 @@ public class JdbcUtils {
             boolean isPk = pkFields.containsKey(fieldName);
             FieldMetadataInfo fieldMetadata = FieldMetadataInfo.builder()
                     .fieldName(fieldName)
-                    .fieldLowCamelName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName))
-                    .fieldUpperCamelName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, fieldName))
                     .sqlType(fieldsRs.getString("TYPE_NAME"))
                     .jdbcDataType(JDBCType.valueOf(fieldsRs.getInt("DATA_TYPE")).getName())
                     //默认Object类型
@@ -459,6 +633,7 @@ public class JdbcUtils {
             if (isPk) {
                 fieldMetadata.setPrimaryKey(true);
                 fieldMetadata.setPkSeq(pkFields.get(fieldName).getSeq());
+                fieldMetadata.setPkName(pkFields.get(fieldName).getPkName());
 //                tableMetadataInfo
 //                        .setPkJavaType(fieldMetadata.getJavaType())
 //                        .setPkSqlType(fieldMetadata.getSqlType())
@@ -469,5 +644,37 @@ public class JdbcUtils {
         return re;
     }
 
+    static String addPrimaryKeyDDLFragment(Connection connection, List<PkMetadataInfo> pks, @Nullable String insertedFieldName){
+        String[] pkColumns = null;
+        if(pks==null){
+            return null;
+        }
+        Comparator<PkMetadataInfo> comparator = (o1, o2) -> {
+            if(o1.getSeq()==null){
+                return 1;
+            }else if(o2.getSeq()==null){
+                return -1;
+            }else{
+                return o1.getSeq().compareTo(o2.getSeq());
+            }
+        };
+        if(insertedFieldName != null){
+
+            pkColumns = pks.stream()
+                    .sorted(comparator.thenComparing((o1, o2) -> {
+                        if (o1.getColumnName().equals(insertedFieldName)) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }))
+                    .map(PkMetadataInfo::getColumnName).toArray(String[]::new);
+        }else{
+            pkColumns = pks.stream()
+                    .sorted(comparator)
+                    .map(PkMetadataInfo::getColumnName).toArray(String[]::new);
+        }
+       return new FieldMetadataInfo().genAddPrimaryKeyDDLFragment(connection, pkColumns);
+    }
 
 }

@@ -462,7 +462,7 @@
   </div>
 </template>
 <script>
-import '~/assets/css/common.css'
+//test
 import '../../views/css/workFlow.css'
 import GafTreeTransparent from '../../views/GafWorkflowCommon/GafTreeTransparent'
 export default {

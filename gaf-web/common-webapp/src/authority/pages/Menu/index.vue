@@ -21,7 +21,7 @@
 <script>
 import menuManage from '../../views/Menu/MenuList'
 import CatalogManage from '../SysCatalog/CatalogManage'
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 export default {
   components: {
     CatalogManage,

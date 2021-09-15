@@ -48,7 +48,7 @@
   </div>
 </template>
 <script>
-import "~/assets/css/common.css";
+//test
 import GafBusinessBox from "../../views/GafWorkflowCommon/GafBusinessBox";
 import GafTimeSwitch from "../../views/GafWorkflowCommon/GafTimeSwitch";
 export default {

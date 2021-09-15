@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import "~/assets/css/common.css";
+import "../../../common/css/common.css";
 import AddEditForm from "../../views/WebgisButton/AddOrEditForm.vue";
 
 export default {

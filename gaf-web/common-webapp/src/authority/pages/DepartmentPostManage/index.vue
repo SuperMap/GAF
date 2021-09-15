@@ -162,7 +162,7 @@ import AddEditPost from '../../views/AuthPost/AddOrEditForm'
 import UserTableNoPage from './UserTableNoPage'
 import addPost from './addPost'
 import addDepartment from './addDepartment'
-import '~/assets/css/common.css'
+import '../../../common/css/common.css'
 
 export default {
   components: {

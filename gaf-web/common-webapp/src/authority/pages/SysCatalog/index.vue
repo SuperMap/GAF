@@ -66,7 +66,7 @@
 
 <script>
     import AddEditForm from '../../views/SysCatalog/AddOrEditForm'
-    import '~/assets/css/common.css'
+    import '../../../common/css/common.css'
 
     export default {
   components: {

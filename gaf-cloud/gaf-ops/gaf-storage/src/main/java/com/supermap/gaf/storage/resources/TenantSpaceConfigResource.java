@@ -59,8 +59,8 @@ public class TenantSpaceConfigResource {
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "新增", notes = "新增")
-    public MessageResult<Void> insertGlobalServerConfig(SpaceConfig spaceConfig) {
-        tenantSpaceConfigService.insertGlobalServerConfig(spaceConfig);
+    public MessageResult<Void> insertTenantServerConf(SpaceConfig spaceConfig) {
+        tenantSpaceConfigService.insertTenantServerConf(spaceConfig);
         return MessageResult.successe(Void.class).status(200).message("新增操作成功").build();
     }
 
@@ -68,8 +68,8 @@ public class TenantSpaceConfigResource {
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "根据id删除", notes = "根据id删除")
     @Path("/{id}")
-    public MessageResult<Void> deleteGlobalServerConfig(@PathParam("id") String id) {
-        tenantSpaceConfigService.deleteGlobalServerConfig(id);
+    public MessageResult<Void> deleteTenantServerConf(@PathParam("id") String id) {
+        tenantSpaceConfigService.deleteTenantServerConf(id);
         return MessageResult.successe(Void.class).status(200).message("删除操作成功").build();
     }
 
@@ -86,9 +86,9 @@ public class TenantSpaceConfigResource {
     @Produces({MediaType.APPLICATION_JSON})
     @ApiOperation(value = "根据id更新", notes = "根据id更新")
     @Path("/{id}")
-    public MessageResult<Void> updateGlobalServerConfig(SpaceConfig spaceConfig, @PathParam("id") String id) {
+    public MessageResult<Void> updateTenantServerConf(SpaceConfig spaceConfig, @PathParam("id") String id) {
         spaceConfig.setId(id);
-        tenantSpaceConfigService.updateGlobalServerConfig(spaceConfig);
+        tenantSpaceConfigService.updateTenantServerConf(spaceConfig);
         return MessageResult.successe(Void.class).status(200).message("更新操作成功").build();
     }
 

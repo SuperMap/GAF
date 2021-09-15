@@ -51,7 +51,7 @@ public class ConvertHelper {
         EngineType engineType = (EngineType) EngineType.parse(EngineType.class, sysResourceDatasource.getTypeCode());
         String rootPath = null;
         if (isFileType(engineType)){
-            rootPath = resolve(sysResourceDatasource.getAddr());
+            rootPath = resolve("");
         }
         return conver2DatasourceConnectionInfo(sysResourceDatasource,rootPath);
     }
