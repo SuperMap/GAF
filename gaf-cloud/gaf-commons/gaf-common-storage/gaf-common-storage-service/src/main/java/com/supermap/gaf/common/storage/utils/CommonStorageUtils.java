@@ -72,7 +72,7 @@ public class CommonStorageUtils {
                 .method("PUT", body)
                 .addHeader("Content-Type", "application/octet-stream");
 
-        if (StringUtils.isEmpty(uploadRequest.getContentMd5())) {
+        if (!StringUtils.isEmpty(uploadRequest.getContentMd5())) {
             builder.addHeader("Content-MD5", uploadRequest.getContentMd5())
                     .addHeader("x-amz-meta-base64md5", uploadRequest.getContentMd5());
         }
