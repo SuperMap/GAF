@@ -150,10 +150,10 @@ public class WebgisServiceServiceImpl implements WebgisServiceService {
         webgisServiceMapper.insert(webgisService);
         log.info("服务：{},{}",id,webgisService.getAddress());
         if(sourceId!=null && sourceType!=null){
-            List<ServiceSource> list = serviceSourceMapper.selectList(ServiceSourceSelectVo.builder().serviceId(id).serviceId(sourceId).sourceType(sourceType).build());
+            List<ServiceSource> list = serviceSourceMapper.selectList(ServiceSourceSelectVo.builder().serviceId(id).sourceId(sourceId).sourceType(sourceType).build());
             if(CollectionUtils.isEmpty(list)){
                 log.info("关联：{},{},{}",id,sourceId,sourceType);
-                serviceSourceMapper.insert(ServiceSource.builder().serviceSourceId(UUID.randomUUID().toString()).serviceId(id).serviceId(sourceId).sourceType(sourceType).build());
+                serviceSourceMapper.insert(ServiceSource.builder().serviceSourceId(UUID.randomUUID().toString()).serviceId(id).sourceId(sourceId).sourceType(sourceType).build());
             }
         }
         return webgisService;

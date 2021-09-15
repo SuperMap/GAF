@@ -84,9 +84,6 @@ public class WebgisCommonUtils {
             } else if ("com.supermap.services.components.impl.SpatialAnalystImpl".equals(componentType)) {
                 // 空间分析服务组件
                 return "RESTSPATIALANALYST";
-            } else {
-                //
-                return null;
             }
         } else if ("com.supermap.services.components.spi.ogc.WMS".equals(interfaceType)) {
             return "WMS";
@@ -101,6 +98,6 @@ public class WebgisCommonUtils {
         } else if ("com.supermap.services.rest.AGSRestServlet".equals(interfaceType)) {
             return "ARCGISMAP";
         }
-        return null;
+        return "OTHER";
     }
 }
