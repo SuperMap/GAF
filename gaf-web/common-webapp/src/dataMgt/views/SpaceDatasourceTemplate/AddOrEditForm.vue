@@ -121,7 +121,7 @@
                   allow-clear
                   :style="operation !== 1 ? 'width:69%':''"
                 />
-                <gaf-upload v-if="operation !== 1 " @fileRemove="fileRemove" accept=".udb,.udbx,.udd"  text="选择" dir="datas/" minioServiceUrl="/storage/api/tenant-created-first/" config-name="default" @uploadComplate="uploadChange"></gaf-upload>
+                <gaf-upload v-if="operation !== 1 " @fileRemove="fileRemove" :accept="accept"  text="选择" :dir="dirPath" minioServiceUrl="/storage/api/tenant-created-first/" config-name="default" @uploadComplate="uploadChange"></gaf-upload>
               </a-form-item>
               <a-form-item v-if="isDatabaseType" label="数据库名称">
                 <a-input
@@ -329,6 +329,8 @@ export default {
       isDatabaseType: true,
       loading1: false,
       loading2: false,
+      dirPath: 'datas/',
+      accept: ''
     }
   },
   beforeMount() {
@@ -560,6 +562,7 @@ export default {
     
     //根据数据源模板类型级联change事件判断是否为文件类型
     typeCodeChange(value) {
+      this.accept = '.' + value.slice(-1)
       if (value[0] === "file") {
         this.isDatabaseType = false
       } else {
@@ -569,7 +572,7 @@ export default {
     //上传组件uploadComplate事件给文件路径赋值
     uploadChange(data) {
       this.addOrEditForm.setFieldsValue({
-        addr: data.name
+        addr: this.dirPath + data.name
       })
     },
     fileRemove() {

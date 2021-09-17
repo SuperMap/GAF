@@ -102,7 +102,6 @@ export default {
   methods: {
     moment,
     handleOk() {
-      this.loading = true
       const form = this.$refs.passwordForm.form
       form.validateFields(async (err) => {
         if (err) {
