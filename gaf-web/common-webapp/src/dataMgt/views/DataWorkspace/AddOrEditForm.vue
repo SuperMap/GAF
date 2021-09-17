@@ -35,7 +35,7 @@
             @change="onChange"
           />
         </a-form-item>
-        <a-form-item  v-if="!isfiletype" label="工作空间名称">
+        <a-form-item  v-show="!isfiletype" label="工作空间名称">
           <a-input
             :disabled="operation === 1"
             v-decorator="[
@@ -79,7 +79,7 @@
             :override="operation === 3"
             :path="operation === 3 ? editData.server : undefined"
             v-if="isfiletype"
-            accept=".smwu,.sxwu"
+            :accept="accept"
             text="选择" :dir="dirPath"
             minioServiceUrl="/storage/api/tenant-created-first/"
             config-name="default"
@@ -312,7 +312,8 @@
       isfiletype: false,
       //回显时级联选择器的路径数据
       optiontypeCode: [],
-      loading: false
+      loading: false,
+      accept: ''
     }
   },
   beforeMount() {
@@ -351,7 +352,8 @@
     //上传组件uploadComplate事件
     uploadChange(file) {
       this.addOrEditForm.setFieldsValue({
-        server: file.name
+        server: this.dirPath + file.name,
+        wsName: file.name
       })
     },
     fileRemove() {
@@ -371,10 +373,6 @@
         const data = this.addOrEditForm.getFieldsValue()
         this.loading = true
         data.typeCode = data.typeCode.slice(-1).join()
-        if (this.isfiletype) {
-          data.wsName = data.server
-          data.server = this.dirPath + data.server
-        }
         if (this.dataId) {
           url = url  + this.dataId
           const rst = await this.$axios.put(url, data)
@@ -403,6 +401,7 @@
     },
     //级联选择change方法
     onChange(value) {
+      this.accept = '.' + value.slice(-1)
       if (value[0] === "file") {
         this.isfiletype = true
       } else {
