@@ -6,9 +6,6 @@
 package com.supermap.gaf.common.storage.service.impl;
 
 import com.amazonaws.HttpMethod;
-import com.amazonaws.auth.policy.*;
-import com.amazonaws.auth.policy.actions.S3Actions;
-import com.amazonaws.auth.policy.conditions.StringCondition;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.*;
@@ -28,10 +25,7 @@ import java.io.File;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
-import static com.amazonaws.auth.policy.conditions.StringCondition.StringComparisonType.StringEquals;
 
 
 /**
@@ -42,7 +36,7 @@ public class S3ClientServiceImpl implements S3ClientService {
 
     public static final String EMPTY_DIR_FILE = ".createDir";
     private static final Logger logger = LoggerFactory.getLogger(S3ClientServiceImpl.class);
-    private static final Map<String, Long> initedBuckets = new ConcurrentHashMap<>();
+    
 
     private MinioConfigHandlerI minioConfigHandlerI;
 
@@ -63,7 +57,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public URL getUrl(String configName, String keyName, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         return s3Client.getUrl(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName));
     }
 
@@ -71,7 +65,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public void putObject(String configName, String keyName, File file, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         s3Client.putObject(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName), file);
     }
 
@@ -79,7 +73,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public String getUploadSignUrl(String configName, String keyName, String contentMd5, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName), HttpMethod.PUT);
         /**
          * private | public-read | public-read-write | authenticated-read | aws-exec-read | bucket-owner-read | bucket-owner-full-control
@@ -98,7 +92,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public String share(String configName, String keyName, long minute, String secret, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         return downloadSignUrl(s3Client, minioConfig, minioConfigHandlerI.encodeKeyName(minioConfig, keyName), minute, secret, false);
     }
 
@@ -123,7 +117,7 @@ public class S3ClientServiceImpl implements S3ClientService {
         List<String> re = new ArrayList<>();
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         return downloadSignUrl(s3Client, minioConfig, minioConfigHandlerI.encodeKeyName(minioConfig, keyName), 15, null, isPreview);
     }
 
@@ -131,7 +125,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public String createMultiUpload(String configName, String keyName, Map<String, String> userObjectMetadata, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setUserMetadata(userObjectMetadata);
         InitiateMultipartUploadResult result = s3Client.initiateMultipartUpload(new InitiateMultipartUploadRequest(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName), metadata));
@@ -142,7 +136,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public Map<Integer, String> multiUploadSignUrl(String configName, String keyName, String uploadId, int maxPartNum, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         Map<Integer, String> re = new HashMap<>();
         ListPartsRequest request = new ListPartsRequest(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName), uploadId);
         PartListing listing = s3Client.listParts(request);
@@ -165,7 +159,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public String completeMultiUpload(String configName, String keyName, String uploadId, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         ListPartsRequest request = new ListPartsRequest(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName), uploadId);
         PartListing listing = s3Client.listParts(request);
         CompleteMultipartUploadRequest request2 = new CompleteMultipartUploadRequest();
@@ -181,7 +175,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public String completeMultiUpload(String configName, String keyName, String uploadId, List<PartETag> partETags, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         CompleteMultipartUploadRequest request2 = new CompleteMultipartUploadRequest();
         request2.withBucketName(minioConfig.getBucketName()).withKey(minioConfigHandlerI.encodeKeyName(minioConfig, keyName)).withUploadId(uploadId);
         request2.setPartETags(partETags);
@@ -193,7 +187,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public Map<Integer, String> uploadPartsSignUrl(String configName, String keyName, String uploadId, List<Integer> partNums, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         Map<Integer, String> re = new HashMap<>();
         for (Integer partNum : partNums) {
             re.put(partNum, uploadPartSignUrl(s3Client, minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName), uploadId, partNum).toString());
@@ -205,7 +199,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public void abortMultiUpload(String configName, String keyName, String uploadId, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         AbortMultipartUploadRequest request = new AbortMultipartUploadRequest(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName), uploadId);
         try {
             s3Client.abortMultipartUpload(request);
@@ -221,7 +215,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public ObjectMetadata getObjectMetadata(String configName, String keyName, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         ObjectMetadata re = s3Client.getObjectMetadata(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName));
         re.getUserMetadata().put("url", s3Client.getUrl(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, keyName)).toString());
         return re;
@@ -231,7 +225,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public List<ObjectInfo> listObjects(String configName, String prefix, boolean recursion, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         List<ObjectInfo> re = new ArrayList<>();
         ListObjectsRequest req = new ListObjectsRequest().withBucketName(minioConfig.getBucketName()).withPrefix(minioConfigHandlerI.encodeKeyName(minioConfig, prefix));
         if (!recursion) {
@@ -263,7 +257,7 @@ public class S3ClientServiceImpl implements S3ClientService {
 //    public void deleteObjects(String configName,List<String> keyNames){
 //        MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
 //        AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-//        initBucket(s3Client,minioConfig);
+//        CommonStorageUtils.initBucket(s3Client,minioConfig);
 //        DeleteObjectsRequest request= new DeleteObjectsRequest(minioConfig.getBucketName());
 //        List<DeleteObjectsRequest.KeyVersion> keyVersions = new ArrayList<>();
 //        for(String keyName:keyNames){
@@ -282,7 +276,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public int deleteObject(String configName, String prefix, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         DeleteObjectsRequest request = new DeleteObjectsRequest(minioConfig.getBucketName());
         ListObjectsRequest req = new ListObjectsRequest().withBucketName(minioConfig.getBucketName()).withPrefix(minioConfigHandlerI.encodeKeyName(minioConfig, prefix));
         ObjectListing listing = s3Client.listObjects(req);
@@ -302,7 +296,7 @@ public class S3ClientServiceImpl implements S3ClientService {
     public void createEmptyDir(String configName, String path, SelectModeI selectMode) {
         MinioConfig minioConfig = minioConfigHandlerI.getConfig(configName, selectMode);
         AmazonS3 s3Client = CommonStorageUtils.createClient(minioConfig);
-        initBucket(s3Client, minioConfig);
+        CommonStorageUtils.initBucket(s3Client, minioConfig);
         path = path.endsWith("/") ? path + EMPTY_DIR_FILE : path + "/" + EMPTY_DIR_FILE;
         s3Client.putObject(minioConfig.getBucketName(), minioConfigHandlerI.encodeKeyName(minioConfig, path), "");
     }
@@ -339,64 +333,5 @@ public class S3ClientServiceImpl implements S3ClientService {
         URL url = s3Client.generatePresignedUrl(uploadPartRequest);
         return url;
     }
-
-    private void initBucketPolicy(AmazonS3 s3Client, String bucketName) {
-        List<String> prefixs = Arrays.asList("**/public/", "public/");
-        Statement one = new Statement(Statement.Effect.Allow)
-                .withPrincipals(Principal.AllUsers)
-                .withActions(S3Actions.GetBucketLocation)
-                .withResources(new Resource(
-                        "arn:aws:s3:::" + bucketName));
-        Statement two = new Statement(Statement.Effect.Allow)
-                .withPrincipals(Principal.AllUsers)
-                .withActions(S3Actions.ListObjects)
-                .withResources(new Resource(
-                        "arn:aws:s3:::" + bucketName))
-                .withConditions(prefixs.stream().map(prefix -> new StringCondition(StringEquals, "s3:prefix", prefix)).toArray(Condition[]::new));
-        Statement three = new Statement(Statement.Effect.Allow)
-                .withPrincipals(Principal.AllUsers)
-                .withActions(S3Actions.GetObject)
-                .withResources(prefixs.stream().map(prefix -> new Resource(
-                        "arn:aws:s3:::" + bucketName + "/" + prefix + "*")).toArray(Resource[]::new));
-        Policy bucket_policy = new Policy().withStatements(one, two, three);
-        s3Client.setBucketPolicy(bucketName, bucket_policy.toJson());
-    }
-
-
-    boolean containsKey(String bucketKey) {
-        Long start = initedBuckets.get(bucketKey);
-        boolean re = false;
-        if (start != null) {
-            long now = System.currentTimeMillis();
-            if (now - start > 1000 * 60) {
-                re = false;
-                initedBuckets.remove(bucketKey);
-            } else {
-                re = true;
-            }
-        }
-        return re;
-    }
-
-    private void initBucket(AmazonS3 s3Client, MinioConfig minioConfig) {
-        String cacheKey = minioConfig.getServiceEndpoint() + "_" + minioConfig.getBucketName();
-        if (!containsKey(cacheKey)) {
-            List<Bucket> buckets = s3Client.listBuckets();
-            boolean has = false;
-            long now = System.currentTimeMillis();
-            for (Bucket bucket : buckets) {
-                initedBuckets.put(minioConfig.getServiceEndpoint() + "_" + bucket.getName(), now);
-                has = has ? true : bucket.getName().equals(minioConfig.getBucketName());
-            }
-            if (!has) {
-                try {
-                    s3Client.createBucket(minioConfig.getBucketName());
-                    initedBuckets.put(cacheKey, now);
-                    initBucketPolicy(s3Client, minioConfig.getBucketName());
-                } catch (AmazonS3Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+    
 }

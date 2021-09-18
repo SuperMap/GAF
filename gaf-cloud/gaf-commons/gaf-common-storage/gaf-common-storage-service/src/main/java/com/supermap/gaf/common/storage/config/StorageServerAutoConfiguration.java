@@ -25,6 +25,7 @@ public class StorageServerAutoConfiguration {
     @Autowired
     private TenantInfoI tenantInfoI;
 
+
     @Bean
     public StorageConfig storageConfig() {
         return new StorageConfig();

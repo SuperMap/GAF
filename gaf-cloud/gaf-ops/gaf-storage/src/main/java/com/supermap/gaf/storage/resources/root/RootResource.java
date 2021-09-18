@@ -1,5 +1,6 @@
 package com.supermap.gaf.storage.resources.root;
 
+import com.alibaba.fastjson.JSON;
 import com.amazonaws.services.s3.AmazonS3;
 import com.supermap.gaf.common.storage.entity.MinioConfig;
 import com.supermap.gaf.common.storage.service.S3ClientService;
@@ -7,8 +8,12 @@ import com.supermap.gaf.common.storage.utils.CommonStorageUtils;
 import com.supermap.gaf.common.storage.web.FileStorageResource;
 import com.supermap.gaf.common.storage.web.VolumeConfigResource;
 import com.supermap.gaf.commontypes.MessageResult;
+import com.supermap.gaf.storage.dao.SpaceMapper;
 import com.supermap.gaf.storage.entity.Space;
+import com.supermap.gaf.storage.entity.SpaceConfig;
+import com.supermap.gaf.storage.entity.vo.SpaceConfigSelectVo;
 import com.supermap.gaf.storage.entity.vo.SpaceSelectVo;
+import com.supermap.gaf.storage.enums.CreatedType;
 import com.supermap.gaf.storage.enums.SelectMode;
 import com.supermap.gaf.storage.resources.GlobalServerConfigResource;
 import com.supermap.gaf.storage.resources.StoragePermissionResource;
@@ -20,12 +25,18 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.supermap.gaf.storage.config.StorageCustomConfig.MOUNT_RELOAD_URLS;
 
 @Component
 @Path("/")
@@ -40,6 +51,10 @@ public class RootResource implements InitializingBean {
 
     @Autowired
     private VolumeConfigResource volumeConfigResource;
+
+    @Autowired
+    private SpaceMapper spaceMapper;
+
 
     private final Map<String, FileStorageResource> fileStorageResourceMap = new HashMap<>();
 
@@ -84,6 +99,40 @@ public class RootResource implements InitializingBean {
     @Path("/volume")
     public VolumeConfigResource volumeConfigResource() {
         return volumeConfigResource;
+    }
+
+
+    @Path("/mount-reload")
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(value = "重新挂载", notes = "重新挂载")
+    @POST
+    public MessageResult<String> mountReload() {
+        int count = 0;
+        String re = "应重启%s个，成功%s个";
+        if(CollectionUtils.isEmpty(MOUNT_RELOAD_URLS)){
+            return MessageResult.failed(String.class).message("未找到任何挂载管理服务器【GAF_STORAGE_MOUNT_MANAGER_SERVERS】").status(500).build();
+        }
+        List<SpaceConfig> spaceConfigs = spaceMapper.selectSpaceConfig(SpaceConfigSelectVo.builder().createdType(CreatedType.CREATED.getValue()).build());
+        for(SpaceConfig item:spaceConfigs){
+            String bucketName = item.getBucketName();
+            int hasSubPath = bucketName.indexOf("/");
+            if(hasSubPath!=-1){
+                item.setBucketName(bucketName.substring(0,hasSubPath));
+            }
+            MinioConfig config = MinioConfig.builder().bucketName(item.getBucketName()).serviceEndpoint(item.getServiceEndpoint()).accessKey(item.getAccessKey()).secretKey(item.getSecretKey()).build();
+            CommonStorageUtils.initBucket(CommonStorageUtils.createClient(config),config);
+        }
+        RestTemplate restTemplate = new RestTemplate();
+        List<String> messages = new ArrayList<>();
+        for(String url: MOUNT_RELOAD_URLS){
+            try{
+                restTemplate.postForEntity(url,null,String.class);
+                ++count;
+            }catch (Exception e){
+                messages.add(e.getMessage());
+            }
+        }
+        return MessageResult.data(String.format(re,MOUNT_RELOAD_URLS.size(),count)).message(JSON.toJSONString(messages)).build();
     }
 
     @POST

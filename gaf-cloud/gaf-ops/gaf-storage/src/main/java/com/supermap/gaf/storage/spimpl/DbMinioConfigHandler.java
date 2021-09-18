@@ -38,6 +38,7 @@ public class DbMinioConfigHandler extends AbstractMinioConfigHandler {
     @Autowired
     private S3ServerMapper s3ServerMapper;
 
+
     public DbMinioConfigHandler(@Autowired StorageConfig storageConfig, @Autowired TenantInfoI tenantInfoI) {
         super(storageConfig, tenantInfoI);
     }
@@ -119,6 +120,8 @@ public class DbMinioConfigHandler extends AbstractMinioConfigHandler {
         return re;
     }
 
+
+
     @Override
     public String getVolumeConfigIni(boolean isWin) {
         List<SpaceConfig> spaceConfigs = spaceMapper.selectSpaceConfig(SpaceConfigSelectVo.builder().createdType(CreatedType.CREATED.getValue()).build());
@@ -131,10 +134,14 @@ public class DbMinioConfigHandler extends AbstractMinioConfigHandler {
         for (SpaceConfig config : spaceConfigs) {
             String bucketName = config.getBucketName();
             int hasSubPath = bucketName.indexOf("/");
-            if(hasSubPath!=-1){
-                bucketName = bucketName.substring(0,hasSubPath);
+            if (hasSubPath != -1) {
+                bucketName = bucketName.substring(0, hasSubPath);
+                config.setBucketName(bucketName);
             }
-
+            try{
+                MinioConfig minioConfig = MinioConfig.builder().bucketName(config.getBucketName()).serviceEndpoint(config.getServiceEndpoint()).accessKey(config.getAccessKey()).secretKey(config.getSecretKey()).build();
+                CommonStorageUtils.initBucket(CommonStorageUtils.createClient(minioConfig),minioConfig);
+            }catch (Exception e){}
             String volumeId = config.getId();
             configs.add(volumeId);
             body.append(String.format("[%s]", volumeId)).append(lineSeparator);

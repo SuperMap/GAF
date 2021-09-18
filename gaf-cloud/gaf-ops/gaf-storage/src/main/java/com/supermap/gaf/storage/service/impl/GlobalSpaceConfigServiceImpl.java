@@ -2,6 +2,8 @@ package com.supermap.gaf.storage.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.supermap.gaf.common.storage.entity.MinioConfig;
+import com.supermap.gaf.common.storage.utils.CommonStorageUtils;
 import com.supermap.gaf.storage.dao.S3ServerMapper;
 import com.supermap.gaf.storage.dao.SpaceMapper;
 import com.supermap.gaf.storage.entity.S3Server;
@@ -78,6 +80,12 @@ public class GlobalSpaceConfigServiceImpl implements GlobalSpaceConfigService {
                 .parentSpaceId(s3ServerId).storageName(spaceConfig.getBucketName()).description(spaceConfig.getDescription())
                 .totalSize(spaceConfig.getTotalSize()).build();
         spaceMapper.insert(space);
+        try{
+            // 初始化桶
+            MinioConfig config = MinioConfig.builder().bucketName(spaceConfig.getBucketName()).serviceEndpoint(spaceConfig.getServiceEndpoint()).accessKey(spaceConfig.getAccessKey()).secretKey(spaceConfig.getSecretKey()).build();
+            CommonStorageUtils.initBucket(CommonStorageUtils.createClient(config),config);
+        }catch (Exception e){}
+
     }
 
 
