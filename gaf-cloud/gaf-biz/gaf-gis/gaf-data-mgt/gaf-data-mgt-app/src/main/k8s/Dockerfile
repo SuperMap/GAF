@@ -18,7 +18,7 @@ ENV GAF_ENV_FLUENTD_PORT 24224
 ENV GAF_ENV_FLUENTD_HOST 'localhost'
 VOLUME /tmp
 # 需要超图许可文件
-VOLUME /usr/local/supermap/Bin/supermap_any_2020.lic9d
+
 # 需要minio挂载
 VOLUME /data-s3fs
 ADD target/*.jar app.jar
