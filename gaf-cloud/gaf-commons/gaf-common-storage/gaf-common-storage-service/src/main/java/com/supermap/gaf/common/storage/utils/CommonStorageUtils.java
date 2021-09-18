@@ -7,10 +7,15 @@ package com.supermap.gaf.common.storage.utils;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.policy.*;
+import com.amazonaws.auth.policy.actions.S3Actions;
+import com.amazonaws.auth.policy.conditions.StringCondition;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.Bucket;
 import com.supermap.gaf.common.storage.config.StorageFileDownloadException;
 import com.supermap.gaf.common.storage.config.StorageFileUploadException;
 import com.supermap.gaf.common.storage.entity.MinioConfig;
@@ -27,7 +32,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static com.amazonaws.auth.policy.conditions.StringCondition.StringComparisonType.StringEquals;
 
 /**
  * @author heykb
@@ -35,6 +46,63 @@ import java.util.Base64;
  */
 public class CommonStorageUtils {
 
+    private static final Map<String, Long> INITED_BUCKETS_CACHE = new ConcurrentHashMap<>();
+    public static void initBucket(AmazonS3 s3Client, MinioConfig minioConfig) {
+        String cacheKey = minioConfig.getServiceEndpoint() + "_" + minioConfig.getBucketName();
+        if (!containsKey(cacheKey)) {
+            List<Bucket> buckets = s3Client.listBuckets();
+            boolean has = false;
+            long now = System.currentTimeMillis();
+            for (Bucket bucket : buckets) {
+                INITED_BUCKETS_CACHE.put(minioConfig.getServiceEndpoint() + "_" + bucket.getName(), now);
+                has = has ? true : bucket.getName().equals(minioConfig.getBucketName());
+            }
+            if (!has) {
+                try {
+                    s3Client.createBucket(minioConfig.getBucketName());
+                    INITED_BUCKETS_CACHE.put(cacheKey, now);
+                    initBucketPolicy(s3Client, minioConfig.getBucketName());
+                } catch (AmazonS3Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    static boolean containsKey(String bucketKey) {
+        Long start = INITED_BUCKETS_CACHE.get(bucketKey);
+        boolean re = false;
+        if (start != null) {
+            long now = System.currentTimeMillis();
+            if (now - start > 1000 * 60) {
+                re = false;
+                INITED_BUCKETS_CACHE.remove(bucketKey);
+            } else {
+                re = true;
+            }
+        }
+        return re;
+    }
+    static public void initBucketPolicy(AmazonS3 s3Client, String bucketName) {
+        List<String> prefixs = Arrays.asList("**/public/", "public/");
+        Statement one = new Statement(Statement.Effect.Allow)
+                .withPrincipals(Principal.AllUsers)
+                .withActions(S3Actions.GetBucketLocation)
+                .withResources(new Resource(
+                        "arn:aws:s3:::" + bucketName));
+        Statement two = new Statement(Statement.Effect.Allow)
+                .withPrincipals(Principal.AllUsers)
+                .withActions(S3Actions.ListObjects)
+                .withResources(new Resource(
+                        "arn:aws:s3:::" + bucketName))
+                .withConditions(prefixs.stream().map(prefix -> new StringCondition(StringEquals, "s3:prefix", prefix)).toArray(Condition[]::new));
+        Statement three = new Statement(Statement.Effect.Allow)
+                .withPrincipals(Principal.AllUsers)
+                .withActions(S3Actions.GetObject)
+                .withResources(prefixs.stream().map(prefix -> new Resource(
+                        "arn:aws:s3:::" + bucketName + "/" + prefix + "*")).toArray(Resource[]::new));
+        Policy bucket_policy = new Policy().withStatements(one, two, three);
+        s3Client.setBucketPolicy(bucketName, bucket_policy.toJson());
+    }
     public static AmazonS3 createClient(MinioConfig minioConfig) {
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(minioConfig.getServiceEndpoint(), Regions.DEFAULT_REGION.getName()))
