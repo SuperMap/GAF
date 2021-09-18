@@ -180,8 +180,19 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
     public void deleteSysResourceDatasource(String datasourceId){
         SysResourceDatasource sysResourceDatasource = getById(datasourceId);
         sysResourceDatasourceMapper.delete(datasourceId);
-        if ("udb".equalsIgnoreCase(sysResourceDatasource.getTypeCode()) || "udbx".equalsIgnoreCase(sysResourceDatasource.getTypeCode())) {
-            storageClient.delete(sysResourceDatasource.getAddr(), SecurityUtilsExt.getUser().getAuthUser().getTenantId());
+        try {
+            if ("udb".equalsIgnoreCase(sysResourceDatasource.getTypeCode()) || "udbx".equalsIgnoreCase(sysResourceDatasource.getTypeCode())) {
+                storageClient.delete(sysResourceDatasource.getAddr(), SecurityUtilsExt.getUser().getAuthUser().getTenantId());
+                if ("udb".equalsIgnoreCase(sysResourceDatasource.getTypeCode())) {
+                    String addr = sysResourceDatasource.getAddr();
+                    if (addr!= null && addr.endsWith(".udb")) {
+                        String uddAddr = addr.replace(".udb", "udd");
+                        storageClient.delete(uddAddr, SecurityUtilsExt.getUser().getAuthUser().getTenantId());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
