@@ -91,14 +91,14 @@ public class BatchSortAndCodeServiceImpl implements BatchSortAndCodeService {
                 founded.add(SortSnField.class);
             }
             if (fieldName.equals("sort_sn") && !founded.contains(SortSnField.class)) {
-                revisionSortSnParam.setParentIdFieldName(fieldName);
+                revisionSortSnParam.setSortSnFieldName(fieldName);
             }
             if (field.isAnnotationPresent(UpdatedTimeField.class)) {
                 revisionSortSnParam.setUpdatedTimeFieldName(fieldName);
                 founded.add(UpdatedTimeField.class);
             }
             if (fieldName.equals("updated_time") && !founded.contains(UpdatedTimeField.class)) {
-                revisionSortSnParam.setParentIdFieldName(fieldName);
+                revisionSortSnParam.setUpdatedTimeFieldName(fieldName);
             }
             if (field.isAnnotationPresent(LogicDeleteField.class)) {
                 revisionSortSnParam.setLogicDeleteFieldName(fieldName);
