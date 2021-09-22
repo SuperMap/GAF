@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.supermap.gaf.constant.CommonConstant.TIME_ZONE;
 import static com.supermap.gaf.srv.governance.constant.SrvConstant.*;
 
 /**
@@ -193,6 +194,7 @@ public class TraceTreeNode implements Serializable {
     private static String formatTraceTimestamp(Long traceTimestamp) {
         Date date = new Date(traceTimestamp);
         SimpleDateFormat format = new SimpleDateFormat(MILLIS_FORMAT);
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
         return format.format(date);
     }
 

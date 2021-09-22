@@ -15,7 +15,9 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
+import static com.supermap.gaf.constant.CommonConstant.TIME_ZONE;
 import static com.supermap.gaf.srv.governance.constant.SrvConstant.*;
 
 /**
@@ -77,6 +79,7 @@ public class FluentLog implements Serializable {
     private static String formatFluentTimestamp(String fluentTimestamp) {
         SimpleDateFormat fluentFormat = new SimpleDateFormat(FLUENT_DATE_FORMAT);
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
         Date date = null;
         try {
             date = fluentFormat.parse(fluentTimestamp);
