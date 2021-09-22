@@ -133,7 +133,21 @@
           <a-row :gutter="24">
             <a-col :span="20">
               <a-form-item label="图标">
-                <a-input v-decorator="['icon']" placeholder="请输入图标" />
+                <webgis-button-icon
+                  v-decorator="[
+                    'icon',
+                    {
+                      rules: [
+                        {
+                          pattern: /^.{0,255}$/,
+                          message: '长度不能超过255',
+                        },
+                      ],
+                    },
+                  ]"
+                  :disabled="operation === 1"
+                  placeholder="请选择图标"
+                />
               </a-form-item>
             </a-col>
             <a-col :span="20">
@@ -225,7 +239,11 @@
 <script>
 import moment from "moment";
 import difference from "lodash/difference";
+import webgisButtonIcon from "../WebgisButton/webgisButtonIcon";
 export default {
+  components: {
+    webgisButtonIcon,
+  },
   props: {
     title: {
       type: String,

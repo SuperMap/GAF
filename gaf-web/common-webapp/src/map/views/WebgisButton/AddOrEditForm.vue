@@ -84,7 +84,7 @@
           />
         </a-form-item>
         <a-form-item label="图标">
-          <gaf-icon-picker
+          <webgis-button-icon
             v-decorator="[
               'icon',
               {
@@ -177,7 +177,11 @@
 <script>
 import "../../../common/css/common.css";
 import moment from "moment";
+import webgisButtonIcon from "./webgisButtonIcon";
 export default {
+  components: {
+    webgisButtonIcon,
+  },
   props: {
     title: {
       type: String,

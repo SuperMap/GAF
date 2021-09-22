@@ -8,4 +8,5 @@ public class CommonConstant {
     public static String JWT_HEADER = "Authorization";
     public static String JWT_PREFIX = "Bearer";
     public static String JWT_USER_NAME_FIELD = "user_name";
+    public static String TIME_ZONE = "Asia/Shanghai";
 }
