@@ -13,6 +13,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import javax.mail.internet.InternetAddress;
 import java.util.Date;
 
 /**
@@ -37,7 +38,7 @@ public class EmailService {
         try {
             //true表示支持复杂类型
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
-            messageHelper.setFrom(sender);
+            messageHelper.setFrom(new InternetAddress(sender, EmailConstant.NICK_NAME, "UTF-8"));
             messageHelper.setTo(receiver.split(","));
             messageHelper.setSubject(EmailConstant.SUBJECT_TITLE);
             messageHelper.setText(String.format("%s%s", EmailConstant.WELCOME_TEXT, password));
@@ -54,7 +55,7 @@ public class EmailService {
         try {
             //true表示支持复杂类型
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
-            messageHelper.setFrom(sender);
+            messageHelper.setFrom(new InternetAddress(sender, EmailConstant.NICK_NAME, "UTF-8"));
             messageHelper.setTo(receiver.split(","));
             messageHelper.setSubject(subject);
             messageHelper.setText(context);

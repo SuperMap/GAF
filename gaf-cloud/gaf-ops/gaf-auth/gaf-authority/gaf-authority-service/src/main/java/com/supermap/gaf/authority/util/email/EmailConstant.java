@@ -15,6 +15,8 @@ public class EmailConstant {
      */
     public static String SUBJECT_TITLE = "GAF 密码";
 
+    public static String NICK_NAME = "GAF";
+
     public static String WELCOME_TEXT = "欢迎使用GAF，您的密码为：";
     /**
      * 修改邮箱
@@ -39,6 +41,12 @@ public class EmailConstant {
     public void setSubjectTitle(String subjectTitle) {
         if (!StringUtils.isEmpty(subjectTitle)) {
             EmailConstant.SUBJECT_TITLE = subjectTitle;
+        }
+    }
+    @Value("${gaf.mail.nickName:}")
+    public void setNickName(String nickName) {
+        if (!StringUtils.isEmpty(nickName)) {
+            EmailConstant.NICK_NAME = nickName;
         }
     }
     @Value("${gaf.mail.welcomeText:}")
