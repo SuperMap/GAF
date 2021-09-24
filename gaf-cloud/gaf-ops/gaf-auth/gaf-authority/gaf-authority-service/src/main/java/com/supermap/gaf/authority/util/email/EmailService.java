@@ -39,7 +39,7 @@ public class EmailService {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
             messageHelper.setFrom(sender);
             messageHelper.setTo(receiver.split(","));
-            messageHelper.setSubject(EmailConstant.SUBJECT);
+            messageHelper.setSubject(EmailConstant.SUBJECT_TITLE);
             messageHelper.setText(String.format("%s%s", EmailConstant.WELCOME_TEXT, password));
             messageHelper.setSentDate(new Date());
             mailSender.send(messageHelper.getMimeMessage());
