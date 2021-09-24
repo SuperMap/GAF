@@ -36,25 +36,25 @@ public class EmailConstant {
 
 
     @Value("${gaf.mail.subjectTitle:}")
-    public static void setSubjectTitle(String subjectTitle) {
+    public void setSubjectTitle(String subjectTitle) {
         if (!StringUtils.isEmpty(subjectTitle)) {
             EmailConstant.SUBJECT_TITLE = subjectTitle;
         }
     }
     @Value("${gaf.mail.welcomeText:}")
-    public static void setWelcomeText(String welcomeText) {
+    public void setWelcomeText(String welcomeText) {
         if (!StringUtils.isEmpty(welcomeText)) {
             EmailConstant.WELCOME_TEXT = welcomeText;
         }
     }
     @Value("${gaf.mail.cahangeEmail:}")
-    public static void setCahangeEmail(String cahangeEmail) {
+    public void setCahangeEmail(String cahangeEmail) {
         if (!StringUtils.isEmpty(cahangeEmail)) {
             EmailConstant.CAHANGE_EMAIL = cahangeEmail;
         }
     }
     @Value("${gaf.mail.checkCodeTextTemplate:}")
-    public static void setCheckCodeTextTemplate(String checkCodeTextTemplate) {
+    public void setCheckCodeTextTemplate(String checkCodeTextTemplate) {
         if (!StringUtils.isEmpty(checkCodeTextTemplate)) {
             EmailConstant.CHECK_CODE_TEXT_TEMPLATE = checkCodeTextTemplate;
         }
