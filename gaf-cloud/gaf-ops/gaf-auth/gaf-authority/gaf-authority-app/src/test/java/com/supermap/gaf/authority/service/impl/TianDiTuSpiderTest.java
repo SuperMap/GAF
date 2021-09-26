@@ -5,15 +5,9 @@
  */
 package com.supermap.gaf.authority.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.supermap.gaf.authority.Application;
 import com.supermap.gaf.authority.service.impl.model.Area;
-import com.supermap.gaf.authority.service.impl.model.R;
 import com.supermap.gaf.sys.mgt.commontype.SysDict;
-import com.supermap.gaf.sys.mgt.dao.SysDictMapper;
-import com.supermap.gaf.utils.MybatisBatchUtil;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,6 +47,7 @@ public class TianDiTuSpiderTest {
         List<SysDict> all = new LinkedList<>();
         Area china = areas.get(0);// 中国行政区划
         List<Area> allProvince = china.getChild();
+        allProvince.sort(Comparator.comparingInt(o -> Integer.parseInt(o.getCityCode())));
         for (int i = 0; i < allProvince.size(); i++) {
             // 遍历省
             Area province = allProvince.get(i);
@@ -64,6 +59,7 @@ public class TianDiTuSpiderTest {
             all.add(provinceDict);
             List<Area> citys = province.getChild();
             if (citys == null || citys.isEmpty()) continue;
+            citys.sort(Comparator.comparingInt(o -> Integer.parseInt(o.getCityCode())));
             for (int j = 0; j < citys.size(); j++) {
                 // 遍历市
                 Area city = citys.get(j);
@@ -75,6 +71,7 @@ public class TianDiTuSpiderTest {
                 all.add(cityDict);
                 List<Area> regions = city.getChild();
                 if (regions == null || regions.isEmpty()) continue;
+                regions.sort(Comparator.comparingInt(o -> Integer.parseInt(o.getCityCode())));
                 for (int k = 0; k < regions.size(); k++) {
                     // 遍历区
                     Area region = regions.get(k);
@@ -98,16 +95,16 @@ public class TianDiTuSpiderTest {
         sysDict.setVisibility(true);
         sysDict.setCreatedBy("sys_admin");
         sysDict.setUpdatedBy("sys_admin");
-        sysDict.setDictValue(area.getCityCode());
-        map.put("level", area.getLevel());
-        map.put("nameabbrevation", area.getNameabbrevation());
-        map.put("adminType", area.getAdminType());
-        map.put("lnt", area.getLnt());
-        map.put("englishabbrevation", area.getEnglishabbrevation());
-        map.put("english", area.getEnglish());
-        map.put("bound", area.getBound());
-        map.put("lat", area.getLat());
-        sysDict.setExtProperties(JSONObject.toJSONString(map));
+        sysDict.setDictValue(area.getCityCode().substring(3));
+        //map.put("level", area.getLevel());
+        //map.put("nameabbrevation", area.getNameabbrevation());
+        //map.put("adminType", area.getAdminType());
+        //map.put("lnt", area.getLnt());
+        //map.put("englishabbrevation", area.getEnglishabbrevation());
+        //map.put("english", area.getEnglish());
+        //map.put("bound", area.getBound());
+        //map.put("lat", area.getLat());
+        //sysDict.setExtProperties(JSONObject.toJSONString(map));
     }
 
 }
