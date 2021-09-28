@@ -160,8 +160,8 @@ public class DbMinioConfigHandler extends AbstractMinioConfigHandler {
     public VolumePathReturn getVolumePath(String name, String path, boolean returnUrl, SelectModeI selectMode) {
         DBMinioConfig dbMinioConfig = (DBMinioConfig) getConfig(name, selectMode);
         VolumePathReturn re = new VolumePathReturn();
-        String encodePath = dbMinioConfig.getRootId() + "/" + encodeKeyName(dbMinioConfig, path);
-        re.setPath(getS3VolumePath(encodePath));
+        String encodePath =  encodeKeyName(dbMinioConfig, path);
+        re.setPath(getS3VolumePath(dbMinioConfig.getRootId() + "/" +encodePath));
         if (returnUrl) {
             String publicUrl = CommonStorageUtils.createClient(dbMinioConfig).getUrl(dbMinioConfig.getBucketName(), encodePath).toString();
             re.setPublicUrl(publicUrl);
