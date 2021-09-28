@@ -77,9 +77,16 @@
           v-if="operation === 3"
           label="密码"
         >
-          <a-button @click="resetPassword">
-            重置密码
-          </a-button>
+          <a-popconfirm
+            title="重置密码无法恢复，确认是否继续?"
+            ok-text="确认"
+            cancel-text="取消"
+            @confirm="() => resetPassword()"
+          >
+            <a-button>
+              重置密码
+            </a-button>
+          </a-popconfirm>
         </a-form-item>
         <a-form-item label="邮箱">
           <a-input

@@ -93,7 +93,6 @@
               >
                 <u>详情</u>
               </a>
-              <a-divider type="vertical" />
               <a
                 @click.stop="() => handleUpdate(record)"
                 href="javascript:;"
@@ -101,7 +100,6 @@
               >
                 <u>编辑</u>
               </a>
-              <a-divider type="vertical" />
               <a-popconfirm
                 v-if="record.status"
                 @confirm="() => setTenantStatus(record)"
@@ -120,7 +118,6 @@
               >
                 <a href="javascript:;" class="btn-margin"><u>启用</u></a>
               </a-popconfirm>
-              <a-divider type="vertical" />
               <a
                 @click.stop="() => setTenantSynchronization(record)"
                 href="javascript:;"
@@ -128,7 +125,6 @@
               >
                 <u>同步</u>
               </a>
-              <a-divider type="vertical" />
               <a
                 @click.stop="() => getAdministrators(record)"
                 href="javascript:;"
@@ -282,7 +278,7 @@ export default {
         },
         {
           title: "操作",
-          // fixed: 'right',
+          fixed: 'right',
           scopedSlots: { customRender: "operation" },
         },
       ],

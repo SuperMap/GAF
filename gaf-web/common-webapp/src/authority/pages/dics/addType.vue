@@ -30,7 +30,7 @@
       <template #default>
         <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
         <gaf-table-with-page
-          :scroll="{ y: 508, x: 1440 }"
+          :scroll="{ y: 508, x: true }"
           :showXH="false"
           :row-selection="{
             selectedRowKeys: selectedRowKeys,

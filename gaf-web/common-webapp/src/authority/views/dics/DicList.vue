@@ -58,7 +58,7 @@
       <template #default>
         <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
         <gaf-table-with-page
-          :scroll="{ y: 508 , x: 1440}"
+          :scroll="{ y: 508 , x: true}"
           :showXH="false"
           :pagination="pagination"
           :data-source="sysDictList"
@@ -226,8 +226,8 @@ export default {
           title: "操作",
           key: "operation",
           scopedSlots: { customRender: "operation" },
-          // fixed: "right",
-          // width: 400,
+          fixed: "right",
+          width: 260,
         },
       ],
     };

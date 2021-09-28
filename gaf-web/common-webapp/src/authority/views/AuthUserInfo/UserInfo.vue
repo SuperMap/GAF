@@ -3,10 +3,10 @@
     <div>
       <!-- <h4 style="font-size:20px;">个人信息</h4> -->
       <a-breadcrumb separator=">">
-        <span class="vertical-line">| </span>
+        <!-- <span class="vertical-line">| </span> -->
         <a-breadcrumb-item class="text-bolder">个人信息</a-breadcrumb-item>
       </a-breadcrumb>
-      <table border="1" class="table-style">
+      <!-- <table border="1" class="table-style">
         <tr>
           <td>真实姓名</td>
           <td>{{ userInfo.realName }}</td>
@@ -37,18 +37,187 @@
           <td>描述</td>
           <td colspan="3">{{ userInfo.description }}</td>
         </tr>
-      </table>
+      </table> -->
+      <a-form
+        :label-col="{ span: 4 }"
+        :wrapper-col="{ span: 14 }"
+        :form="addOrEditForm"
+        layout="horizontal"
+      >
+        <a-row type="flex" justify="start">
+          <a-col :span="12">
+            <a-form-item label="真实姓名">
+              <a-input
+                v-decorator="[
+                  'realName',
+                  {
+                    rules: [
+                      {
+                        max: 500,
+                        message: '长度不能超过500个字符'
+                      }
+                    ]
+                  }
+                ]"
+                allow-clear
+                :read-only="true"
+              />
+            </a-form-item>
+            <a-form-item label="手机号">
+              <a-input
+                v-decorator="[
+                  'mobileNumber',
+                  {
+                    rules: [
+                      {
+                        max: 500,
+                        message: '长度不能超过500个字符'
+                      }
+                    ]
+                  }
+                ]"
+                allow-clear
+                :read-only="true"
+              />
+            </a-form-item>
+            <a-form-item label="身份证号">
+              <a-input
+                v-decorator="[
+                  'idNumber',
+                  {
+                    rules: [
+                      {
+                        max: 500,
+                        message: '长度不能超过500个字符'
+                      }
+                    ]
+                  }
+                ]"
+                allow-clear
+                :read-only="true"
+              />
+            </a-form-item>
+            <a-form-item label="部门">
+              <a-input
+                v-decorator="[
+                  'departmentName',
+                  {
+                    rules: [
+                      {
+                        max: 500,
+                        message: '长度不能超过500个字符'
+                      }
+                    ]
+                  }
+                ]"
+                allow-clear
+                :read-only="true"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="用户名">
+              <a-input
+                v-decorator="[
+                  'name',
+                  {
+                    rules: [
+                      {
+                        max: 500,
+                        message: '长度不能超过500个字符'
+                      }
+                    ]
+                  }
+                ]"
+                allow-clear
+                :read-only="true"
+              />
+            </a-form-item>
+            <a-form-item label="邮箱">
+              <a-input
+                v-decorator="[
+                  'email',
+                  {
+                    rules: [
+                      {
+                        max: 500,
+                        message: '长度不能超过500个字符'
+                      }
+                    ]
+                  }
+                ]"
+                allow-clear
+                :read-only="true"
+              />
+            </a-form-item>
+            <a-form-item label="地址">
+              <a-input
+                v-decorator="[
+                  'address',
+                  {
+                    rules: [
+                      {
+                        max: 500,
+                        message: '长度不能超过500个字符'
+                      }
+                    ]
+                  }
+                ]"
+                allow-clear
+                :read-only="true"
+              />
+            </a-form-item>
+            <a-form-item label="岗位">
+              <a-input
+                v-decorator="[
+                  'postName',
+                  {
+                    rules: [
+                      {
+                        max: 500,
+                        message: '长度不能超过500个字符'
+                      }
+                    ]
+                  }
+                ]"
+                allow-clear
+                :read-only="true"
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="24" :pull="2">
+            <a-form-item label="描述" :wrapper-col="{span: 19}">
+              <a-textarea
+                v-decorator="[
+                  'description',
+                  {
+                    rules: [
+                      {
+                        max: 500,
+                        message: '长度不能超过500个字符'
+                      }
+                    ]
+                  }
+                ]"
+                :auto-size="{ minRows: 3, maxRows: 5 }"
+                :read-only="true"
+              />
+            </a-form-item>
+          </a-col>
+        </a-row>
+      </a-form>
     </div>
     <div style="margin-top: 10px">
       <!-- <h4 style="font-size:20px;">安全设置</h4> -->
       <a-breadcrumb separator=">">
-        <span class="vertical-line">| </span>
+        <!-- <span class="vertical-line">| </span> -->
         <a-breadcrumb-item class="text-bolder">安全设置</a-breadcrumb-item>
       </a-breadcrumb>
-      
-      <a-button class="reset-password" @click="HandleClick">
-        修改密码
-      </a-button>
+      <div style="padding: 0 10px;">
+        <a-button class="reset-password" @click="HandleClick">
+          修改密码
+        </a-button>
+      </div>
     </div>
     <a-modal
       v-model="visible"
@@ -97,8 +266,15 @@ export default {
   },
   computed: {},
   watch: {},
-  beforeMount() {},
-  mounted() {},
+  beforeMount() {
+    this.addOrEditForm = this.$form.createForm(this, { name: 'addOrEditForm' })
+  },
+  mounted() {
+    console.log(this.userInfo)
+    setTimeout(() => {
+      this.addOrEditForm.setFieldsValue({ ...this.userInfo })
+    }, 500)
+  },
   methods: {
     moment,
     handleOk() {
@@ -151,8 +327,8 @@ export default {
   border: none;
 }
 .center {
-  margin: auto;
-  width: 60%;
+  // margin: auto;
+  // width: 60%;
   padding: 10px;
 }
 
