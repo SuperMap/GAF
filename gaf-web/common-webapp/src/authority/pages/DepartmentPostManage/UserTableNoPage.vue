@@ -200,7 +200,7 @@ export default {
         },
         {
           title: "操作",
-          // fixed: "right",
+          fixed: "right",
           scopedSlots: { customRender: "operation" },
         },
       ];
