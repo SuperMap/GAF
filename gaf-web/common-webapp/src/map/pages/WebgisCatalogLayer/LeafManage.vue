@@ -101,7 +101,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <gaf-drawer
+    <a-drawer
       :visible="modalVisible && openadd"
       :width="500"
       :footer="null"
@@ -122,7 +122,7 @@
         @delete-success="afterDeleteSuccess"
         @cancleWhenAdd="cancleWhenAdd"
       ></add-edit-form>
-    </gaf-drawer>
+    </a-drawer>
   </div>
 </template>
 

@@ -115,7 +115,7 @@
       </a-form>
     </div>
     <div>
-      <gaf-drawer
+      <a-drawer
         title="编辑按钮"
         :width="450"
         :visible="visible"
@@ -232,7 +232,7 @@
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="saveClose" class="submit-gray">确定</button>
         </div>
-      </gaf-drawer>
+      </a-drawer>
     </div>
   </div>
 </template>

@@ -85,7 +85,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <gaf-drawer
+    <a-drawer
       :visible="modalVisible"
       :width="500"
       :footer="null"
@@ -104,7 +104,7 @@
         @delete-success="afterDeleteDicTypeSuccess"
         @back="handleBack"
       ></dic-type-form>
-    </gaf-drawer>
+    </a-drawer>
   </div>
 </template>
 
