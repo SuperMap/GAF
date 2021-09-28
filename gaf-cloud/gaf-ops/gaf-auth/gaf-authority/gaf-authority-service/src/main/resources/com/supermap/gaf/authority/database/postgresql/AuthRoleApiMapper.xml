@@ -137,4 +137,12 @@
         SET status = false
         WHERE status = true and role_id = #{roleId}
     </update>
+    <update id="deleteByApiIds">
+        UPDATE "auth_role_api"
+        SET status = false
+        WHERE status = true and resource_api_id IN
+        <foreach collection="list" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

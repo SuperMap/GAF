@@ -10,8 +10,10 @@ import com.supermap.gaf.authority.constant.CommonConstant;
 import com.supermap.gaf.authority.constant.DbFieldNameConstant;
 import com.supermap.gaf.authority.dao.AuthResourceApiMapper;
 import com.supermap.gaf.authority.service.AuthResourceApiService;
+import com.supermap.gaf.authority.service.AuthRoleApiService;
 import com.supermap.gaf.authority.vo.AuthResourceApiSelectVo;
 import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +27,12 @@ import java.util.*;
  */
 @Service
 public class AuthResourceApiServiceImpl implements AuthResourceApiService {
-    private final AuthResourceApiMapper authResourceApiMapper;
-    private final BatchSortAndCodeService batchSortAndCodeService;
-
-    public AuthResourceApiServiceImpl(AuthResourceApiMapper authResourceApiMapper, BatchSortAndCodeService batchSortAndCodeService) {
-        this.authResourceApiMapper = authResourceApiMapper;
-        this.batchSortAndCodeService = batchSortAndCodeService;
-    }
+    @Autowired
+    private AuthResourceApiMapper authResourceApiMapper;
+    @Autowired
+    private BatchSortAndCodeService batchSortAndCodeService;
+    @Autowired
+    private AuthRoleApiService authRoleApiService;
 
     @Override
     public AuthResourceApi getById(String resourceApiId) {
@@ -97,14 +98,20 @@ public class AuthResourceApiServiceImpl implements AuthResourceApiService {
 
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteAuthResourceApi(String resourceApiId) {
+        if (resourceApiId == null || resourceApiId.isEmpty()) return;
         authResourceApiMapper.delete(resourceApiId);
+        authRoleApiService.deleteByApiIds(Collections.singletonList(resourceApiId));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void batchDelete(List<String> resourceApiIds) {
+        if (resourceApiIds == null || resourceApiIds.isEmpty()) return;
         authResourceApiMapper.batchDelete(resourceApiIds);
+        authRoleApiService.deleteByApiIds(resourceApiIds);
     }
 
     @Override

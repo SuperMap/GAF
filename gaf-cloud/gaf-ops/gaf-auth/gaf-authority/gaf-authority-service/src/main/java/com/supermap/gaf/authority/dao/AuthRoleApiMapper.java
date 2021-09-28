@@ -146,4 +146,11 @@ public interface AuthRoleApiMapper {
      * @return 影响的行数即删除的数量
      */
     int deleteByRoleId(@Param("roleId") String roleId);
+
+    /**
+     * 根据接口id集合删除角色接口
+     * @param apiIds  接口id集合
+     * @return  影响的行数即删除的数量
+     */
+    int deleteByApiIds(List<String> apiIds);
 }
