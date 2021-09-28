@@ -86,5 +86,11 @@ public interface AuthRoleApiService {
      */
     void batchDelete(List<String> roleApiIds);
 
+    /**
+     * 根据接口id集合删除角色接口
+     *
+     * @param apiIds 接口id集合
+     */
+    int deleteByApiIds(List<String> apiIds);
 
 }

@@ -213,7 +213,11 @@ public class WebgisRoamRouteServiceImpl implements WebgisRoamRouteService {
      */
     private synchronized void generateFpfFile(FlyManager flyManager, Path path) throws IOException {
         String systemTempDir = System.getProperties().getProperty(SYSTEM_TEMP_DIRECTORY);
-        Path tmp = Paths.get(systemTempDir,UUID.randomUUID().toString(),path.getFileName().toString());
+        Path tmpDir = Paths.get(systemTempDir, UUID.randomUUID().toString());
+        if (!Files.exists(tmpDir)) {
+            Files.createDirectories(tmpDir);
+        }
+        Path tmp = Paths.get(tmpDir.toString(),path.getFileName().toString());
         flyManager.getRoutes().toFile(tmp.toString());
         String tenantId = SecurityUtilsExt.getUser().getAuthUser().getTenantId();
         storageClient.delete(removeStartedBackslash(path.toString()), tenantId);

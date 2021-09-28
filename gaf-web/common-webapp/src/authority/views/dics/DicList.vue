@@ -49,7 +49,7 @@
         <div class="search-position">
           <a-input-search
             @search="onSearch"
-            placeholder="searchedColumn === 'dict_name'? '请输入名称模糊查询': '请输入字典值查询'"
+            :placeholder="searchedColumn === 'dict_name'? '请输入名称模糊查询': '请输入字典值查询'"
             size="large"
           >
           </a-input-search>
@@ -115,7 +115,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-	<gaf-drawer
+	<a-drawer
     :visible="open"
     :width="500"
     :footer="null"
@@ -133,7 +133,7 @@
       :operation="operation"
     >
     </add-edit-form>
-  </gaf-drawer>
+  </a-drawer>
   </div>
 </template>
 

@@ -86,7 +86,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <gaf-drawer
+    <a-drawer
       :visible="modalVisible"
       :width="500"
       :footer="null"
@@ -106,7 +106,7 @@
         @back="handleBack"
         :rootNode="rootNode"
       ></dic-catalog-form>
-    </gaf-drawer>
+    </a-drawer>
   </div>
 </template>
 

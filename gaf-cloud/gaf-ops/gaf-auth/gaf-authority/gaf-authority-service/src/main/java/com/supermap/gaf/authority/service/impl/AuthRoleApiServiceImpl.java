@@ -192,6 +192,12 @@ public class AuthRoleApiServiceImpl implements AuthRoleApiService {
         authRoleApiMapper.batchDelete(roleApiIds);
     }
 
+
+    @Override
+    public int deleteByApiIds(List<String> apiIds) {
+        return authRoleApiMapper.deleteByApiIds(apiIds);
+    }
+
     /**
      * 批量修改
      *

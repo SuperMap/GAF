@@ -101,7 +101,7 @@
         </gaf-table-with-page>
       </template>
     </gaf-table-layout>
-    <gaf-drawer
+    <a-drawer
       :visible="modalVisible"
       :width="500"
       :footer="null"
@@ -124,8 +124,8 @@
         :dataOfTree="dataOfTree"
       >
       </add-edit-form>
-    </gaf-drawer>
-    <gaf-drawer
+    </a-drawer>
+    <a-drawer
       placement="right"
       :closable="false"
       :visible="drawerVisible2"
@@ -134,8 +134,8 @@
       @close="drawerClose"
     >
       <role-menu :role="role"></role-menu>
-    </gaf-drawer>
-    <gaf-drawer
+    </a-drawer>
+    <a-drawer
       :visible="RoleFileVisible"
       :width="500"
       :footer="null"
@@ -150,7 +150,7 @@
        title="分配文件"
        @back="handleBackRoleFile"
       ></role-file>
-    </gaf-drawer>
+    </a-drawer>
   </div>
 </template>
 

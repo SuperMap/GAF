@@ -142,7 +142,7 @@
           </template>
         </gaf-table-layout>
       </div>
-      <gaf-drawer
+      <a-drawer
         :visible="open"
         :width="500"
         :footer="null"
@@ -161,7 +161,7 @@
           @back="handleBack"
         >
         </add-edit-form>
-      </gaf-drawer>
+      </a-drawer>
       <a-modal
         v-model="openconfigField"
         title="配置字段"
