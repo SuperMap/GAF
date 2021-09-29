@@ -44,3 +44,6 @@ INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "pr
 
 -- changeset SYS:20210809-0
 INSERT INTO "config_properties" ("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('yu2yea', 'gaf.database.secretKey', '1q2w3e4r5t6y7u8i', 'gaf-data-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+
+-- changeset SYS:20210929-0
+update "config_properties" SET pro_value = '${GAF_ENV_FLUENTD_TAG:gaf}' where id = 'e62623'
