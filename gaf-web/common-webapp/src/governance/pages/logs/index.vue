@@ -48,7 +48,7 @@
     </div>
     <div class="log-content">
       <div>
-        <a-table
+        <gaf-table-with-page
           :row-key="record => record.id"
           @change="onTableChange"
           :columns="table.columns"
@@ -117,7 +117,7 @@
               {{ message }}
             </a-popover>
           </span>
-        </a-table>
+        </gaf-table-with-page>
       </div>
     </div>
   </div>
@@ -193,7 +193,7 @@ export default {
             scopedSlots: {
               customRender: 'messageRender'
             },
-            ellipsis: true
+            ellipsis: true,
           }
         ],
         data: [],

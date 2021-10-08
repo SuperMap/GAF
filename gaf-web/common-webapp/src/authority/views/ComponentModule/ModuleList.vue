@@ -177,10 +177,11 @@ export default {
       // 有无主键
       hasPKField: true,
       selectRowLength: 0,
+      columns: []
     };
   },
   computed: {
-    columns: function () {
+    initColumns: function () {
       const columns = [
         {
           title: "名称",
@@ -199,11 +200,13 @@ export default {
           title: "路径",
           dataIndex: "path",
           key: "path",
+          width: 300
         },
         {
           title: "地址",
           dataIndex: "moduleUrl",
           key: "module_url",
+          width: 400
         },
         {
           title: "操作",
@@ -260,6 +263,7 @@ export default {
     },
   },
   created() {
+    this.columns = this.initColumns
     this.searchedColumn = "module_catalog_id";
     this.searchText = this.moduleGroup;
     if (this.moduleGroup !== "") {

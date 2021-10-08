@@ -18,7 +18,7 @@
         </a-col>
       </a-row>
     </div>
-    <a-table
+    <gaf-table-with-page
       :row-key="record => record.id"
       :columns="table.columns"
       :data-source="table.data"
@@ -94,7 +94,7 @@
         :style="{ color: filtered ? '#108ee9' : undefined }"
         type="search"
       />
-    </a-table>
+    </gaf-table-with-page>
   </div>
 </div>
 </template>
@@ -106,7 +106,7 @@ const columns = [
   {
     title: '服务',
     dataIndex: 'serviceName',
-    width: '10%',
+    width: 150,
     scopedSlots: {
       filterDropdown: 'filterDropdown',
       filterIcon: 'filterIcon'
@@ -115,25 +115,25 @@ const columns = [
   {
     title: 'HTTP请求信息',
     dataIndex: 'httpPath',
-    width: '10%',
+    width: 150,
     scopedSlots: { customRender: 'customHttpInfoRender' }
   },
   {
     title: '开始时间',
     dataIndex: 'timestampFormat',
-    width: '10%',
+    width: 150,
     sorter: true
   },
   {
     title: '耗时分析',
     dataIndex: '',
-    width: '25%',
+    width: 350,
     scopedSlots: { customRender: 'customTimeAnalyRender' }
   },
   {
     title: '用户',
     dataIndex: 'username',
-    width: '5%',
+    width: 100,
     scopedSlots: {
       filterDropdown: 'filterDropdown',
       filterIcon: 'filterIcon'

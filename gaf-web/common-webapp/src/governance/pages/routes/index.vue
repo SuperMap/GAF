@@ -33,7 +33,7 @@
         </template>
         <!--表格数据-->
         <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
-        <a-table
+        <gaf-table-with-page
           :loading="loading"
           :scroll="{ y: 508 ,x: 1440}"
           :columns="columns"
@@ -70,7 +70,7 @@
               <a href="javascript:;"> <u>删除</u></a>
             </a-popconfirm>
           </span>
-        </a-table>
+        </gaf-table-with-page>
       </Gaf-table-layout>
       <div v-show="showDetail">
         <route-datial-form
@@ -97,24 +97,24 @@ import AddRouteForm from "../../views/route/AddRoute";
 import RouteDatialForm from "../../views/route/RouteDetail";
 
 const columns = [
-  { title: "路由ID", width: '25%', dataIndex: "routeId", key: "routeId" },
-  { title: "地址", dataIndex: "uri", key: "uri", width: '25%' },
+  { title: "路由ID", width: 300, dataIndex: "routeId", key: "routeId" },
+  { title: "地址", dataIndex: "uri", key: "uri", width: 350 },
   {
     title: "顺序",
-    width: '7%',
+    width: 100,
     dataIndex: "order",
     key: "order",
   },
   {
     title: "是否启用",
-    width: '8%',
+    width: 100,
     dataIndex: "enable",
     key: "enable",
     scopedSlots: { customRender: "enable" },
   },
   {
     title: "创建时间",
-    width: '10%',
+    width: 150,
     dataIndex: "createTime",
     key: "createTime",
     scopedSlots: { customRender: "createTime" },
@@ -122,7 +122,8 @@ const columns = [
   {
     title: "操作",
     dataIndex: "operation",
-    key: "operation",
+    fixed: 'right',
+    width: 120,
     scopedSlots: { customRender: "operation" },
   },
 ];
@@ -166,7 +167,7 @@ export default {
   data() {
     return {
       loading: false,
-      columns: columns,
+      columns,
       dataSource: [],
       visible: false,
       selectedRowKeys: [],

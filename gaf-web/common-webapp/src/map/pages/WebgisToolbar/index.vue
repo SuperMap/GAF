@@ -161,20 +161,21 @@ export default {
       operation: 0,
       // 有无主键
       hasPKField: true,
+      columns: []
     };
   },
   computed: {
-    columns() {
+    initColumns() {
       const columns = [
         {
           title: "工具条名称",
           dataIndex: "name",
           key: "name",
-          width: '16%',
+          width: 200,
         },
         {
           title: "工具条类型",
-          width: '16%',
+          width: 150,
           scopedSlots: {
             customRender: "type",
           },
@@ -182,21 +183,22 @@ export default {
           key: "type",
         },
         {
-          width: '21%',
+          width: 250,
           title: "修改时间",
           dataIndex: "createdTime",
           key: "created_time",
           scopedSlots: { customRender: "timeRender" },
         },
         {
-          width: '28%',
+          width: 350,
           title: "工具条ID",
           dataIndex: "toolbarId",
           key: "toolbar_id",
         },
         {
           title: "操作",
-          // fixed: 'right',
+          fixed: 'right',
+          width: 120,
           scopedSlots: { customRender: "operation" },
         },
       ];
@@ -232,6 +234,7 @@ export default {
     },
   },
   created() {
+    this.columns = this.initColumns
     this.getList();
   },
   methods: {

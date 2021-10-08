@@ -188,11 +188,12 @@ export default {
         { value: "RESTREALSPACE", label: "三维服务" },
         { value: "RESTSPATIALANALYST", label: "空间分析服务" },
       ],
+      columns: []
     };
   },
   computed: {
     //表格
-    columns: function () {
+    initColumns: function () {
       const columns = [
         {
           title: "工作空间id",
@@ -203,17 +204,20 @@ export default {
           title: "工作空间名称",
           dataIndex: "wsName",
           key: "ws_name",
+          width: 300
         },
         {
           title: "工作空间类型",
           dataIndex: "typeCode",
           key: "type_code",
           scopedSlots: { customRender: "typeCode" },
+          width: 300
         },
         {
           title: "地址",
           dataIndex: "server",
           key: "server",
+          width: 300
         },
         // {
         //   title: '发布状态',
@@ -254,7 +258,8 @@ export default {
         // },
         {
           title: "操作",
-          // fixed: 'right',
+          fixed: 'right',
+          width: 170,
           scopedSlots: { customRender: "operation" },
         },
       ];
@@ -293,6 +298,7 @@ export default {
     },
   },
   created() {
+    this.columns = this.initColumns
     this.getList();
     this.getOptions();
   },

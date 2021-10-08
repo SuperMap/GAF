@@ -113,7 +113,7 @@ export default {
     },
     isUser: {
       type: Boolean,
-      required: true,
+      required: false,
     },
   },
   data() {
@@ -128,26 +128,30 @@ export default {
       tenantRst: [],
       selectedRowKeys: [],
       selectRowLength: 0,
+      columns: []
     };
   },
   computed: {
-    columns: function () {
+    initColumns: function () {
       const columns = [
         {
           title: "登录用户名",
           dataIndex: "name",
           key: "name",
+          width: 150
         },
         {
           title: "真实姓名",
           dataIndex: "realName",
           key: "real_name",
+          width: 160
         },
         {
           title: "状态",
           dataIndex: "status",
           key: "status",
           scopedSlots: { customRender: "status" },
+          width: 100
         },
 
         // {
@@ -159,6 +163,7 @@ export default {
           title: "部门",
           dataIndex: "departmentName",
           key: "department_name",
+          width: 150
         },
         // {
         //   title: '岗位id',
@@ -169,18 +174,21 @@ export default {
           title: "岗位",
           dataIndex: "postName",
           key: "post_name",
+          width: 150
         },
         {
           title: "是否第三方",
           dataIndex: "isThirdParty",
           key: "is_third_party",
           scopedSlots: { customRender: "isThirdParty" },
+          width: 100
         },
         {
           title: "是否挂职",
           dataIndex: "belongsParttime",
           key: "belongs-parttime",
           scopedSlots: { customRender: "belongsParttime" },
+          width: 100
         },
         {
           title: "授权截止时间",
@@ -189,6 +197,7 @@ export default {
           },
           dataIndex: "expirationTime",
           key: "expiration_time",
+          width: 170
         },
         {
           title: "上次登录时间",
@@ -197,10 +206,12 @@ export default {
           },
           dataIndex: "lastLoginTime",
           key: "last_login_time",
+          width: 170
         },
         {
           title: "操作",
           fixed: "right",
+          width: 100,
           scopedSlots: { customRender: "operation" },
         },
       ];
@@ -236,6 +247,10 @@ export default {
       }
       return null;
     },
+  },
+  created() {
+    this.columns = this.initColumns
+    this.columns = this.isUser ? this.initColumns : this.initColumns.slice(0, -1)
   },
   mounted() {
     // this.getList()
