@@ -225,10 +225,11 @@ export default {
       operation: 0,
       // 有无主键
       hasPKField: true,
+      columns: []
     };
   },
   computed: {
-    columns: function () {
+    initColumns: function () {
       const columns = [
         {
           title: "名称",
@@ -257,6 +258,7 @@ export default {
         {
           title: "操作",
           fixed: "right",
+          width: 430,
           scopedSlots: { customRender: "operation" },
         },
       ];
@@ -307,6 +309,7 @@ export default {
     },
   },
   created() {
+    this.columns = this.initColumns
     // this.getList()
     this.searchedColumn = "role_catalog_id";
     this.searchText = this.roleGroup;

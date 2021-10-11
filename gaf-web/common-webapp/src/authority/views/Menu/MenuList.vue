@@ -171,10 +171,11 @@ export default {
       hasPKField: true,
       openLeafManage: false,
       selectRowLength: 0,
+      columns: []
     };
   },
   computed: {
-    columns: function () {
+    initColumns: function () {
       const columns = [
         {
           title: "菜单id",
@@ -208,7 +209,7 @@ export default {
           title: "描述",
           dataIndex: "description",
           key: "description",
-
+          width: 300
         },
         {
           title: "操作",
@@ -264,6 +265,7 @@ export default {
     },
   },
   created() {
+    this.columns = this.initColumns
     this.searchedColumn = "menu_catalog_id";
     this.searchText = this.menuGroup;
     this.getList();

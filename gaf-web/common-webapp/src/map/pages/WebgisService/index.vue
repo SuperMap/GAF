@@ -248,10 +248,11 @@ export default {
       operation: 0,
       // 有无主键
       hasPKField: true,
+      columns: []
     };
   },
   computed: {
-    columns() {
+    initColumns() {
       const columns = [
         {
           title: "GIS服务id",
@@ -265,7 +266,7 @@ export default {
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
-          width: "18%",
+          width: 200,
           dataIndex: "name",
           key: "name",
         },
@@ -273,7 +274,7 @@ export default {
           title: "服务类型",
           dataIndex: "typeCode",
           key: "type_code",
-          width: "10%",
+          width: 120,
           scopedSlots: { customRender: "serviceType" },
         },
         {
@@ -281,17 +282,19 @@ export default {
           dataIndex: "address",
           key: "address",
           scopedSlots: { customRender: "address" },
-          width: "33%",
+          width: 450,
         },
         {
           title: "时态",
           dataIndex: "timeAttribute",
           key: "time_attribute",
-          width: "12%",
+          // width: ,
           scopedSlots: { customRender: "timeRender" },
         },
         {
           title: "操作",
+          fixed: 'right',
+          width: 170,
           scopedSlots: { customRender: "operation" },
         },
       ];
@@ -330,6 +333,7 @@ export default {
   watch: {},
   mounted() {},
   async created() {
+    this.columns = this.initColumns
     await this.getNodesAndSetByType();
     this.getList();
   },

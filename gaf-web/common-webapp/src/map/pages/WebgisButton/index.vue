@@ -175,10 +175,11 @@ export default {
       hasPKField: true,
       buttonType: "1",
       selectRowLength: 0,
+      columns: []
     };
   },
   computed: {
-    columns() {
+    initColumns() {
       const columns = [
         {
           title: "按钮id",
@@ -187,7 +188,7 @@ export default {
         },
         {
           title: "按钮名称",
-          width: '18%',
+          width: 200,
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
@@ -198,7 +199,7 @@ export default {
         },
         {
           title: "按钮类别",
-          width: '18%',
+          width: 150,
           dataIndex: "type",
           scopedSlots: {
             customRender: "type",
@@ -207,19 +208,20 @@ export default {
         },
         {
           title: "方法",
-          width: '22%',
+          width: 150,
           dataIndex: "method",
           key: "method",
         },
         {
           title: "描述",
-          width: '18%',
+          // width: '18%',
           dataIndex: "description",
           key: "description",
         },
         {
           title: "操作",
-          // fixed: 'right',
+          fixed: 'right',
+          width: 170,
           scopedSlots: { customRender: "operation" },
         },
       ];
@@ -254,6 +256,7 @@ export default {
     },
   },
   created() {
+    this.columns = this.initColumns
     this.getList();
   },
   methods: {

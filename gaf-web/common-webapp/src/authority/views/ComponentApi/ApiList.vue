@@ -189,10 +189,11 @@ export default {
       // 有无主键
       hasPKField: true,
       selectRowLength: 0,
+      columns: []
     };
   },
   computed: {
-    columns: function () {
+    initColumns: function () {
       const columns = [
         {
           title: "序号",
@@ -209,33 +210,33 @@ export default {
           dataIndex: "name",
           key: "name",
           // fixed: 'left',
-          width: "15%",
+          width: 200,
         },
         {
           title: "路由路径",
           dataIndex: "routeUrl",
           key: "route_url",
-          width: "28%",
+          width: 300,
         },
         {
           title: "方法",
           dataIndex: "method",
           key: "method",
-          width: "7%",
+          width: 100,
           scopedSlots: { customRender: "method" },
         },
         {
           title: "类型",
           dataIndex: "type",
           key: "type",
-          width: "10%",
+          width: 120,
           scopedSlots: { customRender: "type" },
         },
         {
           title: "排序序号",
           dataIndex: "sortSn",
           key: "sort_sn",
-          width: "10%",
+          width: 100,
         },
         {
           title: "操作",
@@ -288,6 +289,7 @@ export default {
     },
   },
   created() {
+    this.columns = this.initColumns
     this.searchedColumn = "api_catalog_id";
     this.searchText = this.apiGroup;
     // this.getList()

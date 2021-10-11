@@ -4668,16 +4668,17 @@ functional-red-black-tree@^1.0.1:
   resolved "https://nexus.gaf.net.cn/repository/npm-group/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
 
-gaf-ui@2.0.26:
-  version "2.0.26"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.26.tgz#8d9d6da8a408e237230e64c239a201604393d4a6"
-  integrity sha512-ubbGMSQqDDt/QBmO+b3RrNLOtPHMYTovwSaNGyfitSqAH1q/m2Gta5FUn0HFcExKYmpQjFpYUjQJxQB9tNgjiw==
+gaf-ui@2.0.27:
+  version "2.0.27"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.27.tgz#05ab9f88e5de1c51f0c98a4a57b7b48c35680ff3"
+  integrity sha512-gpLsJdsr/ugpU/X/jiSkMEYQmVL0t+Ykt0ne34vGGEd+E130xNgsTVVo1yP1x+6fgLsHmKZ746g8DsHzozJXxQ==
   dependencies:
     ant-design-vue "^1.7.2"
     core-js "^2.6.5"
     grunt "^1.0.4"
     spark-md5 "^3.0.1"
     vue "^2.6.12"
+    vue-draggable-resizable "2.1.0"
     vuedraggable "^2.23.2"
 
 gaf-web-common@^2.0.7:
@@ -9642,6 +9643,11 @@ vue-cookies@^1.7.4:
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.7.4.tgz#d241d0a0431da0795837651d10b4d73e7c8d3e8d"
   integrity sha512-mOS5Btr8V9zvAtkmQ7/TfqJIropOx7etDAgBywPCmHjvfJl2gFbH2XgoMghleLoyyMTi5eaJss0mPN7arMoslA==
+
+vue-draggable-resizable@2.1.0:
+  version "2.1.0"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/vue-draggable-resizable/-/vue-draggable-resizable-2.1.0.tgz#b590212aef3c07d040aeceda784438068170fb08"
+  integrity sha512-DQe5JjiqPjndc3XZkkZAMVygMlJ4TLcpMWM78IkizHeJBfX5Ki6OKZPxrT+HE7w/12d+OfWom5Y5phYcrwCzqg==
 
 vue-eslint-parser@^7.0.0:
   version "7.2.0"

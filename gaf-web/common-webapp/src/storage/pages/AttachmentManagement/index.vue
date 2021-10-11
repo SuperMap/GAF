@@ -276,14 +276,14 @@ export default {
           dataIndex: 'size',
           key: 'size',
           width: 125,
-          align: 'center',
+          // align: 'center',
           scopedSlots: { customRender: 'size' },
         },
         {
           title: '时态',
           dataIndex: 'lastModified',
           key: 'lastModified',
-          width: '250px',
+          width: 250,
           scopedSlots: { customRender: 'timeRender' },
         },
         {
@@ -291,6 +291,7 @@ export default {
           key: 'operation',
           scopedSlots: { customRender: 'operation' },
           fixed: 'right',
+          width: 260
         },
       ],
       dir: '',

@@ -58,7 +58,7 @@
       <template #default>
         <gaf-table-head :selectedRowKeys="selectedRowKeys" @clearOptions="clearOptions" />
         <gaf-table-with-page
-          :scroll="{ y: 508 , x: true}"
+          :scroll="{ y: 508 , x: 1440}"
           :showXH="false"
           :pagination="pagination"
           :data-source="sysDictList"
@@ -195,7 +195,7 @@ export default {
           title: "字典值",
           dataIndex: "value",
           key: "dict_value",
-          align: "center",
+          // align: "center",
           width: 125,
         },
         {
@@ -205,7 +205,7 @@ export default {
           sortDirections: ["descend", "ascend"],
           dataIndex: "seq",
           key: "seq",
-          align: "center",
+          // align: "center",
           width: 125,
         },
         {
@@ -213,7 +213,7 @@ export default {
           dataIndex: "visibility",
           scopedSlots: { customRender: "visibility" },
           key: "visibility",
-          align: "center",
+          // align: "center",
           width: 125,
         },
         {

@@ -225,7 +225,7 @@ export default {
       columns : [
         {
           title: "数据源别名",
-          width: '18%',
+          width: 200,
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
@@ -246,30 +246,31 @@ export default {
           dataIndex: "typeCode",
           key: "type_code",
           scopedSlots: { customRender: "typeCode" },
-          width: '10%',
+          width: 120,
         },
         {
           title: "服务器地址",
           dataIndex: "addr",
           key: "addr",
-          width: '20%',
+          width: 250,
         },
         {
           title: "数据库名称",
           dataIndex: "dbName",
           key: "db_name",
-          width: '12%',
+          width: 100,
         },
         {
           title: "时态",
           dataIndex: "timeAttribute",
           key: "time_attribute",
           scopedSlots: { customRender: "timeRender" },
-          width: '10%',
+          width: 150,
         },
         {
           title: "操作",
-          // width: '15%',
+          fixed: 'right',
+          width: 120,
           scopedSlots: { customRender: "operation" },
         },
       ]

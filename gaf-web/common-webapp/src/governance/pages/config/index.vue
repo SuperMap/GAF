@@ -147,25 +147,28 @@ const columns = [
     dataIndex: "application",
     // align: "center",
     key: "application",
+    width: 300
   },
   {
     title: "所属租户ID",
     dataIndex: "tenantId",
     // align: "center",
     key: "tenantId",
+    width: 300
   },
   {
     title: "配置数",
     dataIndex: "propertiesCount",
     // align: "center",
     key: "propertiesCount",
+    width: 100
   },
   {
     title: "操作",
     // align: "center",
-    // fixed: 'right',
+    fixed: 'right',
     key: "action",
-    // width: 300,
+    width: 120,
     scopedSlots: { customRender: "action" },
   },
 ];

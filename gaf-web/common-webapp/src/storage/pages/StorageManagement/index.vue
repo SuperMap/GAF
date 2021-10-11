@@ -216,14 +216,15 @@ export default {
       ],
       isShow: true,
       configName: null,
+      columns: []
     }
   },
   computed: {
-    columns() {
+    initColumns() {
       const columns = [
         {
           title: '名称',
-          width: '18%',
+          width: 250,
           scopedSlots: {
             customRender: 'customRender',
           },
@@ -232,19 +233,19 @@ export default {
         },
         {
           title: '地址',
-          width: '18%',
+          width: 250,
           dataIndex: 'serviceEndpoint',
           key: 'serviceEndpoint',
         },
         {
           title: 'bucket名称',
-          width: '22%',
+          width: 200,
           dataIndex: 'bucketName',
           key: 'bucketName',
         },
         {
           title: '修改时间',
-          width: '18%',
+          width: 250,
           dataIndex: 'updatedTime',
           key: 'updatedTime',
           scopedSlots: {
@@ -253,7 +254,8 @@ export default {
         },
         {
           title: '操作',
-          // fixed: 'right',
+          fixed: 'right',
+          width: 120,
           scopedSlots: { customRender: 'operation' },
         },
       ]
@@ -292,6 +294,7 @@ export default {
     },
   },
   created() {
+    this.columns = this.initColumns
     this.getList()
   },
   methods: {

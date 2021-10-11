@@ -159,10 +159,11 @@ export default {
       // 有无主键
       hasPKField: true,
       selectRowLength: 0,
+      columns: []
     };
   },
   computed: {
-    columns: function () {
+    initColumns: function () {
       const columns = [
         {
           title: "系统组件id",
@@ -173,11 +174,13 @@ export default {
           title: "名称",
           dataIndex: "name",
           key: "name",
+          width: 250
         },
         {
           title: "中文名称",
           dataIndex: "nameCn",
           key: "name_cn",
+          width: 200
         },
         // {
         //   title: '编码',
@@ -189,6 +192,7 @@ export default {
           dataIndex: "type",
           key: "type",
           scopedSlots: { customRender: "type" },
+          width: 150
         },
         // {
         //   title: '可见性',
@@ -200,6 +204,7 @@ export default {
           title: "描述",
           dataIndex: "description",
           key: "description",
+          width: 300
         },
         {
           title: "操作",
@@ -242,6 +247,7 @@ export default {
     },
   },
   created() {
+    this.columns = this.initColumns
     this.getList();
   },
   methods: {
