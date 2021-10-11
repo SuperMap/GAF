@@ -1,10 +1,5 @@
 package com.supermap.gaf.webgis.enums;
 
-import com.supermap.services.components.spi.ogc.WMS;
-import com.supermap.services.protocols.wcs.WCS;
-import com.supermap.services.protocols.wfs.WFS;
-import com.supermap.services.wps.WPS;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +20,7 @@ public enum ServiceTypeEnum {
 //    WCS:WCS服务,
 //    WPS:WPS服务,
 //    DXZG:栅格地形,
-//    DXTIN:TIN地形,
+//    TIN_DEM:TIN地形,
 //    YINGXIANG:影像
     /**
      * 数据服务
@@ -76,7 +71,7 @@ public enum ServiceTypeEnum {
     /**
      * TIN地形
      */
-    DXTIN("DXTIN", "TIN地形"),
+    TIN_DEM("TIN_DEM", "TIN地形"),
     /**
      * TIN地形
      */
