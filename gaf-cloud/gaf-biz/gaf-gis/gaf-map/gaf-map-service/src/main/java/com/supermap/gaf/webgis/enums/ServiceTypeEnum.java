@@ -84,7 +84,21 @@ public enum ServiceTypeEnum {
     /**
      * 影像
      */
-    YINGXIANG("YINGXIANG", "影像");
+    YINGXIANG("YINGXIANG", "影像"),
+
+    /**
+     * 百度REST
+     */
+    BAIDUREST("BAIDUREST","百度REST"),
+    /**
+     * 谷歌REST
+     */
+    GOOGLEREST("GOOGLEREST","谷歌REST"),
+    /**
+     * 其它
+     */
+    OTHER("OTHER","其它");
+
 
     private String code;
     /**
