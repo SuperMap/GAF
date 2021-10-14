@@ -1,0 +1,214 @@
+stages:
+- pipeline
+- notification
+
+# 全局变量
+variables:
+  GAF_REGISTRY: ${GAF_REGISTRY}
+  GAF_REGISTRY_PATH: ${GAF_REGISTRY_PATH}
+  GAF_REGISTRY_TAG: ${GAF_REGISTRY_TAG}
+  GAF_REGISTRY_USERNAME: ${GAF_REGISTRY_USERNAME}
+  GAF_REGISTRY_PASSWORD: ${GAF_REGISTRY_PASSWORD}
+  KUBECONFIG: ${KUBECONFIG}
+  WEXIN_MSG_URL: ${WEXIN_MSG_URL}
+
+gaf-webapp:
+  only:
+    changes:
+    - "gaf-web/common-gaf/**/*"
+    - "gaf-web/common-webapp/**/*"
+    - "gaf-web/gaf-webapp/**/*"
+  image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v2.0
+  stage: pipeline
+  script:
+  - npm config set registry https://nexus.gaf.net.cn/repository/npm-group
+  - yarn config set registry https://nexus.gaf.net.cn/repository/npm-group
+  - cd gaf-web
+  - cd common-gaf
+  - yarn install --update-checksums
+  - yarn link
+  - cd ..
+  - cd common-webapp
+  - yarn install --update-checksums
+  - yarn link
+  - cd ..
+  - cd gaf-webapp
+  - yarn install --update-checksums
+  - yarn link common-gaf
+  - yarn link common-webbase
+  - yarn generate
+  - rm -rf node_modules
+  - yarn unlink common-gaf
+  - yarn unlink common-webbase
+  - cd ../..
+  - docker login "https://${GAF_REGISTRY}" -u ${GAF_REGISTRY_USERNAME} -p ${GAF_REGISTRY_PASSWORD}
+  - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-web/gaf-webapp -am
+  - kubectl rollout restart deployment gaf-webapp -n gaf-dev
+
+gaf-mapapp:
+  only:
+    changes:
+    - "gaf-web/common-gaf/**/*"
+    - "gaf-web/common-webapp/**/*"
+    - "gaf-web/common-mapapp/**/*"
+    - "gaf-web/gaf-mapapp/**/*"
+  image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v2.0
+  stage: pipeline
+  script:
+  - npm config set registry https://nexus.gaf.net.cn/repository/npm-group
+  - yarn config set registry https://nexus.gaf.net.cn/repository/npm-group
+  - cd gaf-web
+  - cd common-gaf
+  - yarn install --update-checksums
+  - yarn link
+  - cd ..
+  - cd common-webapp
+  - yarn install --update-checksums
+  - yarn link
+  - cd ..
+  - cd common-mapapp
+  - yarn install --update-checksums
+  - yarn link
+  - cd ..
+  - cd gaf-mapapp
+  - yarn install --update-checksums
+  - yarn link common-gaf
+  - yarn link common-webbase
+  - yarn link common-mapapp
+  - yarn generate
+  - rm -rf node_modules
+  - yarn unlink common-gaf
+  - yarn unlink common-webbase
+  - yarn unlink common-mapapp
+  - cd ../..
+  - docker login "https://${GAF_REGISTRY}" -u ${GAF_REGISTRY_USERNAME} -p ${GAF_REGISTRY_PASSWORD}
+  - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-web/gaf-mapapp -am
+  - kubectl rollout restart deployment gaf-mapapp -n gaf-dev
+
+gaf-all:
+  only:
+    variables:
+    - $CI_COMMIT_MESSAGE =~ /Release/
+  image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v2.0
+  stage: pipeline
+  script:
+  - npm config set registry https://nexus.gaf.net.cn/repository/npm-group
+  - yarn config set registry https://nexus.gaf.net.cn/repository/npm-group
+  - cd gaf-web
+  - cd common-gaf
+  - yarn install --update-checksums
+  - yarn link
+  - cd ..
+  - cd common-webapp
+  - yarn install --update-checksums
+  - yarn link
+  - cd ..
+  - cd common-mapapp
+  - yarn install --update-checksums
+  - yarn link
+  - cd ..
+  - cd gaf-webapp
+  - yarn install --update-checksums
+  - yarn link common-gaf
+  - yarn link common-webbase
+  - yarn generate
+  - rm -rf node_modules
+  - yarn unlink common-gaf
+  - yarn unlink common-webbase
+  - cd ..
+  - cd gaf-mapapp
+  - yarn install --update-checksums
+  - yarn link common-gaf
+  - yarn link common-webbase
+  - yarn link common-mapapp
+  - yarn generate
+  - rm -rf node_modules
+  - yarn unlink common-gaf
+  - yarn unlink common-webbase
+  - yarn unlink common-mapapp
+  - cd ../..
+  - cp -r gaf-web/gaf-webapp/dist gaf-boot/dist_gaf-webapp
+  - cp -r gaf-web/gaf-mapapp/dist gaf-boot/dist_gaf-mapapp
+  - docker login "https://${GAF_REGISTRY}" -u ${GAF_REGISTRY_USERNAME} -p ${GAF_REGISTRY_PASSWORD}
+  - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG}
+  - kubectl rollout restart deployment gaf-webapp gaf-mapapp gaf-analysis gaf-authentication gaf-authority gaf-data-mgt gaf-map gaf-microservice-api gaf-microservice-conf gaf-microservice-gateway gaf-microservice-governance gaf-microservice-rigister gaf-monitor gaf-portal gaf-storage gaf-sys-mgt -n gaf-dev
+
+gaf-data-mgt:
+  only:
+    changes:
+    - "gaf-cloud/gaf-biz/gaf-gis/gaf-data-mgt/**/*"
+  image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v2.0
+  stage: pipeline
+  script:
+  - docker login "https://${GAF_REGISTRY}" -u ${GAF_REGISTRY_USERNAME} -p ${GAF_REGISTRY_PASSWORD}
+  - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-cloud/gaf-biz/gaf-gis/gaf-data-mgt/gaf-data-mgt-app -am
+  - kubectl rollout restart deployment gaf-data-mgt -n gaf-dev
+
+gaf-analysis:
+  only:
+    changes:
+    - "gaf-cloud/gaf-biz/gaf-gis/gaf-analysis/**/*"
+  image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v2.0
+  stage: pipeline
+  script:
+  - docker login "https://${GAF_REGISTRY}" -u ${GAF_REGISTRY_USERNAME} -p ${GAF_REGISTRY_PASSWORD}
+  - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-cloud/gaf-biz/gaf-gis/gaf-analysis/gaf-analysis-app -am
+  - kubectl rollout restart deployment gaf-analysis -n gaf-dev
+
+gaf-authentication:
+  only:
+    changes:
+    - "gaf-cloud/gaf-ops/gaf-auth/gaf-authentication/**/*"
+  image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v2.0
+  stage: pipeline
+  script:
+  - docker login "https://${GAF_REGISTRY}" -u ${GAF_REGISTRY_USERNAME} -p ${GAF_REGISTRY_PASSWORD}
+  - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-cloud/gaf-ops/gaf-auth/gaf-authentication/gaf-authentication-app -am
+  - kubectl rollout restart deployment gaf-authentication -n gaf-dev
+
+gaf-authority:
+  only:
+    changes:
+    - "gaf-cloud/gaf-ops/gaf-auth/gaf-authority/**/*"
+  image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v2.0
+  stage: pipeline
+  script:
+  - docker login "https://${GAF_REGISTRY}" -u ${GAF_REGISTRY_USERNAME} -p ${GAF_REGISTRY_PASSWORD}
+  - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-cloud/gaf-ops/gaf-auth/gaf-authority/gaf-authority-app -am
+  - kubectl rollout restart deployment gaf-authority -n gaf-dev
+
+gaf-map:
+  only:
+    changes:
+    - "gaf-cloud/gaf-biz/gaf-gis/gaf-map/**/*"
+  image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v2.0
+  stage: pipeline
+  script:
+  - docker login "https://${GAF_REGISTRY}" -u ${GAF_REGISTRY_USERNAME} -p ${GAF_REGISTRY_PASSWORD}
+  - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-cloud/gaf-biz/gaf-gis/gaf-map/gaf-map-app -am
+  - kubectl rollout restart deployment gaf-map -n gaf-dev
+
+# 后续操作notification
+success_notification:
+  only:
+    changes:
+    - "gaf-cloud/**/*"
+    - "gaf-web/**/*"
+  image:
+    name: harbor.gaf.net.cn/library/qywx-notification:1.0
+  stage: notification
+  script:
+  - sh /root/success_qiyeweixin.sh ${WEXIN_MSG_URL}
+  when: on_success
+failure_notification:
+  only:
+    changes:
+    - "gaf-cloud/**/*"
+    - "gaf-web/**/*"
+  image:
+    name: harbor.gaf.net.cn/library/qywx-notification:1.0
+  stage: notification
+  script:
+  - sh /root/failure_qiyeweixin.sh ${WEXIN_MSG_URL}
+  when: on_failure
+
