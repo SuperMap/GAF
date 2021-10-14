@@ -26,14 +26,19 @@ public enum ServiceTypeEnum {
      * 数据服务
      */
     RESTDATA("RESTDATA", "数据服务"),
+
+    /**
+     * 三维服务-数据集
+     */
+    RESTREALSPACE_DATA("RESTREALSPACE-DATA","三维服务-数据集"),
+    /**
+     * 三维服务-场景
+     */
+    RESTREALSPACE("RESTREALSPACE","三维服务-场景"),
     /**
      * 地图服务
      */
     RESTMAP("RESTMAP", "地图服务"),
-    /**
-     * 三维服务
-     */
-    RESTREALSPACE("RESTREALSPACE", "三维服务"),
     /**
      * 空间分析服务
      */
@@ -67,7 +72,7 @@ public enum ServiceTypeEnum {
     /**
      * 栅格地形
      */
-    DXZG("DXZG", "栅格地形"),
+    GRID_DEM("GRID_DEM", "栅格地形"),
     /**
      * TIN地形
      */
@@ -98,6 +103,16 @@ public enum ServiceTypeEnum {
 
     public String getName() {
         return name;
+    }
+
+    public static String getNameByCode(String code) {
+        ServiceTypeEnum[] values = values();
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].getCode().equals(code)) {
+                return values[i].getName();
+            }
+        }
+        throw new IllegalArgumentException("不支持的服务类型"+code);
     }
 
     public static Map<String, String> getMap() {
