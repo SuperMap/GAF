@@ -9,32 +9,15 @@ import java.util.Map;
  * @author wxl
  */
 public enum ServiceTypeEnum {
-//    RESTMAP:地图服务,
-//    RESTDATA:数据服务,
-//    RESTREALSPACE:三维服务,
-//    RESTSPATIALANALYST:空间分析服务,
-//    ARCGISMAP:ArcGIS地图服务,
-//    WMS:WMS服务,
-//    WMTS:WMTS服务,
-//    WFS:WFS服务,
-//    WCS:WCS服务,
-//    WPS:WPS服务,
-//    DXZG:栅格地形,
-//    TIN_DEM:TIN地形,
-//    YINGXIANG:影像
     /**
      * 数据服务
      */
     RESTDATA("RESTDATA", "数据服务"),
 
     /**
-     * 三维服务-数据集
+     * 三维服务
      */
-    RESTREALSPACE_DATA("RESTREALSPACE-DATA","三维服务-数据集"),
-    /**
-     * 三维服务-场景
-     */
-    RESTREALSPACE("RESTREALSPACE","三维服务-场景"),
+    RESTREALSPACE("RESTREALSPACE","三维服务"),
     /**
      * 地图服务
      */

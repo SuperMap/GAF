@@ -21,31 +21,8 @@ INSERT INTO "sys_dict"("data_dict_id", "dict_code", "dict_name", "dict_value", "
 UPDATE sys_dict SET dict_value = 'TIN_DEM' WHERE data_dict_id = 'e3573128-26e6-477d-b723-41eebd79e390';
 
 -- changeset SYS:20211014-0
-UPDATE sys_dict SET status = false WHERE data_dict_id = 'b6a0fc90-7179-4bae-97c9-f47067e42241';
 UPDATE sys_dict SET dict_value = 'GRID_DEM' WHERE data_dict_id = 'd6860215-0b81-431e-bb1e-4e38a871a08d';
 
-INSERT INTO "sys_dict"("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('b22e6b37-a91c-4a91-af0d-7fd70f2095d4', 'ServiceType', '三维服务-场景', 'RESTREALSPACE', NULL, 3, '8f2b6703-dcae-40ec-b17e-98c406e3fd79', NULL, 't', '2021-04-12 03:20:49.202', 'sys_admin', '2021-04-12 03:20:49.202', 'sys_admin', NULL, 't', NULL, '{"is3D":true,"isDataService":false}');
-INSERT INTO "sys_dict"("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('25ead71b-b43e-4194-b2dc-9bcdb559033d', 'ServiceType', '三维服务-数据集', 'RESTREALSPACE-DATA', NULL, 2, '8f2b6703-dcae-40ec-b17e-98c406e3fd79', NULL, 't', '2021-04-12 03:21:42.653', 'sys_admin', '2021-04-12 03:21:42.653', 'sys_admin', NULL, 't', NULL, '{"is3D":true,"isDataService":false}');
-INSERT INTO "sys_dict" ("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('3525ae28-a803-4e90-b258-96f312922682', 'ServiceType', '百度REST', 'BAIDUREST', NULL, 16, '8f2b6703-dcae-40ec-b17e-98c406e3fd79', NULL, 't', '2021-09-15 09:14:53.356024', 'sys_admin', '2021-09-15 09:20:31.449977', 'sys_admin', NULL, 't', NULL, '{"isDataService":false}');
-INSERT INTO "sys_dict" ("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('fa8cb544-21aa-4202-839e-7e9bdea24406', 'ServiceType', '谷歌REST', 'GOOGLEREST', NULL, 17, '8f2b6703-dcae-40ec-b17e-98c406e3fd79', NULL, 't', '2021-09-15 09:16:17.31042', 'sys_admin', '2021-09-15 09:20:25.202513', 'sys_admin', NULL, 't', NULL, '{"isDataService":false}');
-INSERT INTO "sys_dict" ("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('ba03b65f-aa16-417f-b83b-55357f4feb39', 'ServiceType', '其它', 'OTHER', NULL, 18, '8f2b6703-dcae-40ec-b17e-98c406e3fd79', NULL, 't', '2021-09-15 09:21:38.636007', 'sys_admin', '2021-09-15 09:21:38.636007', 'sys_admin', NULL, 't', NULL, '{"isDataService":false}');
-
-
-UPDATE sys_dict SET seq = 1	WHERE data_dict_id = '1eb20fea-fc4d-4bf6-9d27-6613126e4b9c';
-UPDATE sys_dict SET seq = 2	WHERE data_dict_id = '25ead71b-b43e-4194-b2dc-9bcdb559033d';
-UPDATE sys_dict SET seq = 3	WHERE data_dict_id = 'b22e6b37-a91c-4a91-af0d-7fd70f2095d4';
-UPDATE sys_dict SET seq = 4	WHERE data_dict_id = '0a968147-e5cc-43d2-bfe1-9ad8f041bff3';
-UPDATE sys_dict SET seq = 5	WHERE data_dict_id = 'af08ceec-ed71-4c06-8d16-b34096f9b319';
-UPDATE sys_dict SET seq = 6	WHERE data_dict_id = '80d3d594-a1cb-482a-a630-30971c80ab53';
-UPDATE sys_dict SET seq = 7	WHERE data_dict_id = 'be1e0c91-a3a8-4094-8e86-7a3cc8e270b5';
-UPDATE sys_dict SET seq = 8	WHERE data_dict_id = '349d5030-d348-4449-88ab-856707a3e2bd';
-UPDATE sys_dict SET seq = 9	WHERE data_dict_id = '99e682b3-3fdd-42cb-88da-1847b820663e';
-UPDATE sys_dict SET seq = 10 WHERE data_dict_id = '4809ff3f-fba8-4904-97e0-156f3d658603';
-UPDATE sys_dict SET seq = 11 WHERE data_dict_id = '2eaecfd2-c841-4a5f-9a84-25d9bd38e21a';
-UPDATE sys_dict SET seq = 12 WHERE data_dict_id = 'd6860215-0b81-431e-bb1e-4e38a871a08d';
-UPDATE sys_dict SET seq = 13 WHERE data_dict_id = 'e3573128-26e6-477d-b723-41eebd79e390';
-UPDATE sys_dict SET seq = 14 WHERE data_dict_id = '109c7dae-5492-41ad-9400-6e7381436e29';
-UPDATE sys_dict SET seq = 15 WHERE data_dict_id = '112efe76-ba45-4b03-ab4f-4d2eedd94568';
-UPDATE sys_dict SET seq = 16 WHERE data_dict_id = '3525ae28-a803-4e90-b258-96f312922682';
-UPDATE sys_dict SET seq = 17 WHERE data_dict_id = 'fa8cb544-21aa-4202-839e-7e9bdea24406';
-UPDATE sys_dict SET seq = 18 WHERE data_dict_id = 'ba03b65f-aa16-417f-b83b-55357f4feb39';
+INSERT INTO "sys_dict" ("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('3525ae28-a803-4e90-b258-96f312922682', 'ServiceType', '百度REST', 'BAIDUREST', NULL, 15, '8f2b6703-dcae-40ec-b17e-98c406e3fd79', NULL, 't', '2021-09-15 09:14:53.356024', 'sys_admin', '2021-09-15 09:20:31.449977', 'sys_admin', NULL, 't', NULL, '{"isDataService":false}');
+INSERT INTO "sys_dict" ("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('fa8cb544-21aa-4202-839e-7e9bdea24406', 'ServiceType', '谷歌REST', 'GOOGLEREST', NULL, 16, '8f2b6703-dcae-40ec-b17e-98c406e3fd79', NULL, 't', '2021-09-15 09:16:17.31042', 'sys_admin', '2021-09-15 09:20:25.202513', 'sys_admin', NULL, 't', NULL, '{"isDataService":false}');
+INSERT INTO "sys_dict" ("data_dict_id", "dict_code", "dict_name", "dict_value", "dict_class", "seq", "pid", "dict_desc", "status", "created_time", "created_by", "updated_time", "updated_by", "tenant_id", "visibility", "catalog_id", "ext_properties") VALUES ('ba03b65f-aa16-417f-b83b-55357f4feb39', 'ServiceType', '其它', 'OTHER', NULL, 17, '8f2b6703-dcae-40ec-b17e-98c406e3fd79', NULL, 't', '2021-09-15 09:21:38.636007', 'sys_admin', '2021-09-15 09:21:38.636007', 'sys_admin', NULL, 't', NULL, '{"isDataService":false}');
