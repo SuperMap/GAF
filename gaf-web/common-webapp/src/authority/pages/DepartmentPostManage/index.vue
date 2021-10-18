@@ -321,8 +321,10 @@ export default {
       if (res.isSuccessed) {
         this.activeKey = '6'
         this.dataOfTree = res.data
-        this.departmentList = this.dataOfTree[0].children.filter(item => item.type === 2)
-        this.postList = this.dataOfTree[0].children.filter(item => item.type === 3)
+        if (this.dataOfTree.children) {
+          this.departmentList = this.dataOfTree[0].children.filter(item => item.type === 2)
+          this.postList = this.dataOfTree[0].children.filter(item => item.type === 3)
+        }
         this.selectedNodeKeys = [this.dataOfTree[0].key]
       } else {
         this.$message.error(`查询失败,原因:${res.message}`)

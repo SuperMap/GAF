@@ -16,7 +16,7 @@
       <gaf-table-layout>
         <template #actions>
           <button @click="handleAdd" class="btn-fun blue btn-16">
-            <a-icon type="plus-circle" /><span>新增</span>
+            <a-icon type="plus-circle" /><span>注册</span>
           </button>
           <a-popconfirm
             class="btn-fun blue"
