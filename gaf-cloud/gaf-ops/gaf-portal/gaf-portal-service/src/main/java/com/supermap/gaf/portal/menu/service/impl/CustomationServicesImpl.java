@@ -20,6 +20,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -41,6 +42,10 @@ public class CustomationServicesImpl implements CustomationServices {
     private static Logger logger = LogUtil.getLocLogger(CustomationServicesImpl.class);
     @Autowired
     private MenuDao menuDao;
+    @Value("${gaf.portal.isNotLogin:false}")
+    private boolean isNotLogin;
+    @Value("${gaf.portal.defaultTenantId:tenant_000000}")
+    private String defaultTenantId;
 
     @Override
     public String queryCustomation(String tenantId) {
@@ -113,11 +118,13 @@ public class CustomationServicesImpl implements CustomationServices {
     public CustomationInfo queryConfig() {
         //String userName = "admin";
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
-        if (shiroUser == null) {
+        if (shiroUser == null && !isNotLogin) {
             return null;
         }
-        String tenantId = shiroUser.getTenantId();
-
+        String tenantId = defaultTenantId;
+        if (shiroUser != null) {
+            tenantId = shiroUser.getTenantId();
+        }
         return getCustomizedPortalConfig(tenantId);
     }
 

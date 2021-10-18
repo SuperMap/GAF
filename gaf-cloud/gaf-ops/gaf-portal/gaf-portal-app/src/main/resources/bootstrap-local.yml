@@ -23,6 +23,9 @@ gaf:
     port: '32222'
     server: 192.168.11.118
     username: admin
+  portal:
+    isNotLogin: true
+    defaultTenantId: tenant_000000
 management:
   endpoint:
     health:
