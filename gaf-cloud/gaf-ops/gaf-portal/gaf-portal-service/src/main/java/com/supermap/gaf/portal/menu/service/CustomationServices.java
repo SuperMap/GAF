@@ -32,6 +32,11 @@ public interface CustomationServices {
     CustomationInfo queryConfig();
 
     /**
+     * 查看默认定制信息
+     * @return
+     */
+    CustomationInfo queryDefaultConfig();
+    /**
      * 查询菜单列表
      *
      * @return

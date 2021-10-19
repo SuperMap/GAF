@@ -64,4 +64,18 @@ public class UserProfileResource {
             return new HashMap<String, Object>(16);
         }
     }
+    @ApiOperation(value = "查看默认定制信息", notes = "查看默认定制信息")
+    @Path("/detail/default")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Map<String, Object> queryUserDefaultProfileDetail() {
+        try {
+            Map<String, Object> variables = new HashMap<String, Object>(16);
+            variables.put("config", customationServices.queryDefaultConfig());
+            return variables;
+        } catch (Exception e) {
+            logger.error("查询用户画像详情异常", e);
+            return new HashMap<String, Object>(16);
+        }
+    }
 }

@@ -42,8 +42,6 @@ public class CustomationServicesImpl implements CustomationServices {
     private static Logger logger = LogUtil.getLocLogger(CustomationServicesImpl.class);
     @Autowired
     private MenuDao menuDao;
-    @Value("${gaf.portal.isNotLogin:false}")
-    private boolean isNotLogin;
     @Value("${gaf.portal.defaultTenantId:tenant_000000}")
     private String defaultTenantId;
 
@@ -118,16 +116,22 @@ public class CustomationServicesImpl implements CustomationServices {
     public CustomationInfo queryConfig() {
         //String userName = "admin";
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
-        if (shiroUser == null && !isNotLogin) {
+        if (shiroUser == null) {
             return null;
         }
-        String tenantId = defaultTenantId;
-        if (shiroUser != null) {
-            tenantId = shiroUser.getTenantId();
-        }
+        String tenantId = shiroUser.getTenantId();
         return getCustomizedPortalConfig(tenantId);
     }
-
+    @Override
+    public CustomationInfo queryDefaultConfig() {
+        if(defaultTenantId == null || "".equals(defaultTenantId)) {
+            return null;
+        }
+        CustomationInfo customizedPortalConfig = getCustomizedPortalConfig(defaultTenantId);
+        customizedPortalConfig.setUser(null);
+        customizedPortalConfig.setTenantId(null);
+        return customizedPortalConfig;
+    }
     @Override
     public List<MenuInfo> queryMenus() {
         List<MenuInfo> menuInfos = menuDao.queryMenus();
