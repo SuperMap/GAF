@@ -10,7 +10,6 @@ import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.supermap.gaf.common.storage.client.StorageClient;
-import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.commontypes.Page;
 import com.supermap.gaf.commontypes.tree.DefaultTreeNode;
 import com.supermap.gaf.data.mgt.commontype.SysResourceDatasource;
@@ -21,8 +20,6 @@ import com.supermap.gaf.data.mgt.vo.SysResourceDatasourceSelectVo;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.sys.mgt.client.SysDictClient;
-import com.supermap.gaf.sys.mgt.model.DictData;
-import com.supermap.gaf.sys.mgt.model.DictDataNode;
 import com.supermap.gaf.utils.TreeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -232,57 +229,46 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
 
     @Override
     public List<DefaultTreeNode> getTree() {
-        final MessageResult<List<DictDataNode>> mr = sysDictClient.getDictDataTree("NR_DATA_CATEGORY", null, 3, false);
-        if (!mr.isSuccessed()) {
-            throw new GafException("查询字典NR_DATA_CATEGORY失败，原因:"+mr.getMessage());
-        }
-
-        List<DictDataNode> dataSourceTypeTree = mr.getData();
         List<DefaultTreeNode> allNodes = new LinkedList<>();
-        Map<String, DictDataNode> codeMap = new HashMap<>(16);
-        TreeUtil.deepFirstTraverseTree(dataSourceTypeTree,(dictDataNode, iterator) -> {
-            DefaultTreeNode node = new DefaultTreeNode();
-            node.setKey(dictDataNode.getKey());
-            node.setParentId(dictDataNode.getParentId());
-            node.setTitle(dictDataNode.getLabel());
-            node.setSortSn(dictDataNode.getSeq());
-            DictData dictData = new DictData();
-            BeanUtils.copyProperties(dictDataNode, dictData);
-            node.setUserObject(dictData);
-            allNodes.add(node);
-            codeMap.putIfAbsent(dictDataNode.getValue(),dictDataNode);
-            return TreeUtil.VisitResult.CONTINUE;
-        });
+        DefaultTreeNode node1 = new DefaultTreeNode();
+        node1.setKey("file");
+        node1.setParentId("0");
+        node1.setTitle("文件型");
+        node1.setSortSn(1);
+        allNodes.add(node1);
+
+        DefaultTreeNode node2 = new DefaultTreeNode();
+        node2.setKey("database");
+        node2.setParentId("0");
+        node2.setTitle("数据库型");
+        node2.setSortSn(2);
+        allNodes.add(node2);
 
         SysResourceDatasourceSelectVo selectVo = new SysResourceDatasourceSelectVo();
         selectVo.setSdx(true);
         selectVo.setTemplate(false);
         List<SysResourceDatasource> datasources = sysResourceDatasourceMapper.selectList(selectVo);
-        Map<String, List<SysResourceDatasource>> groups = datasources.stream().peek(sysResourceDatasource -> sysResourceDatasource.setPassword(decrypt(sysResourceDatasource.getPassword(), secretKey))).collect(Collectors.groupingBy(SysResourceDatasource::getCatalogCode));
-        groups.forEach((catalogCode, sysResourceDatasources) -> {
-            if(sysResourceDatasources!=null && sysResourceDatasources.size() > 0) {
-                DictDataNode dictDataNode = codeMap.get(catalogCode);
-                if(dictDataNode != null) {
-                    int i = 0;
-                    for (SysResourceDatasource datasource : sysResourceDatasources) {
-                        datasource.setPassword(datasource.getPassword());
-                        DefaultTreeNode node = new DefaultTreeNode();
-                        node.setKey(datasource.getDatasourceId());
-                        node.setParentId(dictDataNode.getKey());
-                        node.setSortSn(i+1);
-                        node.setTitle(datasource.getDsName());
-                        DatasourceConnectionInfo datasourceConnectionInfo = new DatasourceConnectionInfo();
-                        BeanUtils.copyProperties(datasource, datasourceConnectionInfo);
-                        node.setUserObject(datasourceConnectionInfo);
-                        allNodes.add(node);
-                        i++;
-                    }
-                }
+        List<SysResourceDatasource> collect = datasources.stream().peek(sysResourceDatasource -> sysResourceDatasource.setPassword(decrypt(sysResourceDatasource.getPassword(), secretKey))).collect(Collectors.toList());
+        for (int i = 0; i < collect.size(); i++) {
+            SysResourceDatasource datasource = collect.get(i);
+            DefaultTreeNode node = new DefaultTreeNode();
+            node.setKey(datasource.getDatasourceId());
+            String typeCode = datasource.getTypeCode();
+            if ("UDBX".equals(typeCode) || "UDB".equals(typeCode)) {
+                node.setParentId("file");
+            } else {
+                node.setParentId("database");
             }
-        });
-        DictDataNode firstNode = dataSourceTypeTree.get(0);
+            node.setSortSn(i+1);
+            node.setTitle(datasource.getDsName());
+            DatasourceConnectionInfo datasourceConnectionInfo = new DatasourceConnectionInfo();
+            BeanUtils.copyProperties(datasource, datasourceConnectionInfo);
+            node.setUserObject(datasourceConnectionInfo);
+            allNodes.add(node);
+        }
+
         DefaultTreeNode root = new DefaultTreeNode();
-        root.setKey(firstNode.getParentId());
+        root.setKey("0");
         return TreeUtil.getChildren(root, allNodes, Comparator.comparingInt(DefaultTreeNode::getSortSn));
     }
 
