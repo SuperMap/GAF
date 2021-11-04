@@ -89,6 +89,7 @@
                 #{item}
             </foreach>
         </if>
+        <if test='null != addr'>AND addr = #{addr}</if>
         <if test='null != searchFieldName and null != searchFieldValue'>AND ${searchFieldName} LIKE CONCAT('%',
             #{searchFieldValue}, '%')
         </if>

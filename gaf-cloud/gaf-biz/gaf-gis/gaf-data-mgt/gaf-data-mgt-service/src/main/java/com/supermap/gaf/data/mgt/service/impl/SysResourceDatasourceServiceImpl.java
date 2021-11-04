@@ -27,6 +27,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotEmpty;
@@ -61,8 +63,7 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
     private String secretKey;
 
     public static void main(String[] args) {
-        String s = new SysResourceDatasourceServiceImpl().encrypt("root","1q2w3e4r5t6y7u8i");
-        System.out.println(s);
+        System.out.println(String.format("%s+:",null));
     }
     private String encrypt(String text, String secretKey) {
         if (StringUtils.isEmpty(secretKey)) {
@@ -146,8 +147,27 @@ public class SysResourceDatasourceServiceImpl implements SysResourceDatasourceSe
         return page;
     }
 
+
 	@Override
     public SysResourceDatasource insertSysResourceDatasource(SysResourceDatasource sysResourceDatasource) {
+        Assert.notNull(sysResourceDatasource.getAddr(),"addr不能为null");
+        Assert.notNull(sysResourceDatasource.getTypeCode(),"typeCode不能为null");
+        List<SysResourceDatasource>  exists = sysResourceDatasourceMapper.selectList(SysResourceDatasourceSelectVo.builder().addr(sysResourceDatasource.getAddr()).typeCodes(Arrays.asList(sysResourceDatasource.getTypeCode())).build());
+        boolean isFileType = ("UDB".equals(sysResourceDatasource.getTypeCode()) ||  "UDBX".equals(sysResourceDatasource.getTypeCode()));
+        if(!CollectionUtils.isEmpty(exists)){
+            if(isFileType){
+                throw new GafException("该数据源已注册");
+            }
+            String format = "%s:%s";
+            String cur = String.format(format,sysResourceDatasource.getPort(),sysResourceDatasource.getDbName());
+            for(SysResourceDatasource item:exists){
+                if(cur.equals(String.format(format,item.getPort(),item.getDbName()))){
+                    throw new GafException("该数据源已注册");
+                }
+            }
+        }
+
+
         sysResourceDatasource.setDatasourceId(UUID.randomUUID().toString());
         String notEncryptPassword = sysResourceDatasource.getPassword();
         if (!StringUtils.isEmpty(sysResourceDatasource.getPassword())) {
