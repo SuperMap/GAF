@@ -53,6 +53,10 @@ public class SysResourceDatasourceSelectVo {
 	@ApiParam("数据源分类")
 	@ApiModelProperty("数据源分类")
 	private String catalogCode;
+	@QueryParam("addr")
+	@ApiParam("数据源地址")
+	@ApiModelProperty("数据源地址")
+	private String addr;
 	@QueryParam("typeCodes")
 	@ApiParam("数据源类型集合")
 	@ApiModelProperty("数据源类型集合")
