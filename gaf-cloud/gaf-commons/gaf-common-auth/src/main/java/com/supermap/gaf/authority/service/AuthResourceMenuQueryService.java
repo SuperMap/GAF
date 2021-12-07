@@ -7,6 +7,9 @@ package com.supermap.gaf.authority.service;
 
 import com.supermap.gaf.authority.commontype.AuthResourceMenu;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * @author wxl
  * @date:2021/3/25 菜单服务类
@@ -19,5 +22,8 @@ public interface AuthResourceMenuQueryService {
      * @return
      */
     AuthResourceMenu getById(String resourceMenuId);
+
+
+    List<AuthResourceMenu> listByIds(Collection<String> resourceMenuIds);
 
 }

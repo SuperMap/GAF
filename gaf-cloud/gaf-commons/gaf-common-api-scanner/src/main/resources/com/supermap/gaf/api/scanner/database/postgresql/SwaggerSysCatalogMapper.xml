@@ -8,7 +8,6 @@
         <result column="name" jdbcType="VARCHAR" property="name" />
         <result column="type" jdbcType="VARCHAR" property="type" />
         <result column="code" jdbcType="VARCHAR" property="code" />
-        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
         <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
         <result column="description" jdbcType="VARCHAR" property="description" />
         <result column="status" jdbcType="BIT" property="status" />
@@ -20,15 +19,6 @@
         <result column="biz_type_code" jdbcType="VARCHAR" property="bizTypeCode" />
     </resultMap>
 
-    <resultMap id="TreeResultMap" type="com.supermap.gaf.api.scanner.entity.SysCatalog">
-        <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
-        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
-        <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
-        <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="type" jdbcType="VARCHAR" property="type" />
-        <result column="biz_type_code" jdbcType="VARCHAR" property="bizTypeCode" />
-    </resultMap>
-
     <sql id="Base_Column_List">
         catalog_id,
         parent_id,
@@ -36,7 +26,6 @@
         name,
         type,
         code,
-        sys_component_id,
         icon_url,
         description,
         status,
@@ -57,7 +46,6 @@
             <if test ='null != name'>name,</if>
             <if test ='null != type'>type,</if>
             <if test ='null != code'>code,</if>
-            <if test ='null != sysComponentId'>sys_component_id,</if>
             <if test ='null != iconUrl'>icon_url,</if>
             <if test ='null != description'>description,</if>
             <if test ='null != status'>status,</if>
@@ -75,7 +63,6 @@
             <if test ='null != name'>#{name},</if>
             <if test ='null != type'>#{type},</if>
             <if test ='null != code'>#{code},</if>
-            <if test ='null != sysComponentId'>#{sysComponentId},</if>
             <if test ='null != iconUrl'>#{iconUrl},</if>
             <if test ='null != description'>#{description},</if>
             <if test ='null != status'>#{status},</if>
@@ -102,7 +89,6 @@
             <if test ='null != name'>name = #{name} AND </if>
             <if test ='null != type'>type = #{type} AND </if>
             <if test ='null != code'>code = #{code} AND </if>
-            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
             <if test ='null != iconUrl'>icon_url = #{iconUrl} AND </if>
             <if test ='null != description'>description = #{description} AND </if>
             <if test ='null != status'>status = #{status} AND </if>
@@ -113,11 +99,6 @@
             <if test ='null != tenantId'>tenant_id = #{tenantId} AND </if>
             <if test ='null != bizTypeCode'>biz_type_code = #{bizTypeCode} AND </if>
         </trim>
-    </select>
-    <select id="getByComponentAndType" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List" />
-        FROM sys_catalog
-        WHERE sys_component_id = #{componentId} AND type = #{type} AND status = true
     </select>
 
 </mapper>

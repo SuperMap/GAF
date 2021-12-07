@@ -45,14 +45,6 @@ public interface SwaggerSysCatalogMapper {
      */
     List<SysCatalog> selectByCombination(SysCatalog queryCatalog);
 
-    /**
-     * 通过component和type获取目录
-     *
-     * @param componentId
-     * @param type
-     * @return
-     */
-    List<SysCatalog> getByComponentAndType(@Param("componentId") String componentId, @Param("type") String type);
 
 
 }

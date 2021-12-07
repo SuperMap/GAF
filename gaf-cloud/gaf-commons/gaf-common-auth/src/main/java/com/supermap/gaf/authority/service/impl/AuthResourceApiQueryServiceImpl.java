@@ -6,11 +6,14 @@
 package com.supermap.gaf.authority.service.impl;
 
 
-import com.supermap.gaf.authority.commontype.*;
+import com.supermap.gaf.authority.commontype.AuthResourceApi;
 import com.supermap.gaf.authority.dao.AuthResourceApiQueryMapper;
-import com.supermap.gaf.authority.service.*;
+import com.supermap.gaf.authority.service.AuthResourceApiQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -32,6 +35,11 @@ public class AuthResourceApiQueryServiceImpl implements AuthResourceApiQueryServ
     @Override
     public AuthResourceApi getById(String resourceApiId) {
         return authResourceApiQueryMapper.select(resourceApiId);
+    }
+
+    @Override
+    public List<AuthResourceApi> listByIds(Collection<String> ids) {
+        return authResourceApiQueryMapper.selectByIds(ids);
     }
 
 

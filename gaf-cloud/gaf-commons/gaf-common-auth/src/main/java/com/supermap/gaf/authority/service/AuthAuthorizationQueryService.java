@@ -5,7 +5,9 @@
  */
 package com.supermap.gaf.authority.service;
 
-import com.supermap.gaf.authority.commontype.*;
+import com.supermap.gaf.authority.commontype.AuthResourceApi;
+import com.supermap.gaf.authority.commontype.AuthResourceMenu;
+import com.supermap.gaf.authority.commontype.AuthRole;
 
 import java.util.List;
 
@@ -23,13 +25,6 @@ public interface AuthAuthorizationQueryService {
      * @return
      */
     List<AuthResourceApi> listAuthorizationApi(String userId);
-
-    /**
-     * 查询所有module接口权限
-     *
-     * @return
-     */
-    List<AuthResourceModule> listAuthorizationModule(String userId);
 
     /**
      * 查询人员菜单

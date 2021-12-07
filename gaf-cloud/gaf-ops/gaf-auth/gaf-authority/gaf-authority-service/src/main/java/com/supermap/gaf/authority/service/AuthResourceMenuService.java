@@ -6,6 +6,7 @@
 package com.supermap.gaf.authority.service;
 
 import com.supermap.gaf.authority.commontype.AuthResourceMenu;
+import com.supermap.gaf.authority.commontype.AuthResourceMenuNode;
 import com.supermap.gaf.authority.vo.AuthResourceMenuSelectVo;
 import com.supermap.gaf.authority.vo.TreeNode;
 
@@ -97,13 +98,6 @@ public interface AuthResourceMenuService {
      */
     AuthResourceMenu updateAuthResourceMenu(AuthResourceMenu authResourceMenu);
 
-    /**
-     * 查询某菜单分组下菜单的数量
-     *
-     * @param menuCatalogId 菜单分组目录id
-     * @return 若未查询到则返回0
-     */
-    Integer countByMenuCatalogId(String menuCatalogId);
 
     /**
      * 通过id集合查询菜单
@@ -111,5 +105,12 @@ public interface AuthResourceMenuService {
      * @param addMenuIdList 菜单id集合
      * @return 若未查询到则返回空集合
      */
-    List<AuthResourceMenu> getByIds(List<String> addMenuIdList);
+    List<AuthResourceMenu> listByIds(List<String> addMenuIdList);
+
+    /**
+     * 条件查询菜单树
+     * @param name 菜单名
+     * @return
+     */
+    List<AuthResourceMenuNode> getMenuTree(String name);
 }

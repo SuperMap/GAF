@@ -562,6 +562,7 @@ white-space: nowrap;
     box-shadow: 3px 3px 0 rgba(217, 217, 217, 0.3);
     border: none;
     color: white;
+    /* background-color: #329DFF; */
     background-color: rgb(84, 92, 100);
 }
 
@@ -759,14 +760,14 @@ button.ant-modal-close:hover {
 /* 模态框 组件 背景样式 */
 
 .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-    background-color: #329DFF;
-    color: white;
-    border: 1px solid #ccc;
+  background-color: #329DFF;
+  color: white;
+  border: 1px solid #ccc;
 }
 
 .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover {
-    background-color: #329DFF;
-    border: 1px solid #ccc;
+  background-color: #329DFF;
+  border: 1px solid #ccc;
 }
 
 .ant-radio-button-wrapper {
@@ -1107,4 +1108,7 @@ li.ant-menu-item.clicked .nuxt-link-active {
 
 .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
   min-width: 18px;
+}
+.ant-message {
+    z-index: 9999;
 }

@@ -40,10 +40,6 @@ public class AuthResourceApi implements Serializable {
     @ApiModelProperty("接口id")
     @Id
     private String resourceApiId;
-    @QueryParam("sysComponentId")
-    @NotNull
-    @ApiModelProperty("所属组件id")
-    private String sysComponentId;
     @QueryParam("apiCatalogId")
     @NotNull
     @ApiModelProperty("接口分组id")

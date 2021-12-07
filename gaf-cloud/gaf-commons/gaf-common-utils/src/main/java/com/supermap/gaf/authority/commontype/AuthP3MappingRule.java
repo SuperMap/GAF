@@ -33,9 +33,12 @@ public class AuthP3MappingRule {
     @NotNull
     @ApiModelProperty(value = "映射规则名称", example = "同步sinfcloud租户")
     private String mappingRuleName;
+
+    // todo: wxl 应该没用了
     @NotNull
     @ApiModelProperty("第三方组件")
     private String p3ComponentId;
+
     @NotNull
     @ApiModelProperty(value = "映射类型。1:租户，2：部门，3：用户", example = "1", allowableValues = "1,2,3")
     private String mappingType;
@@ -60,6 +63,7 @@ public class AuthP3MappingRule {
     @ApiModelProperty("其他参数")
     private String extraParamJson;
 
+    // todo: wxl 应该没用了
     // transient
     private String p3ComponentName;
     private boolean isMapped = false;

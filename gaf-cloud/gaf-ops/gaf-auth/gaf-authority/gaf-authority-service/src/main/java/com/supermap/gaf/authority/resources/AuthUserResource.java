@@ -190,6 +190,10 @@ public class AuthUserResource implements AuthUserClient {
      * @param username
      * @return
      */
+    @ApiOperation(value = "根据用户名查询用户部分信息", notes = "根据用户名查询用户部分信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", paramType = "path", dataType = "string", required = true)
+    })
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("/{username}/some-info")

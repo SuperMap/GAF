@@ -7,15 +7,15 @@ package com.supermap.gaf.api.scanner.service.impl;
 
 import com.supermap.gaf.api.scanner.dao.SwaggerSysCatalogMapper;
 import com.supermap.gaf.api.scanner.entity.SysCatalog;
-import com.supermap.gaf.api.scanner.entity.SysComponent;
-import com.supermap.gaf.api.scanner.enums.CatalogTypeEnum;
 import com.supermap.gaf.api.scanner.service.SwaggerSysCatalogService;
 import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -34,34 +34,8 @@ public class SwaggerSysCatalogServiceImpl implements SwaggerSysCatalogService {
     private static final String ROOT_PARENT_ID = "0";
 
 
-    /**
-     * 插入组件对应的根目录
-     *
-     * @param sysComponent 组件
-     * @param catalogType  参考 CatalogTypeEnum 只能是CatalogTypeEnum.MODULE_GROUP_TYPE;CatalogTypeEnum.API_GROUP_TYPE
-     * @return
-     */
-    @Override
-    public boolean insertSysCatlog(SysComponent sysComponent, CatalogTypeEnum catalogType) {
-        SysCatalog build = SysCatalog.builder()
-                .parentId(ROOT_PARENT_ID)
-                .type(catalogType.getValue())
-                .sysComponentId(sysComponent.getSysComponentId())
-                .name(sysComponent.getNameCn())
-                .status(true)
-                .description(sysComponent.getNameCn() + "默认根目录")
-                .build();
-        this.insertSysCatalog(build);
-        batchSortAndCodeService.revisionSortSnForInsertOrDelete(SysCatalog.class, Arrays.asList(build.getParentId()));
-        return true;
-    }
-
-
     @Override
     public SysCatalog insertSysCatalog(SysCatalog sysCatalog) {
-        if (sysCatalog.getSysComponentId() != null && sysCatalog.getTenantId() != null) {
-            throw new RuntimeException("插入目录异常，目录数据不能同时包含组件id和租户id");
-        }
         sysCatalog.setCatalogId(UUID.randomUUID().toString());
         SysCatalog queryCatalog = SysCatalog.builder().type(sysCatalog.getType()).parentId(sysCatalog.getParentId()).status(true).build();
         List<SysCatalog> sameLevels = swaggerSysCatalogMapper.selectByCombination(queryCatalog);
@@ -76,9 +50,6 @@ public class SwaggerSysCatalogServiceImpl implements SwaggerSysCatalogService {
             }
             if (parentCatalog.getTenantId() != null) {
                 sysCatalog.setTenantId(parentCatalog.getTenantId());
-            }
-            if (parentCatalog.getSysComponentId() != null) {
-                sysCatalog.setSysComponentId(parentCatalog.getSysComponentId());
             }
             if (!StringUtils.isEmpty(parentCatalog.getBizTypeCode())) {
                 sysCatalog.setBizTypeCode(parentCatalog.getBizTypeCode());
@@ -97,8 +68,11 @@ public class SwaggerSysCatalogServiceImpl implements SwaggerSysCatalogService {
 
 
     @Override
-    public List<SysCatalog> getByComponentAndType(String componentId, String type) {
-        return swaggerSysCatalogMapper.getByComponentAndType(componentId, type);
+    public List<SysCatalog> listByType( String type) {
+        SysCatalog queryCatalog = new SysCatalog();
+        queryCatalog.setStatus(true);
+        queryCatalog.setType(type);
+        return swaggerSysCatalogMapper.selectByCombination(queryCatalog);
     }
 
 

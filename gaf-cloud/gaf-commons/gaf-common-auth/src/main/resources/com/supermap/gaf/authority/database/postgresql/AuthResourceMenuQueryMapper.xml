@@ -3,31 +3,30 @@
 <mapper namespace="com.supermap.gaf.authority.dao.AuthResourceMenuQueryMapper">
     <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthResourceMenu">
         <result column="resource_menu_id" jdbcType="VARCHAR" property="resourceMenuId" />
-        <result column="menu_catalog_id" jdbcType="VARCHAR" property="menuCatalogId" />
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
         <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="resource_module_id" jdbcType="VARCHAR" property="resourceModuleId" />
-        <result column="params" jdbcType="VARCHAR" property="params" />
+        <result column="target" jdbcType="VARCHAR" property="target" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
         <result column="icon" jdbcType="VARCHAR" property="icon" />
-        <result column="visible" jdbcType="BIT" property="visible" />
-        <result column="status" jdbcType="BIT" property="status" />
         <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="status" jdbcType="BIT" property="status" />
         <result column="description" jdbcType="VARCHAR" property="description" />
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
         <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
         <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
     </resultMap>
-
     <sql id="Base_Column_List">
         resource_menu_id,
-        menu_catalog_id,
+        parent_id,
         name,
-        resource_module_id,
-        params,
+        target,
+        path,
+        url,
         icon,
-        visible,
-        status,
         sort_sn,
+        status,
         description,
         created_time,
         created_by,
@@ -38,6 +37,14 @@
         SELECT <include refid="Base_Column_List" />
         FROM "auth_resource_menu"
         WHERE resource_menu_id = #{resourceMenuId} AND status = true
+    </select>
+    <select id="selectByIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_menu"
+        WHERE resource_menu_id IN
+        <foreach collection="menuIdList" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </select>
 
 </mapper>

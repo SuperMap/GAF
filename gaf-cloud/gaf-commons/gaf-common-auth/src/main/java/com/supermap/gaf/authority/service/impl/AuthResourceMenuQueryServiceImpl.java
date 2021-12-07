@@ -11,6 +11,9 @@ import com.supermap.gaf.authority.service.AuthResourceMenuQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * @author wxl
  * @date:2021/3/25 菜单服务类
@@ -28,5 +31,10 @@ public class AuthResourceMenuQueryServiceImpl implements AuthResourceMenuQuerySe
     @Override
     public AuthResourceMenu getById(String resourceMenuId) {
         return authResourceMenuMapper.select(resourceMenuId);
+    }
+
+    @Override
+    public List<AuthResourceMenu> listByIds(Collection<String> resourceMenuIds) {
+        return  authResourceMenuMapper.selectByIds(resourceMenuIds);
     }
 }

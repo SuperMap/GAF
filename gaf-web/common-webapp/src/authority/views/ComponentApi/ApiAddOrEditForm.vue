@@ -15,24 +15,6 @@
         :wrapper-col="{ span: 19 }"
         layout="horizontal"
       >
-        <a-form-item v-show="false" label="所属组件id">
-          <a-input
-            :disabled="operation === 1"
-            v-decorator="[
-              'sysComponentId',
-              {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入所属组件id'
-                  }
-                ]
-              }
-            ]"
-            placeholder="请输入所属组件id"
-            allow-clear
-          />
-        </a-form-item>
         <a-form-item v-show="false" label="API组id">
           <a-input
             :disabled="operation === 1"
@@ -145,7 +127,7 @@
             button-style="solid"
           >
             <a-radio-button value="1">
-              应用组件资源
+              系统资源
             </a-radio-button>
             <a-radio-button value="2">
               第三方资源
@@ -224,10 +206,6 @@ export default {
       type: Number,
       default: 0
     },
-    componentId: {
-      type: String,
-      default: ''
-    },
     apiGroupId: {
       type: String,
       default: ''
@@ -292,7 +270,6 @@ export default {
       copyData.updatedTime = moment(new Date(copyData.updatedTime))
     this.addOrEditForm.setFieldsValue({ ...copyData })
     this.addOrEditForm.setFieldsValue({
-      sysComponentId: this.componentId,
       apiCatalogId: this.apiGroupId
     })
   },

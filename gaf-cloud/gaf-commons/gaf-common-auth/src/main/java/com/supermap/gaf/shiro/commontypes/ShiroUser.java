@@ -6,7 +6,7 @@
 package com.supermap.gaf.shiro.commontypes;
 
 import com.supermap.gaf.authority.commontype.AuthResourceApi;
-import com.supermap.gaf.authority.commontype.AuthResourceModule;
+import com.supermap.gaf.authority.commontype.AuthResourceMenu;
 import com.supermap.gaf.authority.commontype.AuthRole;
 import com.supermap.gaf.authority.commontype.AuthUser;
 
@@ -94,17 +94,19 @@ public class ShiroUser extends com.supermap.gaf.commontypes.ShiroUser implements
      */
     private AuthUser authUser;
     /**
+     * 用户角色列表
+     */
+    private List<AuthRole> authRoles;
+    /**
      * 用户api权限
      */
     private List<AuthResourceApi> authResourceApis;
     /**
-     * 用户模块列表
+     * 用户的菜单信息
      */
-    private List<AuthResourceModule> authResourceModules;
-    /**
-     * 用户角色列表
-     */
-    private List<AuthRole> authRoles;
+    private List<AuthResourceMenu> authResourceMenus;
+
+
 
     public AuthUser getAuthUser() {
         return authUser;
@@ -122,12 +124,12 @@ public class ShiroUser extends com.supermap.gaf.commontypes.ShiroUser implements
         this.authResourceApis = authResourceApis;
     }
 
-    public List<AuthResourceModule> getAuthResourceModules() {
-        return authResourceModules;
+    public List<AuthResourceMenu> getAuthResourceMenus() {
+        return authResourceMenus;
     }
 
-    public void setAuthResourceModules(List<AuthResourceModule> authResourceModules) {
-        this.authResourceModules = authResourceModules;
+    public void setAuthResourceMenus(List<AuthResourceMenu> authResourceMenus) {
+        this.authResourceMenus = authResourceMenus;
     }
 
     public List<AuthRole> getAuthRoles() {

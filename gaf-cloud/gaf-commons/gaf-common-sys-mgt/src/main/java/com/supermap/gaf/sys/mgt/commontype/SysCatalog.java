@@ -63,10 +63,7 @@ public class SysCatalog implements Serializable {
     @QueryParam("code")
     @ApiModelProperty("编码。暂时无用")
     private String code;
-    @QueryParam("sysComponentId")
-    @NotNull
-    @ApiModelProperty("所属组件")
-    private String sysComponentId;
+
     @QueryParam("iconUrl")
     @ApiModelProperty("图标地址")
     private String iconUrl;

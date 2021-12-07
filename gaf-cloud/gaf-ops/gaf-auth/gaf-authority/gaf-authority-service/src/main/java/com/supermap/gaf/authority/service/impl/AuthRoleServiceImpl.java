@@ -189,6 +189,10 @@ public class AuthRoleServiceImpl implements AuthRoleService {
         String tenantId = Objects.requireNonNull(shiroUser).getTenantId();
         authRole.setTenantId(tenantId);
         authRole.setCreatedBy(shiroUser.getAuthUser().getName());
+        authRole.setUpdatedBy(shiroUser.getAuthUser().getName());
+        Date now = new Date();
+        authRole.setCreatedTime(now);
+        authRole.setUpdatedTime(now);
         authRole.setType(AuthRoleTypeEnum.Tenant.typeValue);
         authRole.setRoleId(UUID.randomUUID().toString());
 
@@ -237,6 +241,9 @@ public class AuthRoleServiceImpl implements AuthRoleService {
             throw new GafException("更新失败，不是有效的角色");
         }
         checkUniqueness(authRole, true);
+        ShiroUser shiroUser = SecurityUtilsExt.getUser();
+        authRole.setUpdatedBy(shiroUser.getAuthUser().getName());
+        authRole.setUpdatedTime(new Date());
         authRoleMapper.update(authRole);
         String parentId = authRole.getRoleCatalogId() != null ? authRole.getRoleCatalogId() : authRoleExist.getRoleCatalogId();
         batchSortAndCodeService.revisionSortSnForUpdate(AuthRole.class, parentId, authRoleExist.getSortSn(), authRole.getSortSn());

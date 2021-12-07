@@ -8,7 +8,6 @@
         <result column="name" jdbcType="VARCHAR" property="name" />
         <result column="type" jdbcType="VARCHAR" property="type" />
         <result column="code" jdbcType="VARCHAR" property="code" />
-        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
         <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
         <result column="description" jdbcType="VARCHAR" property="description" />
         <result column="status" jdbcType="BIT" property="status" />
@@ -36,7 +35,6 @@
         name,
         type,
         code,
-        sys_component_id,
         icon_url,
         description,
         status,
@@ -126,7 +124,6 @@
             <if test ='null != name'>name = #{name} AND </if>
             <if test ='null != type'>type = #{type} AND </if>
             <if test ='null != code'>code = #{code} AND </if>
-            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
             <if test ='null != iconUrl'>icon_url = #{iconUrl} AND </if>
             <if test ='null != description'>description = #{description} AND </if>
             <if test ='null != status'>status = #{status} AND </if>
@@ -148,7 +145,6 @@
             <if test ='null != name'>name = #{name} AND </if>
             <if test ='null != type'>type = #{type} AND </if>
             <if test ='null != code'>code = #{code} AND </if>
-            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
             <if test ='null != iconUrl'>icon_url = #{iconUrl} AND </if>
             <if test ='null != description'>description = #{description} AND </if>
             <if test ='null != status'>status = #{status} AND </if>
@@ -169,7 +165,6 @@
 				<if test ='null != name'>name,</if>
 				<if test ='null != type'>type,</if>
 				<if test ='null != code'>code,</if>
-				<if test ='null != sysComponentId'>sys_component_id,</if>
 				<if test ='null != iconUrl'>icon_url,</if>
 				<if test ='null != description'>description,</if>
 				<if test ='null != status'>status,</if>
@@ -187,7 +182,6 @@
 				<if test ='null != name'>#{name},</if>
 				<if test ='null != type'>#{type},</if>
 				<if test ='null != code'>#{code},</if>
-				<if test ='null != sysComponentId'>#{sysComponentId},</if>
 				<if test ='null != iconUrl'>#{iconUrl},</if>
 				<if test ='null != description'>#{description},</if>
 				<if test ='null != status'>#{status},</if>
@@ -202,7 +196,7 @@
 	<insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO "sys_catalog"(<include refid="Base_Column_List" />) VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (  #{item.catalogId}  ,  #{item.parentId}  ,  #{item.sortSn}  ,  #{item.name}  ,  #{item.type}  ,  #{item.code}  ,  #{item.sysComponentId}  ,  #{item.iconUrl}  ,  #{item.description}  ,  #{item.status}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy} , #{item.tenantId}, #{item.bizTypeCode} )
+            (  #{item.catalogId}  ,  #{item.parentId}  ,  #{item.sortSn}  ,  #{item.name}  ,  #{item.type}  ,  #{item.code}  ,   #{item.iconUrl}  ,  #{item.description}  ,  #{item.status}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy} , #{item.tenantId}, #{item.bizTypeCode} )
         </foreach>
     </insert>
 	<delete id="batchDelete" parameterType="java.util.List">
@@ -223,8 +217,7 @@
 				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>				
 				<if test ='null != name'>name = #{name},</if>				
 				<if test ='null != type'>type = #{type},</if>				
-				<if test ='null != code'>code = #{code},</if>				
-				<if test ='null != sysComponentId'>sys_component_id = #{sysComponentId},</if>				
+				<if test ='null != code'>code = #{code},</if>
 				<if test ='null != iconUrl'>icon_url = #{iconUrl},</if>				
 				<if test ='null != description'>description = #{description},</if>				
 				<if test ='null != status'>status = #{status},</if>
@@ -256,7 +249,6 @@
             <if test ='null != queryCondition.name'>name = #{queryCondition.name} AND </if>
             <if test ='null != queryCondition.type'>type = #{queryCondition.type} AND </if>
             <if test ='null != queryCondition.code'>code = #{queryCondition.code} AND </if>
-            <if test ='null != queryCondition.sysComponentId'>sys_component_id = #{queryCondition.sysComponentId} AND </if>
             <if test ='null != queryCondition.iconUrl'>icon_url = #{queryCondition.iconUrl} AND </if>
             <if test ='null != queryCondition.description'>description = #{queryCondition.description} AND </if>
             <if test ='null != queryCondition.status'>status = #{queryCondition.status} AND </if>
@@ -270,12 +262,6 @@
         AND #{endSortSn} > sort_sn
         AND sort_sn > #{startSortSn}
     </update>
-
-    <select id="getByComponentAndType" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List" />
-        FROM sys_catalog
-        WHERE sys_component_id = #{componentId} AND type = #{type} AND status = true
-    </select>
     <select id="selectByCondition" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM sys_catalog
@@ -288,7 +274,6 @@
             <if test ='null != queryCatalog.name'>name = #{queryCatalog.name} AND </if>
             <if test ='null != queryCatalog.type'>type = #{queryCatalog.type} AND </if>
             <if test ='null != queryCatalog.code'>code = #{queryCatalog.code} AND </if>
-            <if test ='null != queryCatalog.sysComponentId'>sys_component_id = #{queryCatalog.sysComponentId} AND </if>
             <if test ='null != queryCatalog.iconUrl'>icon_url = #{queryCatalog.iconUrl} AND </if>
             <if test ='null != queryCatalog.description'>description = #{queryCatalog.description} AND </if>
             <if test ='null != queryCatalog.status'>status = #{queryCatalog.status} AND </if>

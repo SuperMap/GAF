@@ -3,14 +3,14 @@
 <mapper namespace="com.supermap.gaf.authority.dao.AuthResourceMenuMapper">
     <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthResourceMenu">
         <result column="resource_menu_id" jdbcType="VARCHAR" property="resourceMenuId" />
-        <result column="menu_catalog_id" jdbcType="VARCHAR" property="menuCatalogId" />
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
         <result column="name" jdbcType="VARCHAR" property="name" />
-        <result column="resource_module_id" jdbcType="VARCHAR" property="resourceModuleId" />
-        <result column="params" jdbcType="VARCHAR" property="params" />
+        <result column="target" jdbcType="VARCHAR" property="target" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
         <result column="icon" jdbcType="VARCHAR" property="icon" />
-        <result column="visible" jdbcType="BIT" property="visible" />
-        <result column="status" jdbcType="BIT" property="status" />
         <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
+        <result column="status" jdbcType="BIT" property="status" />
         <result column="description" jdbcType="VARCHAR" property="description" />
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
         <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
@@ -20,14 +20,14 @@
 
     <sql id="Base_Column_List">
         resource_menu_id,
-        menu_catalog_id,
+        parent_id,
         name,
-        resource_module_id,
-        params,
+        target,
+        path,
+        url,
         icon,
-        visible,
-        status,
         sort_sn,
+        status,
         description,
         created_time,
         created_by,
@@ -68,7 +68,7 @@
         <if test ='null != fieldName'>AND ${fieldName} = #{fieldValue}</if>
     </select>
     <select id="bigOffsetPageList" resultMap="BaseResultMap">
-        SELECT  a.resource_menu_id, a.menu_catalog_id, a.name, a.resource_module_id,a.params, a.icon, a.visible, a.status, a.sort_sn, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_resource_menu" a,(
+        SELECT  a.resource_menu_id, a.parent_id,a.name,a.target,a.path,a.url, a.icon,  a.sort_sn, a.status, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_resource_menu" a,(
             select resource_menu_id 
             From "auth_resource_menu"
             WHERE status = true
@@ -88,14 +88,14 @@
         WHERE
         <trim suffixOverrides="AND">
             <if test ='null != resourceMenuId'>resource_menu_id = #{resourceMenuId} AND </if>
-            <if test ='null != menuCatalogId'>menu_catalog_id = #{menuCatalogId} AND </if>
+            <if test ='null != parentId'>parent_id = #{parentId} AND </if>
             <if test ='null != name'>name = #{name} AND </if>
-            <if test ='null != resourceModuleId'>resource_module_id = #{resourceModuleId} AND </if>
-            <if test ='null != params'>params = #{params} AND </if>
+            <if test ='null != target'>target = #{target} AND </if>
+            <if test ='null != path'>path = #{path} AND </if>
+            <if test ='null != url'>url = #{url} AND </if>
             <if test ='null != icon'>icon = #{icon} AND </if>
-            <if test ='null != visible'>visible = #{visible} AND </if>
-            <if test ='null != status'>status = #{status} AND </if>
             <if test ='null != sortSn'>sort_sn = #{sortSn} AND </if>
+            <if test ='null != status'>status = #{status} AND </if>
             <if test ='null != description'>description = #{description} AND </if>
             <if test ='null != createdTime'>created_time = #{createdTime} AND </if>
             <if test ='null != createdBy'>created_by = #{createdBy} AND </if>
@@ -108,6 +108,13 @@
         FROM "auth_resource_menu"
         where status = true
     </select>
+    <select id="listMenusByName" resultType="com.supermap.gaf.authority.commontype.AuthResourceMenu">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_menu"
+        where status = true
+        <if test ='null != name'>AND name LIKE CONCAT('%',#{name},'%')</if>
+
+    </select>
     <select id="selectByIds" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM "auth_resource_menu"
@@ -116,26 +123,27 @@
             #{id}
         </foreach>
     </select>
-    <select id="selectByModuleIds" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List" />
+    <select id="selectIdsByParentIds" resultType="java.lang.String">
+        SELECT resource_menu_id
         FROM "auth_resource_menu"
-        WHERE status = true AND resource_module_id IN
-        <foreach collection="moduleIdList" index="index" item="id" open="(" close=")" separator=",">
-            #{id}
+        WHERE status = true AND parent_id IN
+        <foreach collection="parentIds" index="index" item="parentId" open="(" close=")" separator=",">
+            #{parentId}
         </foreach>
     </select>
+
     <insert id="insert" useGeneratedKeys="true" keyColumn="resource_menu_id" keyProperty="resourceMenuId" parameterType="com.supermap.gaf.authority.commontype.AuthResourceMenu">
         INSERT INTO "auth_resource_menu"
         <trim prefix="(" suffix=")" suffixOverrides=",">
 				<if test ='null != resourceMenuId'>resource_menu_id,</if>
-				<if test ='null != menuCatalogId'>menu_catalog_id,</if>
+				<if test ='null != parentId'>parent_id,</if>
 				<if test ='null != name'>name,</if>
-				<if test ='null != resourceModuleId'>resource_module_id,</if>
-                <if test ='null != params'>params,</if>
+				<if test ='null != target'>target,</if>
+				<if test ='null != path'>path,</if>
+				<if test ='null != url'>url,</if>
 				<if test ='null != icon'>icon,</if>
-				<if test ='null != visible'>visible,</if>
-				<if test ='null != status'>status,</if>
-				<if test ='null != sortSn'>sort_sn,</if>
+                <if test ='null != sortSn'>sort_sn,</if>
+                <if test ='null != status'>status,</if>
 				<if test ='null != description'>description,</if>
 				created_time,
 				<if test ='null != createdBy'>created_by,</if>
@@ -144,14 +152,14 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 				<if test ='null != resourceMenuId'>#{resourceMenuId},</if>
-				<if test ='null != menuCatalogId'>#{menuCatalogId},</if>
+				<if test ='null != parentId'>#{parentId},</if>
 				<if test ='null != name'>#{name},</if>
-				<if test ='null != resourceModuleId'>#{resourceModuleId},</if>
-                <if test ='null != params'>#{params},</if>
+				<if test ='null != target'>#{target},</if>
+				<if test ='null != path'>#{path},</if>
+				<if test ='null != url'>#{url},</if>
 				<if test ='null != icon'>#{icon},</if>
-				<if test ='null != visible'>#{visible},</if>
-				<if test ='null != status'>#{status},</if>
-				<if test ='null != sortSn'>#{sortSn},</if>
+                <if test ='null != sortSn'>#{sortSn},</if>
+                <if test ='null != status'>#{status},</if>
 				<if test ='null != description'>#{description},</if>
 				now(),
 				<if test ='null != createdBy'>#{createdBy},</if>
@@ -162,8 +170,8 @@
 	<insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO "auth_resource_menu"(<include refid="Base_Column_List" />) VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (  #{item.resourceMenuId}  ,  #{item.menuCatalogId}  ,  #{item.name}  ,  #{item.resourceModuleId}  ,  #{item.params} ,
-             #{item.icon}  ,  #{item.visible}  ,  #{item.status}  ,  #{item.sortSn}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+            (  #{item.resourceMenuId}  ,  #{parentId}  , #{item.name}  , #{item.target}  ,#{item.path}  ,#{item.url}  ,
+             #{item.icon}  ,   #{item.sortSn}  , #{item.status}  , #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
         </foreach>
     </insert>
 	<delete id="batchDelete" parameterType="java.util.List">
@@ -173,21 +181,27 @@
             #{id}
         </foreach>
     </delete>
-	<delete id="delete" >
+	<update id="delete" >
         UPDATE "auth_resource_menu" SET status = false
         WHERE resource_menu_id = #{resourceMenuId} AND status = true
-    </delete>
+    </update>
+    <update id="deleteByIds">
+        UPDATE "auth_resource_menu" SET status = false
+        WHERE resource_menu_id IN
+        <foreach collection="ids" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
     <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthResourceMenu">
         UPDATE "auth_resource_menu"
         <set>
-				<if test ='null != menuCatalogId'>menu_catalog_id = #{menuCatalogId},</if>				
-				<if test ='null != name'>name = #{name},</if>				
-				<if test ='null != resourceModuleId'>resource_module_id = #{resourceModuleId},</if>
-                params = #{params},
+				parent_id = #{parentId},
+				<if test ='null != name'>name = #{name},</if>
+				<if test ='null != target'>target = #{target},</if>
+				<if test ='null != path'>path = #{path},</if>
+				<if test ='null != url'>name = #{url},</if>
                 <if test ='null != icon'>icon = #{icon},</if>
-				<if test ='null != visible'>visible = #{visible},</if>				
-				<if test ='null != status'>status = #{status},</if>				
-				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>				
+                <if test ='null != sortSn'>sort_sn = #{sortSn},</if>
 				<if test ='null != description'>description = #{description},</if>
 				updated_time = now(),
 				<if test ='null != updatedBy'>updated_by = #{updatedBy},</if>				

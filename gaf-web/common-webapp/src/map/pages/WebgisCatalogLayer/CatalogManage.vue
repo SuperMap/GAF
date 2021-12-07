@@ -122,7 +122,6 @@
         parentId: '0',
         parentPath: ['0'],
         type: 6,
-        sysComponentId: '',
       },
       operation: 'add',
       // ew
@@ -346,7 +345,6 @@
                   parentId: catalogAndParentPath.catalogId,
                   parentPath: catalogAndParentPath.parentPath,
                   type: catalogAndParentPath.type,
-                  sysComponentId: catalogAndParentPath.sysComponentId,
                 }
               }
             )
@@ -362,7 +360,6 @@
           parentId: '0',
           parentPath: ['0'],
           type: this.catalogType,
-          sysComponentId: '',
         }
       }
     },

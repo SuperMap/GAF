@@ -7,6 +7,7 @@ package com.supermap.gaf.authority.service;
 
 import com.supermap.gaf.authority.commontype.AuthResourceApi;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,4 +25,10 @@ public interface AuthResourceApiQueryService {
     AuthResourceApi getById(String resourceApiId);
 
 
+    /**
+     * 根据id集合查询api资源
+     * @param ids
+     * @return
+     */
+    List<AuthResourceApi> listByIds(Collection<String> ids);
 }

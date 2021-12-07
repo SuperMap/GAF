@@ -53,11 +53,11 @@ public class SysCatalog implements Serializable {
     private String type;
     @ApiModelProperty("编码")
     private String code;
-    @NotNull
-    @ApiModelProperty("所属组件")
-    private String sysComponentId;
+
     @ApiModelProperty("图标地址")
     private String iconUrl;
+
+
     @ApiModelProperty("描述")
     private String description;
     @NotNull

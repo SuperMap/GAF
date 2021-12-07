@@ -205,7 +205,6 @@
               parentId: catalogAndParentPath.catalogId,
               parentPath: catalogAndParentPath.parentPath,
               type: catalogAndParentPath.type,
-              sysComponentId: catalogAndParentPath.sysComponentId
             }
           }
         )

@@ -8,7 +8,6 @@ package com.supermap.gaf.api.scanner.service.impl;
 import com.supermap.gaf.api.scanner.dao.SwaggerApiDocMapper;
 import com.supermap.gaf.api.scanner.entity.ApiDoc;
 import com.supermap.gaf.api.scanner.service.SwaggerApiDocService;
-import com.supermap.gaf.api.scanner.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

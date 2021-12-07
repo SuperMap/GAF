@@ -5,11 +5,10 @@
  */
 package com.supermap.gaf.utils;
 
+import com.supermap.gaf.commontypes.tree.INode;
 import com.supermap.gaf.commontypes.tree.ITreeNode;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -21,6 +20,55 @@ import java.util.stream.Collectors;
  * @date:2021/3/25
  */
 public class TreeUtil {
+
+    public static final String ROOT_PARENT_NODE_KEY =  "0";
+    /**
+     * 将非树形结构的树节点组织为树形结构
+     * 注意：树形结构的叶子节点的children为null
+     *
+     * @param all        所有树节点
+     * @param comparator 比较器
+     * @param <K>        树节点唯一标识类型
+     * @param <N>        树节点类型
+     * @return 若所有树节点为null或者空，则返回空集合
+     */
+    public static <K, N extends ITreeNode<K, N>> List<N> build(List<N> all,Comparator<? super N> comparator) {
+        if (all == null || all.isEmpty()) return Collections.emptyList();
+        Map<K, N> map = all.stream().collect(Collectors.toMap(INode::getKey, n -> n));
+        Set<K> rootParentIds = all.stream().filter(n -> !map.containsKey(n.getParentId())).map(INode::getParentId).collect(Collectors.toSet());
+        List<N> result = new LinkedList<>();
+        for (N n : all) {
+            K parentId = n.getParentId();
+            if (!rootParentIds.contains(parentId)) {
+                N parentNode = map.get(parentId);
+                if (parentNode != null) {
+                    List<N> children = parentNode.getChildren();
+                    if (children == null) {
+                        children = new LinkedList<>();
+                        parentNode.setChildren(children);
+                    }
+                    children.add(n);
+                }
+            } else {
+                result.add(n);
+            }
+        }
+        for (N n : all) {
+            List<N> children = n.getChildren();
+            if (children != null) {
+                children.sort(comparator);
+                n.setLeaf(false);
+            } else {
+                n.setLeaf(true);
+            }
+        }
+        result.sort(comparator);
+        return result;
+    }
+
+
+
+
 
     /**
      * 将非树形结构的树节点组织为树形结构

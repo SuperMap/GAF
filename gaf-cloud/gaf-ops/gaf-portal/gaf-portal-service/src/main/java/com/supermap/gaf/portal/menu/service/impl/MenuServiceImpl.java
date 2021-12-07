@@ -7,7 +7,6 @@ package com.supermap.gaf.portal.menu.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.supermap.gaf.authority.commontype.AuthResourceMenu;
-import com.supermap.gaf.authority.commontype.AuthResourceModule;
 import com.supermap.gaf.authority.service.AuthAuthorizationQueryService;
 import com.supermap.gaf.portal.menu.commontypes.MenuInfo;
 import com.supermap.gaf.portal.menu.dao.MenuDao;
@@ -15,13 +14,13 @@ import com.supermap.gaf.portal.menu.service.MenuService;
 import com.supermap.gaf.portal.menu.utils.MenuManager;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.ShiroUser;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author:yw
@@ -154,38 +153,12 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuInfo> queryMenuFromAuthority() {
-        String msg;
-        boolean success;
-        List<MenuInfo> menuInfos = new ArrayList<>();
         ShiroUser shiroUser = SecurityUtilsExt.getUser();
         if (null == shiroUser) {
-            return menuInfos;
+            return Collections.emptyList();
         }
         List<AuthResourceMenu> authResourceMenus = authAuthorizationQueryService.listAuthorizationMenu(shiroUser.getId());
-        if (CollectionUtils.isNotEmpty(authResourceMenus)) {
-            // 去掉根节点 并将根节点下的节点的menuCatalogId设置为""
-            Set<String> rootMenuIds = new HashSet<>();
-            Iterator<AuthResourceMenu> iterator = authResourceMenus.iterator();
-            for (; iterator.hasNext(); ) {
-                AuthResourceMenu menu = iterator.next();
-                if ("0".equals(menu.getMenuCatalogId())) {
-                    rootMenuIds.add(menu.getResourceMenuId());
-                    iterator.remove();
-                }
-            }
-            authResourceMenus.forEach(authResourceMenu -> {
-                if (rootMenuIds.contains(authResourceMenu.getMenuCatalogId())) {
-                    authResourceMenu.setMenuCatalogId("");
-                }
-                menuInfos.add(convertMenu(authResourceMenu));
-            });
-            success = true;
-            msg = "查询菜单成功";
-        } else {
-            success = false;
-            msg = "查询不到菜单信息";
-        }
-        return menuInfos;
+        return authResourceMenus.stream().map(this::convertMenu).collect(Collectors.toList());
     }
 
     private MenuInfo convertMenu(AuthResourceMenu authResourceMenu) {
@@ -195,7 +168,11 @@ public class MenuServiceImpl implements MenuService {
         menuInfo.setEmbedUrl("");
 
         menuInfo.setId(authResourceMenu.getResourceMenuId());
-        menuInfo.setPid(authResourceMenu.getMenuCatalogId());
+        if (StringUtils.isEmpty(authResourceMenu.getParentId())) {
+            menuInfo.setPid("");
+        } else {
+            menuInfo.setPid(authResourceMenu.getParentId());
+        }
 
         menuInfo.setName(authResourceMenu.getName());
         if (StringUtils.isEmpty(authResourceMenu.getIcon())) {
@@ -208,74 +185,22 @@ public class MenuServiceImpl implements MenuService {
         } else {
             menuInfo.setOrder(authResourceMenu.getSortSn());
         }
-
-        //菜单的模块信息
-        AuthResourceModule authResourceModule = authResourceMenu.getAuthResourceModule();
-        if (authResourceModule == null) {
-            return menuInfo;
+        if (!StringUtils.isEmpty(authResourceMenu.getUrl())) {
+            menuInfo.setEmbedUrl(authResourceMenu.getUrl());
         }
-        String containsParam = "?";
-        //菜单实际地址（带模块入口参数）
-        if (!StringUtils.isBlank(authResourceMenu.getParams())) {
-            if (!StringUtils.isBlank(authResourceModule.getModuleUrl()) && !authResourceModule.getModuleUrl().contains(containsParam)) {
-                authResourceModule.setModuleUrl(authResourceModule.getModuleUrl() + "?");
-            }
-            authResourceModule.setModuleUrl(authResourceModule.getModuleUrl() + authResourceMenu.getParams().trim());
-
-        }
-        menuInfo.setEmbedUrl(authResourceModule.getModuleUrl());
-        if (!StringUtils.isEmpty(authResourceModule.getPath())) {
-            menuInfo.setPath(authResourceModule.getPath());
+        if (!StringUtils.isEmpty(authResourceMenu.getPath())) {
+            menuInfo.setPath(authResourceMenu.getPath());
         }
         String equalParam = "1";
-        if (equalParam.equals(authResourceModule.getTarget())) {
+        if (equalParam.equals(authResourceMenu.getTarget())) {
             menuInfo.setTarget(equalParam);
         }
-        String param = "2";
-        if (param.equals(authResourceModule.getType())) {
-            menuInfo.setEmbed(true);
-        }
 
+        // embed暂时没用,以后可能有用
+        menuInfo.setEmbed(true);
         return menuInfo;
     }
 
-    @Deprecated
-    /** 菜单数据结构转换 */
-    private MenuInfo convertMenu(AuthResourceModule authResourceModule) {
-        MenuInfo menuInfo = new MenuInfo();
-        menuInfo.setId(authResourceModule.getResourceModuleId());
-        String equalsParam = "0";
-        if (equalsParam.equals(authResourceModule.getModuleCatalogId())) {
-            menuInfo.setPid("");
-        } else {
-            menuInfo.setPid(authResourceModule.getModuleCatalogId());
-        }
-        menuInfo.setName(authResourceModule.getName());
-        if (StringUtils.isEmpty(authResourceModule.getIconUrl())) {
-            menuInfo.setIcon("");
-        } else {
-            menuInfo.setIcon(authResourceModule.getIconUrl());
-        }
-        if (null == authResourceModule.getSortSn()) {
-            menuInfo.setOrder(0);
-        } else {
-            menuInfo.setOrder(authResourceModule.getSortSn());
-        }
-        if (!StringUtils.isEmpty(authResourceModule.getPath())) {
-            menuInfo.setPath(authResourceModule.getPath());
-        } else {
-            menuInfo.setPath("");
-        }
-        String param = "2";
-        if (param.equals(authResourceModule.getType())) {
-            menuInfo.setEmbed(true);
-            menuInfo.setEmbedUrl(authResourceModule.getModuleUrl());
-        } else {
-            menuInfo.setEmbedUrl("");
-        }
-        menuInfo.setTarget("0");
-        return menuInfo;
-    }
 
     @Override
     public String importMenus(String flag, List<MenuInfo> arr) {

@@ -5,7 +5,6 @@
  */
 package com.supermap.gaf.authority.commontype;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.supermap.gaf.annotation.LogicDeleteField;
 import com.supermap.gaf.annotation.ParentIdField;
 import com.supermap.gaf.annotation.SortSnField;
@@ -38,30 +37,47 @@ public class AuthResourceMenu implements Serializable {
     @ApiModelProperty("菜单id")
     @Id
     private String resourceMenuId;
-    @NotNull
-    @ApiModelProperty("菜单分组id")
+
+    @ApiModelProperty("父菜单id")
     @ParentIdField
-    private String menuCatalogId;
+    private String parentId;
+
+
     @NotNull
     @ApiModelProperty(value = "显示名称", example = "权限控制")
     private String name;
+
+    // todo: 现在应该没啥用了
+    //@ApiModelProperty(value = "类型.1:平台内页面，2：外部页面", example = "1", allowableValues = "1,2")
+    //private String type;
+
     @NotNull
-    @ApiModelProperty("关联模块。模块id")
-    private String resourceModuleId;
-    @ApiModelProperty(value = "参数。入口参数和值,para1=value1&para2=value2。菜单实际路径为模块路径加参数(url?params)", example = "para1=value1&para2=value2")
-    private String params;
+    // 前端目前逻辑是，当前窗口打开 使用 下面的前端路由路径path , 新窗口打开使用地址url
+    @ApiModelProperty(value = "打开方式。0:当前窗口(或当前窗口新开tab),1:新窗口打开", example = "0", allowableValues = "0,1")
+    private String target;
+
+    @ApiModelProperty(value = "路由路径。表示前端路由路径", example = "/authority/ComponentModule")
+    private String path;
+
+    @ApiModelProperty(value = "地址", example = "http://www.xxxx.com/index.html")
+    private String url;
+
     @ApiModelProperty("图标")
     private String icon;
-    @ApiModelProperty(value = "是否可见。true:可见，false:不可见", example = "true", allowableValues = "true,false")
-    @JSONField(name = "isVisible")
-    private Boolean visible;
-    @ApiModelProperty("状态。逻辑删除字段")
-    @JSONField(name = "isStatus")
-    @LogicDeleteField
-    private Boolean status = true;
+
+    //// todo: wxl 好像没用了
+    //@ApiModelProperty(value = "是否可见。true:可见，false:不可见", example = "true", allowableValues = "true,false")
+    //@JSONField(name = "isVisible")
+    //private Boolean visible;
+
     @ApiModelProperty(value = "排序序号", example = "1", allowableValues = "range[1,infinity]")
     @SortSnField
     private Integer sortSn;
+
+
+    @ApiModelProperty("状态。逻辑删除字段")
+    @LogicDeleteField
+    private Boolean status = true;
     @ApiModelProperty("描述")
     private String description;
     @ApiModelProperty("创建时间")
@@ -74,6 +90,4 @@ public class AuthResourceMenu implements Serializable {
     @ApiModelProperty("修改人")
     private String updatedBy;
 
-    // transient
-    private AuthResourceModule authResourceModule;
 }

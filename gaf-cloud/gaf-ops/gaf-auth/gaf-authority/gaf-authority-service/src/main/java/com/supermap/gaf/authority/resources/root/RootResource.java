@@ -15,7 +15,7 @@ import javax.ws.rs.Path;
  * @date:2021/3/25
  */
 @Path("/")
-@Api("系统与权限控制")
+@Api("权限控制组件")
 public class RootResource {
 
     @Path("/auth-tenants")
@@ -38,11 +38,6 @@ public class RootResource {
         return AuthRoleResource.class;
     }
 
-
-    @Path("/sys-components")
-    public Class<SysComponentResource> sysComponentResource() {
-        return SysComponentResource.class;
-    }
 
     @Path("/auth-post-role")
     public Class<AuthPostRoleResource> authPostRoleResource() {
@@ -69,10 +64,6 @@ public class RootResource {
         return AuthRoleApiResource.class;
     }
 
-    @Path("/auth-role-module")
-    public Class<AuthRoleModuleResource> authRoleModuleResource() {
-        return AuthRoleModuleResource.class;
-    }
 
     @Path("/auth-role-menu")
     public Class<AuthRoleMenuResource> authRoleMenuResource() {
@@ -84,21 +75,11 @@ public class RootResource {
         return AuthResourceApiResource.class;
     }
 
-    @Path("/auth-resource-modules")
-    public Class<AuthResourceModuleResource> authResourceModuleResource() {
-        return AuthResourceModuleResource.class;
-    }
 
     @Path("/auth-resource-menus")
     public Class<AuthResourceMenuResource> authResourceMenuResource() {
         return AuthResourceMenuResource.class;
     }
-
-    @Path("/auth-module-apis")
-    public Class<AuthModuleApiResource> authModuleApiResource() {
-        return AuthModuleApiResource.class;
-    }
-
 
     @Path("/auth-p3-mapping-rule")
     public Class<AuthP3MappingRuleResource> authP3MappingRuleResource() {

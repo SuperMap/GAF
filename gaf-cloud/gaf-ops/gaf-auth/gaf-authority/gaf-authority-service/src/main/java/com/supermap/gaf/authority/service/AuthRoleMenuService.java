@@ -9,6 +9,7 @@ import com.supermap.gaf.authority.commontype.AuthRoleMenu;
 import com.supermap.gaf.authority.vo.AuthRoleMenuSelectVo;
 import com.supermap.gaf.authority.vo.RoleMenuVo;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -108,4 +109,9 @@ public interface AuthRoleMenuService {
      */
     AuthRoleMenu updateAuthRoleMenu(AuthRoleMenu authRoleMenu);
 
+    /**
+     * 根据菜单id 集合删除 角色菜单
+     * @param allIds
+     */
+    void removeByMenuIds(Collection<String> allIds);
 }

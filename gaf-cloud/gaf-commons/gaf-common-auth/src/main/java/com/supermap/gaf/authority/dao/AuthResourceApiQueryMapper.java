@@ -10,6 +10,9 @@ import com.supermap.gaf.authority.commontype.AuthResourceApi;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.List;
+
 
 /**
  * @author dqc
@@ -24,4 +27,11 @@ public interface AuthResourceApiQueryMapper {
      **/
     AuthResourceApi select(@Param("resourceApiId") String resourceApiId);
 
+
+    /**
+     * 根据id集合查询api资源
+     * @param ids
+     * @return
+     */
+    List<AuthResourceApi> selectByIds(@Param("ids") Collection<String> ids);
 }

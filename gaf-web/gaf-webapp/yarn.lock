@@ -2089,6 +2089,13 @@ axios@^0.21.0:
   dependencies:
     follow-redirects "^1.10.0"
 
+axios@^0.23.0:
+  version "0.23.0"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/axios/-/axios-0.23.0.tgz#b0fa5d0948a8d1d75e3d5635238b6c4625b05149"
+  integrity sha512-NmvAE4i0YAv5cKq8zlDoPd1VLKAqX5oLuZKs8xkJa4qi6RGn0uhCYFjWtHHC9EM/MwOwYWOs53W+V0aqEXq1sg==
+  dependencies:
+    follow-redirects "^1.14.4"
+
 babel-eslint@^10.1.0:
   version "10.1.0"
   resolved "https://nexus.gaf.net.cn/repository/npm-group/babel-eslint/-/babel-eslint-10.1.0.tgz#6968e568a910b78fb3779cdd8b6ac2f479943232"
@@ -4572,6 +4579,11 @@ follow-redirects@^1.0.0, follow-redirects@^1.10.0:
   resolved "https://nexus.gaf.net.cn/repository/npm-group/follow-redirects/-/follow-redirects-1.13.1.tgz#5f69b813376cee4fd0474a3aba835df04ab763b7"
   integrity sha1-X2m4Ezds7k/QR0o6uoNd8Eq3Y7c=
 
+follow-redirects@^1.14.4:
+  version "1.14.5"
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/follow-redirects/-/follow-redirects-1.14.5.tgz#f09a5848981d3c772b5392309778523f8d85c381"
+  integrity sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA==
+
 for-in@^1.0.1, for-in@^1.0.2:
   version "1.0.2"
   resolved "https://nexus.gaf.net.cn/repository/npm-group/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -4670,14 +4682,15 @@ functional-red-black-tree@^1.0.1:
 
 gaf-ui@2.0.27:
   version "2.0.27"
-  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.27.tgz#05ab9f88e5de1c51f0c98a4a57b7b48c35680ff3"
-  integrity sha512-gpLsJdsr/ugpU/X/jiSkMEYQmVL0t+Ykt0ne34vGGEd+E130xNgsTVVo1yP1x+6fgLsHmKZ746g8DsHzozJXxQ==
+  resolved "https://nexus.gaf.net.cn/repository/npm-group/gaf-ui/-/gaf-ui-2.0.27.tgz#467c4096b3abc3c8d4e354f2f8c7a6dfba5b2d3e"
+  integrity sha512-w9dTjTBaU++iaFCK3DCx0iE63fiGKJXE2Sz/W6lvwPaM1ps2seof+CWkHcaVNvTOQBOi5i38Qs5UxsMSoFP0LQ==
   dependencies:
     ant-design-vue "^1.7.2"
+    axios "^0.23.0"
     core-js "^2.6.5"
     grunt "^1.0.4"
     spark-md5 "^3.0.1"
-    vue "^2.6.12"
+    vue "2.6.12"
     vue-draggable-resizable "2.1.0"
     vuedraggable "^2.23.2"
 

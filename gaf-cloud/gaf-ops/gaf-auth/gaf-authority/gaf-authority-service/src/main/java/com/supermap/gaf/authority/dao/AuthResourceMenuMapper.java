@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -44,6 +45,13 @@ public interface AuthResourceMenuMapper {
      * @return 菜单集合
      */
     List<AuthResourceMenu> listMenus();
+
+    /**
+     * 查询所有
+     *
+     * @return 菜单集合
+     */
+    List<AuthResourceMenu> listMenusByName(@Param("name") String name);
 
     /**
      * 分页查询菜单
@@ -143,10 +151,16 @@ public interface AuthResourceMenuMapper {
     List<AuthResourceMenu> selectByIds(@Param("menuIdList") List<String> menuIdList);
 
     /**
-     * 通过模块id集合查询菜单
-     *
-     * @param moduleIdList 模块id集合
-     * @return 若未查询到则返回为空集合
+     * 根据父id集合查询菜单的id集合
+     * @param parentIds 父id集合
+     * @return 菜单的id集合
      */
-    List<AuthResourceMenu> selectByModuleIds(@Param("moduleIdList") List<String> moduleIdList);
+    List<String> selectIdsByParentIds(@Param("parentIds") Collection<String> parentIds);
+
+    /**
+     * 根据id集合删除菜单
+     * @param ids 菜单id集合
+     */
+    void deleteByIds(@Param("ids") Collection<String> ids);
+
 }

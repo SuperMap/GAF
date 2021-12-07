@@ -5,7 +5,6 @@
  */
 package com.supermap.gaf.sys.mgt.service;
 
-import com.supermap.gaf.authority.commontype.SysComponent;
 import com.supermap.gaf.authority.vo.SelectOptionVo;
 import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.commontypes.Page;
@@ -31,15 +30,6 @@ public interface SysCatalogService {
     SysCatalog getById(String catalogId);
 
     /**
-     * 插入组件对应的根目录
-     *
-     * @param sysComponent 组件
-     * @param catalogType  参考 CatalogTypeEnum 只能是CatalogTypeEnum.MODULE_GROUP_TYPE;CatalogTypeEnum.API_GROUP_TYPE
-     * @return true成功 false失败
-     */
-    boolean insertSysCatalog(SysComponent sysComponent, CatalogTypeEnum catalogType);
-
-    /**
      * 新增目录
      *
      * @param sysCatalog 目录
@@ -54,14 +44,6 @@ public interface SysCatalogService {
      */
     void batchInsert(List<SysCatalog> sysCatalogs);
 
-    /**
-     * 删除组件对应的目录 逻辑删除 将它和所有子目录树 status置为false
-     *
-     * @param sysComponent 组件
-     * @param catalogType  参考 CatalogTypeEnum 只能是CatalogTypeEnum.MODULE_GROUP_TYPE;CatalogTypeEnum.API_GROUP_TYPE
-     * @return true 成功 false失败
-     */
-    boolean deleteSysCatalog(SysComponent sysComponent, CatalogTypeEnum catalogType);
 
 
     /**
@@ -80,14 +62,6 @@ public interface SysCatalogService {
      */
     void batchDelete(List<String> catalogIds);
 
-    /**
-     * 更新组件对应的目录 只更新名字，若组件中文名没有变则不用更新
-     *
-     * @param sysComponent 组件
-     * @param catalogType  参考 CatalogTypeEnum 只能是CatalogTypeEnum.MODULE_GROUP_TYPE;CatalogTypeEnum.API_GROUP_TYPE
-     * @return true 成功 false 失败
-     */
-    boolean updateSysCatalog(SysComponent sysComponent, CatalogTypeEnum catalogType);
 
     /**
      * 更新目录
@@ -115,18 +89,6 @@ public interface SysCatalogService {
     List<TreeNode> getNodesByType(String type);
 
     /**
-     * 根据类型获取有效目录对应的树原始节点
-     * 注意 :
-     * 当有租户id不为null时 将返回的树原始节点TreeNodes转换成树结构后,树根节点对应的原始节点TreeNode的parentId为租户id
-     * 否则为组件id
-     *
-     * @param type     目录类型
-     * @param tenantId 可选参数，当没有租户id是传入null
-     * @return 若没有查询到则返回空集合
-     */
-    List<TreeNode> getNodes(CatalogTypeEnum type, String tenantId);
-
-    /**
      * 组合条件等值查询
      *
      * @param queryCatalog 查询参数
@@ -144,14 +106,6 @@ public interface SysCatalogService {
      */
     List<SysCatalog> getByType(String type);
 
-    /**
-     * 通过component和type获取目录
-     *
-     * @param componentId 组件id
-     * @param type        目录类型 参考CatalogTypeEnum
-     * @return 目录集合 若未查询到则返回空集合
-     */
-    List<SysCatalog> getByComponentAndType(String componentId, String type);
 
     /**
      * 分页查询根目录，条件是单字段模糊匹配和目录类型

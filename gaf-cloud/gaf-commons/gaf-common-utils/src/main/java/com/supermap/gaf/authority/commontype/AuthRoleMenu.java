@@ -37,9 +37,6 @@ public class AuthRoleMenu implements Serializable {
     @NotNull
     @ApiModelProperty("菜单id")
     private String resourceMenuId;
-    @NotNull
-    @ApiModelProperty("模块id")
-    private String resourceModuleId;
     @ApiModelProperty("状态。逻辑删除字段")
     @JSONField(name = "isStatus")
     private Boolean status = true;

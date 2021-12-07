@@ -6,10 +6,8 @@
 package com.supermap.gaf.shiro.realms;
 
 import com.supermap.gaf.authority.commontype.*;
-import com.supermap.gaf.shiro.JJWTUtils;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.shiro.commontypes.CustomToken;
-import com.supermap.gaf.shiro.commontypes.JWTToken;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +20,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.oauth.profile.OAuth20Profile;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -65,9 +62,9 @@ public class CustomTokenRealm extends AuthorizingRealm {
             profile.setId(userId);
 
             List<AuthResourceApi> authResourceApis = userInfoDetails.getAuthResourceApiList();
-            List<AuthResourceModule> authResourceModules = userInfoDetails.getAuthResourceModuleList();
+            List<AuthResourceMenu> authResourceMenus = userInfoDetails.getAuthResourceMenusList();
             List<AuthRole> authRoles = userInfoDetails.getAuthRoleList();
-            SecurityUtilsExt.recordKeycloakUser(profile, authUser, authResourceApis, authResourceModules, authRoles);
+            SecurityUtilsExt.recordKeycloakUser(profile, authUser, authResourceApis,authResourceMenus, authRoles);
             final Pac4jPrincipal principal = new Pac4jPrincipal(Arrays.asList(new CommonProfile[]{profile}));
             return new SimpleAuthenticationInfo(principal, Boolean.TRUE, getName());
         } catch (Exception e) {

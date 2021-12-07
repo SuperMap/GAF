@@ -7,13 +7,14 @@ package com.supermap.gaf.sys.mgt.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.supermap.gaf.authority.commontype.SysComponent;
 import com.supermap.gaf.authority.constant.DbFieldNameConstant;
 import com.supermap.gaf.authority.enums.NodeTypeEnum;
 import com.supermap.gaf.authority.vo.SelectOptionVo;
 import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.commontypes.Page;
 import com.supermap.gaf.commontypes.ShiroUser;
+import com.supermap.gaf.data.access.commontypes.ExtendSortSnParam;
+import com.supermap.gaf.data.access.dao.BatchSortAndCodeMapper;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
 import com.supermap.gaf.sys.mgt.commontype.SysCatalog;
@@ -21,8 +22,6 @@ import com.supermap.gaf.sys.mgt.dao.SysCatalogMapper;
 import com.supermap.gaf.sys.mgt.enums.BizTypeEnum;
 import com.supermap.gaf.sys.mgt.enums.CatalogTypeEnum;
 import com.supermap.gaf.sys.mgt.service.SysCatalogService;
-import com.supermap.gaf.data.access.commontypes.ExtendSortSnParam;
-import com.supermap.gaf.data.access.dao.BatchSortAndCodeMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -59,28 +58,9 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         return sysCatalogMapper.select(catalogId);
     }
 
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean insertSysCatalog(SysComponent sysComponent, CatalogTypeEnum catalogType) {
-        SysCatalog build = SysCatalog.builder()
-                .parentId(ROOT_PARENT_ID)
-                .type(catalogType.getValue())
-                .sysComponentId(sysComponent.getSysComponentId())
-                .name(sysComponent.getNameCn())
-                .status(true)
-                .description(sysComponent.getNameCn() + "默认根目录")
-                .build();
-        this.insertSysCatalog(build);
-        return true;
-    }
-
     @Transactional(rollbackFor = Exception.class)
     @Override
     public SysCatalog insertSysCatalog(SysCatalog sysCatalog) {
-        if (sysCatalog.getSysComponentId() != null && sysCatalog.getTenantId() != null) {
-            throw new GafException("插入目录异常，目录数据不能同时包含组件id和租户id");
-        }
         sysCatalog.setCatalogId(UUID.randomUUID().toString());
 
         SysCatalog.SysCatalogBuilder queryBuilder = SysCatalog.builder().type(sysCatalog.getType()).parentId(sysCatalog.getParentId()).status(true);
@@ -102,9 +82,6 @@ public class SysCatalogServiceImpl implements SysCatalogService {
             }
             if (parentCatalog.getTenantId() != null) {
                 sysCatalog.setTenantId(parentCatalog.getTenantId());
-            }
-            if (parentCatalog.getSysComponentId() != null) {
-                sysCatalog.setSysComponentId(parentCatalog.getSysComponentId());
             }
             if (!StringUtils.isEmpty(parentCatalog.getBizTypeCode())) {
                 sysCatalog.setBizTypeCode(parentCatalog.getBizTypeCode());
@@ -166,19 +143,6 @@ public class SysCatalogServiceImpl implements SysCatalogService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean deleteSysCatalog(SysComponent sysComponent, CatalogTypeEnum catalogType) {
-        SysCatalog queryCatalog = SysCatalog.builder().parentId(ROOT_PARENT_ID).sysComponentId(sysComponent.getSysComponentId()).type(catalogType.getValue()).status(true).build();
-        List<SysCatalog> sysCatalogs = this.sysCatalogMapper.selectByCombination(queryCatalog);
-        if (sysCatalogs.size() != 1) {
-            return false;
-        }
-        SysCatalog sysCatalog = sysCatalogs.get(0);
-        this.deleteSysCatalog(sysCatalog.getCatalogId());
-        return true;
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
     public SysCatalog deleteSysCatalog(String catalogId) {
         SysCatalog needLogicDelete = sysCatalogMapper.selectByIdAndStatus(catalogId, true);
         if (needLogicDelete == null) {
@@ -210,23 +174,6 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         for (String catalogId : catalogIds) {
             deleteSysCatalog(catalogId);
         }
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean updateSysCatalog(SysComponent sysComponent, CatalogTypeEnum catalogType) {
-        SysCatalog queryCatalog = SysCatalog.builder().parentId(ROOT_PARENT_ID).sysComponentId(sysComponent.getSysComponentId()).type(catalogType.getValue()).status(true).build();
-        List<SysCatalog> sysCatalogs = this.sysCatalogMapper.selectByCombination(queryCatalog);
-        if (sysCatalogs.size() != 1) {
-            return false;
-        }
-        SysCatalog sysCatalog = sysCatalogs.get(0);
-        if (sysComponent.getNameCn() != null && sysComponent.getNameCn().equals(sysCatalog.getName())) {
-            return true;
-        }
-        sysCatalog.setName(sysComponent.getNameCn());
-        this.updateSysCatalog(sysCatalog);
-        return true;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -277,44 +224,6 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         return parentPath;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public List<TreeNode> getNodes(CatalogTypeEnum type, String tenantId) {
-        SysCatalog.SysCatalogBuilder queryCondition = SysCatalog.builder().status(true).type(type.getValue());
-        if (tenantId != null) {
-            queryCondition.tenantId(tenantId);
-        }
-        List<SysCatalog> sysCatalogs = this.sysCatalogMapper.selectByCombination(queryCondition.build());
-        List<TreeNode> nodeList = new LinkedList<>();
-        if (sysCatalogs.size() == 0) {
-            return nodeList;
-        }
-        Map<@NotNull String, SysCatalog> map = sysCatalogs.stream().collect(Collectors.toMap(
-                SysCatalog::getCatalogId, sysCatalog -> sysCatalog
-        ));
-        for (SysCatalog current : sysCatalogs) {
-            String parentId = current.getParentId();
-            if (!ROOT_PARENT_ID.equals(parentId)) {
-                TreeNode node = new TreeNode();
-                node.setKey(current.getCatalogId());
-                node.setTitle(current.getName());
-                node.setType(NodeTypeEnum.CATALOG.getValue());
-                node.setSortSn(current.getSortSn());
-                SysCatalog parent = map.get(parentId);
-                if (parent != null && ROOT_PARENT_ID.equals(parent.getParentId())) {
-                    if (parent.getTenantId() != null) {
-                        node.setParentId(parent.getTenantId());
-                    } else {
-                        node.setParentId(parent.getSysComponentId());
-                    }
-                } else {
-                    node.setParentId(current.getParentId());
-                }
-                nodeList.add(node);
-            }
-        }
-        return nodeList;
-    }
 
     @Override
     public List<TreeNode> getNodesByType(String type) {
@@ -358,10 +267,6 @@ public class SysCatalogServiceImpl implements SysCatalogService {
         return sysCatalogMapper.selectByCombination(querySysCatalog);
     }
 
-    @Override
-    public List<SysCatalog> getByComponentAndType(String componentId, String type) {
-        return sysCatalogMapper.getByComponentAndType(componentId, type);
-    }
 
     @Override
     public Page<SysCatalog> listByPageCondition(String searchFieldName, String searchFieldValue, String orderFieldName, String orderMethod, Integer pageNum, Integer pageSize, CatalogTypeEnum catalogType) {

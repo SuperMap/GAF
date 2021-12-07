@@ -7,6 +7,4 @@
     <include  file="./component/common-auth.xml" relativeToChangelogFile="true"/>
     <include file="../ddl/config_properties.sql" relativeToChangelogFile="true"/>
 
-    <!--<includeAll  path="../changelog/gaf-analysis/" relativeToChangelogFile="true"/>-->
-
 </databaseChangeLog>

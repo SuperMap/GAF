@@ -59,7 +59,7 @@ import java.util.*;
 @Service
 public class WebgisServiceServiceImpl implements WebgisServiceService {
 
-    public static final String WEBGIS_DEFAULT_COMPONENT_ID = "webgisDefaultComponentId";
+    //public static final String WEBGIS_DEFAULT_COMPONENT_ID = "webgisDefaultComponentId";
     public static final String REGISTRY_TYPE_SERVER = "server";
     public static final String REGISTRY_TYPE_BATCH = "batch";
     public static final String REGISTRY_TYPE_SINGLE = "single";
@@ -204,7 +204,6 @@ public class WebgisServiceServiceImpl implements WebgisServiceService {
         // 类型2表示第三方
         authResourceApi.setType("2");
         authResourceApi.setApiCatalogId(webgisTypeCatalog.getCatalogId());
-        authResourceApi.setSysComponentId(WEBGIS_DEFAULT_COMPONENT_ID);
         return addApi(authResourceApi);
     }
 

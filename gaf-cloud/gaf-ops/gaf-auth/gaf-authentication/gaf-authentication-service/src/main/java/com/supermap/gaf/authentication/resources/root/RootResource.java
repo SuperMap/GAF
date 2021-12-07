@@ -15,7 +15,7 @@ import javax.ws.rs.Path;
  * @date:2021/3/25
  */
 @Path("/")
-@Api("认证中心接口")
+@Api("认证中心组件")
 public class RootResource {
 
     @Path("/login")

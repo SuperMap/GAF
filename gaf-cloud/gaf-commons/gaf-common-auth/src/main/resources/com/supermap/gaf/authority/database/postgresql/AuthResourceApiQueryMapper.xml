@@ -3,7 +3,6 @@
 <mapper namespace="com.supermap.gaf.authority.dao.AuthResourceApiQueryMapper">
     <resultMap id="BaseResultMap" type="com.supermap.gaf.authority.commontype.AuthResourceApi">
         <result column="resource_api_id" jdbcType="VARCHAR" property="resourceApiId" />
-        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
         <result column="api_catalog_id" jdbcType="VARCHAR" property="apiCatalogId" />
         <result column="name" jdbcType="VARCHAR" property="name" />
         <result column="route_url" jdbcType="VARCHAR" property="routeUrl" />
@@ -19,7 +18,6 @@
 
     <sql id="Base_Column_List">
         resource_api_id,
-        sys_component_id,
         api_catalog_id,
         name,
         route_url,
@@ -36,6 +34,14 @@
         SELECT <include refid="Base_Column_List" />
         FROM "auth_resource_api"
         WHERE resource_api_id = #{resourceApiId}
+    </select>
+    <select id="selectByIds" resultType="com.supermap.gaf.authority.commontype.AuthResourceApi">
+        SELECT <include refid="Base_Column_List" />
+        FROM "auth_resource_api"
+        WHERE resource_api_id IN
+        <foreach collection="ids" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </select>
 
 </mapper>

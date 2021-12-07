@@ -5,7 +5,6 @@
  */
 package com.supermap.gaf.api.scanner.service;
 
-import com.supermap.gaf.api.scanner.entity.SysComponent;
 import io.swagger.models.Swagger;
 
 /**
@@ -15,25 +14,14 @@ import io.swagger.models.Swagger;
  */
 public interface SwaggerApiInitializingService {
 
-    /**
-     * 查找工程对应系统模块数据
-     */
-    SysComponent searchSysComponent();
-
-
-    /**
-     * 初始化系统模块表数据(包含自动生成系统模块表数据逻辑)
-     */
-    SysComponent initializeSysComponent();
-
 
     /**
      * 初始化系统目录表数据
      */
-    void initializeSysCatalog(SysComponent sysComponent, Swagger swagger);
+    void initializeSysCatalog(Swagger swagger);
 
     /**
      * 初始化系统API表数据
      */
-    void initializeSysResourceApi(SysComponent sysComponent, Swagger swagger);
+    void initializeSysResourceApi(Swagger swagger);
 }

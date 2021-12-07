@@ -6,6 +6,7 @@
 package com.supermap.gaf.authority.resources;
 
 import com.supermap.gaf.authority.commontype.AuthResourceMenu;
+import com.supermap.gaf.authority.commontype.AuthResourceMenuNode;
 import com.supermap.gaf.authority.service.AuthResourceMenuService;
 import com.supermap.gaf.authority.vo.AuthResourceMenuSelectVo;
 import com.supermap.gaf.authority.vo.TreeNode;
@@ -17,7 +18,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotEmpty;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -47,6 +47,14 @@ public class AuthResourceMenuResource {
     @Path("/{resourceMenuId}")
     public MessageResult<AuthResourceMenu> getById(@PathParam("resourceMenuId") String resourceMenuId) {
         return MessageResult.data(authResourceMenuService.getById(resourceMenuId)).message("查询成功").build();
+    }
+
+    @ApiOperation(value = "条件查询菜单树", notes = "若当前用户所属租户是平台管理员所属租户，则获取所有菜单")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("/tree/condition")
+    public MessageResult<List<AuthResourceMenuNode>> getMenuTree(@QueryParam("name") String name) {
+        return MessageResult.data(authResourceMenuService.getMenuTree(name)).message("查询成功").build();
     }
 
     @ApiOperation(value = "查询菜单树节点集合", notes = "查询当前用户的菜单并转换为树节点（未组织为树结构）。若当前用户所属租户是平台管理员所属租户，则获取所有菜单")
@@ -93,17 +101,6 @@ public class AuthResourceMenuResource {
             result = authResourceMenuService.searchList(selectVo);
         }
         return MessageResult.data(result).message("查询成功").build();
-    }
-
-    @ApiOperation(value = "查询某菜单分组下菜单的数量", notes = "根据菜单分组id条件查询菜单的数量")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "moduleCatalogId", value = "菜单分组id", paramType = "path", dataType = "string", required = true)
-    })
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    @Path("/menu-catalog-id/{menuCatalogId}")
-    public MessageResult<Integer> countByMenuCatalogId(@NotEmpty @PathParam("menuCatalogId") String menuCatalogId) {
-        return MessageResult.data(authResourceMenuService.countByMenuCatalogId(menuCatalogId)).message("查询成功").build();
     }
 
     @ApiOperation(value = "新增菜单")

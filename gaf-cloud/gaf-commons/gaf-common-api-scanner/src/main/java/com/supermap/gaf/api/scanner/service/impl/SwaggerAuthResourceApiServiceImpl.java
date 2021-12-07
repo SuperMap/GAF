@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author zhm
@@ -35,7 +37,6 @@ public class SwaggerAuthResourceApiServiceImpl implements SwaggerAuthResourceApi
     @Override
     @Transactional
     public AuthResourceApi insertAuthResourceApi(AuthResourceApi authResourceApi) {
-        //TODO: 主键非GeneratedKey，此处添加自定义主键生成策略
         authResourceApi.setResourceApiId(UUID.randomUUID().toString());
         swaggerAuthResourceApiMapper.insert(authResourceApi);
         batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthResourceApi.class, Arrays.asList(authResourceApi.getApiCatalogId()));

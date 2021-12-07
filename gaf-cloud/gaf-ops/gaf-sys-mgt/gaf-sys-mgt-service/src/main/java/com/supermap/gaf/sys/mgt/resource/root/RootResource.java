@@ -17,7 +17,7 @@ import javax.ws.rs.Path;
  * @date:2021/3/25
  */
 @Path("/")
-@Api("系统与权限控制")
+@Api("系统管理组件")
 public class RootResource {
 
     @Path("/sys-catalogs")

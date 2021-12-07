@@ -32,14 +32,16 @@ public class AuthUserInfoDetails implements Serializable {
     @ApiModelProperty("用户信息")
     private AuthUser authUser;
 
+    @ApiModelProperty("用户角色信息")
+    private List<AuthRole> authRoleList;
+
+    @ApiModelProperty("用户的菜单信息")
+    private List<AuthResourceMenu> authResourceMenusList;
+
     @ApiModelProperty("用户api信息")
     private List<AuthResourceApi> authResourceApiList;
 
-    @ApiModelProperty("用户模块信息")
-    private List<AuthResourceModule> authResourceModuleList;
 
-    @ApiModelProperty("用户角色信息")
-    private List<AuthRole> authRoleList;
 
 
 }

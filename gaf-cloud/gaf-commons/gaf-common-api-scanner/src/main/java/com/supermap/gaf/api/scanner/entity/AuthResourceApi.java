@@ -39,9 +39,6 @@ public class AuthResourceApi implements Serializable {
     @Id
     private String resourceApiId;
     @NotNull
-    @ApiModelProperty("所属组件id")
-    private String sysComponentId;
-    @NotNull
     @ApiModelProperty("API组id")
     @ParentIdField
     private String apiCatalogId;

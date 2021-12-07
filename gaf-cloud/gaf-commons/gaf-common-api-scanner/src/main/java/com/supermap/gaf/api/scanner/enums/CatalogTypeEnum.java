@@ -9,10 +9,6 @@ public enum CatalogTypeEnum {
     // 平台级表示目录平台可见 租户不可见
     // 租户级 表示租户可见
     /**
-     * 模块分组（菜单） 平台级
-     */
-    MODULE_GROUP_TYPE("1"),
-    /**
      * API分组 平台级
      */
     API_GROUP_TYPE("2"),

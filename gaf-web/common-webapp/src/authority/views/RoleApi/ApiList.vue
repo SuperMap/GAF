@@ -31,7 +31,7 @@
             {{ getMethod(record.method) }}
           </template>
           <template slot="type" slot-scope="text, record">
-            {{ record.type === '1' ? '应用组件资源' : '第三方资源' }}
+            {{ record.type === '1' ? '系统资源' : '第三方资源' }}
           </template>
         </gaf-table-with-page>
       </template>

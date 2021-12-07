@@ -246,10 +246,6 @@ export default {
       type: Number,
       default: 0
     },
-    componentId: {
-      type: String,
-      default: ''
-    },
     moduleGrpId: {
       type: String,
       default: ''
@@ -296,7 +292,6 @@ export default {
       copyData.updatedTime = moment(new Date(copyData.updatedTime))
     this.addOrEditForm.setFieldsValue({ ...copyData })
     this.addOrEditForm.setFieldsValue({
-      sysComponentId: this.componentId,
       moduleCatalogId: this.moduleGrpId
     })
   },

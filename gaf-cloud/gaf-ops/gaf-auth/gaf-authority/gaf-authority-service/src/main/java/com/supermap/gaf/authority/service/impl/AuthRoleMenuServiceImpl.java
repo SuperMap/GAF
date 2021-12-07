@@ -5,12 +5,10 @@
  */
 package com.supermap.gaf.authority.service.impl;
 
-import com.supermap.gaf.authority.commontype.AuthResourceMenu;
 import com.supermap.gaf.authority.commontype.AuthRoleMenu;
 import com.supermap.gaf.authority.constant.CommonConstant;
 import com.supermap.gaf.authority.constant.DbFieldNameConstant;
 import com.supermap.gaf.authority.dao.AuthRoleMenuMapper;
-import com.supermap.gaf.authority.service.AuthResourceMenuService;
 import com.supermap.gaf.authority.service.AuthRoleMenuService;
 import com.supermap.gaf.authority.service.AuthRoleService;
 import com.supermap.gaf.authority.vo.AuthRoleMenuSelectVo;
@@ -38,14 +36,11 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
 
     private final AuthRoleService authRoleService;
 
-    private final AuthResourceMenuService authResourceMenuService;
-
     private static final Logger logger = LogUtil.getLocLogger(AuthRoleMenuServiceImpl.class);
 
-    public AuthRoleMenuServiceImpl(AuthRoleMenuMapper authRoleMenuMapper, AuthRoleService authRoleService, AuthResourceMenuService authResourceMenuService) {
+    public AuthRoleMenuServiceImpl(AuthRoleMenuMapper authRoleMenuMapper, AuthRoleService authRoleService) {
         this.authRoleMenuMapper = authRoleMenuMapper;
         this.authRoleService = authRoleService;
-        this.authResourceMenuService = authResourceMenuService;
     }
 
     @Override
@@ -97,7 +92,6 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
         //新增或修改
         if (!CollectionUtils.isEmpty(addList)) {
             List<AuthRoleMenu> addRoleMenuList = new ArrayList<>();
-            List<String> addMenuIdList = new LinkedList<>();
             List<String> updateList = new ArrayList<>();
             addList.forEach(item -> {
                 AuthRoleMenu oldRoleMenu = getByRoleAndMenu(roleId, item, false);
@@ -110,7 +104,6 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
                             .status(true)
                             .sortSn(1)
                             .build();
-                    addMenuIdList.add(item);
                     addRoleMenuList.add(authRoleMenu);
                 }
             });
@@ -120,11 +113,6 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
             }
             //批量新增
             if (!CollectionUtils.isEmpty(addRoleMenuList)) {
-                List<AuthResourceMenu> menus = authResourceMenuService.getByIds(addMenuIdList);
-                if (menus != null && menus.size() > 0) {
-                    Map<String, String> menuIdAndModule = menus.stream().collect(Collectors.toMap(AuthResourceMenu::getResourceMenuId, AuthResourceMenu::getResourceModuleId));
-                    addRoleMenuList.forEach(authRoleMenu -> authRoleMenu.setResourceModuleId(menuIdAndModule.get(authRoleMenu.getResourceMenuId())));
-                }
                 batchInsertRoleMenu(addRoleMenuList);
             }
         }
@@ -195,8 +183,6 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
         authRoleMenu.setRoleMenuId(UUID.randomUUID().toString());
         // 唯一性校验
         checkUniqueness(authRoleMenu);
-        AuthResourceMenu menu = authResourceMenuService.getById(authRoleMenu.getResourceMenuId());
-        authRoleMenu.setResourceModuleId(menu.getResourceModuleId());
         authRoleMenuMapper.insert(authRoleMenu);
         return authRoleMenu;
     }
@@ -238,6 +224,12 @@ public class AuthRoleMenuServiceImpl implements AuthRoleMenuService {
     public AuthRoleMenu updateAuthRoleMenu(AuthRoleMenu authRoleMenu) {
         authRoleMenuMapper.update(authRoleMenu);
         return authRoleMenu;
+    }
+
+    @Override
+    public void removeByMenuIds(Collection<String> allIds) {
+        authRoleMenuMapper.deleteByMenuIds(allIds);
+
     }
 
     /**

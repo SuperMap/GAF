@@ -104,7 +104,6 @@
         @back="handleBack"
         v-if="open"
         :operation="operation"
-        :componentId="component"
         :moduleGrpId="moduleGroup"
         :module-group-path="moduleGroupPath"
       >
@@ -129,10 +128,6 @@ export default {
     moduleGroupPath: {
       type: Array,
       default: () => []
-    },
-    component: {
-      type: String,
-      default: ''
     },
     dataOfTree: {
       type: Array,

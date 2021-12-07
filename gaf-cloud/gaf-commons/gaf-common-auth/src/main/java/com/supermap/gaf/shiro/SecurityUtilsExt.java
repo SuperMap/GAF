@@ -1,12 +1,11 @@
 package com.supermap.gaf.shiro;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.supermap.gaf.authority.commontype.AuthResourceApi;
-import com.supermap.gaf.authority.commontype.AuthResourceModule;
+import com.supermap.gaf.authority.commontype.AuthResourceMenu;
 import com.supermap.gaf.authority.commontype.AuthRole;
 import com.supermap.gaf.authority.commontype.AuthUser;
+import com.supermap.gaf.shiro.commontypes.ShiroUser;
+import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -16,9 +15,8 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ThreadContext;
 import org.pac4j.core.profile.CommonProfile;
 
-import com.supermap.gaf.shiro.commontypes.ShiroUser;
-
-import io.buji.pac4j.subject.Pac4jPrincipal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -113,7 +111,7 @@ public abstract class SecurityUtilsExt {
     }
 
     @SuppressWarnings("unchecked")
-    public static void recordKeycloakUser(CommonProfile profile, AuthUser authUser, List<AuthResourceApi> authResourceApis, List<AuthResourceModule> authResourceModules, List<AuthRole> authRoles) {
+    public static void recordKeycloakUser(CommonProfile profile, AuthUser authUser, List<AuthResourceApi> authResourceApis, List<AuthResourceMenu> authResourceMenus, List<AuthRole> authRoles) {
         if (profile != null) {
             ShiroUser user = new ShiroUser();
             user.setUsername(authUser.getName());
@@ -127,7 +125,7 @@ public abstract class SecurityUtilsExt {
             //添加新权限内容
             user.setAuthUser(authUser);
             user.setAuthResourceApis(authResourceApis);
-            user.setAuthResourceModules(authResourceModules);
+            user.setAuthResourceMenus(authResourceMenus);
             user.setAuthRoles(authRoles);
             user.setTenantId(authUser.getTenantId());
 

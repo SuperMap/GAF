@@ -11,7 +11,6 @@
       <a-icon :type="iconNodeType.type === 12 ? 'tags' : 'tag'"></a-icon>
     </template>
     <api-manage
-      :component="component"
       :api-group="apiGrpId"
       :api-group-path="apiGroupPath"
       :dataOfTree="dataOfTree"
@@ -34,7 +33,6 @@ export default {
       // '1' 模块分组 '2' API分组 '3' 角色分组
       catalogTypeActiveKey: '2',
       // api相关
-      component: '',
       apiGrpId: '',
       apiGroupPath: [],
       dataOfTree: [],
@@ -45,7 +43,6 @@ export default {
   methods: {
     onSelected(selectedKeys, catalogAndParentPath, path) {
       this.apiGrpId = selectedKeys[0]
-      this.component = catalogAndParentPath.sysComponentId
       this.apiGroupPath = path
       this.openLeaf = true
     },

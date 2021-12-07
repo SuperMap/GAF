@@ -10,8 +10,8 @@
     <include file="../ddl/auth_post.sql" relativeToChangelogFile="true"/>
     <include file="../ddl/config_properties.sql" relativeToChangelogFile="true"/>
 
-    <include file="../changelog/component-module-menu/gaf-authority.sql" relativeToChangelogFile="true"/>
-    <include file="../changelog/component-module-menu/gaf-overage.sql" relativeToChangelogFile="true"/>
+    <include file="../changelog/menu/gaf-authority.sql" relativeToChangelogFile="true"/>
+    <include file="../changelog/menu/gaf-overage.sql" relativeToChangelogFile="true"/>
 
 
 </databaseChangeLog>

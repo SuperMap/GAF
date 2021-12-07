@@ -308,7 +308,6 @@ export default {
       delete newEditData.updatedTime
       delete newEditData.updatedBy
       delete newEditData.tenantId
-      delete newEditData.sysComponentId
       if (newEditData.parentPath != null) {
         newEditData.parentId =
           newEditData.parentPath[newEditData.parentPath.length - 1]
@@ -330,7 +329,6 @@ export default {
     delete this.editData.updatedTime
     delete this.editData.updatedBy
     delete this.editData.tenantId
-    delete this.editData.sysComponentId
     if (this.editData.parentPath != null) {
       this.editData.parentId = this.editData.parentPath[
         this.editData.parentPath.length - 1

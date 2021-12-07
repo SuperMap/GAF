@@ -8,7 +8,6 @@
         <result column="name" jdbcType="VARCHAR" property="name" />
         <result column="type" jdbcType="VARCHAR" property="type" />
         <result column="code" jdbcType="VARCHAR" property="code" />
-        <result column="sys_component_id" jdbcType="VARCHAR" property="sysComponentId" />
         <result column="icon_url" jdbcType="VARCHAR" property="iconUrl" />
         <result column="description" jdbcType="VARCHAR" property="description" />
         <result column="status" jdbcType="BIT" property="status" />
@@ -36,7 +35,6 @@
         name,
         type,
         code,
-        sys_component_id,
         icon_url,
         description,
         status,
@@ -57,7 +55,6 @@
             <if test ='null != name'>name = #{name} AND </if>
             <if test ='null != type'>type = #{type} AND </if>
             <if test ='null != code'>code = #{code} AND </if>
-            <if test ='null != sysComponentId'>sys_component_id = #{sysComponentId} AND </if>
             <if test ='null != iconUrl'>icon_url = #{iconUrl} AND </if>
             <if test ='null != description'>description = #{description} AND </if>
             <if test ='null != status'>status = #{status} AND </if>

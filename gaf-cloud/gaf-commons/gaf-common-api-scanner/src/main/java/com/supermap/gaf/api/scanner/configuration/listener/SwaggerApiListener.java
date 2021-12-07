@@ -6,7 +6,6 @@
 package com.supermap.gaf.api.scanner.configuration.listener;
 
 import com.supermap.gaf.api.scanner.entity.ApiDoc;
-import com.supermap.gaf.api.scanner.entity.SysComponent;
 import com.supermap.gaf.api.scanner.service.SwaggerApiDocService;
 import com.supermap.gaf.api.scanner.service.SwaggerApiInitializingService;
 import com.supermap.gaf.utils.LogUtil;
@@ -80,16 +79,10 @@ public class SwaggerApiListener extends ObjectMapperFactory implements Applicati
         }
         //上传resource到数据库
         try {
-            SysComponent sysComponent = swaggerApiInitializingService.searchSysComponent();
-            if (null != sysComponent) {
-                swaggerApiInitializingService.initializeSysCatalog(sysComponent, swagger);
-                swaggerApiInitializingService.initializeSysResourceApi(sysComponent, swagger);
-                logger.info("resource-api入库【成功】...");
-            } else {
-                throw new NullPointerException("未查询到系统模块数据，暂不入库");
-            }
+            swaggerApiInitializingService.initializeSysCatalog(swagger);
+            swaggerApiInitializingService.initializeSysResourceApi(swagger);
+            logger.info("resource-api入库【成功】...");
         } catch (Exception e) {
-//            e.printStackTrace();
             logger.error("resource-api入库【失败】...");
         }
         //上传api_doc到数据库
@@ -98,7 +91,6 @@ public class SwaggerApiListener extends ObjectMapperFactory implements Applicati
             apiDocService.syncApiDoc(apiDoc);
             logger.info("swagger-api文档api_doc入库程序【成功】...");
         } catch (Exception e) {
-//            e.printStackTrace();
             logger.error("swagger-api文档api_doc入库程序【失败】...");
         }
     }

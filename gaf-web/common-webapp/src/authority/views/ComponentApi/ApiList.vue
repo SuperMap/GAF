@@ -53,7 +53,7 @@
             {{ getMethod(record.method) }}
           </template>
           <template slot="type" slot-scope="text, record">
-            {{ record.type === "1" ? "应用组件资源" : "第三方资源" }}
+            {{ record.type === "1" ? "系统资源" : "第三方资源" }}
           </template>
           <template slot="status" slot-scope="text, record">
             <a-switch
@@ -115,7 +115,6 @@
         @back="handleBack"
         v-if="open"
         :operation="operation"
-        :component-id="component"
         :api-group-id="apiGroup"
         :api-group-path="apiGroupPath"
         :dataOfTree="dataOfTree"
@@ -132,10 +131,6 @@ export default {
     AddEditForm,
   },
   props: {
-    component: {
-      type: String,
-      default: "",
-    },
     apiGroup: {
       type: String,
       default: "",

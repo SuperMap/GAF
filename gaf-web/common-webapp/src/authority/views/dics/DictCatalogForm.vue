@@ -195,7 +195,6 @@ export default {
       delete newEditData.updatedTime
       delete newEditData.updatedBy
       delete newEditData.tenantId
-      delete newEditData.sysComponentId
       this.addOrEditForm.setFieldsValue({ ...newEditData })
       if(this.dataId) {
         this.disableNodeWithChlidren(this.treeData, this.dataId)
@@ -218,7 +217,6 @@ export default {
     delete this.editData.updatedTime
     delete this.editData.updatedBy
     delete this.editData.tenantId
-    delete this.editData.sysComponentId
     if (this.operation === 'edit'){
       this.dataId = this.editData.catalogId
       delete this.editData.catalogId

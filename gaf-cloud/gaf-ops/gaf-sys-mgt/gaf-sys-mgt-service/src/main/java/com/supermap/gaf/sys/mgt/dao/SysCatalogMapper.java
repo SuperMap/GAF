@@ -217,15 +217,6 @@ public interface SysCatalogMapper {
     List<com.supermap.gaf.sys.mgt.commontype.SysCatalog> selectByCombination(com.supermap.gaf.sys.mgt.commontype.SysCatalog queryCatalog);
 
     /**
-     * 通过component和type获取目录
-     *
-     * @param componentId 组件id
-     * @param type        目录类型 应为枚举类CatalogTypeEnum值
-     * @return 目录集合 若未查询到则返回空集合
-     */
-    List<com.supermap.gaf.sys.mgt.commontype.SysCatalog> getByComponentAndType(@Param("componentId") String componentId, @Param("type") String type);
-
-    /**
      * 查询根目录，条件是单字段模糊匹配和目录字段等值匹配
      * 模糊匹配的字段不能和等值匹配的字段冲突
      *

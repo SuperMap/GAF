@@ -5,7 +5,6 @@
         <result column="role_menu_id" jdbcType="VARCHAR" property="roleMenuId" />
         <result column="role_id" jdbcType="VARCHAR" property="roleId" />
         <result column="resource_menu_id" jdbcType="VARCHAR" property="resourceMenuId" />
-        <result column="resource_module_id" jdbcType="VARCHAR" property="resourceModuleId" />
         <result column="status" jdbcType="BIT" property="status" />
         <result column="sort_sn" jdbcType="INTEGER" property="sortSn" />
         <result column="description" jdbcType="VARCHAR" property="description" />
@@ -19,7 +18,6 @@
         role_menu_id,
         role_id,
         resource_menu_id,
-        resource_module_id,
         status,
         sort_sn,
         description,
@@ -72,7 +70,7 @@
 		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
     </select>
     <select id="bigOffsetPageList" resultMap="BaseResultMap">
-        SELECT  a.role_menu_id, a.role_id, a.resource_menu_id, a.resource_module_id, a.status, a.sort_sn, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_role_menu" a,(
+        SELECT  a.role_menu_id, a.role_id, a.resource_menu_id,  a.status, a.sort_sn, a.description, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_role_menu" a,(
             select role_menu_id
             From "auth_role_menu" 
             LIMIT #{pageSize} OFFSET #{offset}
@@ -99,7 +97,6 @@
 				<if test ='null != roleMenuId'>role_menu_id,</if>
 				<if test ='null != roleId'>role_id,</if>
 				<if test ='null != resourceMenuId'>resource_menu_id,</if>
-                <if test ='null != resourceModuleId'>resource_module_id,</if>
 				<if test ='null != status'>status,</if>
 				<if test ='null != sortSn'>sort_sn,</if>
 				<if test ='null != description'>description,</if>
@@ -112,7 +109,6 @@
 				<if test ='null != roleMenuId'>#{roleMenuId},</if>
 				<if test ='null != roleId'>#{roleId},</if>
 				<if test ='null != resourceMenuId'>#{resourceMenuId},</if>
-                <if test ='null != resourceModuleId'>#{resourceModuleId},</if>
 				<if test ='null != status'>#{status},</if>
 				<if test ='null != sortSn'>#{sortSn},</if>
 				<if test ='null != description'>#{description},</if>
@@ -125,7 +121,7 @@
 	<insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO "auth_role_menu"(<include refid="Base_Column_List" />) VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (  #{item.roleMenuId}  ,  #{item.roleId}  ,  #{item.resourceMenuId}  ,#{item.resourceModuleId},  #{item.status}  ,  #{item.sortSn}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+            (  #{item.roleMenuId}  ,  #{item.roleId}  ,  #{item.resourceMenuId}  ,  #{item.status}  ,  #{item.sortSn}  ,  #{item.description}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
         </foreach>
     </insert>
 	<update id="batchDelete" parameterType="java.util.List">
@@ -141,12 +137,19 @@
         SET status = false
         WHERE status = true and role_menu_id = #{roleMenuId}
     </update>
+    <update id="deleteByMenuIds">
+        UPDATE "auth_role_menu"
+        SET status = false
+        WHERE resource_menu_id IN
+        <foreach collection="menuIds" index="index" item="menuId" open="(" close=")" separator=",">
+            #{menuId}
+        </foreach>
+    </update>
     <update id="update" parameterType="com.supermap.gaf.authority.commontype.AuthRoleMenu">
         UPDATE "auth_role_menu"
         <set>
 				<if test ='null != roleId'>role_id = #{roleId},</if>				
 				<if test ='null != resourceMenuId'>resource_menu_id = #{resourceMenuId},</if>
-                <if test ='null != resourceModuleId'>resource_module_id = #{resourceModuleId},</if>
                 <if test ='null != status'>status = #{status},</if>
 				<if test ='null != sortSn'>sort_sn = #{sortSn},</if>				
 				<if test ='null != description'>description = #{description},</if>

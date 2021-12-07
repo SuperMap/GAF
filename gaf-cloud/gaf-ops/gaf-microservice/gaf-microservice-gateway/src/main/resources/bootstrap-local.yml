@@ -53,7 +53,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     password: '123456'
-    url: jdbc:postgresql://192.168.11.118:32222/gaf
+    url: jdbc:postgresql://192.168.11.164:5432/gaf-new
     username: admin
   sleuth:
     sampler:

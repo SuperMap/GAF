@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -155,4 +156,9 @@ public interface AuthRoleMenuMapper {
      */
     int update(AuthRoleMenu authRoleMenu);
 
+    /**
+     * 根据菜单id集合删除角色菜单
+     * @param menuIds
+     */
+    void deleteByMenuIds(@Param("menuIds") Collection<String> menuIds);
 }

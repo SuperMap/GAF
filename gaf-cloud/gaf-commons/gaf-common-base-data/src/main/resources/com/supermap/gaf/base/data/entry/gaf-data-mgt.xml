@@ -16,7 +16,7 @@
     <include file="../changelog/dict/data_source_type.sql" relativeToChangelogFile="true"/>
     <include file="../changelog/dict/ordinary_data_source_type.sql" relativeToChangelogFile="true"/>
 
-    <include file="../changelog/component-module-menu/gaf-data-mgt.sql" relativeToChangelogFile="true"/>
+    <include file="../changelog/menu/gaf-data-mgt.sql" relativeToChangelogFile="true"/>
     <include file="../changelog/gaf-data-mgt/update0_20210722.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -6,12 +6,14 @@
 package com.supermap.gaf.authority.service.impl;
 
 import com.supermap.gaf.authority.commontype.AuthP3MappingRule;
-import com.supermap.gaf.authority.commontype.SysComponent;
 import com.supermap.gaf.authority.constant.CommonConstant;
 import com.supermap.gaf.authority.constant.DbFieldNameConstant;
 import com.supermap.gaf.authority.dao.AuthP3MappingRuleMapper;
 import com.supermap.gaf.authority.enums.AuthP3MappingRuleTypeEnum;
-import com.supermap.gaf.authority.service.*;
+import com.supermap.gaf.authority.service.AuthP3DepartmentMappingService;
+import com.supermap.gaf.authority.service.AuthP3MappingRuleService;
+import com.supermap.gaf.authority.service.AuthP3TenantMappingService;
+import com.supermap.gaf.authority.service.AuthP3UserMappingService;
 import com.supermap.gaf.authority.vo.AuthP3MappingRuleSelectVo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,14 +32,12 @@ import java.util.UUID;
 @Service
 public class AuthP3MappingRuleServiceImpl implements AuthP3MappingRuleService {
     private final AuthP3MappingRuleMapper authP3MappingRuleMapper;
-    private final SysComponentService sysComponentService;
     private final AuthP3TenantMappingService authP3TenantMappingService;
     private final AuthP3DepartmentMappingService authP3DepartmentMappingService;
     private final AuthP3UserMappingService authP3UserMappingService;
 
-    public AuthP3MappingRuleServiceImpl(AuthP3MappingRuleMapper authP3MappingRuleMapper, SysComponentService sysComponentService, AuthP3TenantMappingService authP3TenantMappingService, AuthP3DepartmentMappingService authP3DepartmentMappingService, AuthP3UserMappingService authP3UserMappingService) {
+    public AuthP3MappingRuleServiceImpl(AuthP3MappingRuleMapper authP3MappingRuleMapper, AuthP3TenantMappingService authP3TenantMappingService, AuthP3DepartmentMappingService authP3DepartmentMappingService, AuthP3UserMappingService authP3UserMappingService) {
         this.authP3MappingRuleMapper = authP3MappingRuleMapper;
-        this.sysComponentService = sysComponentService;
         this.authP3TenantMappingService = authP3TenantMappingService;
         this.authP3DepartmentMappingService = authP3DepartmentMappingService;
         this.authP3UserMappingService = authP3UserMappingService;
@@ -90,14 +90,6 @@ public class AuthP3MappingRuleServiceImpl implements AuthP3MappingRuleService {
             pageList = authP3MappingRuleMapper.bigOffsetPageList(authP3MappingRuleSelectVo);
         }
 
-        if (null != pageList) {
-            pageList.forEach(authP3MappingRule -> {
-                SysComponent sysComponent = sysComponentService.getById(authP3MappingRule.getP3ComponentId());
-                if (null != sysComponent) {
-                    authP3MappingRule.setP3ComponentName(sysComponent.getNameCn());
-                }
-            });
-        }
         int totalCount = authP3MappingRuleMapper.pageListCount();
         Map<String, Object> result = new HashMap<>(2);
         result.put("pageList", pageList);
@@ -111,14 +103,6 @@ public class AuthP3MappingRuleServiceImpl implements AuthP3MappingRuleService {
             authP3MappingRuleSelectVo.setPageSize(50);
         }
         List<AuthP3MappingRule> pageList = authP3MappingRuleMapper.searchList(authP3MappingRuleSelectVo);
-        if (null != pageList) {
-            pageList.forEach(authP3MappingRule -> {
-                SysComponent sysComponent = sysComponentService.getById(authP3MappingRule.getP3ComponentId());
-                if (null != sysComponent) {
-                    authP3MappingRule.setP3ComponentName(sysComponent.getNameCn());
-                }
-            });
-        }
         Map<String, Object> result = new HashMap<>(2);
         result.put("pageList", pageList);
         if (pageList != null) {
@@ -127,15 +111,12 @@ public class AuthP3MappingRuleServiceImpl implements AuthP3MappingRuleService {
         return result;
     }
 
+
     @Override
     public List<AuthP3MappingRule> listByMappingType(String mappingType, String id) {
         List<AuthP3MappingRule> authP3MappingRules = authP3MappingRuleMapper.listByOneField(DbFieldNameConstant.P3_MAPPING_TYPE, mappingType);
         if (!CollectionUtils.isEmpty(authP3MappingRules)) {
             for (AuthP3MappingRule authP3MappingRule : authP3MappingRules) {
-                SysComponent sysComponent = sysComponentService.getById(authP3MappingRule.getP3ComponentId());
-                if (null != sysComponent) {
-                    authP3MappingRule.setP3ComponentName(sysComponent.getNameCn());
-                }
                 Object saved = null;
                 if (AuthP3MappingRuleTypeEnum.TENANT.getValue().equals(mappingType)) {
                     saved = authP3TenantMappingService.getByTenantId(authP3MappingRule.getP3ComponentId(), id);
