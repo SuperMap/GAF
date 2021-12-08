@@ -67,9 +67,6 @@ public final class DbFieldNameConstant {
     public static final String ROLE_CATALOG_ID = "role_catalog_id";
 
 
-    //----------------- auth_p3_mapping_rule 表
-    public static final String P3_MAPPING_TYPE = "mapping_type";
-
     // ------------------sys_dict表
     /**
      * 字典id
