@@ -50,27 +50,28 @@ public class CustomTokenRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         CustomToken customToken = (CustomToken) token;
-        try {
-            String username = iauthUsername.getAuthUsername(customToken);
+        String username = iauthUsername.getAuthUsername(customToken);
+        if (!StringUtils.isEmpty(username)) {
+            try {
+                // 获取权限、租户、角色信息(新)
+                AuthUserInfoDetails userInfoDetails = iauthUserInfoDetails.getAuthUserInfoDetails(username);
 
-            // 获取权限、租户、角色信息(新)
-            AuthUserInfoDetails userInfoDetails = iauthUserInfoDetails.getAuthUserInfoDetails(username);
+                CommonProfile profile = new CommonProfile();
+                AuthUser authUser = userInfoDetails.getAuthUser();
+                String userId = authUser.getUserId();
+                profile.setId(userId);
 
-            CommonProfile profile = new CommonProfile();
-            AuthUser authUser = userInfoDetails.getAuthUser();
-            String userId = authUser.getUserId();
-            profile.setId(userId);
-
-            List<AuthResourceApi> authResourceApis = userInfoDetails.getAuthResourceApiList();
-            List<AuthResourceMenu> authResourceMenus = userInfoDetails.getAuthResourceMenusList();
-            List<AuthRole> authRoles = userInfoDetails.getAuthRoleList();
-            SecurityUtilsExt.recordKeycloakUser(profile, authUser, authResourceApis,authResourceMenus, authRoles);
-            final Pac4jPrincipal principal = new Pac4jPrincipal(Arrays.asList(new CommonProfile[]{profile}));
-            return new SimpleAuthenticationInfo(principal, Boolean.TRUE, getName());
-        } catch (Exception e) {
-            log.error("【URI:" + ((CustomToken) token).getRequest().getRequestURI() + "】获取用户信息失败");
-            throw new AuthenticationException("获取用户信息失败:");
+                List<AuthResourceApi> authResourceApis = userInfoDetails.getAuthResourceApiList();
+                List<AuthResourceMenu> authResourceMenus = userInfoDetails.getAuthResourceMenusList();
+                List<AuthRole> authRoles = userInfoDetails.getAuthRoleList();
+                SecurityUtilsExt.recordKeycloakUser(profile, authUser, authResourceApis, authResourceMenus, authRoles);
+                final Pac4jPrincipal principal = new Pac4jPrincipal(Arrays.asList(new CommonProfile[]{profile}));
+                return new SimpleAuthenticationInfo(principal, Boolean.TRUE, getName());
+            } catch (Exception e) {
+                log.error("【URI:" + ((CustomToken) token).getRequest().getRequestURI() + "】获取用户信息失败");
+            }
         }
+        return null;
     }
 
     /**
