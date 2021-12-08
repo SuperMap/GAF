@@ -177,6 +177,22 @@ gaf-authority:
   - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-cloud/gaf-ops/gaf-auth/gaf-authority/gaf-authority-app -am
   - kubectl rollout restart deployment gaf-authority -n gaf-dev
 
+gaf-sys-mgt:
+  only:
+    changes:
+      - "gaf-cloud/gaf-ops/gaf-sys-mgt/**/*"
+      - "gaf-cloud/gaf-commons/gaf-common-utils/**/*"
+      - "gaf-cloud/gaf-commons/gaf-common-auth-starter/**/*"
+      - "gaf-cloud/gaf-commons/gaf-common-auth/**/*"
+      - "gaf-cloud/gaf-commons/gaf-common-data-access/**/*"
+      - "gaf-cloud/gaf-commons/gaf-common-sys-mgt/**/*"
+  image: registry.cn-hangzhou.aliyuncs.com/supermap-gaf/build-tools:v2.0
+  stage: pipeline
+  script:
+    - docker login "https://${GAF_REGISTRY}" -u ${GAF_REGISTRY_USERNAME} -p ${GAF_REGISTRY_PASSWORD}
+    - mvn clean package dockerfile:build dockerfile:push -Ddockerfile.build.skip -Ddockerfile.push.skip -Dmaven.test.skip=true -DCUSTOM_REGISTRY=${GAF_REGISTRY_PATH} -DCUSTOM_TAG=${GAF_REGISTRY_TAG} -pl gaf-cloud/gaf-ops/gaf-sys-mgt/gaf-sys-mgt-app -am
+    - kubectl rollout restart deployment gaf-sys-mgt -n gaf-dev
+
 gaf-map:
   only:
     changes:
