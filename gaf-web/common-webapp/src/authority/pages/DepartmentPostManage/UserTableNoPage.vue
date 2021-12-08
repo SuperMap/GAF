@@ -51,25 +51,6 @@
               un-checked-children="已禁用"
             />
           </template>
-          <template slot="operation" slot-scope="text, record">
-            <a
-              v-if="isUser"
-              @click.stop="() => setTenantSynchronization(record)"
-              href="javascript:;"
-            >
-              <u>同步</u>
-            </a>
-            <!-- <a-divider type="vertical" />
-        <a-popconfirm
-          v-if="isUser"
-          @confirm="() => handleDelete(record)"
-          title="删除后无法恢复，确认是否继续?"
-          ok-text="确认"
-          cancel-text="取消"
-        >
-          <a href="javascript:;" class="btn-del"><a-icon type="delete" /> 删除</a>
-        </a-popconfirm> -->
-          </template>
           <template slot="isThirdParty" slot-scope="text, record">
             <span>{{ record.isThirdParty ? "是" : "否" }}</span>
           </template>
@@ -82,26 +63,12 @@
         </gaf-table-no-page>
       </template>
     </gaf-table-layout>
-    <gaf-modal
-      v-model="mapList"
-      :width="1000"
-      :footer="null"
-      title="第三方组件映射"
-    >
-      <mapping-process
-        :tenantIdData="tenantIdData"
-        :tenantRst="tenantRst"
-      ></mapping-process>
-    </gaf-modal>
   </div>
 </template>
 <script>
-import MappingProcess from "../../views/AuthUser/MappingProcess";
 export default {
   name: "UserTableNoPage",
-  components: {
-    MappingProcess,
-  },
+  components: {},
   props: {
     id: {
       type: String,
@@ -118,14 +85,11 @@ export default {
   },
   data() {
     return {
-      mapList: false,
       authUserList: [],
       // 列表是否加载中
       loading: true,
       hasPKField: true,
       userStatus: true,
-      tenantIdData: "",
-      tenantRst: [],
       selectedRowKeys: [],
       selectRowLength: 0,
       columns: []
@@ -153,23 +117,12 @@ export default {
           scopedSlots: { customRender: "status" },
           width: 100
         },
-
-        // {
-        //   title: '部门',
-        //   dataIndex: 'departmentId',
-        //   key: 'department_id'
-        // },
         {
           title: "部门",
           dataIndex: "departmentName",
           key: "department_name",
           width: 150
         },
-        // {
-        //   title: '岗位id',
-        //   dataIndex: 'postId',
-        //   key: 'post_id'
-        // },
         {
           title: "岗位",
           dataIndex: "postName",
@@ -207,13 +160,7 @@ export default {
           dataIndex: "lastLoginTime",
           key: "last_login_time",
           width: 170
-        },
-        {
-          title: "操作",
-          fixed: "right",
-          width: 100,
-          scopedSlots: { customRender: "operation" },
-        },
+        }
       ];
       return this.hasPKField ? columns : columns.slice(0, columns.length - 2);
     },
@@ -272,16 +219,6 @@ export default {
           this.$message.error(`查询失败,原因:${res.message}`);
         }
       });
-    },
-    // 同步
-    async setTenantSynchronization(row) {
-      this.mapList = true;
-      this.mappingType = row.type;
-      this.id = row.userId;
-      this.tenantIdData = this.id;
-      const url = `/authority/auth-p3-mapping-rule/list-by-type/`;
-      const res = await this.$axios.get(url + 3 + "/" + this.id);
-      this.tenantRst = res.data.data;
     },
     statusClick(value, record) {
       record.status = !value;

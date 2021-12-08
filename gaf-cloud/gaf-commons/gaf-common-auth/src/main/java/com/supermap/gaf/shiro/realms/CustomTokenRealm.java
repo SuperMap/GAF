@@ -11,6 +11,7 @@ import com.supermap.gaf.shiro.commontypes.CustomToken;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

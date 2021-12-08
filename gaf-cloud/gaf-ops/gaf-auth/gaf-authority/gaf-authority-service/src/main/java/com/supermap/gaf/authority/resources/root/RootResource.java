@@ -81,21 +81,6 @@ public class RootResource {
         return AuthResourceMenuResource.class;
     }
 
-    @Path("/auth-p3-mapping-rule")
-    public Class<AuthP3MappingRuleResource> authP3MappingRuleResource() {
-        return AuthP3MappingRuleResource.class;
-    }
-
-    @Path("/auth-p3-tenant-mapping")
-    public Class<AuthP3TenantMappingResource> authP3TenantMappingResource() {
-        return AuthP3TenantMappingResource.class;
-    }
-
-    @Path("/auth-p3-sync-mapping")
-    public Class<AuthP3SyncMappingResource> authP3SyncMappingResource() {
-        return AuthP3SyncMappingResource.class;
-    }
-
 
     @Path("/auth-user-details")
     public Class<AuthUserInfoDetailsResource> authUserInfoDetailsResourceClass() {

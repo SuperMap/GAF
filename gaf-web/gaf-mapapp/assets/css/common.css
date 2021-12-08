@@ -385,20 +385,6 @@
   color: white;
 }
 
-/* 同步按钮 */
-.btn-sync {
-  background-color: rgb(245, 166, 77);
-  border: 1px solid transparent;
-  padding: 2px 5px;
-  border-radius: 5px;
-  color: #fff;
-}
-
-.btn-sync:hover {
-  background-color: rgb(196, 137, 70);
-  color: white;
-}
-
 /* 全部管理员按钮 */
 .btn-admin {
   background-color: rgb(66, 210, 134);
