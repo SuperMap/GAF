@@ -20,6 +20,12 @@
 		<dependency>
 			<groupId>com.supermap.gaf</groupId>
 			<artifactId>gaf-common-cloud</artifactId>
+			<exclusions>
+                <exclusion>
+                   	<groupId>org.springframework.cloud</groupId>
+            		<artifactId>spring-cloud-starter-bus-amqp</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.supermap.gaf</groupId>
