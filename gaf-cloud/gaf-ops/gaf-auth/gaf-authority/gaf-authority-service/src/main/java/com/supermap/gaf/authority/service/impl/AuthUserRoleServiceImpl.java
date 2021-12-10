@@ -5,19 +5,19 @@
  */
 package com.supermap.gaf.authority.service.impl;
 
-import com.supermap.gaf.authority.commontype.*;
+import com.supermap.gaf.authority.commontype.AuthRole;
+import com.supermap.gaf.authority.commontype.AuthUserRole;
 import com.supermap.gaf.authority.constant.CacheGroupConstant;
 import com.supermap.gaf.authority.constant.CommonConstant;
 import com.supermap.gaf.authority.constant.DbFieldNameConstant;
 import com.supermap.gaf.authority.dao.AuthUserRoleMapper;
-import com.supermap.gaf.authority.enums.CodeBaseRoleEnum;
 import com.supermap.gaf.authority.enums.NodeTypeEnum;
-import com.supermap.gaf.authority.service.*;
+import com.supermap.gaf.authority.service.AuthRoleService;
+import com.supermap.gaf.authority.service.AuthUserRoleService;
 import com.supermap.gaf.authority.util.TreeConvertUtil;
 import com.supermap.gaf.authority.vo.AuthUserRoleSelectVo;
 import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.authority.vo.TreeVo;
-import com.supermap.gaf.commontypes.MessageResult;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.sys.mgt.enums.CatalogTypeEnum;
 import com.supermap.gaf.sys.mgt.service.SysCatalogService;
@@ -43,29 +43,14 @@ public class AuthUserRoleServiceImpl implements AuthUserRoleService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthUserRoleServiceImpl.class);
 
-
     @Autowired
     private AuthUserRoleMapper authUserRoleMapper;
-    @Autowired
-    private AuthUserService authUserService;
+
     @Autowired
     private AuthRoleService authRoleService;
     @Autowired
-    private AuthUserParttimeService authUserParttimeService;
-    @Autowired
-    private AuthPostRoleService authPostRoleService;
-    @Autowired
     private SysCatalogService sysCatalogService;
 
-//    public AuthUserRoleServiceImpl(AuthUserRoleMapper authUserRoleMapper, AuthUserService authUserService, AuthRoleService authRoleService, AuthUserParttimeService authUserParttimeService, AuthPostRoleService authPostRoleService, SysCatalogService sysCatalogService, ProjCodeBaseUsersFeignService projCodeBaseUsersFeignService) {
-//        this.authUserRoleMapper = authUserRoleMapper;
-//        this.authUserService = authUserService;
-//        this.authRoleService = authRoleService;
-//        this.authUserParttimeService = authUserParttimeService;
-//        this.authPostRoleService = authPostRoleService;
-//        this.sysCatalogService = sysCatalogService;
-//        this.projCodeBaseUsersFeignService = projCodeBaseUsersFeignService;
-//    }
 
     @Override
     public AuthUserRole getById(String userRoleId) {
@@ -204,30 +189,6 @@ public class AuthUserRoleServiceImpl implements AuthUserRoleService {
                     .build()
             ).collect(Collectors.toList());
             authUserRoleMapper.batchInsert(toAddUserRoles);
-        }
-        // 应该使用id去查询而不应该使用name
-        List<String> nameEns = CodeBaseRoleEnum.getAllNames();
-        List<AuthRole> appRoles = authRoleService.listByNameEn(nameEns);
-        Set<String> appRoleIds = appRoles.stream().map(AuthRole::getRoleId).collect(Collectors.toSet());
-
-        AuthUser user = authUserService.getById(userId);
-        if (user == null) {
-            throw new GafException("未找到该用户信息");
-        }
-        // todo: 获取用户所属租户  后序要改
-        // 查询用户所在当前租户下是否有挂职信息
-        // 查询岗位是否关联到App角色
-        List<AuthUserParttime> userParttimes = authUserParttimeService.getByUserId(userId);
-        List<String> postIds = userParttimes.stream().map(AuthUserParttime::getPostId).collect(Collectors.toList());
-        if (!StringUtils.isEmpty(user.getPostId())) {
-            postIds.add(user.getPostId());
-        }
-        if (postIds.size() > 0) {
-            List<AuthPostRole> authPostRoles = authPostRoleService.listByPostIds(postIds);
-            List<AuthPostRole> authPostRoleInAppRole = authPostRoles.stream().filter(authPostRole -> appRoleIds.contains(authPostRole.getRoleId())).collect(Collectors.toList());
-            if (authPostRoleInAppRole.size() > 0) {
-                return;
-            }
         }
     }
 

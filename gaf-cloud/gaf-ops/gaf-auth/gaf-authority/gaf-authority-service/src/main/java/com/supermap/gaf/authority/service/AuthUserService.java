@@ -154,6 +154,13 @@ public interface AuthUserService {
     AuthUser active(String userId);
 
     /**
+     * 禁用用户
+     * @param userId
+     * @return
+     */
+    AuthUser inActive(String userId);
+
+    /**
      * 通过用户id物理删除用户
      *
      * @param userId 用户id
@@ -190,4 +197,6 @@ public interface AuthUserService {
      * @return 若为空则表示成功，否则表示失败原因
      */
     void sendCheckCode(String email);
+
+
 }

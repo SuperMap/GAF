@@ -5,13 +5,11 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
     <include  file="./component/common-auth.xml" relativeToChangelogFile="true"/>
-    <include file="../ddl/auth_p3_department_mapping.sql" relativeToChangelogFile="true"/>
-    <include file="../ddl/auth_p3_mapping_rule.sql" relativeToChangelogFile="true"/>
     <include file="../ddl/auth_post.sql" relativeToChangelogFile="true"/>
     <include file="../ddl/config_properties.sql" relativeToChangelogFile="true"/>
 
     <include file="../changelog/menu/gaf-authority.sql" relativeToChangelogFile="true"/>
     <include file="../changelog/menu/gaf-overage.sql" relativeToChangelogFile="true"/>
-
+    <include file="../changelog/api/case_api.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

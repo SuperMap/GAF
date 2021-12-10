@@ -281,12 +281,12 @@
         <a-form-item label="状态">
           <a-switch
             v-decorator="[
-              'status',
+              'state',
               { valuePropName: 'checked', initialValue: true }
             ]"
             :style="{ background:'#1890FF'}"
             :disabled="operation === 2"
-            @click="statusClick"
+            @click="stateClick"
             checked-children="启用"
             un-checked-children="禁用"
             size="small"
@@ -360,6 +360,7 @@
           </a-button>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <button @click="cancle" class="cancel-modal" v-show="operation !== 3">{{this.operation === 1 ? "返回" : "取消"}}</button>
+          <button @click="handleDelete" class="cancel-modal" v-show="operation === 3" >删除</button>
         </div>
       </a-form>
     </div>
@@ -564,28 +565,45 @@ export default {
         this.$emit('cancleWhenUpdateUser', this.addOrEditForm.getFieldsValue())
       }
     },
-    statusClick(value) {
+    handleDelete() {
+      const thisObj = this
+      this.$confirm({
+        title: '确定要删除该用户吗',
+        okText: '确认',
+        cancelText: '取消',
+        async onOk() {
+          if (thisObj.dataId) {
+            const url = `/authority/auth-users/${thisObj.dataId}`
+            const rst = await thisObj.$axios.delete(url)
+            if (rst.data.isSuccessed) {
+              thisObj.$message.success('删除成功')
+              thisObj.$emit('deleteUserSuccess', rst.data.data)
+            } else {
+              thisObj.$message.error(`删除失败,原因：${rst.data.message}`)
+            }
+          }
+        },
+        onCancel() {},
+        centered: true,
+        class: 'test'
+      })
+    },
+    async stateClick(value) {
       if (!value) {
-        this.addOrEditForm.setFieldsValue({ status: !value })
+        this.addOrEditForm.setFieldsValue({ state: !value })
         const form = this.addOrEditForm
         const thisObj = this
         this.$confirm({
           title: '确定要禁用该用户吗',
-          content: () => (
-            <div style="color:red;">
-              禁用该用户会清空用户绑定的所有岗位、兼职和角色，该用户无法登录
-            </div>
-          ),
           okText: '确认',
           cancelText: '取消',
           async onOk() {
             if (thisObj.dataId) {
-              const url = `/authority/auth-users/${thisObj.dataId}`
+              const url = `/authority/auth-users/inactive/${thisObj.dataId}`
               const rst = await thisObj.$axios.delete(url)
               if (rst.data.isSuccessed) {
                 thisObj.$message.success('禁用成功')
-                form.setFieldsValue({ status: value })
-                thisObj.$emit('deleteUserSuccess', rst.data.data)
+                form.setFieldsValue({ state: value })
               } else {
                 thisObj.$message.error(`禁用失败,原因：${rst.data.message}`)
               }
@@ -595,6 +613,20 @@ export default {
           centered: true,
           class: 'test'
         })
+      } else {
+        this.addOrEditForm.setFieldsValue({ state: !value })
+        const form = this.addOrEditForm
+        const thisObj = this
+        if (thisObj.dataId) {
+          const url = `/authority/auth-users/active/${thisObj.dataId}`
+          const rst = await thisObj.$axios.post(url)
+          if (rst.data.isSuccessed) {
+            thisObj.$message.success('启用成功')
+            form.setFieldsValue({ state: value })
+          } else {
+            thisObj.$message.error(`启用失败,原因：${rst.data.message}`)
+          }
+        }
       }
     },
     resetFields() {

@@ -46,18 +46,15 @@ public class AuthTenantServiceImpl implements AuthTenantService {
 
     private final SysCatalogService sysCatalogService;
 
-    private final AuthPostRoleService authPostRoleService;
-
     private static final Logger logger = LogUtil.getLocLogger(AuthTenantServiceImpl.class);
 
-    public AuthTenantServiceImpl(AuthTenantMapper authTenantMapper, AuthUserService authUserService, AuthDepartmentService authDepartmentService, AuthUserRoleService authUserRoleService, AuthPostService authPostService, SysCatalogService sysCatalogService, AuthPostRoleService authPostRoleService) {
+    public AuthTenantServiceImpl(AuthTenantMapper authTenantMapper, AuthUserService authUserService, AuthDepartmentService authDepartmentService, AuthUserRoleService authUserRoleService, AuthPostService authPostService, SysCatalogService sysCatalogService) {
         this.authTenantMapper = authTenantMapper;
         this.authUserService = authUserService;
         this.authDepartmentService = authDepartmentService;
         this.authUserRoleService = authUserRoleService;
         this.authPostService = authPostService;
         this.sysCatalogService = sysCatalogService;
-        this.authPostRoleService = authPostRoleService;
     }
 
     @Override
@@ -103,19 +100,8 @@ public class AuthTenantServiceImpl implements AuthTenantService {
             return new ArrayList<>();
         }
         List<String> userIds = admins.stream().map(AuthUser::getUserId).collect(Collectors.toList());
-        List<String> postIds = admins.stream().map(AuthUser::getPostId).collect(Collectors.toList());
         List<String> resUserIds = authUserRoleService.getByUserIds(userIds).stream().filter(userIds::contains).collect(Collectors.toList());
-        List<String> resUserPostIds = authPostRoleService.getByPostIds(postIds).stream().filter(postIds::contains).collect(Collectors.toList());
-
-        List<AuthUser> res1 = admins.stream().filter(user -> resUserIds.contains(user.getUserId())).collect(Collectors.toList());
-        List<AuthUser> res2 = admins.stream().filter(user -> resUserPostIds.contains(user.getPostId())).collect(Collectors.toList());
-        res1.addAll(res2);
-        res2.forEach(user -> {
-            if (!res1.contains(user)) {
-                res1.add(user);
-            }
-        });
-        return res1;
+        return admins.stream().filter(user -> resUserIds.contains(user.getUserId())).collect(Collectors.toList());
     }
 
     @Override
@@ -228,7 +214,7 @@ public class AuthTenantServiceImpl implements AuthTenantService {
         logger.info("新增租户");
         AuthTenant authTenant = insertAuthTenant(tenantInitVo.getAuthTenant());
         String tenantId = authTenant.getTenantId();
-
+        // todo: 是否应该删除
         logger.info("新增租户根部门");
         AuthDepartment authDepartment = new AuthDepartment();
         authDepartment.setTenantId(tenantId);
@@ -241,25 +227,31 @@ public class AuthTenantServiceImpl implements AuthTenantService {
         authDepartment.setDescription(authTenant.getTenantName() + "默认根节点");
         AuthDepartment rootDepartment = authDepartmentService.insertAuthDepartment(authDepartment);
 
-        logger.info("新增根部门岗位");
-        AuthPost authPost = new AuthPost();
-        authPost.setDepartmentId(rootDepartment.getDepartmentId());
-        authPost.setPostName("租户管理员");
-        authPost.setTenantId(tenantId);
-        authPost.setDescription("租户管理员岗位绑定有内置的租户管理员角色");
-        AuthPost administratorPost = authPostService.insertAuthPost(authPost);
+        //logger.info("新增根部门岗位");
+        //AuthPost authPost = new AuthPost();
+        //authPost.setDepartmentId(rootDepartment.getDepartmentId());
+        //authPost.setPostName("租户管理员");
+        //authPost.setTenantId(tenantId);
+        //authPost.setDescription("租户管理员岗位绑定有内置的租户管理员角色");
+        //AuthPost administratorPost = authPostService.insertAuthPost(authPost);
 
         // 岗位绑定角色
-        AuthPostRole tenantAdminRole = new AuthPostRole();
-        tenantAdminRole.setPostId(administratorPost.getPostId());
-        tenantAdminRole.setRoleId(AuthRole.TENANT_ADMIN.getRoleId());
-        authPostRoleService.insertAuthPostRole(tenantAdminRole);
+        //AuthPostRole tenantAdminRole = new AuthPostRole();
+        //tenantAdminRole.setPostId(administratorPost.getPostId());
+        //tenantAdminRole.setRoleId(AuthRole.TENANT_ADMIN.getRoleId());
+        //authPostRoleService.insertAuthPostRole(tenantAdminRole);
         logger.info("新增租户管理员");
         AuthUser authUser = tenantInitVo.getAuthUser();
         authUser.setTenantId(tenantId);
         authUser.setDepartmentId(rootDepartment.getDepartmentId());
-        authUser.setPostId(administratorPost.getPostId());
+        //authUser.setPostId(administratorPost.getPostId());
         AuthUser tenantAdmin = authUserService.insertAuthUser(authUser);
+
+        AuthUserRole authUserRole = new AuthUserRole();
+        authUserRole.setRoleId(AuthRole.TENANT_ADMIN.getRoleId());
+        authUserRole.setUserId(tenantAdmin.getUserId());
+        authUserRole.setStatus(true);
+        authUserRoleService.insertAuthUserRole(authUserRole);
 
         //设置租户初始管理员id
         logger.info("设置租户初始管理员id");

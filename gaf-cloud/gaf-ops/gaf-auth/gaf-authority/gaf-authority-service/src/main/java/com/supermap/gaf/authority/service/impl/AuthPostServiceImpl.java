@@ -21,12 +21,13 @@ import com.supermap.gaf.authority.vo.AuthPostSelectVo;
 import com.supermap.gaf.authority.vo.SelectOptionVo;
 import com.supermap.gaf.authority.vo.TreeNode;
 import com.supermap.gaf.commontypes.ShiroUser;
+import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import com.supermap.gaf.exception.GafException;
 import com.supermap.gaf.shiro.SecurityUtilsExt;
-import com.supermap.gaf.data.access.service.BatchSortAndCodeService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -45,8 +46,10 @@ import java.util.stream.Collectors;
 public class AuthPostServiceImpl implements AuthPostService {
     @Autowired
     private AuthPostMapper authPostMapper;
+    @Lazy
     @Autowired
     private AuthDepartmentService authDepartmentService;
+    @Lazy
     @Autowired
     private AuthUserService authUserService;
     @Autowired

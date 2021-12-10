@@ -183,10 +183,6 @@
           删除
         </button>
         &nbsp;&nbsp;&nbsp;
-        <button @click="setTenantSynchronization" class="submit-gray">
-          同步
-        </button>
-        &nbsp;&nbsp;&nbsp;
         <button v-if="operation === 2" @click="cancelDelete" class="cancel-modal">
           取消
         </button>
@@ -197,29 +193,13 @@
       </div>
       </div>
     </div>
-    <div>
-      <gaf-modal
-        v-model="mapList"
-        :width="1000"
-        :footer="null"
-        title="第三方组件映射"
-      >
-        <mapping-process
-          :tenantRst="tenantRst"
-          :MapDataId="dataId"
-        ></mapping-process>
-      </gaf-modal>
-    </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
-import MappingProcess from './MappingProcess'
 export default {
-  components: {
-    MappingProcess
-  },
+  components: {},
   props: {
     editData: {
       type: Object,
@@ -233,8 +213,6 @@ export default {
   data() {
     return {
       dataId: '',
-      tenantRst: [],
-      mapList: false,
       loading: false
     }
   },
@@ -262,14 +240,6 @@ export default {
   },
   methods: {
     moment,
-    // 同步
-    async setTenantSynchronization() {
-      this.mapList = true
-      this.id = this.dataId
-      const url = `/authority/auth-p3-mapping-rule/list-by-type/`
-      const res = await this.$axios.get(url + 2 + '/' + this.id)
-      this.tenantRst = res.data.data
-    },
     setEditData(newEditData) {
       this.dataId = newEditData.departmentId
       delete newEditData.departmentId

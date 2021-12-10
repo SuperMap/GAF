@@ -14,7 +14,6 @@ import Menu from './authority/pages/Menu'
 import RoleMenu from './authority/pages/RoleMenu'
 import dics from './authority/pages/dics'
 import RoleApi from './authority/pages/RoleApi'
-import AuthP3MappingRule from './authority/pages/AuthP3MappingRule'
 //认证中心
 import login from './authentication/pages/login'
 //服务治理
@@ -48,7 +47,7 @@ const components = [
     AuthRole, AuthTenant,
     AuthUser, ComponentApi, DepartmentPostManage,
     Menu, RoleMenu, SysResourceDatasource,
-    dics,RoleApi,AuthP3MappingRule,
+    dics,RoleApi,
     //认证中心
     login,
     //服务治理
@@ -88,7 +87,6 @@ export {
     SysResourceDatasource,
     dics,
     RoleApi,
-    AuthP3MappingRule,
     //认证中心
     login,
     //服务治理

@@ -243,9 +243,23 @@ public class AuthUserResource implements AuthUserClient {
     })
     @DELETE
     @Produces({MediaType.APPLICATION_JSON})
+    @Path("/inactive/{userId}")
+    public MessageResult<AuthUser> inactiveAuthUser(@PathParam("userId") String userId) {
+        AuthUser authUser = authUserService.inActive(userId);;
+        return MessageResult.data(authUser).message("删除操作成功").build();
+    }
+
+
+
+    @ApiOperation(value = "删除用户", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", paramType = "path", dataType = "string", required = true)
+    })
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON})
     @Path("/{userId}")
     public MessageResult<AuthUser> deleteAuthUser(@PathParam("userId") String userId) {
-        AuthUser authUser = authUserService.deleteAuthUser(userId);
+        AuthUser authUser = authUserService.deleteAuthUser(userId);;
         return MessageResult.data(authUser).message("删除操作成功").build();
     }
 

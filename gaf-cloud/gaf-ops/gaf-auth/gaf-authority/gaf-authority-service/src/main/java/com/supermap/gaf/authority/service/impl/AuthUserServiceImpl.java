@@ -5,18 +5,22 @@
  */
 package com.supermap.gaf.authority.service.impl;
 
-import com.supermap.gaf.authority.commontype.*;
+import com.supermap.gaf.authority.commontype.AuthDepartment;
+import com.supermap.gaf.authority.commontype.AuthPost;
+import com.supermap.gaf.authority.commontype.AuthUser;
+import com.supermap.gaf.authority.commontype.AuthUserRole;
 import com.supermap.gaf.authority.constant.CacheGroupConstant;
 import com.supermap.gaf.authority.constant.CommonConstant;
 import com.supermap.gaf.authority.constant.DbFieldNameConstant;
 import com.supermap.gaf.authority.dao.AuthUserMapper;
-import com.supermap.gaf.authority.enums.CodeBaseRoleEnum;
 import com.supermap.gaf.authority.enums.NodeTypeEnum;
-import com.supermap.gaf.authority.service.*;
+import com.supermap.gaf.authority.service.AuthDepartmentService;
+import com.supermap.gaf.authority.service.AuthPostService;
+import com.supermap.gaf.authority.service.AuthUserRoleService;
+import com.supermap.gaf.authority.service.AuthUserService;
 import com.supermap.gaf.authority.util.TreeConvertUtil;
 import com.supermap.gaf.authority.util.email.EmailConstant;
 import com.supermap.gaf.authority.util.email.EmailService;
-import com.supermap.gaf.authority.vo.AuthUserParttimeSelectVo;
 import com.supermap.gaf.authority.vo.AuthUserSelectVo;
 import com.supermap.gaf.authority.vo.EmailChangeVo;
 import com.supermap.gaf.authority.vo.TreeNode;
@@ -29,6 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -60,19 +65,16 @@ public class AuthUserServiceImpl implements AuthUserService {
     @Autowired
     private AuthUserMapper authUserMapper;
     @Autowired
+    @Lazy
     private AuthDepartmentService authDepartmentService;
     @Autowired
     private AuthPostService authPostService;
-    @Autowired
-    private AuthRoleService authRoleService;
-    @Autowired
-    private AuthUserRoleService authUserRoleService;
-    @Autowired
-    private AuthPostRoleService authPostRoleService;
 
     @Autowired
-    private AuthUserParttimeService authUserParttimeService;
+    private AuthUserRoleService authUserRoleService;
+
     @Autowired
+    @Lazy
     private EmailService emailService;
 
     @Autowired
@@ -86,18 +88,6 @@ public class AuthUserServiceImpl implements AuthUserService {
      */
     private static final int USER_PASSWORD_LENGTH = 8;
 
-//    public AuthUserServiceImpl(AuthUserMapper authUserMapper, AuthDepartmentService authDepartmentService, AuthPostService authPostService, AuthRoleService authRoleService, AuthUserRoleService authUserRoleService, AuthPostRoleService authPostRoleService, AuthUserParttimeService authUserParttimeService, EmailService emailService, ProjCodeBaseUsersFeignService projCodeBaseUsersFeignService, BatchSortAndCodeService batchSortAndCodeService) {
-//        this.authUserMapper = authUserMapper;
-//        this.authDepartmentService = authDepartmentService;
-//        this.authPostService = authPostService;
-//        this.authRoleService = authRoleService;
-//        this.authUserRoleService = authUserRoleService;
-//        this.authPostRoleService = authPostRoleService;
-//        this.authUserParttimeService = authUserParttimeService;
-//        this.emailService = emailService;
-//        this.projCodeBaseUsersFeignService = projCodeBaseUsersFeignService;
-//        this.batchSortAndCodeService = batchSortAndCodeService;
-//    }
 
     @Override
     public AuthUser getById(String userId) {
@@ -194,24 +184,7 @@ public class AuthUserServiceImpl implements AuthUserService {
                 .searchFieldValue(postId)
                 .build();
         List<AuthUser> authUsers = authUserMapper.searchWholeMatchList(authUserSelectVo);
-        //挂职表通过岗位查询
-        AuthUserParttimeSelectVo parttimeSelectVo = AuthUserParttimeSelectVo.builder()
-                .searchFieldName(DbFieldNameConstant.POST_ID)
-                .searchFieldValue(postId)
-                .build();
-        List<AuthUserParttime> authUserParttimes = null;
-        try {
-            authUserParttimes = (List<AuthUserParttime>) authUserParttimeService.pageList(parttimeSelectVo).get(DbFieldNameConstant.PAGE_LIST);
-        } catch (Exception e) {
-            logger.error("查询用户挂职失败");
-        }
-        if (!CollectionUtils.isEmpty(authUserParttimes)) {
-            for (AuthUserParttime authUserParttime : authUserParttimes) {
-                AuthUser authUser = getById(authUserParttime.getUserId());
-                authUser.setBelongsParttime(true);
-                authUsers.add(authUser);
-            }
-        }
+
         if (!CollectionUtils.isEmpty(authUsers)) {
             String departmentName = null;
             AuthPost authPost = authPostService.getById(postId);
@@ -308,17 +281,7 @@ public class AuthUserServiceImpl implements AuthUserService {
     @Override
     public void batchInsert(List<AuthUser> authUsers) {
         if (!CollectionUtils.isEmpty(authUsers)) {
-            ShiroUser shiroUser = SecurityUtilsExt.getUser();
-            String tenantId = Objects.requireNonNull(shiroUser).getTenantId();
-            Set<String> parentIds = new HashSet<>();
-            authUsers.forEach(authUser -> {
-                parentIds.add(authUser.getDepartmentId());
-                authUser.setUserId(UUID.randomUUID().toString());
-                authUser.setTenantId(tenantId);
-            });
-            checkUniqueness(authUsers);
-            authUserMapper.batchInsert(authUsers);
-            batchSortAndCodeService.revisionSortSnForInsertOrDelete(AuthUser.class, parentIds);
+          authUsers.forEach(this::insertAuthUser);
         }
     }
 
@@ -332,17 +295,13 @@ public class AuthUserServiceImpl implements AuthUserService {
         if (oldAuthUser == null) {
             throw new GafException("找不到用户");
         }
-        // 查询用户的所有角色 若有租户管理员的角色则不允许禁用
+        // 查询用户的所有角色 若有租户管理员的角色则不允许删除
         Set<String> roleIdSet = listRole(oldAuthUser);
         if (roleIdSet.contains(AuthUser.TENANT_ADMIN_ROLE_ID)) {
-            throw new GafException("该用户有租户管理员的角色，不能禁用");
+            throw new GafException("该用户有租户管理员的角色，不允许删除");
         }
-        // 清空岗位
-        authUserMapper.update(AuthUser.builder().userId(userId).postId(null).build());
         // 删除用户
         authUserMapper.delete(userId);
-        // 清空挂职和角色
-        authUserParttimeService.deleteByUserId(userId);
         authUserRoleService.deleteByUserId(userId);
         return oldAuthUser;
     }
@@ -351,28 +310,7 @@ public class AuthUserServiceImpl implements AuthUserService {
     private Set<String> listRole(AuthUser authUser) {
         //1.获取用户岗位post
         String userId = authUser.getUserId();
-        String postId = authUser.getPostId();
-        List<String> postIds = new LinkedList<>();
-        if (!StringUtils.isEmpty(postId)) {
-            postIds.add(postId);
-        }
-        List<AuthUserParttime> authUserParttimes = authUserParttimeService.getByUserId(userId);
-        for (AuthUserParttime authUserParttime : authUserParttimes) {
-            String parttimePostId = authUserParttime.getPostId();
-            if (!StringUtils.isEmpty(parttimePostId)) {
-                postIds.add(parttimePostId);
-            }
-        }
         Set<String> roleIdSet = new HashSet<>();
-        if (postIds.size() > 0) {
-            List<AuthPostRole> authPostRoleList = authPostRoleService.listByPostIds(postIds);
-            for (AuthPostRole authPostRole : authPostRoleList) {
-                String roleId = authPostRole.getRoleId();
-                if (!StringUtils.isEmpty(roleId)) {
-                    roleIdSet.add(roleId);
-                }
-            }
-        }
         List<AuthUserRole> authUserRoles = authUserRoleService.listByUser(userId);
         for (AuthUserRole authUserRole : authUserRoles) {
             if (!StringUtils.isEmpty(authUserRole.getRoleId())) {
@@ -414,22 +352,6 @@ public class AuthUserServiceImpl implements AuthUserService {
         }
 
         return authUser;
-    }
-
-    private boolean hasAppRoleOnParttimeOrRole(AuthUser authUser, Set<String> appRoleIds) {
-        boolean hasAppRoleBefore = false;
-        List<AuthUserParttime> userParttimes = authUserParttimeService.getByUserId(authUser.getUserId());
-        List<String> postIds = userParttimes.stream().map(AuthUserParttime::getPostId).collect(Collectors.toList());
-        if (postIds.size() > 0) {
-            List<AuthPostRole> authParttimePostRoles = authPostRoleService.listByPostIds(postIds);
-            hasAppRoleBefore = authParttimePostRoles.stream().anyMatch(authPostRole -> appRoleIds.contains(authPostRole.getRoleId()));
-        }
-        if (!hasAppRoleBefore) {
-            List<AuthUserRole> authUserRoles = authUserRoleService.listByUser(authUser.getUserId());
-            hasAppRoleBefore = authUserRoles.stream().anyMatch(authUserRole -> appRoleIds.contains(authUserRole.getRoleId()));
-
-        }
-        return hasAppRoleBefore;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -486,11 +408,28 @@ public class AuthUserServiceImpl implements AuthUserService {
             throw new GafException("未找到该用户");
         }
         AuthUser authUser = authUsers.get(0);
-        if (!authUser.getStatus()) {
-            authUser.setStatus(true);
-            this.deletePhysicsById(userId);
-            this.insertAuthUser(authUser);
+        AuthUser authUser1 = new AuthUser();
+        authUser1.setState(true);
+        authUser1.setPostId(authUser.getPostId());
+        authUser1.setUserId(userId);
+        authUserMapper.update(authUser1);
+        authUser.setState(true);
+        return authUser;
+    }
+
+    @Override
+    public AuthUser inActive(String userId) {
+        List<AuthUser> authUsers = authUserMapper.selectByCombination(AuthUser.builder().userId(userId).build());
+        if (authUsers.size() != 1) {
+            throw new GafException("未找到该用户");
         }
+        AuthUser authUser = authUsers.get(0);
+        AuthUser authUser1 = new AuthUser();
+        authUser1.setState(false);
+        authUser1.setPostId(authUser.getPostId());
+        authUser1.setUserId(userId);
+        authUserMapper.update(authUser1);
+        authUser.setState(false);
         return authUser;
     }
 

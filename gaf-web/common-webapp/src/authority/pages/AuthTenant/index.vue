@@ -119,13 +119,6 @@
                 <a href="javascript:;" class="btn-margin"><u>启用</u></a>
               </a-popconfirm>
               <a
-                @click.stop="() => setTenantSynchronization(record)"
-                href="javascript:;"
-                class="btn-margin"
-              >
-                <u>同步</u>
-              </a>
-              <a
                 @click.stop="() => getAdministrators(record)"
                 href="javascript:;"
               >
@@ -148,17 +141,6 @@
       >
       </add-edit-form>
       <gaf-modal
-        v-model="mapList"
-        :width="1000"
-        :footer="null"
-        title="第三方组件映射"
-      >
-        <mapping-process
-          :tenantIdData="tenantIdData"
-          :tenantRst="tenantRst"
-        ></mapping-process>
-      </gaf-modal>
-      <gaf-modal
         v-model="adminList"
         :width="600"
         :footer="null"
@@ -173,22 +155,17 @@
 <script>
 import AddEditForm from "../../views/AuthTenant/AddOrEditForm";
 import Administrators from "../../views/AuthTenant/Administrators";
-import MappingProcess from "../../views/AuthTenant/MappingProcess";
 import "../../../common/css/common.css";
 
 export default {
   components: {
     AddEditForm,
-    Administrators,
-    MappingProcess,
+    Administrators
   },
   data() {
     return {
-      tenantRst: [],
-      tenantIdData: "",
       tenantId: "",
       adminList: false,
-      mapList: false,
       searchPlaceholder: "租户名称",
       searchOptions: [
         {
@@ -383,16 +360,6 @@ export default {
     getAdministrators(row) {
       this.tenantId = row.tenantId;
       this.adminList = true;
-    },
-    // 同步
-    async setTenantSynchronization(row) {
-      this.mapList = true;
-      this.mappingType = row.type;
-      this.id = row.tenantId;
-      this.tenantIdData = this.id;
-      const url = `/authority/auth-p3-mapping-rule/list-by-type/`;
-      const res = await this.$axios.get(url + this.mappingType + "/" + this.id);
-      this.tenantRst = res.data.data;
     },
     getType(val) {
       switch (val) {
