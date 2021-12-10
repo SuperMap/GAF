@@ -38,12 +38,6 @@ public class RootResource {
         return AuthRoleResource.class;
     }
 
-
-    @Path("/auth-post-role")
-    public Class<AuthPostRoleResource> authPostRoleResource() {
-        return AuthPostRoleResource.class;
-    }
-
     @Path("/auth-users")
     public Class<AuthUserResource> authUserResourceClass() {
         return AuthUserResource.class;
@@ -52,11 +46,6 @@ public class RootResource {
     @Path("/auth-user-role")
     public Class<AuthUserRoleResource> authUserRoleResource() {
         return AuthUserRoleResource.class;
-    }
-
-    @Path("/auth-user-parttime")
-    public Class<AuthUserParttimeResource> authUserParttimeResource() {
-        return AuthUserParttimeResource.class;
     }
 
     @Path("/auth-role-api")

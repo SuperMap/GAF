@@ -19,6 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -39,11 +40,9 @@ import java.util.Objects;
 @Component
 @Api(value = "部门接口")
 public class AuthDepartmentResource {
-    private final AuthDepartmentService authDepartmentService;
+    @Autowired
+    private AuthDepartmentService authDepartmentService;
 
-    public AuthDepartmentResource(AuthDepartmentService authDepartmentService) {
-        this.authDepartmentService = authDepartmentService;
-    }
 
     @ApiOperation(value = "查询部门", notes = "根据id查询部门")
     @ApiImplicitParams({

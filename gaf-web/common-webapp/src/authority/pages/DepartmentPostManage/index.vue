@@ -84,31 +84,6 @@
           </add-edit-post>
           </div>
         </a-tab-pane>
-        <a-tab-pane key="4" v-if="!departmentShow" tab="绑定角色">
-          <div class="main-top">
-            <a-button
-              @click="handleAdd"
-              class="btn-fun blue main-top-button"
-            >
-              <span><a-icon type="arrow-left" />添加至当前岗位</span>
-            </a-button>
-            <gaf-tree-transparent
-              :dataOfTree="roleOfTree"
-              :searchType="[0]"
-              :expandedNodeKeys.sync="expandedNodeKeys2"
-              :checkable="true"
-              :checkNodeStrictly="false"
-              v-model="checkedNodeKeys"
-              search-placeholder="请输入角色名查询"
-            >
-              <template v-slot:icon="{ iconNodeType }">
-                <a-icon
-                  :type="iconNodeType.type === 5 ? 'switcher' : 'branches'"
-                ></a-icon>
-              </template>
-            </gaf-tree-transparent>
-          </div>
-        </a-tab-pane>
         <a-tab-pane key="5" v-if="!departmentShow" tab="岗位人员">
           <div v-show="showPaneContent" class="list-table">
             <user-table-no-page
@@ -177,13 +152,9 @@ export default {
       searchPlaceholder: '请输入岗位名称查询',
       // tree
       nodeType: [],
-      roleTreeNodes: [],
-      checkedNodeKeys: [],
       dataOfTree: [],
-      roleOfTree: [],
       expandedNodeKeys: [],
       selectedNodeKeys: [],
-      expandedNodeKeys2: [],
       // department
       departmentShow: true,
       departmentOperation: 3, // 详情：1，新增：2，编辑：3
@@ -198,7 +169,6 @@ export default {
       tab1SelectedKeyVesion: 0,
       tab2SelectedKeyVesion: 0,
       tab3SelectedKeyVesion: 0,
-      tab4SelectedKeyVesion: 0,
       tab5SelectedKeyVesion: 0,
       // 岗位id
       postId: '',
@@ -214,9 +184,6 @@ export default {
     }
   },
   watch: {
-    postId: function() {
-      this.getSelected()
-    },
     departmentShow: function(newDepartmentShow) {
       if (newDepartmentShow) {
         this.activeKey = '1'
@@ -230,52 +197,9 @@ export default {
   },
   async mounted() {
     await this.getTree()
-    await this.getRoleTree()
-    await this.getSelected()
-    
+  
   },
   methods: {
-    async getSelected() {
-      const url = `/authority/auth-post-role/list-by-post/${this.postId}`
-      const res = await this.$axios.$get(url)
-      if (res.isSuccessed) {
-        if (res.data !== null && res.data.length > 0) {
-          this.checkedNodeKeys = res.data.map(item => item.roleId)
-        } else {
-          this.checkedNodeKeys = []
-        }
-      }
-    },
-    async handleAdd() {
-      const checkedRoles = this.roleTreeNodes
-        .filter(
-          item =>
-            this.checkedNodeKeys.indexOf(item.key) !== -1 && item.type === 5
-        )
-        .map(i => i.key)
-      const url = `/authority/auth-post-role/handle`
-      const data = {
-        postId: this.postId,
-        roleList: checkedRoles
-      }
-      const res = await this.$axios.$post(url, data)
-      if (res.isSuccessed) {
-        this.$message.success('添加成功')
-      } else {
-        this.$message.error(`添加失败,原因:${res.message}`)
-        this.getSelected()
-      }
-    },
-    async getRoleTree() {
-      const url = `/authority/auth-roles/tree`
-      const res = await this.$axios.$get(url)
-      if (res.isSuccessed) {
-        this.roleTreeNodes = res.data
-        this.roleOfTree = this.$refs.myGafTree.convertToTree(res.data)
-      } else {
-        this.$message.error('加载角色树失败,原因：' + res.message)
-      }
-    },
     updatPostUser(selectedNodeKeys) {
       this.postId = selectedNodeKeys[0]
       this.$nextTick(function() {
@@ -357,8 +281,6 @@ export default {
             if (this.activeKey === '3') {
               this.updatePostEditForm(selectedKeys)
               this.tab3SelectedKeyVesion = this.selectedNodeKeyVesion
-            } else if (this.activeKey === '4') {
-              this.tab4SelectedKeyVesion = this.selectedNodeKeyVesion
             } else if (this.activeKey === '5') {
               this.updatPostUser(selectedKeys)
               this.tab5SelectedKeyVesion = this.selectedNodeKeyVesion
@@ -545,11 +467,6 @@ export default {
               this.updatePostEditForm(this.selectedNodeKeys)
               this.tab1SelectedKeyVesion = this.selectedNodeKeyVesion
             }
-          } else if (
-            activeKey === '4' &&
-            this.tab4SelectedKeyVesion < this.selectedNodeKeyVesion
-          ) {
-            //
           } else if (
             activeKey === '5' &&
             this.tab5SelectedKeyVesion < this.selectedNodeKeyVesion

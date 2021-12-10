@@ -47,6 +47,9 @@
             class="table-style"
             size="middle"
           >
+            <template slot="icon" slot-scope="text">
+              <a-icon v-if="text && text !== ''" :type="text" /> 
+            </template>
             <template slot="target" slot-scope="text">
               {{text == '0'? '当前窗口': '新窗口打开'}}
             </template>
@@ -128,6 +131,7 @@ export default {
           title: "图标",
           dataIndex: "icon",
           key: "icon",
+          scopedSlots: { customRender: "icon" },
         },
         {
           title: "排序序号",

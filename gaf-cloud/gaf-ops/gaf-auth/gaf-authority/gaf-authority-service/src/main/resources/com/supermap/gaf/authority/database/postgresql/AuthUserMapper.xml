@@ -16,6 +16,8 @@
         <result column="post_id" jdbcType="VARCHAR" property="postId" />
         <result column="expiration_time" jdbcType="TIMESTAMP" property="expirationTime" />
         <result column="is_third_party" jdbcType="BIT" property="isThirdParty" />
+        <result column="state" jdbcType="BIT" property="state" />
+
         <result column="status" jdbcType="BIT" property="status" />
         <result column="description" jdbcType="VARCHAR" property="description" />
         <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
@@ -39,6 +41,7 @@
         post_id,
         expiration_time,
         is_third_party,
+        state,
         status,
         description,
         last_login_time,
@@ -62,6 +65,7 @@
         post_id,
         expiration_time,
         is_third_party,
+        state,
         status,
         description,
         last_login_time,
@@ -76,7 +80,7 @@
     <select id="select" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM "auth_user"
-        WHERE user_id = #{userId}
+        WHERE user_id = #{userId}  AND status = true
     </select>
     <select id="selectWithPassword" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List_WithPassword" />
@@ -105,6 +109,7 @@
 	<select id="pageList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserSelectVo">
         SELECT <include refid="Base_Column_List" />
         FROM "auth_user"
+        WHERE status = true
         LIMIT #{pageSize}
         <if test ='null != offset'>OFFSET #{offset}</if>
     </select>
@@ -112,7 +117,8 @@
 	<select id="searchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserSelectVo">
         SELECT <include refid="Base_Column_List" />
         FROM "auth_user"
-		<if test ='null != selectVo.searchFieldName and null != selectVo.searchFieldValue'>where ${selectVo.searchFieldName} LIKE CONCAT('%', #{selectVo.searchFieldValue}, '%')</if>
+        WHERE status = true
+		<if test ='null != selectVo.searchFieldName and null != selectVo.searchFieldValue'>AND ${selectVo.searchFieldName} LIKE CONCAT('%', #{selectVo.searchFieldValue}, '%')</if>
 		<if test ='null != selectVo.orderFieldName'>order by ${selectVo.orderFieldName} ${selectVo.orderMethod}</if>
         LIMIT #{selectVo.pageSize}
         <if test ='null != selectVo.offset'>OFFSET #{selectVo.offset}</if>
@@ -120,7 +126,7 @@
     <select id="searchWholeMatchList" resultMap="BaseResultMap" parameterType="com.supermap.gaf.authority.vo.AuthUserSelectVo">
         SELECT <include refid="Base_Column_List" />
         FROM "auth_user"
-        where ${selectVo.searchFieldName} = #{selectVo.searchFieldValue}
+        WHERE status=true AND ${selectVo.searchFieldName} = #{selectVo.searchFieldValue}
         <if test ='null != selectVo.orderFieldName'>order by ${selectVo.orderFieldName} ${selectVo.orderMethod}</if>
         LIMIT #{selectVo.pageSize}
         <if test ='null != selectVo.offset'>OFFSET #{selectVo.offset}</if>
@@ -128,12 +134,14 @@
 	<select id="countOneField" resultType="java.lang.Integer">
         SELECT count(*)
         FROM "auth_user"
-		<if test ='null != fieldName'>where ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
+        WHERE status = true
+		<if test ='null != fieldName'> AND ${fieldName} LIKE CONCAT('%', #{fieldValue}, '%')</if>
     </select>
     <select id="bigOffsetPageList" resultMap="BaseResultMap">
-        SELECT  a.user_id, a.tenant_id, a.department_id, a.sort_sn, a.name, a.password, a.real_name, a.id_number, a.mobile_number, a.email, a.address, a.post_id, a.expiration_time, a.is_third_party, a.status, a.description, a.last_login_time, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_user" a,(
+        SELECT  a.user_id, a.tenant_id, a.department_id, a.sort_sn, a.name, a.password, a.real_name, a.id_number, a.mobile_number, a.email, a.address, a.post_id, a.expiration_time, a.is_third_party,a.state, a.status, a.description, a.last_login_time, a.created_time, a.created_by, a.updated_time, a.updated_by        FROM "auth_user" a,(
             select user_id 
-            From "auth_user" 
+            From "auth_user"
+            WHERE status = true
             LIMIT #{pageSize} OFFSET #{offset}
             ) b 
         WHERE a.user_id = b.user_id 
@@ -142,6 +150,7 @@
     <select id="pageListCount" resultType="java.lang.Integer">
         SELECT count(*)
         FROM "auth_user"
+        WHERE  status = true
     </select>
     <select id="selectByCombination" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
@@ -162,6 +171,7 @@
         <if test ='null != postId'>post_id = #{postId} AND </if>
         <if test ='null != expirationTime'>expiration_time = #{expirationTime} AND </if>
         <if test ='null != isThirdParty'>is_third_party = #{isThirdParty} AND </if>
+        <if test ='null != state'>state = #{state} AND </if>
         <if test ='null != status'>status = #{status} AND </if>
         <if test ='null != description'>description = #{description} AND </if>
         <if test ='null != lastLoginTime'>last_login_time = #{lastLoginTime} AND </if>
@@ -174,7 +184,7 @@
     <select id="selectByDepartmentIdAndTenantIdWithSort" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM auth_user
-        WHERE tenant_id = #{tenantId} AND department_id = #{departmentId}
+        WHERE tenant_id = #{tenantId} AND department_id = #{departmentId} AND status = true
         order by status desc, created_time asc
     </select>
     <select id="countByCombination" resultType="java.lang.Integer">
@@ -196,6 +206,7 @@
             <if test ='null != postId'>post_id = #{postId} AND </if>
             <if test ='null != expirationTime'>expiration_time = #{expirationTime} AND </if>
             <if test ='null != isThirdParty'>is_third_party = #{isThirdParty} AND </if>
+            <if test ='null != state'>state = #{state} AND </if>
             <if test ='null != status'>status = #{status} AND </if>
             <if test ='null != description'>description = #{description} AND </if>
             <if test ='null != lastLoginTime'>last_login_time = #{lastLoginTime} AND </if>
@@ -222,7 +233,8 @@
 				<if test ='null != postId'>post_id,</if>
 				<if test ='null != expirationTime'>expiration_time,</if>
 				<if test ='null != isThirdParty'>is_third_party,</if>
-				<if test ='null != status'>status,</if>
+				<if test ='null != state'>state,</if>
+				status,
 				<if test ='null != description'>description,</if>
 				<if test ='null != lastLoginTime'>last_login_time,</if>
 				created_time,
@@ -245,7 +257,8 @@
 				<if test ='null != postId'>#{postId},</if>
 				<if test ='null != expirationTime'>#{expirationTime},</if>
 				<if test ='null != isThirdParty'>#{isThirdParty},</if>
-				<if test ='null != status'>#{status},</if>
+				<if test ='null != state'>#{state},</if>
+				true,
 				<if test ='null != description'>#{description},</if>
 				<if test ='null != lastLoginTime'>#{lastLoginTime},</if>
 				now(),
@@ -257,7 +270,7 @@
 	<insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO "auth_user"(<include refid="Base_Column_List" />) VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (  #{item.userId}  ,  #{item.tenantId}  ,  #{item.departmentId}  ,  #{item.sortSn}  ,  #{item.name}  ,  #{item.password}  ,  #{item.realName}  ,  #{item.idNumber}  ,  #{item.mobileNumber}  ,  #{item.email}  ,  #{item.address}  ,  #{item.postId}  ,  #{item.expirationTime}  ,  #{item.isThirdParty}  ,  #{item.status}  ,  #{item.description}  ,  #{item.lastLoginTime}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
+            (  #{item.userId}  ,  #{item.tenantId}  ,  #{item.departmentId}  ,  #{item.sortSn}  ,  #{item.name}  ,  #{item.password}  ,  #{item.realName}  ,  #{item.idNumber}  ,  #{item.mobileNumber}  ,  #{item.email}  ,  #{item.address}  ,  #{item.postId}  ,  #{item.expirationTime}  ,  #{item.isThirdParty}  , #{item.state}, true  ,  #{item.description}  ,  #{item.lastLoginTime}  ,  now()  ,  #{item.createdBy}  ,  now()  ,  #{item.updatedBy}  )
         </foreach>
     </insert>
 	<update id="batchDelete" parameterType="java.util.List">
@@ -288,7 +301,8 @@
                 post_id = #{postId},
 				<if test ='null != expirationTime'>expiration_time = #{expirationTime},</if>
                 <if test ='null != isThirdParty'>is_third_party = #{isThirdParty},</if>
-				<if test ='null != status'>status = #{status},</if>				
+                <if test ='null != state'>state = #{state},</if>
+
 				<if test ='null != description'>description = #{description},</if>				
 				<if test ='null != lastLoginTime'>last_login_time = #{lastLoginTime},</if>
 				updated_time = now(),

@@ -39,13 +39,13 @@
           class="table-style"
           size="middle"
         >
-          <template slot="status" slot-scope="text, record">
+          <template slot="state" slot-scope="text, record">
             <a-switch
               :disabled="!isUser"
-              v-model="record.status"
-              :default-checked="record.status"
-              :style="{ background: record.status ? '#1890FF' : '#BFBFBF' }"
-              @click="statusClick($event, record)"
+              v-model="record.state"
+              :default-checked="record.state"
+              :style="{ background: record.state ? '#1890FF' : '#BFBFBF' }"
+              @click="stateClick($event, record)"
               checked-children="已启用"
               size="small"
               un-checked-children="已禁用"
@@ -89,7 +89,6 @@ export default {
       // 列表是否加载中
       loading: true,
       hasPKField: true,
-      userStatus: true,
       selectedRowKeys: [],
       selectRowLength: 0,
       columns: []
@@ -112,9 +111,9 @@ export default {
         },
         {
           title: "状态",
-          dataIndex: "status",
-          key: "status",
-          scopedSlots: { customRender: "status" },
+          dataIndex: "state",
+          key: "state",
+          scopedSlots: { customRender: "state" },
           width: 100
         },
         {
@@ -134,13 +133,6 @@ export default {
           dataIndex: "isThirdParty",
           key: "is_third_party",
           scopedSlots: { customRender: "isThirdParty" },
-          width: 100
-        },
-        {
-          title: "是否挂职",
-          dataIndex: "belongsParttime",
-          key: "belongs-parttime",
-          scopedSlots: { customRender: "belongsParttime" },
           width: 100
         },
         {
@@ -220,28 +212,22 @@ export default {
         }
       });
     },
-    statusClick(value, record) {
-      record.status = !value;
+    stateClick(value, record) {
+      record.state = !value;
       if (!value) {
         const currentVueObj = this;
         this.$confirm({
           title: "确定要禁用该用户吗",
-          content: () => (
-            <div style="color:red;">
-              禁用该用户会清空用户绑定的所有岗位、兼职和角色，该用户无法登录
-            </div>
-          ),
           okText: "确认",
           cancelText: "取消",
           onOk() {
             if (record.userId) {
-              const url = `/authority/auth-users/${record.userId}`;
+              const url = `/authority/auth-users/inactive/${record.userId}`;
               return currentVueObj.$axios.delete(url).then((p) => {
                 const result = p.data;
                 if (result.isSuccessed) {
-                  record.status = value;
+                  record.state = value;
                   currentVueObj.$message.success("禁用成功");
-                  currentVueObj.$emit("deleteUserSuccess", record);
                 } else {
                   currentVueObj.$message.error(
                     `禁用失败,原因：${result.message}`
@@ -260,9 +246,8 @@ export default {
         this.$axios.post(url).then((p) => {
           const result = p.data;
           if (result.isSuccessed) {
-            record.status = value;
+            record.state = value;
             this.getList();
-            this.$emit("activeUserSuccess", result.data);
           } else {
             this.$message.error(`启用失败，原因:${result.message}`);
           }

@@ -24,14 +24,6 @@ import java.util.stream.Collectors;
 public class AuthAuthorizationQueryServiceImpl implements AuthAuthorizationQueryService {
 
     @Autowired
-    private AuthUserQueryService authUserQueryService;
-
-    @Autowired
-    private AuthUserParttimeQueryService authUserParttimeQueryService;
-    @Autowired
-    private AuthPostRoleQueryService authPostRoleQueryService;
-
-    @Autowired
     private AuthUserRoleQueryService authUserRoleQueryService;
 
 
@@ -115,31 +107,10 @@ public class AuthAuthorizationQueryServiceImpl implements AuthAuthorizationQuery
 
     @Override
     public List<AuthRole> listAuthorizationRole(String userId) {
-        //0.获取用户user
-        AuthUser authUser = authUserQueryService.getById(userId);
-        //1.获取用户岗位post
-        String postId = authUser.getPostId();
-        //1.1获取挂职表用户岗位post
-        List<AuthUserParttime> authUserParttimes = authUserParttimeQueryService.listByUserId(userId);
-        //2.获取用户岗位所有角色列表a
-        List<AuthPostRole> userPostRoles = authPostRoleQueryService.listByPost(postId);
-        List<AuthPostRole> userPattimePostRoles = new ArrayList<>();
-        for (AuthUserParttime authUserParttime : authUserParttimes) {
-            userPattimePostRoles.addAll(authPostRoleQueryService.listByPost(authUserParttime.getPostId()));
-        }
-        Set<AuthPostRole> postRoles = new HashSet<>();
-        postRoles.addAll(userPostRoles);
-        postRoles.addAll(userPattimePostRoles);
-        //3.获取用户单独绑定的角色列表b
         List<AuthUserRole> userRoles = authUserRoleQueryService.listByUser(userId);
-        //4.取得a、b角色列表并集c
-        Set<String> postRoleIds = postRoles.stream().map(AuthPostRole::getRoleId).collect(Collectors.toSet());
-        Set<String> userRoleIds = userRoles.stream().map(AuthUserRole::getRoleId).collect(Collectors.toSet());
-        Set<String> allRoleIds = new HashSet<>();
-        allRoleIds.addAll(postRoleIds);
-        allRoleIds.addAll(userRoleIds);
-
+        Set<String> allRoleIds = userRoles.stream().map(AuthUserRole::getRoleId).collect(Collectors.toSet());
         List<AuthRole> authRoles = new ArrayList<>();
+        // todo: 查询优化
         allRoleIds.forEach(roleId -> {
             AuthRole authRole = authRoleQueryService.getById(roleId);
             if (authRole != null) {

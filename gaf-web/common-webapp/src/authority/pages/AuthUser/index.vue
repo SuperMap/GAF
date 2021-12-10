@@ -76,11 +76,6 @@
               </div>
             </div>
           </a-tab-pane>
-          <a-tab-pane key="3" v-if="!departmentShow" tab="挂职">
-            <div v-show="showPaneContent">
-              <auth-user-parttime :userId="parttimeUserId"></auth-user-parttime>
-            </div>
-          </a-tab-pane>
           <a-tab-pane key="4" v-if="departmentShow" tab="部门用户">
             <div v-show="showPaneContent">
               <user-table-no-page
@@ -88,8 +83,6 @@
                 :id="departmentId"
                 :isDepartmentId="true"
                 :isUser="true"
-                @deleteUserSuccess="afterDeleteUserSuccessInDepartmentShow"
-                @activeUserSuccess="afterActiveUserSuccessInDepartmentShow"
                 @handleAddUser="handleAddUser"
               ></user-table-no-page>
             </div>
@@ -113,14 +106,12 @@
 <script>
 import AddEditForm from "../../views/AuthUser/AddOrEditForm";
 import UserTableNoPage from "../DepartmentPostManage/UserTableNoPage";
-import AuthUserParttime from "../AuthUserParttime/index";
 import "../../../common/css/common.css";
 
 export default {
   components: {
     AddEditForm,
-    UserTableNoPage,
-    AuthUserParttime,
+    UserTableNoPage
   },
   data() {
     return {
@@ -139,11 +130,9 @@ export default {
       selectedNodeKeyVesion: 1,
       tab1SelectedKeyVesion: 0,
       tab2SelectedKeyVesion: 0,
-      tab3SelectedKeyVesion: 0,
       tab4SelectedKeyVesion: 0,
       userId: "",
       departmentId: "",
-      parttimeUserId: "",
       showAddform: false,
     };
   },
@@ -217,9 +206,6 @@ export default {
       } else {
         this.$message.error("加载角色树失败,原因：" + res.message);
       }
-    },
-    updateUserParttimeList(selectedKeys) {
-      this.parttimeUserId = selectedKeys[0];
     },
     updateUserEditForm(selectedKeys) {
       const parent = this.$refs.myGafTree.getParent(
@@ -374,10 +360,6 @@ export default {
               this.tab1SelectedKeyVesion = this.selectedNodeKeyVesion;
             } else if (this.activeKey === "2") {
               this.tab2SelectedKeyVesion = this.selectedNodeKeyVesion;
-            } else if (this.activeKey === "3") {
-              // 挂职信息更新
-              this.updateUserParttimeList(selectedKeys);
-              this.tab3SelectedKeyVesion = this.selectedNodeKeyVesion;
             }
           });
         }
@@ -400,12 +382,6 @@ export default {
           ) {
             // todo isSuceess
             this.tab2SelectedKeyVesion = this.selectedNodeKeyVesion;
-          } else if (
-            activeKey === "3" &&
-            this.tab3SelectedKeyVesion < this.selectedNodeKeyVesion
-          ) {
-            this.updateUserParttimeList(this.selectedNodeKeys);
-            this.tab3SelectedKeyVesion = this.selectedNodeKeyVesion;
           } else if (
             activeKey === "4" &&
             this.tab4SelectedKeyVesion < this.selectedNodeKeyVesion

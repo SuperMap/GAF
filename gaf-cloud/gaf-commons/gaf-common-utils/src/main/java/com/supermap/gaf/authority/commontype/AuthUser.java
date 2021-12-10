@@ -72,10 +72,16 @@ public class AuthUser implements Serializable {
     @ApiModelProperty(value = "是否第三方", allowableValues = "true,false")
     @JSONField(name = "isThirdParty")
     private Boolean isThirdParty;
-    @ApiModelProperty("状态。逻辑删除字段")
+
+    @ApiModelProperty("状态,是否启用.true启用,false禁用,默认启用")
+    private Boolean state;
+
+    @ApiModelProperty("逻辑删除字段,false表示已删除")
     @JSONField(name = "isStatus")
     @LogicDeleteField
     private Boolean status = true;
+
+
     @ApiModelProperty("描述")
     private String description;
     @ApiModelProperty("上次登录时间")
@@ -95,8 +101,4 @@ public class AuthUser implements Serializable {
     private String departmentName;
     @ApiModelProperty("岗位名称")
     private String postName;
-    @ApiModelProperty("是否是挂职")
-    private Boolean belongsParttime;
-
-
 }
