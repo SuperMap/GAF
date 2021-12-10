@@ -10,6 +10,7 @@ import com.supermap.gaf.rest.remote.ExternalRemoteService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.bus.jackson.RemoteApplicationEventScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 @ComponentScan(basePackages = {"com.supermap.gaf"}, excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com.supermap.gaf.common.storage.*"))
 @EnableDiscoveryClient
 @EnableFeignClients({"com.supermap.gaf"})
+@RemoteApplicationEventScan(basePackages = {"com.supermap.gaf.cloud.bus.event"})
 @MapperScan(basePackages = {"com.supermap.gaf.**.dao", "com.supermap.gaf.**.mapper"})
 @EnableTransactionManagement
 public class Application {

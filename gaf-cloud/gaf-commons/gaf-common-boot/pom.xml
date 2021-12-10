@@ -64,6 +64,9 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.supermap.gaf</groupId>
+            <artifactId>gaf-common-utils</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -5,16 +5,21 @@
  */
 package com.supermap.gaf.authority;
 
+import com.supermap.gaf.cloud.bus.event.RemoteMailSendEvent;
 import com.supermap.gaf.utils.MybatisBatchUtil;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.bus.BusAutoConfiguration;
+import org.springframework.cloud.bus.jackson.BusJacksonAutoConfiguration;
+import org.springframework.cloud.bus.jackson.RemoteApplicationEventScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -26,6 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {"com.supermap.gaf"})
 @MapperScan(basePackages = {"com.supermap.gaf.**.dao", "com.supermap.gaf.dao"})
 @EnableFeignClients(basePackages = {"com.supermap.gaf"})
+@RemoteApplicationEventScan(basePackages = "com.supermap.gaf.cloud.bus.event")
 @EnableDiscoveryClient
 @EnableAsync
 @EnableTransactionManagement

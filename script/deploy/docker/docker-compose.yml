@@ -296,3 +296,8 @@ services:
       STORAGE_TYPE: elasticsearch
       ES_HOSTS: http://gaf-elasticsearch:9200
     container_name: gaf-zipkin
+  gaf-mq:
+    image: rabbitmq:3-management-alpine
+    networks:
+    - gaf-net
+    container_name: gaf-mq

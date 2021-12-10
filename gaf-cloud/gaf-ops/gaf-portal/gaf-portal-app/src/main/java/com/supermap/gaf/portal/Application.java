@@ -6,15 +6,20 @@
 package com.supermap.gaf.portal;
 
 
+import com.supermap.gaf.cloud.bus.event.RemoteMailSendEvent;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.bus.BusAutoConfiguration;
+import org.springframework.cloud.bus.jackson.BusJacksonAutoConfiguration;
+import org.springframework.cloud.bus.jackson.RemoteApplicationEventScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -25,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.supermap.gaf"})
 @EnableDiscoveryClient
+@RemoteApplicationEventScan(basePackages = "com.supermap.gaf.cloud.bus.event")
 @EnableHystrix
 @EnableFeignClients(basePackages = "com.supermap.gaf")
 @MapperScan(basePackages = {"com.supermap.gaf.**.dao"})

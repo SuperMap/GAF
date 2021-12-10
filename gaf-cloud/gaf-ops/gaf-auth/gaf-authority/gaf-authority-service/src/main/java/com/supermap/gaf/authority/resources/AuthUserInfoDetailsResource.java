@@ -7,7 +7,9 @@ package com.supermap.gaf.authority.resources;
 
 import com.supermap.gaf.authority.client.AuthUserInfoDetailsClient;
 import com.supermap.gaf.authority.commontype.*;
+import com.supermap.gaf.authority.publisher.MailSendPublisher;
 import com.supermap.gaf.authority.service.impl.AuthUserInfoDetailsDbImpl;
+import com.supermap.gaf.commontypes.MailSendDetail;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -40,4 +42,5 @@ public class AuthUserInfoDetailsResource implements AuthUserInfoDetailsClient {
     public AuthUserInfoDetails getAuthUserInfoDetails(@QueryParam("username") String username) {
         return authUserInfoDetailsDb.getAuthUserInfoDetails(username);
     }
+
 }

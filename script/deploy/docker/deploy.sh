@@ -48,7 +48,7 @@ base() {
     #替换GAF_ENV_CONFIG.env里的变量
     sed_config_env
     #启动GAF基础环境数据存储应用
-    LOAD_SERVICE="gaf-postgres gaf-redis gaf-minio gaf-s3fs-mount"
+    LOAD_SERVICE="gaf-postgres gaf-redis gaf-mq gaf-minio gaf-s3fs-mount"
     docker-compose up -d $LOAD_SERVICE
     #向postgres数据库导入基础数据
     wait_gaf_db

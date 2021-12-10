@@ -115,3 +115,12 @@ INSERT INTO config_properties (id, pro_key, pro_value, application, profile, "la
 
 -- changeset SYS:20210809-1
 DELETE FROM config_properties WHERE id = 'd00204';
+
+
+-- changeset SYS:20211210-1
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f067', 'spring.rabbitmq.host', '${GAF_ENV_MQ_HOST:localhost}', 'gaf-sys-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f068', 'spring.rabbitmq.port', '${GAF_ENV_MQ_PORT:5672}', 'gaf-sys-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f069', 'spring.rabbitmq.username', '${GAF_ENV_MQ_USERNAME:guest}', 'gaf-sys-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f070', 'spring.rabbitmq.password', '${GAF_ENV_MQ_PASSWORD:guest}', 'gaf-sys-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f071', 'spring.rabbitmq.listener.direct.retry.enabled', 'true', 'gaf-sys-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f072', 'spring.rabbitmq.listener.simple.retry.enabled', 'true', 'gaf-sys-mgt', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);

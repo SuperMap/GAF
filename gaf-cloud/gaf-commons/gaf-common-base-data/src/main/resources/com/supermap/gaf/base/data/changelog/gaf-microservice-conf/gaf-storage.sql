@@ -33,3 +33,10 @@ INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "pr
 
 
 
+-- changeset SYS:20211210-1
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f061', 'spring.rabbitmq.host', '${GAF_ENV_MQ_HOST:localhost}', 'gaf-storage', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f062', 'spring.rabbitmq.port', '${GAF_ENV_MQ_PORT:5672}', 'gaf-storage', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f063', 'spring.rabbitmq.username', '${GAF_ENV_MQ_USERNAME:guest}', 'gaf-storage', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f064', 'spring.rabbitmq.password', '${GAF_ENV_MQ_PASSWORD:guest}', 'gaf-storage', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f065', 'spring.rabbitmq.listener.direct.retry.enabled', 'true', 'gaf-storage', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
+INSERT INTO "config_properties"("id", "pro_key", "pro_value", "application", "profile", "label", "tenant_id", "created_time", "created_by", "updated_time", "updated_by", "description") VALUES ('09f066', 'spring.rabbitmq.listener.simple.retry.enabled', 'true', 'gaf-storage', 'prod', 'master', 'tenant_000000', NULL, 'SYS', NULL, 'SYS', NULL);
