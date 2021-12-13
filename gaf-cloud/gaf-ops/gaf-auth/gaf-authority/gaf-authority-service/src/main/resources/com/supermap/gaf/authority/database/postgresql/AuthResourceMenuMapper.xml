@@ -199,7 +199,7 @@
 				<if test ='null != name'>name = #{name},</if>
 				<if test ='null != target'>target = #{target},</if>
 				<if test ='null != path'>path = #{path},</if>
-				<if test ='null != url'>name = #{url},</if>
+				<if test ='null != url'>url = #{url},</if>
                 <if test ='null != icon'>icon = #{icon},</if>
                 <if test ='null != sortSn'>sort_sn = #{sortSn},</if>
 				<if test ='null != description'>description = #{description},</if>
