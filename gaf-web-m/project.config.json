@@ -1,0 +1,15 @@
+{
+  "token":"",
+  "proxy": {
+    "/api/": {
+      "target": "http://gaf.gaf-pro.chengdu",
+      "pathRewrite": {
+          "^/api/": ""
+      },
+      "ws": true,
+      "changeOrigin": true,
+      "startsWith": "/",
+      "timeout": 16000
+    }
+  }
+}

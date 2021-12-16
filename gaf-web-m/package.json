@@ -1,0 +1,22 @@
+{
+  "name": "gaf-web",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "scripts": {
+    "build:portal": "lerna exec --scope apps-portal -- yarn build",
+    "build:log": "lerna exec --scope apps-log -- yarn build",
+    "build:config": "lerna exec --scope apps-config -- yarn build",
+    "dev:portal": "lerna exec --scope apps-portal -- yarn serve",
+    "dev:log": "lerna exec --scope apps-log -- yarn serve",
+    "dev:config": "lerna exec --scope apps-config -- yarn serve",
+    "dev:test": "lerna exec --scope apps-test -- yarn serve",
+    "lint": "lerna run lint",
+    "build": "lerna run build",
+    "serve": "lerna run serve"
+  }
+}
