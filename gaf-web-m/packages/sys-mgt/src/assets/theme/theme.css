@@ -1,0 +1,111 @@
+:root {
+  --theme-color: #545c64;
+   --theme-menu-color: #abcee7;
+  --active-color: #4a90e2;
+  --bg-color: #223442;
+  /* --active-color: #ffd04b; */
+}
+.header {
+  background: url('/img/header.png') no-repeat center center;
+}
+.header .left .title {
+  color: var(--active-color);
+}
+.hr-menu {
+  background-color: none;
+}
+.sider {
+  background: url('/img/slide.png') no-repeat center center !important;
+  background-size: cover !important;
+}
+.nav-title {
+  color: white;
+}
+.ant-menu-submenu-title > span {
+  color: var(--theme-menu-color);
+  font-weight: 600;
+}
+.ant-menu-item > a {
+  color: var(--theme-menu-color);
+  font-weight: 600;
+}
+.sub-navs-container {
+  background-color: var(--bg-color) !important;
+}
+.sub-navs-container .group-title {
+  color: var(--theme-menu-color) !important;
+}
+.ant-menu-dark .ant-menu-item,
+.ant-menu-dark .ant-menu-item-group-title,
+.ant-menu-dark .ant-menu-item > a,
+.ant-menu-horizontal > .ant-menu-item > a{
+  color: var(--theme-menu-color);
+}
+.ant-layout-sider,
+.ant-layout-header,
+.ant-menu-dark, .ant-menu-dark .ant-menu-sub,
+.ant-menu.ant-menu-dark,
+.ant-menu-submenu-popup.ant-menu-dark {
+  background: none;
+}
+.ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+  background-color: #4a90e2;
+}
+.header .ant-menu-item-selected > a{
+  /* color: var(--active-color) !important; */
+  color: #fff;
+}
+.header .ant-menu-item-selected > a:hover{
+  /* color: var(--active-color) !important; */
+  color: #fff;
+}
+.ant-menu-dark.ant-menu-submenu-popup {
+  background: var(--bg-color);
+}
+/* 侧边栏菜单主题 */
+.side .ant-menu-dark,
+.side .ant-menu-inline,
+.side .ant-menu-sub,
+.ant-layout-sider-children .ant-menu-dark,
+.ant-layout-sider-children .ant-menu-inline,
+.ant-layout-sider-children .ant-menu-sub{
+  background: none !important;
+  box-shadow: none !important;
+}
+.side .ant-menu-submenu-vertical > .ant-menu-submenu-title .ant-menu-submenu-arrow,
+.side .ant-menu-submenu-vertical-left > .ant-menu-submenu-title .ant-menu-submenu-arrow,
+.side .ant-menu-submenu-vertical-right > .ant-menu-submenu-title .ant-menu-submenu-arrow,
+.side .ant-menu-submenu-inline > .ant-menu-submenu-title .ant-menu-submenu-arrow {
+  left: 126px;
+  margin-left: 10px;
+}
+.side .ant-menu-submenu-title > span {
+  color: #b4d6ef;
+}
+.side .ant-menu-item > a {
+  color: #8aa9c0;
+}
+.icon-fold {
+  color: white;
+}
+.ant-menu-item > a :hover {
+  color: var(--active-color) ;
+}
+.ant-menu-submenu-title > span :hover{
+  color: var(--active-color);
+}
+.sub-navs-container .ant-menu-item > a.nuxt-link-active {
+  color: var(--active-color);
+}
+.cancel-high-light {
+  color: var(--theme-menu-color) !important;
+}
+.cancel-high-light:hover{
+  color: var(--active-color) !important;
+}
+.cancel-high-light > a {
+  color: var(--theme-menu-color) !important;
+}
+.cancel-high-light > a:hover {
+  color: var(--active-color) !important;
+}

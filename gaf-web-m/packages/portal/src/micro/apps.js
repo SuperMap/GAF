@@ -17,6 +17,24 @@ const apps = [
     entry: isDev ? 'http://localhost:10202' : '/apps-config/',
     container: '#frame',
     activeRule: '/config'
+  },
+  {
+    name: 'apps-map',
+    entry: isDev ? 'http://localhost:10203' : '/apps-map/',
+    container: '#frame',
+    activeRule: '/map'
+  },
+  {
+    name: 'apps-data-mgt',
+    entry: isDev ? 'http://localhost:10204' : '/apps-data-mgt/',
+    container: '#frame',
+    activeRule: '/data-mgt'
+  },
+  {
+    name: 'apps-sys-mgt',
+    entry: isDev ? 'http://localhost:10209' : '/apps-sys-mgt/',
+    container: '#frame',
+    activeRule: '/sys-mgt'
   }
 ]
 

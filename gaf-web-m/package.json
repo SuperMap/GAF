@@ -15,6 +15,9 @@
     "dev:log": "lerna exec --scope apps-log -- yarn serve",
     "dev:config": "lerna exec --scope apps-config -- yarn serve",
     "dev:test": "lerna exec --scope apps-test -- yarn serve",
+    "dev:map": "lerna exec --scope apps-map -- yarn serve",
+    "dev:data-mgt": "lerna exec --scope apps-data-mgt -- yarn serve",
+    "dev:sys-mgt": "lerna exec --scope apps-sys-mgt -- yarn serve",
     "lint": "lerna run lint",
     "build": "lerna run build",
     "serve": "lerna run serve"

@@ -1,5 +1,5 @@
 {
-  "token":"",
+  "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmlkIl0sInVzZXJfbmFtZSI6InN5c19hZG1pbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2Mzk3MzQ2OTQsIm1lc3NhZ2UiOiJoZWxsbyB3b3JsZCIsImF1dGhvcml0aWVzIjpbIuW5s-WPsOeuoeeQhuWRmCJdLCJqdGkiOiJkNWFiY2UyMi1lZmZjLTRlMWQtOTI4NC1iMTRmZjEwNGQyYjEiLCJjbGllbnRfaWQiOiJjdXN0b21fY2xpZW50IiwidXNlcm5hbWUiOiJzeXNfYWRtaW4ifQ.F0yYmW8320D2Tlbh_q72_H0UxtE40X8sm79dUKZV2XQ",
   "proxy": {
     "/api/": {
       "target": "http://gaf.gaf-pro.chengdu",
