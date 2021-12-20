@@ -7,7 +7,7 @@ module.exports = {
   publicPath: isDev ? '/' : '/apps-data-mgt/',
   assetsDir: 'static',
   devServer: {
-    port: 10204,
+    port: 10224,
     disableHostCheck: true,
     headers: {
       'Access-Control-Allow-Origin': '*'

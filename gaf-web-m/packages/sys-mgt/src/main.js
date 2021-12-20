@@ -22,7 +22,7 @@ let router = null
 function render (props = {}) {
   // 在 render 中创建 VueRouter，可以保证在卸载微应用时，移除 location 事件监听，防止事件污染
   router = new VueRouter({
-    base: window.__POWERED_BY_QIANKUN__ ? '/sys-mgt/' : '/apps-sys-mgt/',
+    base: window.__POWERED_BY_QIANKUN__ ? '/sysMgt/' : '/apps-sys-mgt/',
     mode: 'history',
     routes
   })

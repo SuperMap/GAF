@@ -26,15 +26,15 @@ const apps = [
   },
   {
     name: 'apps-data-mgt',
-    entry: isDev ? 'http://localhost:10204' : '/apps-data-mgt/',
+    entry: isDev ? 'http://localhost:10224' : '/apps-data-mgt/',
     container: '#frame',
-    activeRule: '/data-mgt'
+    activeRule: '/dataMgt'
   },
   {
     name: 'apps-sys-mgt',
     entry: isDev ? 'http://localhost:10209' : '/apps-sys-mgt/',
     container: '#frame',
-    activeRule: '/sys-mgt'
+    activeRule: '/sysMgt'
   }
 ]
 
